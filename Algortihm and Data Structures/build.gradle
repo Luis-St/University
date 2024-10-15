@@ -1,0 +1,75 @@
+plugins {
+	id "java"
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation "org.jetbrains:annotations:23.0.0"
+}
+
+tasks.register("testSheet1", JavaExec) {
+	group = "runs"
+	getMainClass().set("net.luis.sheet1.Main")
+	classpath = sourceSets.main.runtimeClasspath
+	enableAssertions = true
+}
+
+tasks.register("testSheet2", JavaExec) {
+	group = "runs"
+	getMainClass().set("net.luis.sheet2.Main")
+	classpath = sourceSets.main.runtimeClasspath
+	enableAssertions = true
+}
+
+tasks.register("testSheet3", JavaExec) {
+	group = "runs"
+	getMainClass().set("net.luis.sheet3.Main")
+	classpath = sourceSets.main.runtimeClasspath
+	enableAssertions = true
+	args("This", "is", "a", "Test")
+}
+
+tasks.register("testSheet4", JavaExec) {
+	group = "runs"
+	getMainClass().set("net.luis.sheet4.Main")
+	classpath = sourceSets.main.runtimeClasspath
+	enableAssertions = true
+}
+
+tasks.register("testSheet5", JavaExec) {
+	group = "runs"
+	getMainClass().set("net.luis.sheet5.Main")
+	classpath = sourceSets.main.runtimeClasspath
+	enableAssertions = true
+}
+
+tasks.register("testSheet6", JavaExec) {
+	group = "runs"
+	getMainClass().set("net.luis.sheet6.Main")
+	classpath = sourceSets.main.runtimeClasspath
+	enableAssertions = true
+}
+
+tasks.register("testSheet7", JavaExec) {
+	group = "runs"
+	getMainClass().set("net.luis.sheet7.Main")
+	classpath = sourceSets.main.runtimeClasspath
+	enableAssertions = true
+}
+
+tasks.register("testSheet8", JavaExec) {
+	group = "runs"
+	getMainClass().set("net.luis.sheet8.Main")
+	classpath = sourceSets.main.runtimeClasspath
+	enableAssertions = true
+}
+
+tasks.register("testSheet9", JavaExec) {
+	group = "runs"
+	getMainClass().set("net.luis.sheet9.Main")
+	classpath = sourceSets.main.runtimeClasspath
+	enableAssertions = true
+}
