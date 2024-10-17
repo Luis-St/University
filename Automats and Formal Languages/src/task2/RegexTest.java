@@ -45,7 +45,7 @@ public class RegexTest {
 	
 	@Test
 	public void testZeitpunkt() {
-		String zeitpunkt = "\\d{4}-(0[123456789]|1[012])-([012]\\d|3[01])T(0?\\d|1\\d|2[01234]):\\d{2}:\\d{2}:\\d{3}";
+		String zeitpunkt = "\\d{4}-(0[123456789]|1[012])-([012]\\d|3[01])T(0?\\d|1\\d|2[01234]):([012345]\\d):([012345]\\d):\\d{3}";
 		
 		assertTrue(Pattern.matches(zeitpunkt, "2012-09-30T23:28:51:544"));
 		assertTrue(Pattern.matches(zeitpunkt, "2012-12-30T12:28:51:544"));
@@ -68,13 +68,14 @@ public class RegexTest {
 	
 	@Test
 	public void testKFZKennzeichen() {
-		String kennzeichen = ".{1,3} [A-Za-z]{1,2} ([1-9]\\d{0,2} [HE]|[1-9]\\d{0,3})$";
+		// Theoretisch wäre auch \w als Klasse für [a-zA-Z] möglich, aber das würde auch Zahlen und Unterstriche zulassen
+		String kennzeichen = "([a-zA-Z]|[ÄÜÖ]){1,3} [a-zA-Z]{1,2} ([1-9]\\d{0,2} [HE]|[1-9]\\d{0,3})$";
 		
 		assertTrue(Pattern.matches(kennzeichen, "VS HH 1000"));
 		assertTrue(Pattern.matches(kennzeichen, "HH HH 1"));
 		assertTrue(Pattern.matches(kennzeichen, "H HH 1"));
 		assertTrue(Pattern.matches(kennzeichen, "HH HH 1 H"));
-		assertTrue(Pattern.matches(kennzeichen, "T� HH 1 H"));
+		assertTrue(Pattern.matches(kennzeichen, "TÜ HH 1 H"));
 		
 		assertFalse(Pattern.matches(kennzeichen, "HH HH 1 "));
 		assertFalse(Pattern.matches(kennzeichen, "VS VS 0"));
