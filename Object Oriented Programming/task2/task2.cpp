@@ -4,28 +4,28 @@
 
 #include "Position.h"
 
-void ls::runTask2() {
-	ls::toIntTest();
-	ls::decodeTest();
-	ls::positionTest();
+void lsv2::runTask2() {
+	lsv2::toIntTest();
+	lsv2::decodeTest();
+	lsv2::positionTest();
 }
 
-void ls::toInt(const char c, int &theInt) {
+void lsv2::toInt(const char c, int &theInt) {
 	if (c < '0' || c > '9') {
 		return;
 	}
 	theInt = c - '0';
 }
 
-void ls::toIntTest() {
+void lsv2::toIntTest() {
 	int theInt;
-	ls::toInt('0', theInt);
+	lsv2::toInt('0', theInt);
 	assert(theInt == 0);
-	ls::toInt('1', theInt);
+	lsv2::toInt('1', theInt);
 	assert(theInt == 1);
-	ls::toInt('a', theInt); // Invalid input -> stays the same
+	lsv2::toInt('a', theInt); // Invalid input -> stays the same
 	assert(theInt == 1);
-	ls::toInt('9', theInt);
+	lsv2::toInt('9', theInt);
 	assert(theInt == 9);
 
 	int number = -1;
@@ -39,7 +39,7 @@ void ls::toIntTest() {
 	assert(number==-1);
 }
 
-int ls::decode(const std::string &line) {
+int lsv2::decode(const std::string &line) {
 	int firstDigit = -1, lastDigit = -1;
 	for (int i = 0; line[i] != '\0'; ++i) {
 		int currentDigit = -1;
@@ -57,7 +57,7 @@ int ls::decode(const std::string &line) {
 	return firstDigit * 10 + lastDigit;
 }
 
-void ls::decodeTest() {
+void lsv2::decodeTest() {
 	const std::string lines[] = {
 		"1abc2",
 		"pqr3stu8vwx",
@@ -66,16 +66,16 @@ void ls::decodeTest() {
 	};
 	constexpr int expected[]{12, 38, 15, 77};
 	for (int i = 0; i < 4; ++i) {
-		assert(ls::decode(lines[i]) == expected[i]);
+		assert(lsv2::decode(lines[i]) == expected[i]);
 	}
 	try {
-		ls::decode("no digit");
+		lsv2::decode("no digit");
 		assert(false);
 	} catch (std::invalid_argument &) {}
 }
 
-void ls::positionTest() {
-	ls::Position pos1;
+void lsv2::positionTest() {
+	lsv2::Position pos1;
 	assert(pos1.getName().empty());
 	assert(pos1.getX() == 0);
 	assert(pos1.getY() == 0);
@@ -85,7 +85,7 @@ void ls::positionTest() {
 	assert(pos1.getX() == 10);
 	assert(pos1.getY() == 20);
 
-	ls::Position pos2;
+	lsv2::Position pos2;
 	pos2.set("Position3", 30, 40);
 	assert(pos2.getName() == "Position3");
 	assert(pos2.getX() == 30);

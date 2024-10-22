@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace ls {
+namespace lsv2 {
 	void runTask2();
 
 	void toInt(char c, int &theInt);

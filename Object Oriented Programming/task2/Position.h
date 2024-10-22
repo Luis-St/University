@@ -2,7 +2,7 @@
 #define POSITION_H
 #include <string>
 
-namespace ls {
+namespace lsv2 {
 	class Position {
 	private:
 		std::string name;
