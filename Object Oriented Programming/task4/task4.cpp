@@ -31,22 +31,22 @@ void lsv4::testCtor() {
 	std::string pois[] = {"Sauron", "Minas Morgul", "Orodruin"};
 	lsv4::City city(position, pois, 3);
 	pois[0] = "Gandalf";
-	assert(city.getPOI(0)=="Sauron");
+	assert(city.getPOI(0) == "Sauron");
 }
 
 void lsv4::testGetNameXY() {
 	auto position = createPosition();
 	lsv4::City city(position, nullptr, 0);
-	assert(city.getName()=="Mordor");
-	assert(city.getX()==47);
-	assert(city.getY()==11);
+	assert(city.getName() == "Mordor");
+	assert(city.getX() == 47);
+	assert(city.getY() == 11);
 }
 
 void lsv4::testGetPOI() {
 	auto city = createCity();
-	assert(city.getPOI(0)=="Sauron");
-	assert(city.getPOI(1)=="Minas Morgul");
-	assert(city.getPOI(2)=="Orodruin");
+	assert(city.getPOI(0) == "Sauron");
+	assert(city.getPOI(1) == "Minas Morgul");
+	assert(city.getPOI(2) == "Orodruin");
 	try {
 		city.getPOI(3);
 		assert(false);

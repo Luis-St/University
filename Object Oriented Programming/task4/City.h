@@ -1,6 +1,6 @@
 #ifndef CITY_H
 #define CITY_H
-#include "../task3/task3.h"
+#include "../task3/Position.h"
 
 namespace lsv4 {
 	class City {
