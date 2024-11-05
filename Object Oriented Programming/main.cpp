@@ -3,10 +3,12 @@
 #include "task2/task2.h"
 #include "task3/task3.h"
 #include "task4/task4.h"
+#include "task5/task5.h"
 
 int main() {
 	runTask1();
 	lsv2::runTask2();
 	lsv3::runTask3();
 	lsv4::runTask4();
+	lsv5::runTask5();
 }
