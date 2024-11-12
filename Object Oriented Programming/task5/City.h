@@ -17,7 +17,7 @@ namespace lsv5 {
 		[[nodiscard]] std::string getName() const;
 		[[nodiscard]] int getX() const;
 		[[nodiscard]] int getY() const;
-		[[nodiscard]] std::string getPOI(int index) const;
+		[[nodiscard]] std::string& getPOI(int index) const;
 		void setPOI(int index, const std::string& poi) const;
 		[[nodiscard]] int getNumberOfPOIs() const;
 		~City();

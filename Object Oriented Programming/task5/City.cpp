@@ -36,7 +36,7 @@ namespace lsv5 {
 		return this->position.getY();
 	}
 
-	std::string City::getPOI(const int index) const {
+	std::string& City::getPOI(const int index) const {
 		checkIndex(index);
 		return this->pois[index];
 	}
