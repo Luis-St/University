@@ -22,9 +22,9 @@ namespace lsv5 {
 
 	City::City(const std::string &name, const int x, const int y, const std::string *pois, const int numberOfPOIs): City(lsv3::Position(name, x, y), pois, numberOfPOIs) {}
 
-	City::City(const lsv5::City& other): position(other.position), pois(createPOIs(other.pois, other.numberOfPOIs)), numberOfPOIs(other.numberOfPOIs) {}
+	City::City(const lsv5::City& other): City(other.position, other.pois, other.numberOfPOIs) {}
 
-	std::string City::getName() const {
+	const std::string& City::getName() const {
 		return this->position.getName();
 	}
 
@@ -36,7 +36,7 @@ namespace lsv5 {
 		return this->position.getY();
 	}
 
-	std::string& City::getPOI(const int index) const {
+	const std::string& City::getPOI(const int index) const {
 		checkIndex(index);
 		return this->pois[index];
 	}

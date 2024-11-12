@@ -14,10 +14,10 @@ namespace lsv5 {
 	public:
 		City(const std::string& name, int x, int y, const std::string *pois, int numberOfPOIs);
 		City(const lsv5::City& other);
-		[[nodiscard]] std::string getName() const;
+		[[nodiscard]] const std::string& getName() const;
 		[[nodiscard]] int getX() const;
 		[[nodiscard]] int getY() const;
-		[[nodiscard]] std::string& getPOI(int index) const;
+		[[nodiscard]] const std::string& getPOI(int index) const;
 		void setPOI(int index, const std::string& poi) const;
 		[[nodiscard]] int getNumberOfPOIs() const;
 		~City();
