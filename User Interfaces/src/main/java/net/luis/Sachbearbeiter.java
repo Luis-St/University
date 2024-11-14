@@ -34,7 +34,6 @@ public class Sachbearbeiter {
 			throw new IllegalArgumentException("Sachbearbeiter mit benutzername existiert bereits");
 		}
 		dieSachbearbeiter.put(sachbearbeiter.gibBenutzername(), sachbearbeiter);
-		
 	}
 	
 	static boolean loesche(String benutzername) {
