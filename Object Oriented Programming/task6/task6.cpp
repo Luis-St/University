@@ -24,7 +24,7 @@ void lsv6::testAdd() {
 	lsv6::City city("Mordor", 47, 11, pois, 2);
 	city.add("Orodruin");
 	assert(city.getNumberOfPOIs() == 3);
-	assert(city.getPOI(2)=="Orodruin");
+	assert(city.getPOI(2) == "Orodruin");
 	lsv6::City empty("Mordor", 47, 11);
 	empty.add("Orodruin");
 	assert(empty.getNumberOfPOIs() == 1);

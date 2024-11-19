@@ -58,9 +58,6 @@ namespace lsv6 {
 
 	void City::add(const std::string &name) {
 		const auto result = copyStringArray(this->pois, this->numberOfPOIs + 1);
-		for (int i = 0; i < this->numberOfPOIs; i++) {
-			result[i] = pois[i];
-		}
 		result[this->numberOfPOIs] = name;
 		this->numberOfPOIs = this->numberOfPOIs + 1;
 		delete[] this->pois;
