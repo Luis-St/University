@@ -9,4 +9,6 @@ add_executable(FH_S5_OOP main.cpp task1/task1.cpp task1/task1.h
 		task4/task4.cpp task4/task4.h task4/City.cpp task4/City.h
 		task5/task5.cpp task5/task5.h task5/City.cpp
 		task6/task6.cpp task6/task6.h task6/City.cpp
+		task7/Position.h
+		task7/Position.cpp
 )

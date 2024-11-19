@@ -1,5 +1,5 @@
-#ifndef CITY_H
-#define CITY_H
+#ifndef CITY_H_6
+#define CITY_H_6
 #include "../task3/Position.h"
 
 namespace lsv6 {

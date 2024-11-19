@@ -1,5 +1,5 @@
-#ifndef POSITION_H
-#define POSITION_H
+#ifndef POSITION_H_3
+#define POSITION_H_3
 #include <string>
 
 namespace lsv3 {
