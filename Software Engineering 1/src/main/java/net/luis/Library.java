@@ -23,6 +23,8 @@ public class Library {
 	private final Map<UUID, Media> media = Maps.newHashMap();
 	private final Map<UUID, Lending> lendings = Maps.newHashMap();
 	
+	private Library() {}
+	
 	public static @NotNull Library getInstance() {
 		return INSTANCE;
 	}

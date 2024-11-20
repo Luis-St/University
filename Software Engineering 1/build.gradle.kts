@@ -43,6 +43,7 @@ tasks.register<JavaExec>("runTest") {
 	mainClass.set("net.luis.Main")
 	classpath(sourceSets.test.get().runtimeClasspath)
 	standardInput = System.`in`
+	enableAssertions = true
 	args()
 	jvmArgs()
 }
