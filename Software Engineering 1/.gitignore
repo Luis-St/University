@@ -1,0 +1,11 @@
+# gradle
+build
+.gradle
+
+# project files
+*.imp
+/.idea/
+/src/main/java/net/luis/utils/Main.java
+
+# logs
+/logs/
