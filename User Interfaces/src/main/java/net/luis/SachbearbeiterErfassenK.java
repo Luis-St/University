@@ -1,16 +1,10 @@
 package net.luis;
 
-/**
- *
- * @author Luis-St
- *
- */
-
-public class SachbearbeiterErfassenK {
-	
-	Sachbearbeiter erzeugeSachbearbeiter(String benutzername, String passwort, boolean istAdmin) {
-		Sachbearbeiter sachbearbeiter = new Sachbearbeiter(benutzername, passwort, istAdmin);
-		Sachbearbeiter.fuegeHinzu(sachbearbeiter);
-		return sachbearbeiter;
+class SachbearbeiterErfassenK {
+	String erzeugeSachbearbeiter(String benutzername, String 
+			passwort, boolean istAdmin) {
+		String fehlermeldung = Sachbearbeiter.erzeuge(benutzername, passwort, istAdmin);
+		
+		return fehlermeldung;
 	}
 }

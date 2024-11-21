@@ -1,47 +1,64 @@
 package net.luis;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
-public class Fortbildung {
+public class Fortbildung implements Serializable {
 	
-	private static final Map<String, Fortbildung> dieFortbildungen = new HashMap<>();
-	private final Set<Fortbildung> voraussetzungen = new HashSet<>();
-	private final String name = "";
+	private static final long serialVersionUID = 1L;
+	private static Map<String, Fortbildung> dieFortbildungen =
+		new HashMap<>();
+	
+	static Map<String, Fortbildung> gibDieFortbildungen() {
+		return dieFortbildungen;
+	}
+	
+	static void setzeDieFortbildungen(Map<String, Fortbildung> fortbildungen) {
+		dieFortbildungen = fortbildungen;
+	}
+	
+	static {
+		Fortbildung mathematik1 = new Fortbildung("Mathematik 1");
+		Fortbildung allgemeineBwl = new Fortbildung("Allgemeine BWL");
+		Fortbildung mathematik2 = new Fortbildung("Mathematik 2", mathematik1);
+		new Fortbildung("Kostenrechnung", mathematik2, allgemeineBwl);
+	}
 	
 	static String[] gibAlleNamen() {
 		return dieFortbildungen.keySet().toArray(new String[0]);
 	}
 	
 	static Fortbildung gib(String name) {
-		if (!dieFortbildungen.containsKey(name)) {
-			throw new IllegalArgumentException("Sacharbeiter wurde nicht gefunden");
-		}
 		return dieFortbildungen.get(name);
 	}
 	
-	void fuegeVoraussetzungHinzu(Fortbildung voraussetzung) {
-		if (this.voraussetzungen.contains(voraussetzung)) {
-			throw new IllegalArgumentException("Fortbildung ist bereits voraussetzung");
+	private String name;
+	private Set<Fortbildung> voraussetzungen = new LinkedHashSet<>();
+	
+	Fortbildung(String name, Fortbildung... vorausgesetzteFortbildungen) {
+		this.name = name;
+		
+		for (Fortbildung f : vorausgesetzteFortbildungen) {
+			voraussetzungen.add(f);
 		}
-		this.voraussetzungen.add(voraussetzung);
+		
+		dieFortbildungen.put(this.gibName(), this);
 	}
 	
-	void loescheVoraussetzung(Fortbildung voraussetzung) {
-		this.voraussetzungen.remove(voraussetzung);
+	String gibName() {
+		return this.name;
 	}
 	
-	boolean istVoraussetzung(Fortbildung voraussetzung) {
-		return this.voraussetzungen.contains(voraussetzung);
+	boolean istVoraussetzungVon(Fortbildung fortbildung) {
+		return fortbildung.voraussetzungen.contains(this);
 	}
 	
-	Fortbildung[] gibVoraussetzungen() {
-		return this.voraussetzungen.toArray(new Fortbildung[0]);
+	Set<Fortbildung> gibVoraussetzungen() {
+		return voraussetzungen;
 	}
 	
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Fortbildung that)) return false;
-		return Objects.equals(this.name, that.name);
-	}
+	
 }
