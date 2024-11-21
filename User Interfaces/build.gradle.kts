@@ -14,7 +14,7 @@ tasks.test {
 
 tasks.register<JavaExec>("run") {
 	group = "run"
-	mainClass.set("net.luis.Main")
+	mainClass.set("net.luis.FortbildungsverwaltungHS")
 	classpath(sourceSets.main.get().runtimeClasspath)
 	standardInput = System.`in`
 	args()

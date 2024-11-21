@@ -2,7 +2,7 @@ package net.luis.k;
 
 import net.luis.Sachbearbeiter;
 
-class SachbearbeiterBearbeitenK {
+public class SachbearbeiterBearbeitenK {
 	
 	public String schreibeSachbearbeiter(String alterBenutzername, String neuerBenutzername, String passwort, boolean istAdmin) {
 		Sachbearbeiter sachbearbeiter = Sachbearbeiter.gib(alterBenutzername);

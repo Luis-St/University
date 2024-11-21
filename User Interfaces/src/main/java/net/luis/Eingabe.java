@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Eingabe {
 	
-	public static String eingabe(String prompt) {
+	public static String eingeben(String prompt) {
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.print(prompt);
 			return scanner.nextLine();
