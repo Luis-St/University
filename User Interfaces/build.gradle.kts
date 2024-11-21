@@ -14,9 +14,6 @@ dependencies {
 		exclude(group = "com.google.errorprone")
 		exclude(group = "com.google.j2objc")
 	} // Utility
-	// Apache
-	implementation("org.apache.logging.log4j:log4j-api:${project.properties["Log4jAPI"].toString()}") // Logging
-	implementation("org.apache.logging.log4j:log4j-core:${project.properties["Log4jCore"].toString()}") // Logging
 	implementation("org.apache.commons:commons-lang3:${project.properties["ApacheLang"].toString()}") // Utility
 	// Other
 	implementation("org.jetbrains:annotations:${project.properties["JetBrainsAnnotations"].toString()}") // Annotations
