@@ -7,20 +7,18 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-class Sachbearbeiter implements Serializable {
-	/**
-	 *
-	 */
+public class Sachbearbeiter implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 	// Invariante: mindestens ein Administrator muss in dieSachbearbeiter vorhanden
 	// sein
-	static private Map<String, Sachbearbeiter> dieSachbearbeiter = new HashMap<>();
+	private static Map<String, Sachbearbeiter> dieSachbearbeiter = new HashMap<>();
 	
-	static String[] gibAlleNamen() {
+	public static String[] gibAlleNamen() {
 		return dieSachbearbeiter.keySet().toArray(new String[0]);
 	}
 	
-	static Sachbearbeiter gib(String benutzername) {
+	public static Sachbearbeiter gib(String benutzername) {
 		return dieSachbearbeiter.get(benutzername);
 	}
 	
@@ -33,11 +31,11 @@ class Sachbearbeiter implements Serializable {
 		dieSachbearbeiter.put(sachbearbeiter.gibBenutzername(), sachbearbeiter);
 	}
 	
-	static boolean mindestensEinSachbearbeiterExistiert() {
+	public static boolean mindestensEinSachbearbeiterExistiert() {
 		return !dieSachbearbeiter.isEmpty();
 	}
 	
-	static boolean mindestensEinAdminExistiert() {
+	public static boolean mindestensEinAdminExistiert() {
 		
 		for (Sachbearbeiter s : dieSachbearbeiter.values()) {
 			if (s.istAdmin() == true) {
@@ -48,7 +46,7 @@ class Sachbearbeiter implements Serializable {
 		return false;
 	}
 	
-	static String pruefeBenutzername(String benutzername) {
+	public static String pruefeBenutzername(String benutzername) {
 		boolean istOk = !dieSachbearbeiter.containsKey(benutzername);
 		
 		if (!istOk) {
@@ -64,11 +62,11 @@ class Sachbearbeiter implements Serializable {
 		}
 	}
 	
-	static String pruefePasswort(String passwort) {
+	public static String pruefePasswort(String passwort) {
 		String regAusdruck = ".*[A-ZÄÜÖ].*[A-ZÄÜÖ].*";
 		boolean istOk = passwort.matches(regAusdruck);
 		regAusdruck = ".*[a-zäüöß].*[a-zäüöß].*";
-		istOk &= passwort.matches(regAusdruck);
+		istOk = istOk && passwort.matches(regAusdruck);
 		regAusdruck = ".*\\d.*\\d.*";
 		istOk &= passwort.matches(regAusdruck);
 		// laut Wikipedia ist ein Sonderzeichen ein Zeichen, das weder Buchstabe noch
@@ -88,7 +86,7 @@ class Sachbearbeiter implements Serializable {
 	// der Map dieSachbearbeiter hinzugefuegt
 	// wenn das erzeugen klappt, wird null zurueckgegeben
 	// wenn es nicht klappt, wird eine Fehlermeldung zurueckgegeben
-	static String erzeuge(String benutzername, String passwort, boolean istAdmin) {
+	public static String erzeuge(String benutzername, String passwort, boolean istAdmin) {
 		String fehlermeldung = pruefeBenutzername(benutzername);
 		if (fehlermeldung == null) {
 			fehlermeldung = pruefePasswort(passwort);
@@ -108,19 +106,19 @@ class Sachbearbeiter implements Serializable {
 	private Map<String, Fortbildung> bestandeneFortbildungen = new HashMap<>();
 	private Map<String, Fortbildung> belegteFortbildungen = new HashMap<>();
 	
-	boolean istBestanden(Fortbildung fortbildung) {
+	public boolean istBestanden(Fortbildung fortbildung) {
 		return bestandeneFortbildungen.containsKey(fortbildung.gibName());
 	}
 	
-	boolean istBelegt(Fortbildung fortbildung) {
+	public boolean istBelegt(Fortbildung fortbildung) {
 		return belegteFortbildungen.containsKey(fortbildung.gibName());
 	}
 	
-	String gibBenutzername() {
+	public String gibBenutzername() {
 		return benutzername;
 	}
 	
-	String setzeBenutzername(String neuerBenutzername) {
+	public String setzeBenutzername(String neuerBenutzername) {
 		String fehlermeldung = null;
 		if (!neuerBenutzername.equals(this.benutzername)) {
 			fehlermeldung = pruefeBenutzername(neuerBenutzername);
@@ -135,11 +133,11 @@ class Sachbearbeiter implements Serializable {
 		return fehlermeldung;
 	}
 	
-	String gibPasswort() {
+	public String gibPasswort() {
 		return passwort;
 	}
 	
-	String setzePasswort(String passwort) {
+	public String setzePasswort(String passwort) {
 		String fehlermeldung = pruefePasswort(passwort);
 		
 		if (fehlermeldung == null) {
@@ -148,11 +146,11 @@ class Sachbearbeiter implements Serializable {
 		return fehlermeldung;
 	}
 	
-	boolean istAdmin() {
+	public boolean istAdmin() {
 		return istAdmin;
 	}
 	
-	String setzeIstAdmin(boolean istAdmin) {
+	public String setzeIstAdmin(boolean istAdmin) {
 		boolean alteBerechtigung = this.istAdmin;
 		this.istAdmin = istAdmin;
 		if (mindestensEinAdminExistiert()) {
@@ -171,12 +169,12 @@ class Sachbearbeiter implements Serializable {
 		this.istAdmin = istAdmin;
 	}
 	
-	boolean mindestensEineFortbildungszuordnungExistiert() {
+	public boolean mindestensEineFortbildungszuordnungExistiert() {
 		boolean existiert = !this.belegteFortbildungen.isEmpty();
 		return existiert |= !this.bestandeneFortbildungen.isEmpty();
 	}
 	
-	String loesche() {
+	public String loesche() {
 		dieSachbearbeiter.remove(gibBenutzername());
 		// mindestens ein Admin muss in dieFortbildungen existieren
 		if (mindestensEinAdminExistiert()) {
@@ -188,33 +186,24 @@ class Sachbearbeiter implements Serializable {
 		}
 	}
 	
-	void belege(Fortbildung fortbildung) {
+	public void belege(Fortbildung fortbildung) {
 		belegteFortbildungen.put(fortbildung.gibName(), fortbildung);
 	}
 	
-	void bestehe(Fortbildung fortbildung) {
+	public void bestehe(Fortbildung fortbildung) {
 		belegteFortbildungen.remove(fortbildung.gibName());
 		bestandeneFortbildungen.put(fortbildung.gibName(), fortbildung);
 	}
 	
-	void fortbildungsbelegungLoeschen(Fortbildung fortbildung) {
+	public void fortbildungsbelegungLoeschen(Fortbildung fortbildung) {
 		belegteFortbildungen.remove(fortbildung.gibName());
 	}
 	
-	void fortbildungsbestehenLoeschen(Fortbildung fortbildung) {
+	public void fortbildungsbestehenLoeschen(Fortbildung fortbildung) {
 		bestandeneFortbildungen.remove(fortbildung.gibName());
 	}
 	
-	public static void main(String[] args) {
-		String name = " ";
-		
-		System.out.println(erzeuge(name, "gGG+2&256g", true));
-		gib("admin").loesche();
-		System.out.println(gib(name).loesche());
-		alleNamenAusgeben();
-	}
-	
-	static void alleNamenAusgeben() {
+	public static void alleNamenAusgeben() {
 		String[] alleNamen = Sachbearbeiter.gibAlleNamen();
 		for (String name : alleNamen) {
 			System.out.println(name);
@@ -222,17 +211,17 @@ class Sachbearbeiter implements Serializable {
 		
 	}
 	
-	Collection<Fortbildung> gibBestandeneFortbildungen() {
+	public Collection<Fortbildung> gibBestandeneFortbildungen() {
 		return bestandeneFortbildungen.values();
 	}
 	
-	Collection<Fortbildung> gibBelegteFortbildungen() {
+	public Collection<Fortbildung> gibBelegteFortbildungen() {
 		return belegteFortbildungen.values();
 	}
 	
-	static private String dateiname = "./Entitaeten.ser";
+	private static String dateiname = "./Entitaeten.ser";
 	
-	static void abspeichern() {
+	public static void abspeichern() {
 		try (ObjectOutputStream aus = new ObjectOutputStream(new FileOutputStream(dateiname))) {
 			aus.writeObject(dieSachbearbeiter);
 			aus.writeObject(Fortbildung.gibDieFortbildungen());
@@ -242,7 +231,7 @@ class Sachbearbeiter implements Serializable {
 	}
 	
 	@SuppressWarnings("unchecked")
-	static void einlesen() {
+	public static void einlesen() {
 		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(dateiname))) {
 			dieSachbearbeiter = (Map<String, Sachbearbeiter>) in.readObject();
 			Map<String, Fortbildung> dieFortbildungen = (Map<String, Fortbildung>) in.readObject();
@@ -257,5 +246,4 @@ class Sachbearbeiter implements Serializable {
 			System.out.println(ex);
 		}
 	}
-	
 }

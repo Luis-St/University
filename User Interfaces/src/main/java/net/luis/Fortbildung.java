@@ -12,11 +12,11 @@ public class Fortbildung implements Serializable {
 	private static Map<String, Fortbildung> dieFortbildungen =
 		new HashMap<>();
 	
-	static Map<String, Fortbildung> gibDieFortbildungen() {
+	public static Map<String, Fortbildung> gibDieFortbildungen() {
 		return dieFortbildungen;
 	}
 	
-	static void setzeDieFortbildungen(Map<String, Fortbildung> fortbildungen) {
+	public static void setzeDieFortbildungen(Map<String, Fortbildung> fortbildungen) {
 		dieFortbildungen = fortbildungen;
 	}
 	
@@ -27,18 +27,18 @@ public class Fortbildung implements Serializable {
 		new Fortbildung("Kostenrechnung", mathematik2, allgemeineBwl);
 	}
 	
-	static String[] gibAlleNamen() {
+	public static String[] gibAlleNamen() {
 		return dieFortbildungen.keySet().toArray(new String[0]);
 	}
 	
-	static Fortbildung gib(String name) {
+	public static Fortbildung gib(String name) {
 		return dieFortbildungen.get(name);
 	}
 	
 	private String name;
 	private Set<Fortbildung> voraussetzungen = new LinkedHashSet<>();
 	
-	Fortbildung(String name, Fortbildung... vorausgesetzteFortbildungen) {
+	public Fortbildung(String name, Fortbildung... vorausgesetzteFortbildungen) {
 		this.name = name;
 		
 		for (Fortbildung f : vorausgesetzteFortbildungen) {
@@ -48,17 +48,15 @@ public class Fortbildung implements Serializable {
 		dieFortbildungen.put(this.gibName(), this);
 	}
 	
-	String gibName() {
+	public String gibName() {
 		return this.name;
 	}
 	
-	boolean istVoraussetzungVon(Fortbildung fortbildung) {
+	public boolean istVoraussetzungVon(Fortbildung fortbildung) {
 		return fortbildung.voraussetzungen.contains(this);
 	}
 	
-	Set<Fortbildung> gibVoraussetzungen() {
+	public Set<Fortbildung> gibVoraussetzungen() {
 		return voraussetzungen;
 	}
-	
-	
 }

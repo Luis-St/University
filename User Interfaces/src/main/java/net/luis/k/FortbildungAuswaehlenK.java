@@ -1,10 +1,14 @@
-package net.luis;
+package net.luis.k;
+import net.luis.Fortbildung;
+import net.luis.Sachbearbeiter;
+
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-class FortbildungAuswaehlenK {
-	static String[] gibAlleNamen() {
+public class FortbildungAuswaehlenK {
+	
+	public static String[] gibAlleNamen() {
 		return Fortbildung.gibAlleNamen();
 	}
 
@@ -47,8 +51,8 @@ class FortbildungAuswaehlenK {
 			return true;
 		}
 	}
-
-	boolean alleVoraussetzungenVorhanden(Sachbearbeiter sachbearbeiter, Fortbildung fortbildung) {
+	
+	public boolean alleVoraussetzungenVorhanden(Sachbearbeiter sachbearbeiter, Fortbildung fortbildung) {
 		Set<Fortbildung> voraussetzungen = fortbildung.gibVoraussetzungen();
 		
 		for (Fortbildung voraussetzung : voraussetzungen) {
@@ -69,5 +73,4 @@ class FortbildungAuswaehlenK {
 			return true;
 		}
 	}
-
 }

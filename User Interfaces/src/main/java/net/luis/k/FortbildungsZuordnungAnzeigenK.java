@@ -1,3 +1,3 @@
-package net.luis;
+package net.luis.k;
 
 public class FortbildungsZuordnungAnzeigenK {}

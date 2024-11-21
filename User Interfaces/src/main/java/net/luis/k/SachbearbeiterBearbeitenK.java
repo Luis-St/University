@@ -1,0 +1,33 @@
+package net.luis.k;
+
+import net.luis.Sachbearbeiter;
+
+class SachbearbeiterBearbeitenK {
+	
+	public String schreibeSachbearbeiter(String alterBenutzername, String neuerBenutzername, String passwort, boolean istAdmin) {
+		Sachbearbeiter sachbearbeiter = Sachbearbeiter.gib(alterBenutzername);
+		
+		String fehlermeldung = sachbearbeiter.setzeBenutzername(neuerBenutzername);
+		if (fehlermeldung == null) {
+			String altesPasswort = sachbearbeiter.gibPasswort();
+			fehlermeldung = sachbearbeiter.setzePasswort(passwort);
+			if (fehlermeldung == null) {
+				fehlermeldung = sachbearbeiter.setzeIstAdmin(istAdmin);
+				if (fehlermeldung != null) {
+					// rollback benutzername und passwort
+					sachbearbeiter.setzeBenutzername(alterBenutzername);
+					sachbearbeiter.setzePasswort(altesPasswort);
+				}
+			} else {
+				// rollback des Benutzernamens, weil passwort falsch
+				sachbearbeiter.setzeBenutzername(alterBenutzername);
+			}
+		}
+		
+		return fehlermeldung;
+	}
+	
+	public boolean gibBerechtigung(String altenBenutzernamen) {
+		return new SachbearbeiterK().gibBerechtigung(altenBenutzernamen);
+	}
+}

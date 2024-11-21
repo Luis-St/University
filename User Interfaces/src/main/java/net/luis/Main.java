@@ -1,7 +1,5 @@
 package net.luis;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  *
  * @author Luis-St
@@ -10,5 +8,5 @@ import org.jetbrains.annotations.NotNull;
 
 public class Main {
 	
-	public static void main(String @NotNull [] args) {}
+	public static void main(String[] args) {}
 }

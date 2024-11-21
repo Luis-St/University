@@ -1,7 +1,5 @@
 package net.luis;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 
 /**
@@ -12,7 +10,7 @@ import java.util.*;
 
 public class Auswaehlen {
 	
-	public static @NotNull String optionAuswaehlen(@NotNull String... options) {
+	public static String optionAuswaehlen(String... options) {
 		Map<Integer, String> lookup = Arrays.stream(options).collect(HashMap::new, (map, option) -> map.put(map.size() + 1, option), HashMap::putAll);
 		
 		System.out.println("Verfügbare Optionen:");

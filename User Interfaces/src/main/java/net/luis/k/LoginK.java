@@ -1,7 +1,10 @@
-package net.luis;
+package net.luis.k;
 
-class LoginK {
-	String passwortPasstZuBenutzername(String benutzername, String passwort) {
+import net.luis.Sachbearbeiter;
+
+public class LoginK {
+	
+	public String passwortPasstZuBenutzername(String benutzername, String passwort) {
 		Sachbearbeiter sachbearbeiter = Sachbearbeiter.gib(benutzername);
 		String fehlermeldung = "Login ist leider fehlgeschlagen";
 		if (sachbearbeiter == null) {
@@ -15,8 +18,8 @@ class LoginK {
 			}
 		}
 	}
-
-	String gewaehlteBerechtigungPasstZuSachbearbeiter(String benutzername, boolean istAdmin) {
+	
+	public String gewaehlteBerechtigungPasstZuSachbearbeiter(String benutzername, boolean istAdmin) {
 		if (!istAdmin) {
 			return null;
 		} else {
@@ -28,9 +31,8 @@ class LoginK {
 			}
 		}
 	}
-
-	boolean istAdmin(String benutzername) {
+	
+	public boolean istAdmin(String benutzername) {
 		return Sachbearbeiter.gib(benutzername).istAdmin();
 	}
-
 }

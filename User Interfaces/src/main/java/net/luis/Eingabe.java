@@ -1,7 +1,5 @@
 package net.luis;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Scanner;
 
 /**
@@ -12,7 +10,7 @@ import java.util.Scanner;
 
 public class Eingabe {
 	
-	public static @NotNull String eingabe(@NotNull String prompt) {
+	public static String eingabe(String prompt) {
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.print(prompt);
 			return scanner.nextLine();

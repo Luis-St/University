@@ -1,5 +1,7 @@
-package net.luis;
+package net.luis.k;
 
+import net.luis.Fortbildung;
+import net.luis.Sachbearbeiter;
 
 public class FortbildungZuordnenK {
 	

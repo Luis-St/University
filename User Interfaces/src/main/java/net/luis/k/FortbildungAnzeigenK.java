@@ -1,9 +1,14 @@
-package net.luis;
+package net.luis.k;
+
+import net.luis.Fortbildung;
+import net.luis.Sachbearbeiter;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-class FortbildungAnzeigenK extends FortbildungZuordnenK {
-	String[] gibBelegteFortbildungen(String ausgewaehlterBenutzername) {
+public class FortbildungAnzeigenK extends FortbildungZuordnenK {
+	
+	public String[] gibBelegteFortbildungen(String ausgewaehlterBenutzername) {
 		Sachbearbeiter sachbearbeiter = Sachbearbeiter.gib(ausgewaehlterBenutzername);
 		Set<String> fortbildungenNamen = new LinkedHashSet<>();
 		
@@ -13,8 +18,8 @@ class FortbildungAnzeigenK extends FortbildungZuordnenK {
 		
 		return fortbildungenNamen.toArray(new String[0]);
 	}
-
-	String[] gibBestandeneFortbildungen(String ausgewaehlterBenutzername) {
+	
+	public String[] gibBestandeneFortbildungen(String ausgewaehlterBenutzername) {
 		Sachbearbeiter sachbearbeiter = Sachbearbeiter.gib(ausgewaehlterBenutzername);
 		Set<String> fortbildungenNamen = new LinkedHashSet<>();
 		
