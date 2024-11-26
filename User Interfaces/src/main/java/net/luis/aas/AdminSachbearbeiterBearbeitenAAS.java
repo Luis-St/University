@@ -6,56 +6,42 @@ import net.luis.k.SachbearbeiterBearbeitenK;
 
 public class AdminSachbearbeiterBearbeitenAAS {
 	
-	private static AdminSachbearbeiterBearbeitenAAS OBJ = new AdminSachbearbeiterBearbeitenAAS();
-	private SachbearbeiterBearbeitenK kontrolle;
+	public static final AdminSachbearbeiterBearbeitenAAS INSTANZ = new AdminSachbearbeiterBearbeitenAAS();
 	
-	private AdminSachbearbeiterBearbeitenAAS() {
-		this.kontrolle = new SachbearbeiterBearbeitenK();
-	}
+	private final SachbearbeiterBearbeitenK kontrolle = new SachbearbeiterBearbeitenK();
 	
-	public static AdminSachbearbeiterBearbeitenAAS getInstance() {
-		return OBJ;
-	}
+	private AdminSachbearbeiterBearbeitenAAS() {}
 	
 	public void oeffnen() {
-		System.out.println("Sachbearbeiter bearbeiten:");
-		String name = Eingabe.eingeben("Namen des zu bearbeitenden Nutzers eingeben:");
-		while (true) {
-			try {
-				Sachbearbeiter.gib(name);
-				break;
-			} catch (IllegalArgumentException e) {
-				System.out.println(e.getMessage());
-				name = Eingabe.eingeben("Namen des zu bearbeitenden Nutzers eingeben:");
-			}
-		}
-		String admin = Eingabe.eingeben("Admin? Y/N (X to leave it as it was)");
-		Boolean isAdmin = Sachbearbeiter.gib(name).istAdmin();
+		String name = SachbearbeiterAuswaehlenAAS.INSTANCE.selektiereSachbearbeiter();
 		
-		while (!admin.equals("Y") && !admin.equals("N") && !admin.equals("X")) {
-			if (admin.equals("X")) {
-				break;
-			}
-			admin = Eingabe.eingeben("Admin? Y / N / X");
+		String username = Eingabe.eingeben("Neuer Benutzername eingeben: (^X to cancel, ^S not modify username)");
+		if ("^X".equals(username)) {
+			return;
 		}
-		if (admin == "Y") {
-			isAdmin = true;
+		if ("^S".equals(username)) {
+			username = Sachbearbeiter.gib(name).gibBenutzername();
 		}
 		
-		while (true) {
-			try {
-				String userName = Eingabe.eingeben("Neuer Benutzername eingeben: (X to cancel)");
-				if (userName.equals("X")) {
-					break;
-				}
-				Sachbearbeiter sachbearbeiter = Sachbearbeiter.gib(userName);
-				kontrolle.schreibeSachbearbeiter(userName, sachbearbeiter.gibBenutzername(), sachbearbeiter.gibPasswort(), isAdmin);
-				break;
-			} catch (IllegalArgumentException e) {
-				System.out.println(e.getMessage());
-			}
+		String passwort = Eingabe.eingeben("Neues Passwort eingeben: (^X to cancel, ^S not modify password)");
+		if ("X".equals(passwort)) {
+			return;
 		}
+		if ("^S".equals(passwort)) {
+			passwort = Sachbearbeiter.gib(name).gibPasswort();
+		}
+		
+		String admin;
+		do {
+			admin = Eingabe.eingeben("Soll der Sachbearbeiter Admin sein? Y/N (^X to cancel, ^S not modify admin)");
+		} while (!"Y".equals(admin) && !"N".equals(admin) && !"^X".equals(admin) && !"^S".equals(admin));
+		if ("^X".equals(admin)) {
+			return;
+		}
+		if ("^S".equals(admin)) {
+			admin = Sachbearbeiter.gib(name).istAdmin() ? "Y" : "N";
+		}
+		
+		this.kontrolle.schreibeSachbearbeiter(name, username, passwort, "Y".equals(admin));
 	}
-	
-	public void praesentiereSachbearbeiter() {}
 }

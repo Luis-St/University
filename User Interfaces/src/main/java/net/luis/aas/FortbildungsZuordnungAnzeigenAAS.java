@@ -1,19 +1,30 @@
 package net.luis.aas;
 
+import net.luis.Auswaehlen;
 import net.luis.k.FortbildungsZuordnungAnzeigenK;
 
 public class FortbildungsZuordnungAnzeigenAAS {
 	
-	private static FortbildungsZuordnungAnzeigenAAS OBJ = new FortbildungsZuordnungAnzeigenAAS();
-	private FortbildungsZuordnungAnzeigenK kontrolle;
+	public static final FortbildungsZuordnungAnzeigenAAS INSTANZ = new FortbildungsZuordnungAnzeigenAAS();
 	
-	private FortbildungsZuordnungAnzeigenAAS() {
-		this.kontrolle = new FortbildungsZuordnungAnzeigenK();
+	private final FortbildungsZuordnungAnzeigenK kontrolle = new FortbildungsZuordnungAnzeigenK();
+	
+	private FortbildungsZuordnungAnzeigenAAS() {}
+	
+	public void oeffnen() {
+		String sachbearbeiter = SachbearbeiterAuswaehlenAAS.INSTANCE.selektiereSachbearbeiter();
+		
+		System.out.println("Welche Zuordnung möchten Sie anzeigen?");
+		ZuordnungsTyp typ = ZuordnungsTyp.values()[Auswaehlen.optionAuswaehlen("Belegt", "Bestanden")];
+		if (typ == ZuordnungsTyp.BELEGT) {
+			this.kontrolle.gibBelegteFortbildung(sachbearbeiter).forEach(System.out::println);
+		} else if (typ == ZuordnungsTyp.BESTANDEN) {
+			this.kontrolle.gibBestandeneFortbildung(sachbearbeiter).forEach(System.out::println);
+		}
 	}
 	
-	public static FortbildungsZuordnungAnzeigenAAS getInstance() {
-		return OBJ;
+	private enum ZuordnungsTyp {
+		
+		BELEGT, BESTANDEN;
 	}
-	
-	public void oeffnen() {}
 }

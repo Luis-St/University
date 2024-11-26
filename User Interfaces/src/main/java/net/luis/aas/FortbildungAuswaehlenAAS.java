@@ -1,23 +1,20 @@
 package net.luis.aas;
 
+import net.luis.Auswaehlen;
 import net.luis.k.FortbildungAuswaehlenK;
 
 public class FortbildungAuswaehlenAAS {
 	
-	private static FortbildungAuswaehlenAAS OBJ = new FortbildungAuswaehlenAAS();
-	private FortbildungAuswaehlenK kontrolle;
+	public static final FortbildungAuswaehlenAAS INSTANCE = new FortbildungAuswaehlenAAS();
 	
-	private FortbildungAuswaehlenAAS() {
-		this.kontrolle = new FortbildungAuswaehlenK();
+	private final FortbildungAuswaehlenK kontrolle = new FortbildungAuswaehlenK();
+	
+	private FortbildungAuswaehlenAAS() {}
+	
+	public String selektiereFortbildung() {
+		System.out.println("Fortbildung auswählen:");
+		String[] namen = this.kontrolle.gibAlleNamen();
+		int index = Auswaehlen.optionAuswaehlen(namen);
+		return namen[index];
 	}
-	
-	public static FortbildungAuswaehlenAAS getInstance() {
-		return OBJ;
-	}
-	
-	public void oeffnen() {}
-	
-	public void praesentiereFortbildungenNamen() {}
-	
-	public void selektiereFortbildung() {}
 }

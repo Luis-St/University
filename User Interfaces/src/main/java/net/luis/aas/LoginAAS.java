@@ -8,62 +8,51 @@ import net.luis.k.LoginK;
 
 public class LoginAAS {
 	
-	private static LoginAAS OBJ = new LoginAAS();
-	private LoginK kontrolle;
-	Sachbearbeiter sachbearbeiterToLogin;
+	public static final LoginAAS INSTANZ = new LoginAAS();
 	
-	private LoginAAS() {
-		this.kontrolle = new LoginK();
-	}
+	Sachbearbeiter sachbearbeiter;
 	
-	public static LoginAAS getInstance() {
-		return OBJ;
-	}
+	private LoginAAS() {}
 	
 	public void oeffnen() {
-		
 		System.out.println("Login Vorgang gestartet.");
-		
-		while (true) {
+		do {
+			String input = Eingabe.eingeben("Name eingeben:");
 			try {
-				String name = Eingabe.eingeben("Name eingeben:");
-				sachbearbeiterToLogin = Sachbearbeiter.gib(name);
-				break;
-			} catch (IllegalArgumentException e) {
+				this.sachbearbeiter = Sachbearbeiter.gib(input);
+			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
-		}
+		} while (this.sachbearbeiter == null);
 		
-		String passwort = Eingabe.eingeben("Passwort eingeben:");
-		int counter = 1;
-		while (true) {
-			if (counter > 2) {
-				throw new IllegalArgumentException("Passwort zu oft falsch eingegeben.");
-			}
-			if (!sachbearbeiterToLogin.gibPasswort().equals(passwort)) {
-				passwort = Eingabe.eingeben("Passwort falsch. \nPasswort eingeben:");
-				counter++;
-			} else {
+		for (int i = 0; true; i++) {
+			String passwort = Eingabe.eingeben("Passwort eingeben:");
+			if (LoginK.passwortPasstZuBenutzername(this.sachbearbeiter.gibBenutzername(), passwort)) {
 				break;
 			}
-		}
-		
-		String admin = Eingabe.eingeben("Admin? Y/N");
-		Boolean isAdmin = false;
-		
-		while (!admin.equals("Y") && !admin.equals("N")) {
-			admin = Eingabe.eingeben("Falsche Eingabe. \nAdmin? Y/N");
-		}
-		if (admin.equals("Y")) {
-			if (sachbearbeiterToLogin.istAdmin()) {
-				System.out.println("Erfolgreich eingeloggt als Admin: " + sachbearbeiterToLogin.gibBenutzername());
-				new AdminAS().oeffnen();
-			} else {
-				System.out.println("Erfolgreich eingeloggt als Nutzer: " + sachbearbeiterToLogin.gibBenutzername());
-				new NormalAS().oeffnen();
+			if (i == 2) {
+				throw new IllegalArgumentException("Passwort zu oft falsch eingegeben.");
 			}
+			System.out.println("Passwort falsch!");
+		}
+		
+		String admin;
+		do {
+			admin = Eingabe.eingeben("Einloggen als Admin? Y/N");
+		} while (!"Y".equals(admin) && !"N".equals(admin));
+		
+		if (!LoginK.gewaehlteBerechtigungPasstZuSachbearbeiter(this.sachbearbeiter.gibBenutzername(), "Y".equals(admin))) {
+			throw new IllegalStateException("Berechtigung passt nicht zum Sachbearbeiter.");
+		}
+		
+		if ("Y".equals(admin)) {
+			if (LoginK.istAdmin(this.sachbearbeiter.gibBenutzername())) {
+				System.out.println("Erfolgreich eingeloggt als Admin: " + this.sachbearbeiter.gibBenutzername());
+				new AdminAS().oeffnen();
+			}
+			throw new IllegalStateException("Nicht berechtigt als Admin einzuloggen.");
 		} else {
-			System.out.println("Erfolgreich eingeloggt als Nutzer: " + sachbearbeiterToLogin.gibBenutzername());
+			System.out.println("Erfolgreich eingeloggt als Nutzer: " + this.sachbearbeiter.gibBenutzername());
 			new NormalAS().oeffnen();
 		}
 	}

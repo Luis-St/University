@@ -1,16 +1,12 @@
 package net.luis;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Fortbildung implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	private static Map<String, Fortbildung> dieFortbildungen =
-		new HashMap<>();
+	private static Map<String, Fortbildung> dieFortbildungen = new HashMap<>();
 	
 	public static Map<String, Fortbildung> gibDieFortbildungen() {
 		return dieFortbildungen;
@@ -18,13 +14,6 @@ public class Fortbildung implements Serializable {
 	
 	public static void setzeDieFortbildungen(Map<String, Fortbildung> fortbildungen) {
 		dieFortbildungen = fortbildungen;
-	}
-	
-	static {
-		Fortbildung mathematik1 = new Fortbildung("Mathematik 1");
-		Fortbildung allgemeineBwl = new Fortbildung("Allgemeine BWL");
-		Fortbildung mathematik2 = new Fortbildung("Mathematik 2", mathematik1);
-		new Fortbildung("Kostenrechnung", mathematik2, allgemeineBwl);
 	}
 	
 	public static String[] gibAlleNamen() {
@@ -35,16 +24,12 @@ public class Fortbildung implements Serializable {
 		return dieFortbildungen.get(name);
 	}
 	
-	private String name;
-	private Set<Fortbildung> voraussetzungen = new LinkedHashSet<>();
+	private final String name;
+	private final Set<Fortbildung> voraussetzungen = new LinkedHashSet<>();
 	
 	public Fortbildung(String name, Fortbildung... vorausgesetzteFortbildungen) {
 		this.name = name;
-		
-		for (Fortbildung f : vorausgesetzteFortbildungen) {
-			voraussetzungen.add(f);
-		}
-		
+		Collections.addAll(this.voraussetzungen, vorausgesetzteFortbildungen);
 		dieFortbildungen.put(this.gibName(), this);
 	}
 	
@@ -57,6 +42,6 @@ public class Fortbildung implements Serializable {
 	}
 	
 	public Set<Fortbildung> gibVoraussetzungen() {
-		return voraussetzungen;
+		return this.voraussetzungen;
 	}
 }

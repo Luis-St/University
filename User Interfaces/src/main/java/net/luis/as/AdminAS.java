@@ -1,62 +1,59 @@
 package net.luis.as;
 
+import net.luis.Auswaehlen;
 import net.luis.Eingabe;
 import net.luis.aas.*;
 
 public class AdminAS {
 	
+	private static final String[] MENUE = {
+		"Sachbearbeiter erfassen",
+		"Sachbearbeiter bearbeiten",
+		"Sachbearbeiter loeschen",
+		"Fortbildung zuordnen",
+		"Fortbildungszuordnung löschen",
+		"Fortbildungszuordnung anzeigen",
+		"Logout"
+	};
+	
 	public void oeffnen() {
-		while (true) {
-			System.out.println("--------------------------------");
-			System.out.println("Menue");
-			System.out.println("--------------------------------");
-			System.out.println("Folgende Funktionen stehen zur Verfügung:");
-			System.out.println("Sachbearbeiter erfassen (SE)");
-			System.out.println("Sachbearbeiter bearbeiten (SB)");
-			System.out.println("Sachbearbeiter loeschen (SL)");
-			System.out.println("Fortbildung zuordnen (FZ)");
-			System.out.println("Fortbildungszuordnung löschen (FL)");
-			System.out.println("Fortbildungszuordnung anzeigen (FA)");
-			System.out.println("Logout (X)");
-			
-			String eingabe = Eingabe.eingeben("SE / SB / SL / FZ / FL / FA / X");
-			
-			while (!eingabe.equals("SE") && !eingabe.equals("SB") && !eingabe.equals("SL") && !eingabe.equals("FZ") && !eingabe.equals("FL") && !eingabe.equals("FA") && !eingabe.equals("X")) {
-				eingabe = Eingabe.eingeben("Falsche Eingabe. \nSE / SB / SL / FZ / FL / FA / X");
+		loop: while (true) {
+			System.out.println("Admin-Menü:");
+			int option = Auswaehlen.optionAuswaehlen(MENUE);
+			switch (option) {
+				case 0 -> this.sachbearbeiterErfassen();
+				case 1 -> this.sachbearbeiterBearbeiten();
+				case 2 -> this.sachbearbeiterLoeschen();
+				case 3 -> this.fortbildungZuordnen();
+				case 4 -> this.fortbildungsZuordnungLoeschen();
+				case 5 -> this.fortbildungsZuordnungAnzeigen();
+				default -> {break loop;}
 			}
-			if (eingabe.equals("SE")) {
-				sachbearbeiterErfassen();
-			} else if (eingabe.equals("SB")) {
-				sachbearbeiterBearbeiten();
-			} else if (eingabe.equals("SL")) {
-				sachbearbeiterLoeschen();
-			} else if (eingabe.equals("FZ")) {
-				fortbildungZuordnen();
-			} else if (eingabe.equals("FL")) {
-				fortbildungsZuordnungLoeschen();
-			} else if (eingabe.equals("FA")) {
-				fortbildungsZuordnungAnzeigen();
-			} else {
-				break;
-			}
+			System.out.println();
 		}
 	}
 	
 	private void sachbearbeiterErfassen() {
-		SachbearbeiterErfassenAAS.getInstance().oeffnen();
+		SachbearbeiterErfassenAAS.INSTANZ.oeffnen();
 	}
 	
 	private void sachbearbeiterLoeschen() {
-		SachbearbeiterLoeschenAAS.getInstance().oeffnen();
+		SachbearbeiterLoeschenAAS.INSTANZ.oeffnen();
 	}
 	
 	private void sachbearbeiterBearbeiten() {
-		AdminSachbearbeiterBearbeitenAAS.getInstance().oeffnen();
+		AdminSachbearbeiterBearbeitenAAS.INSTANZ.oeffnen();
 	}
 	
-	private void fortbildungZuordnen() {}
+	private void fortbildungZuordnen() {
+		FortbildungZuordnenAAS.INSTANZ.oeffnen();
+	}
 	
-	private void fortbildungsZuordnungLoeschen() {}
+	private void fortbildungsZuordnungLoeschen() {
+		FortbildungsZuordnungLoeschenAAS.INSTANZ.oeffnen();
+	}
 	
-	private void fortbildungsZuordnungAnzeigen() {}
+	private void fortbildungsZuordnungAnzeigen() {
+		FortbildungsZuordnungAnzeigenAAS.INSTANZ.oeffnen();
+	}
 }

@@ -6,34 +6,27 @@ import net.luis.k.SachbearbeiterLoeschenK;
 
 public class SachbearbeiterLoeschenAAS {
 	
-	private static SachbearbeiterLoeschenAAS OBJ = new SachbearbeiterLoeschenAAS();
-	SachbearbeiterLoeschenK kontrolle;
+	public static final SachbearbeiterLoeschenAAS INSTANZ = new SachbearbeiterLoeschenAAS();
 	
-	private SachbearbeiterLoeschenAAS() {
-		this.kontrolle = new SachbearbeiterLoeschenK();
-	}
+	private final SachbearbeiterLoeschenK kontrolle = new SachbearbeiterLoeschenK();
 	
-	public static SachbearbeiterLoeschenAAS getInstance() {
-		return OBJ;
-	}
+	private SachbearbeiterLoeschenAAS() {}
 	
 	public void oeffnen() {
-		String name = Eingabe.eingeben("Zu löschender Nutzer:");
+		String name = SachbearbeiterAuswaehlenAAS.INSTANCE.selektiereSachbearbeiter();
 		try {
-			kontrolle.loescheSachbearbeiter(name);
-			ausgefuehrt(name);
+			this.kontrolle.loescheSachbearbeiter(name);
+			this.ausgefuehrt(name);
 		} catch (IllegalArgumentException e) {
 			System.out.println(e.getMessage());
 		}
-		
 	}
 	
 	public void ausgefuehrt(String name) {
-		try {
-			Sachbearbeiter.gib(name);
-			System.out.println("Löschen fehlgeschlagen");
-		} catch (IllegalArgumentException e) {
+		if (Sachbearbeiter.gib(name) == null) {
 			System.out.println("Löschen erfolgreich.");
+		} else {
+			System.out.println("Löschen fehlgeschlagen");
 		}
 	}
 }

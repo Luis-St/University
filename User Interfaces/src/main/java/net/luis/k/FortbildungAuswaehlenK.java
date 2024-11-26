@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class FortbildungAuswaehlenK {
 	
-	public static String[] gibAlleNamen() {
+	public String[] gibAlleNamen() {
 		return Fortbildung.gibAlleNamen();
 	}
 

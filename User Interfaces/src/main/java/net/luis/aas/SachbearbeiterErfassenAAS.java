@@ -1,35 +1,36 @@
 package net.luis.aas;
 
 import net.luis.Eingabe;
+import net.luis.Sachbearbeiter;
 import net.luis.k.SachbearbeiterErfassenK;
 
 public class SachbearbeiterErfassenAAS {
 	
-	private static SachbearbeiterErfassenAAS OBJ = new SachbearbeiterErfassenAAS();
-	SachbearbeiterErfassenK kontrolle;
+	public static final SachbearbeiterErfassenAAS INSTANZ = new SachbearbeiterErfassenAAS();
 	
-	private SachbearbeiterErfassenAAS() {
-		this.kontrolle = new SachbearbeiterErfassenK();
-	}
+	private final SachbearbeiterErfassenK kontrolle = new SachbearbeiterErfassenK();
 	
-	public static SachbearbeiterErfassenAAS getInstance() {
-		return OBJ;
-	}
+	private SachbearbeiterErfassenAAS() {}
 	
 	public void oeffnen() {
 		String name = Eingabe.eingeben("Name eingeben:");
 		String passwort = Eingabe.eingeben("Passwort eingeben:");
-		String admin = Eingabe.eingeben("Admin? Y/N");
-		Boolean isAdmin = false;
 		
-		while (!admin.equals("Y") && !admin.equals("N")) {
+		String admin;
+		do {
 			admin = Eingabe.eingeben("Admin? Y/N");
-		}
-		if (admin == "Y") {
-			isAdmin = true;
-		}
+		} while (!"Y".equalsIgnoreCase(admin) && !"N".equalsIgnoreCase(admin));
 		
-		kontrolle.erzeugeSachbearbeiter(name, passwort, isAdmin);
+		this.kontrolle.erzeugeSachbearbeiter(name, passwort, "Y".equalsIgnoreCase(admin));
+		this.ausgefuehrt(name);
 	}
 	
+	public void ausgefuehrt(String name) {
+		Sachbearbeiter sachbearbeiter = Sachbearbeiter.gib(name);
+		if (name != null) {
+			System.out.println("Sachbearbeiter " + sachbearbeiter.gibBenutzername() + " erfolgreich erfasst");
+		} else {
+			System.out.println("Erfassen fehlgeschlagen");
+		}
+	}
 }

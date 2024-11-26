@@ -6,40 +6,32 @@ import net.luis.k.SachbearbeiterBearbeitenK;
 
 public class SachbearbeiterBearbeitenAAS {
 	
-	private static SachbearbeiterBearbeitenAAS OBJ = new SachbearbeiterBearbeitenAAS();
-	SachbearbeiterBearbeitenK kontrolle;
+	public static final SachbearbeiterBearbeitenAAS INSTANZ = new SachbearbeiterBearbeitenAAS();
 	
-	private SachbearbeiterBearbeitenAAS() {
-		this.kontrolle = new SachbearbeiterBearbeitenK();
-	}
+	private final SachbearbeiterBearbeitenK kontrolle = new SachbearbeiterBearbeitenK();
 	
-	public static SachbearbeiterBearbeitenAAS getInstance() {
-		return OBJ;
+	private SachbearbeiterBearbeitenAAS() {}
+	
+	public void oeffnen() {
+		String name = SachbearbeiterAuswaehlenAAS.INSTANCE.selektiereSachbearbeiter();
+		System.out.println("Sachbearbeiter " + name + " bearbeiten:");
+		
+		Sachbearbeiter sachbearbeiter = Sachbearbeiter.gib(name);
+		String username = Eingabe.eingeben("Neuer Benutzername eingeben: (X to cancel)");
+		if ("X".equals(username)) {
+			return;
+		}
+		
+		this.kontrolle.schreibeSachbearbeiter(name, username, sachbearbeiter.gibPasswort(), sachbearbeiter.istAdmin());
+		this.ausgefuehrt(name);
 	}
 	
 	public void ausgefuehrt(String name) {
-		Sachbearbeiter temp = Sachbearbeiter.gib(name);
-		System.out.println("Neuer Benutzername ist: " + temp.gibPasswort());
-	}
-	
-	public void modifiziereSachbearbeiter() {
-		String name = LoginAAS.getInstance().sachbearbeiterToLogin.gibBenutzername();
-		
-		System.out.println("Sachbearbeiter " + name + " bearbeiten:");
-		
-		while (true) {
-			try {
-				String username = Eingabe.eingeben("Neuer Benutzername eingeben: (X to cancel)");
-				if (username.equals("X")) {
-					break;
-				}
-				Sachbearbeiter sachbearbeiter = Sachbearbeiter.gib(name);
-				kontrolle.schreibeSachbearbeiter(name, username, sachbearbeiter.gibPasswort(), sachbearbeiter.istAdmin());
-				ausgefuehrt(name);
-				break;
-			} catch (IllegalArgumentException e) {
-				System.out.println(e.getMessage());
-			}
+		Sachbearbeiter sachbearbeiter = Sachbearbeiter.gib(name);
+		if (sachbearbeiter != null) {
+			System.out.println("Bearbeiten erfolgreich, neuer Benutzername: " + sachbearbeiter.gibBenutzername());
+		} else {
+			System.out.println("Bearbeiten fehlgeschlagen");
 		}
 	}
 }

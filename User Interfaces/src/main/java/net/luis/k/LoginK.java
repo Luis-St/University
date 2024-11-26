@@ -4,35 +4,28 @@ import net.luis.Sachbearbeiter;
 
 public class LoginK {
 	
-	public String passwortPasstZuBenutzername(String benutzername, String passwort) {
+	public static boolean passwortPasstZuBenutzername(String benutzername, String passwort) {
 		Sachbearbeiter sachbearbeiter = Sachbearbeiter.gib(benutzername);
-		String fehlermeldung = "Login ist leider fehlgeschlagen";
 		if (sachbearbeiter == null) {
-			return fehlermeldung;
+			return false;
 		} else {
-			String passwortVonSachbearbeiter = sachbearbeiter.gibPasswort();
-			if (passwortVonSachbearbeiter.equals(passwort)) {
-				return null;
-			} else {
-				return fehlermeldung;
-			}
+			return sachbearbeiter.gibPasswort().equals(passwort);
 		}
 	}
 	
-	public String gewaehlteBerechtigungPasstZuSachbearbeiter(String benutzername, boolean istAdmin) {
-		if (!istAdmin) {
-			return null;
+	public static boolean gewaehlteBerechtigungPasstZuSachbearbeiter(String benutzername, boolean istAdmin) {
+		if (istAdmin) {
+			return istAdmin(benutzername);
 		} else {
-			Sachbearbeiter sachbearbeiter = Sachbearbeiter.gib(benutzername);
-			if (sachbearbeiter.istAdmin()) {
-				return null;
-			} else {
-				return "Sie haben leider keine Berechtigung als Administrator";
-			}
+			return true;
 		}
 	}
 	
-	public boolean istAdmin(String benutzername) {
-		return Sachbearbeiter.gib(benutzername).istAdmin();
+	public static boolean istAdmin(String benutzername) {
+		Sachbearbeiter sachbearbeiter = Sachbearbeiter.gib(benutzername);
+		if (sachbearbeiter == null) {
+			return false;
+		}
+		return sachbearbeiter.istAdmin();
 	}
 }

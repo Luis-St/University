@@ -1,48 +1,47 @@
 package net.luis.as;
 
+import net.luis.Auswaehlen;
 import net.luis.Eingabe;
-import net.luis.aas.SachbearbeiterBearbeitenAAS;
+import net.luis.aas.*;
 
 public class NormalAS {
 	
+	private static final String[] MENUE = {
+		"Sachbearbeiter bearbeiten",
+		"Fortbildung zuordnen",
+		"Fortbildungszuordnung löschen",
+		"Fortbildungszuordnung anzeigen",
+		"Logout"
+	};
+	
 	public void oeffnen() {
-		while (true) {
-			System.out.println("--------------------------------");
-			System.out.println("Menue");
-			System.out.println("--------------------------------");
-			System.out.println("Folgende Funktionen stehen zur Verfügung:");
-			System.out.println("Sachbearbeiter bearbeiten (B)");
-			System.out.println("Fortbildung zuordnen (Z)");
-			System.out.println("Fortbildungszuordnung löschen (L)");
-			System.out.println("Fortbildungszuordnung anzeigen (A)");
-			System.out.println("Logout (X)");
-			
-			String eingabe = Eingabe.eingeben("B / Z / L / A / X");
-			
-			while (!eingabe.equals("B") && !eingabe.equals("Z") && !eingabe.equals("L") && !eingabe.equals("A") && !eingabe.equals("X")) {
-				eingabe = Eingabe.eingeben("Falsche Eingabe. \nB / Z / L / A / X");
+		loop: while (true) {
+			System.out.println("Normal-Menü:");
+			int option = Auswaehlen.optionAuswaehlen(MENUE);
+			switch (option) {
+				case 0 -> this.sachbearbeiterBearbeiten();
+				case 1 -> this.fortbildungZuordnen();
+				case 2 -> this.fortbildungsZuordnungLoeschen();
+				case 3 -> this.fortbildungsZuordnungAnzeigen();
+				default -> {break loop;}
 			}
-			if (eingabe.equals("B")) {
-				sachbearbeiterBearbeiten();
-			} else if (eingabe.equals("Z")) {
-				fortbildungZuordnen();
-			} else if (eingabe.equals("L")) {
-				fortbildungsZuordnungLoeschen();
-			} else if (eingabe.equals("A")) {
-				fortbildungsZuordnungAnzeigen();
-			} else {
-				break;
-			}
+			System.out.println();
 		}
 	}
 	
 	private void sachbearbeiterBearbeiten() {
-		SachbearbeiterBearbeitenAAS.getInstance().modifiziereSachbearbeiter();
+		SachbearbeiterBearbeitenAAS.INSTANZ.oeffnen();
 	}
 	
-	private void fortbildungZuordnen() {}
+	private void fortbildungZuordnen() {
+		FortbildungZuordnenAAS.INSTANZ.oeffnen();
+	}
 	
-	private void fortbildungsZuordnungLoeschen() {}
+	private void fortbildungsZuordnungLoeschen() {
+		FortbildungsZuordnungLoeschenAAS.INSTANZ.oeffnen();
+	}
 	
-	private void fortbildungsZuordnungAnzeigen() {}
+	private void fortbildungsZuordnungAnzeigen() {
+		FortbildungsZuordnungAnzeigenAAS.INSTANZ.oeffnen();
+	}
 }
