@@ -28,6 +28,7 @@ namespace lsv8 {
 		void add(const std::string& name);
 		bool remove(const std::string& name);
 
+		City& operator=(const City &other);
 		std::string& operator[](int index);
 		const std::string& operator[](int index) const;
 		friend std::ostream& operator<<(std::ostream& os, const City& city);

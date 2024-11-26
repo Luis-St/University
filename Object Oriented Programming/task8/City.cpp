@@ -81,6 +81,15 @@ namespace lsv8 {
 		return found;
 	}
 
+	City& City::operator=(const City &other) {
+		if (this != &other) {
+			this->position = other.position;
+			this->pois = copyStringArray(other.pois, other.numberOfPOIs);
+			this->numberOfPOIs = other.numberOfPOIs;
+		}
+		return *this;
+	}
+
 	std::string &City::operator[](const int index) {
 		checkIndex(index);
 		return this->pois[index];
