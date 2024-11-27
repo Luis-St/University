@@ -1,7 +1,7 @@
-package net.luis;
+package net.luis.library;
 
-import net.luis.media.Book;
-import net.luis.pay.PayPal;
+import net.luis.library.media.Book;
+import net.luis.library.pay.PayPal;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;

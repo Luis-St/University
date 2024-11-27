@@ -1,8 +1,8 @@
-package net.luis;
+package net.luis.library;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import net.luis.pay.PaymentMethod;
+import net.luis.library.pay.PaymentMethod;
 import org.jetbrains.annotations.*;
 
 import java.time.LocalDateTime;

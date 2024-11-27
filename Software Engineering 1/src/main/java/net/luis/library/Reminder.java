@@ -1,4 +1,4 @@
-package net.luis;
+package net.luis.library;
 
 import org.jetbrains.annotations.NotNull;
 

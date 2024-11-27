@@ -1,6 +1,6 @@
-package net.luis.media;
+package net.luis.library.media;
 
-import net.luis.Media;
+import net.luis.library.Media;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 

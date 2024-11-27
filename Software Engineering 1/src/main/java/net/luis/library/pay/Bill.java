@@ -1,6 +1,6 @@
-package net.luis.pay;
+package net.luis.library.pay;
 
-import net.luis.Address;
+import net.luis.library.Address;
 import org.jetbrains.annotations.NotNull;
 
 /**

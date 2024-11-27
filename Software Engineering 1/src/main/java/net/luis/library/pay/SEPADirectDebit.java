@@ -1,4 +1,4 @@
-package net.luis.pay;
+package net.luis.library.pay;
 
 import org.jetbrains.annotations.NotNull;
 

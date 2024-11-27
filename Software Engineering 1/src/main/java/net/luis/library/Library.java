@@ -1,7 +1,7 @@
-package net.luis;
+package net.luis.library;
 
 import com.google.common.collect.Maps;
-import net.luis.pay.PaymentMethod;
+import net.luis.library.pay.PaymentMethod;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

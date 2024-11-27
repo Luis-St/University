@@ -29,18 +29,19 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.register<JavaExec>("run") {
+tasks.register<JavaExec>("runLibraryTest") {
 	group = "run"
-	mainClass.set("net.luis.Main")
-	classpath(sourceSets.main.get().runtimeClasspath)
+	mainClass.set("net.luis.library.Main")
+	classpath(sourceSets.test.get().runtimeClasspath)
 	standardInput = System.`in`
+	enableAssertions = true
 	args()
 	jvmArgs()
 }
 
-tasks.register<JavaExec>("runTest") {
+tasks.register<JavaExec>("runMessengerTest") {
 	group = "run"
-	mainClass.set("net.luis.Main")
+	mainClass.set("net.luis.messenger.Main")
 	classpath(sourceSets.test.get().runtimeClasspath)
 	standardInput = System.`in`
 	enableAssertions = true

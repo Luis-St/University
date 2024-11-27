@@ -1,4 +1,4 @@
-package net.luis.media;
+package net.luis.library.media;
 
 import org.jetbrains.annotations.NotNull;
 
