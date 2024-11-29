@@ -12,7 +12,7 @@ public class SachbearbeiterAuswaehlenAAS {
 	public String selektiereSachbearbeiter() {
 		System.out.println("Sachbearbeiter auswählen:");
 		String[] namen = this.kontrolle.gibSachbearbeiterNamen();
-		int index = Auswaehlen.optionAuswaehlen(namen);
+		int index = Auswaehlen.optionAuswaehlen(namen) - 1;
 		return namen[index];
 	}
 }

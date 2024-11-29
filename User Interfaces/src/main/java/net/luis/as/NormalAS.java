@@ -19,10 +19,10 @@ public class NormalAS {
 			System.out.println("Normal-Menü:");
 			int option = Auswaehlen.optionAuswaehlen(MENUE);
 			switch (option) {
-				case 0 -> this.sachbearbeiterBearbeiten();
-				case 1 -> this.fortbildungZuordnen();
-				case 2 -> this.fortbildungsZuordnungLoeschen();
-				case 3 -> this.fortbildungsZuordnungAnzeigen();
+				case 1 -> this.sachbearbeiterBearbeiten();
+				case 2 -> this.fortbildungZuordnen();
+				case 3 -> this.fortbildungsZuordnungLoeschen();
+				case 4 -> this.fortbildungsZuordnungAnzeigen();
 				default -> {break loop;}
 			}
 			System.out.println();

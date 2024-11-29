@@ -14,7 +14,7 @@ public class FortbildungAuswaehlenAAS {
 	public String selektiereFortbildung() {
 		System.out.println("Fortbildung auswählen:");
 		String[] namen = this.kontrolle.gibAlleNamen();
-		int index = Auswaehlen.optionAuswaehlen(namen);
+		int index = Auswaehlen.optionAuswaehlen(namen) - 1;
 		return namen[index];
 	}
 }

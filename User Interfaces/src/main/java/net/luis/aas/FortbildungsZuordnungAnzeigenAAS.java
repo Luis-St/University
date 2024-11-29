@@ -15,7 +15,7 @@ public class FortbildungsZuordnungAnzeigenAAS {
 		String sachbearbeiter = SachbearbeiterAuswaehlenAAS.INSTANCE.selektiereSachbearbeiter();
 		
 		System.out.println("Welche Zuordnung möchten Sie anzeigen?");
-		ZuordnungsTyp typ = ZuordnungsTyp.values()[Auswaehlen.optionAuswaehlen("Belegt", "Bestanden")];
+		ZuordnungsTyp typ = ZuordnungsTyp.values()[Auswaehlen.optionAuswaehlen("Belegt", "Bestanden") - 1];
 		if (typ == ZuordnungsTyp.BELEGT) {
 			this.kontrolle.gibBelegteFortbildung(sachbearbeiter).forEach(System.out::println);
 		} else if (typ == ZuordnungsTyp.BESTANDEN) {

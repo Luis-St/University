@@ -21,12 +21,12 @@ public class AdminAS {
 			System.out.println("Admin-Menü:");
 			int option = Auswaehlen.optionAuswaehlen(MENUE);
 			switch (option) {
-				case 0 -> this.sachbearbeiterErfassen();
-				case 1 -> this.sachbearbeiterBearbeiten();
-				case 2 -> this.sachbearbeiterLoeschen();
-				case 3 -> this.fortbildungZuordnen();
-				case 4 -> this.fortbildungsZuordnungLoeschen();
-				case 5 -> this.fortbildungsZuordnungAnzeigen();
+				case 1 -> this.sachbearbeiterErfassen();
+				case 2 -> this.sachbearbeiterBearbeiten();
+				case 3 -> this.sachbearbeiterLoeschen();
+				case 4 -> this.fortbildungZuordnen();
+				case 5 -> this.fortbildungsZuordnungLoeschen();
+				case 6 -> this.fortbildungsZuordnungAnzeigen();
 				default -> {break loop;}
 			}
 			System.out.println();

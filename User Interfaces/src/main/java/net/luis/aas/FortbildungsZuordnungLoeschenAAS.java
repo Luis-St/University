@@ -22,7 +22,7 @@ public class FortbildungsZuordnungLoeschenAAS {
 		String fortbildung = FortbildungAuswaehlenAAS.INSTANCE.selektiereFortbildung();
 		
 		System.out.println("Aus welcher Zuordnung möchten Sie die Fortbildung löschen?");
-		ZuordnungsTyp typ = ZuordnungsTyp.values()[Auswaehlen.optionAuswaehlen("Belegt", "Bestanden")];
+		ZuordnungsTyp typ = ZuordnungsTyp.values()[Auswaehlen.optionAuswaehlen("Belegt", "Bestanden") - 1];
 		if (typ == ZuordnungsTyp.BELEGT) {
 			this.kontrolle.loescheBelegteFortbildung(sachbearbeiter, fortbildung);
 		} else if (typ == ZuordnungsTyp.BESTANDEN) {

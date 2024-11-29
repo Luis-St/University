@@ -16,9 +16,10 @@ public class Auswaehlen {
 		System.out.println("Verfügbare Optionen:");
 		lookup.forEach((key, value) -> System.out.println(" " + key + ". " + value));
 		
+		Scanner scanner = new Scanner(System.in);
 		while (true) {
 			System.out.print("Auswahl: ");
-			try (Scanner scanner = new Scanner(System.in)) {
+			try {
 				int choice = scanner.nextInt();
 				if (lookup.containsKey(choice)) {
 					return choice;

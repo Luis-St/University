@@ -39,18 +39,19 @@ public class LoginAAS {
 		String admin;
 		do {
 			admin = Eingabe.eingeben("Einloggen als Admin? Y/N");
-		} while (!"Y".equals(admin) && !"N".equals(admin));
+		} while (!"Y".equalsIgnoreCase(admin) && !"N".equalsIgnoreCase(admin));
 		
-		if (!LoginK.gewaehlteBerechtigungPasstZuSachbearbeiter(this.sachbearbeiter.gibBenutzername(), "Y".equals(admin))) {
+		if (!LoginK.gewaehlteBerechtigungPasstZuSachbearbeiter(this.sachbearbeiter.gibBenutzername(), "Y".equalsIgnoreCase(admin))) {
 			throw new IllegalStateException("Berechtigung passt nicht zum Sachbearbeiter.");
 		}
 		
-		if ("Y".equals(admin)) {
+		if ("Y".equalsIgnoreCase(admin)) {
 			if (LoginK.istAdmin(this.sachbearbeiter.gibBenutzername())) {
 				System.out.println("Erfolgreich eingeloggt als Admin: " + this.sachbearbeiter.gibBenutzername());
 				new AdminAS().oeffnen();
+			} else {
+				throw new IllegalStateException("Nicht berechtigt als Admin einzuloggen.");
 			}
-			throw new IllegalStateException("Nicht berechtigt als Admin einzuloggen.");
 		} else {
 			System.out.println("Erfolgreich eingeloggt als Nutzer: " + this.sachbearbeiter.gibBenutzername());
 			new NormalAS().oeffnen();
