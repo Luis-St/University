@@ -4,6 +4,8 @@ import net.luis.Eingabe;
 import net.luis.Sachbearbeiter;
 import net.luis.k.SachbearbeiterBearbeitenK;
 
+import javax.swing.*;
+
 public class SachbearbeiterBearbeitenAAS {
 	
 	public static final SachbearbeiterBearbeitenAAS INSTANZ = new SachbearbeiterBearbeitenAAS();
@@ -12,7 +14,7 @@ public class SachbearbeiterBearbeitenAAS {
 	
 	private SachbearbeiterBearbeitenAAS() {}
 	
-	public void oeffnen() {
+	public void oeffnen(JFrame fenster) {
 		String name = SachbearbeiterAuswaehlenAAS.INSTANCE.selektiereSachbearbeiter();
 		System.out.println("Sachbearbeiter " + name + " bearbeiten:");
 		

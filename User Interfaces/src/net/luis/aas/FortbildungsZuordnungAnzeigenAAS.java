@@ -3,6 +3,8 @@ package net.luis.aas;
 import net.luis.Auswaehlen;
 import net.luis.k.FortbildungsZuordnungAnzeigenK;
 
+import javax.swing.*;
+
 public class FortbildungsZuordnungAnzeigenAAS {
 	
 	public static final FortbildungsZuordnungAnzeigenAAS INSTANZ = new FortbildungsZuordnungAnzeigenAAS();
@@ -11,7 +13,7 @@ public class FortbildungsZuordnungAnzeigenAAS {
 	
 	private FortbildungsZuordnungAnzeigenAAS() {}
 	
-	public void oeffnen() {
+	public void oeffnen(JFrame fenster) {
 		String sachbearbeiter = SachbearbeiterAuswaehlenAAS.INSTANCE.selektiereSachbearbeiter();
 		
 		System.out.println("Welche Zuordnung möchten Sie anzeigen?");

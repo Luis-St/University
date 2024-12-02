@@ -4,6 +4,8 @@ import net.luis.Auswaehlen;
 import net.luis.k.FortbildungZuordnenK;
 import net.luis.k.SachbearbeiterAuswaehlenK;
 
+import javax.swing.*;
+
 public class FortbildungZuordnenAAS {
 	
 	public static final FortbildungZuordnenAAS INSTANZ = new FortbildungZuordnenAAS();
@@ -12,7 +14,7 @@ public class FortbildungZuordnenAAS {
 	
 	private FortbildungZuordnenAAS() {}
 	
-	public void oeffnen() {
+	public void oeffnen(JFrame fenster) {
 		String sachbearbeiter = SachbearbeiterAuswaehlenAAS.INSTANCE.selektiereSachbearbeiter();
 		String fortbildung = FortbildungAuswaehlenAAS.INSTANCE.selektiereFortbildung();
 		

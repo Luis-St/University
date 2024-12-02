@@ -3,6 +3,8 @@ package net.luis.aas;
 import net.luis.Auswaehlen;
 import net.luis.k.FortbildungsZuordnungLoeschenK;
 
+import javax.swing.*;
+
 /**
  *
  * @author Luis-St
@@ -17,7 +19,7 @@ public class FortbildungsZuordnungLoeschenAAS {
 	
 	private FortbildungsZuordnungLoeschenAAS() {}
 	
-	public void oeffnen() {
+	public void oeffnen(JFrame fenster) {
 		String sachbearbeiter = SachbearbeiterAuswaehlenAAS.INSTANCE.selektiereSachbearbeiter();
 		String fortbildung = FortbildungAuswaehlenAAS.INSTANCE.selektiereFortbildung();
 		

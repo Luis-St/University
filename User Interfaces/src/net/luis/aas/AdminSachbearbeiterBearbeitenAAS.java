@@ -4,6 +4,8 @@ import net.luis.Eingabe;
 import net.luis.Sachbearbeiter;
 import net.luis.k.SachbearbeiterBearbeitenK;
 
+import javax.swing.*;
+
 public class AdminSachbearbeiterBearbeitenAAS {
 	
 	public static final AdminSachbearbeiterBearbeitenAAS INSTANZ = new AdminSachbearbeiterBearbeitenAAS();
@@ -12,7 +14,7 @@ public class AdminSachbearbeiterBearbeitenAAS {
 	
 	private AdminSachbearbeiterBearbeitenAAS() {}
 	
-	public void oeffnen() {
+	public void oeffnen(JFrame fenster) {
 		String name = SachbearbeiterAuswaehlenAAS.INSTANCE.selektiereSachbearbeiter();
 		
 		String username = Eingabe.eingeben("Neuer Benutzername eingeben: (^X to cancel, ^S not modify username)");

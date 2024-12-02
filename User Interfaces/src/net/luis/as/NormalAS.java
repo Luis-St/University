@@ -1,47 +1,68 @@
 package net.luis.as;
 
-import net.luis.Auswaehlen;
-import net.luis.Eingabe;
 import net.luis.aas.*;
 
-public class NormalAS {
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class NormalAS extends JPanel {
 	
-	private static final String[] MENUE = {
-		"Sachbearbeiter bearbeiten",
-		"Fortbildung zuordnen",
-		"Fortbildungszuordnung löschen",
-		"Fortbildungszuordnung anzeigen",
-		"Logout"
-	};
+	public static final NormalAS INSTANZ = new NormalAS();
+	private JFrame fenster;
 	
-	public void oeffnen() {
-		loop: while (true) {
-			System.out.println("Normal-Menü:");
-			int option = Auswaehlen.optionAuswaehlen(MENUE);
-			switch (option) {
-				case 1 -> this.sachbearbeiterBearbeiten();
-				case 2 -> this.fortbildungZuordnen();
-				case 3 -> this.fortbildungsZuordnungLoeschen();
-				case 4 -> this.fortbildungsZuordnungAnzeigen();
-				default -> {break loop;}
+	private NormalAS() {
+		this.setLayout(new BorderLayout());
+		JMenuBar menuBar = new JMenuBar();
+		
+		JMenu menu = new JMenu("Optionen");
+		
+		JMenuItem sachbearbeiterBearbeitenItem = new JMenuItem("Sachbearbeiter bearbeiten");
+		sachbearbeiterBearbeitenItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SachbearbeiterBearbeitenAAS.INSTANZ.oeffnen(NormalAS.this.fenster);
 			}
-			System.out.println();
-		}
+		});
+		
+		JMenuItem fortbildungZuordnenItem = new JMenuItem("Fortbildung zuordnen");
+		fortbildungZuordnenItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FortbildungZuordnenAAS.INSTANZ.oeffnen(NormalAS.this.fenster);
+			}
+		});
+		
+		JMenuItem fortbildungsZuordnungLoeschenItem = new JMenuItem("Fortbildungszuordnung löschen");
+		fortbildungsZuordnungLoeschenItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FortbildungsZuordnungLoeschenAAS.INSTANZ.oeffnen(NormalAS.this.fenster);
+			}
+		});
+		
+		JMenuItem fortbildungsZuordnungAnzeigenItem = new JMenuItem("Fortbildungszuordnung anzeigen");
+		fortbildungsZuordnungAnzeigenItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FortbildungsZuordnungAnzeigenAAS.INSTANZ.oeffnen(NormalAS.this.fenster);
+			}
+		});
+		
+		menu.add(sachbearbeiterBearbeitenItem);
+		menu.add(fortbildungZuordnenItem);
+		menu.add(fortbildungsZuordnungLoeschenItem);
+		menu.add(fortbildungsZuordnungAnzeigenItem);
+		
+		menuBar.add(menu);
+		this.add(menuBar, BorderLayout.NORTH);
 	}
 	
-	private void sachbearbeiterBearbeiten() {
-		SachbearbeiterBearbeitenAAS.INSTANZ.oeffnen();
-	}
-	
-	private void fortbildungZuordnen() {
-		FortbildungZuordnenAAS.INSTANZ.oeffnen();
-	}
-	
-	private void fortbildungsZuordnungLoeschen() {
-		FortbildungsZuordnungLoeschenAAS.INSTANZ.oeffnen();
-	}
-	
-	private void fortbildungsZuordnungAnzeigen() {
-		FortbildungsZuordnungAnzeigenAAS.INSTANZ.oeffnen();
+	public void oeffnen(JFrame fenster) {
+		this.fenster = fenster;
+		fenster.setContentPane(this);
+		fenster.revalidate();
+		fenster.repaint();
 	}
 }

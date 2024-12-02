@@ -4,6 +4,8 @@ import net.luis.Eingabe;
 import net.luis.Sachbearbeiter;
 import net.luis.k.SachbearbeiterLoeschenK;
 
+import javax.swing.*;
+
 public class SachbearbeiterLoeschenAAS {
 	
 	public static final SachbearbeiterLoeschenAAS INSTANZ = new SachbearbeiterLoeschenAAS();
@@ -12,7 +14,7 @@ public class SachbearbeiterLoeschenAAS {
 	
 	private SachbearbeiterLoeschenAAS() {}
 	
-	public void oeffnen() {
+	public void oeffnen(JFrame fenster) {
 		String name = SachbearbeiterAuswaehlenAAS.INSTANCE.selektiereSachbearbeiter();
 		try {
 			this.kontrolle.loescheSachbearbeiter(name);

@@ -4,6 +4,8 @@ import net.luis.Eingabe;
 import net.luis.Sachbearbeiter;
 import net.luis.k.SachbearbeiterErfassenK;
 
+import javax.swing.*;
+
 public class SachbearbeiterErfassenAAS {
 	
 	public static final SachbearbeiterErfassenAAS INSTANZ = new SachbearbeiterErfassenAAS();
@@ -12,7 +14,7 @@ public class SachbearbeiterErfassenAAS {
 	
 	private SachbearbeiterErfassenAAS() {}
 	
-	public void oeffnen() {
+	public void oeffnen(JFrame fenster) {
 		String name = Eingabe.eingeben("Name eingeben:");
 		String passwort = Eingabe.eingeben("Passwort eingeben:");
 		
