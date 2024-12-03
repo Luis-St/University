@@ -8,7 +8,7 @@ void lsv8::runTask8() {
 	lsv8::cityCopyIndexTest();
 }
 
-lsv8::City createCity() {
+lsv8::City lsv8::createCity() {
 	const std::string mordor = "Mordor";
 	const std::string pois[] = {"Sauron", "Minas Morgul", "Orodruin"};
 	lsv8::City result(mordor, 47, 11, pois, 3);

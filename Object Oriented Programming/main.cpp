@@ -7,6 +7,7 @@
 #include "task6/task6.h"
 #include "task7/task7.h"
 #include "task8/task8.h"
+#include "task9/task9.h"
 
 int main() {
 	runTask1();
@@ -17,4 +18,5 @@ int main() {
 	lsv6::runTask6();
 	lsv7::runTask7();
 	lsv8::runTask8();
+	lsv9::runTask9();
 }
