@@ -23,7 +23,6 @@ namespace lsv10 {
 	public:
 		City(const std::string &name, int x, int y);
 		City(const std::string &name, int x, int y, const std::string *pois, int numberOfPOIs);
-		City(const lsv10::City &other);
 
 		[[nodiscard]] const std::string &getName() const;
 		[[nodiscard]] int getX() const;
@@ -33,11 +32,13 @@ namespace lsv10 {
 		void add(const std::string &name);
 		bool remove(const std::string &name);
 
-		City &operator=(const City &other);
 		std::string &operator[](int index);
 		const std::string &operator[](int index) const;
 		friend std::ostream &operator<<(std::ostream &os, const City &city);
 
+		// No longer needed, but explicit is better than implicit
+		City(const lsv10::City &other) = default;
+		City &operator=(const City &other) = default;
 		~City() = default;
 	};
 }

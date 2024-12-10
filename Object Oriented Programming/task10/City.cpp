@@ -38,8 +38,6 @@ namespace lsv10 {
 
 	City::City(const std::string &name, const int x, const int y, const std::string *pois, const int numberOfPOIs): City(lsv7::Position(name, x, y), createStringVector(pois, numberOfPOIs)) {}
 
-	City::City(const lsv10::City &other): City(other.position, other.pois) {}
-
 	const std::string &City::getName() const {
 		return this->position.getName();
 	}
@@ -64,14 +62,6 @@ namespace lsv10 {
 		const uint size = this->pois.size();
 		std::erase(this->pois, name);
 		return size != this->pois.size();
-	}
-
-	City& City::operator=(const City &other) {
-		if (this != &other) {
-			this->position = other.position;
-			this->pois = other.pois;
-		}
-		return *this;
 	}
 
 	std::string &City::operator[](const int index) {
