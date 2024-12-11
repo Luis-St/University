@@ -48,3 +48,13 @@ tasks.register<JavaExec>("runMessengerTest") {
 	args()
 	jvmArgs()
 }
+
+tasks.register<JavaExec>("runCompositeTest") {
+	group = "run"
+	mainClass.set("net.luis.composite.Main")
+	classpath(sourceSets.test.get().runtimeClasspath)
+	standardInput = System.`in`
+	enableAssertions = true
+	args()
+	jvmArgs()
+}
