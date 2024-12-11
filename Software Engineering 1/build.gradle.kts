@@ -58,3 +58,13 @@ tasks.register<JavaExec>("runCompositeTest") {
 	args()
 	jvmArgs()
 }
+
+tasks.register<JavaExec>("runObserverTest") {
+	group = "run"
+	mainClass.set("net.luis.observer.Main")
+	classpath(sourceSets.test.get().runtimeClasspath)
+	standardInput = System.`in`
+	enableAssertions = true
+	args()
+	jvmArgs()
+}

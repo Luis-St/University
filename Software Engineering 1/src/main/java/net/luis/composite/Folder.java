@@ -37,6 +37,7 @@ public class Folder implements FileSystemEntry {
 	}
 	
 	@Override
+	@SuppressWarnings("DuplicatedCode")
 	public void display(@NotNull StringBuilder builder) {
 		builder.append(this.name()).append(" (").append(this.size()).append(" MB)");
 		this.children.forEach(child -> {
