@@ -68,3 +68,13 @@ tasks.register<JavaExec>("runObserverTest") {
 	args()
 	jvmArgs()
 }
+
+tasks.register<JavaExec>("runVisitorTest") {
+	group = "run"
+	mainClass.set("net.luis.visitor.Main")
+	classpath(sourceSets.test.get().runtimeClasspath)
+	standardInput = System.`in`
+	enableAssertions = true
+	args()
+	jvmArgs()
+}
