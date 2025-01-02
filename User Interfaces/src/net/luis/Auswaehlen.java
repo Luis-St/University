@@ -2,12 +2,6 @@ package net.luis;
 
 import java.util.*;
 
-/**
- *
- * @author Luis-St
- *
- */
-
 public class Auswaehlen {
 	
 	public static int optionAuswaehlen(String... options) {

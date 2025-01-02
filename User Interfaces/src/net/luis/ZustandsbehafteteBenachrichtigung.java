@@ -4,12 +4,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- *
- * @author Luis-St
- *
- */
-
 public class ZustandsbehafteteBenachrichtigung {
 	
 	public static void main(String[] args) {

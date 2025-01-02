@@ -2,12 +2,6 @@ package net.luis;
 
 import java.util.Scanner;
 
-/**
- *
- * @author Luis-St
- *
- */
-
 public class Eingabe {
 	
 	public static String eingeben(String prompt) {

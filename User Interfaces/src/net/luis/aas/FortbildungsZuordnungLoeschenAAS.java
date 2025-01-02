@@ -5,12 +5,6 @@ import net.luis.k.FortbildungsZuordnungLoeschenK;
 
 import javax.swing.*;
 
-/**
- *
- * @author Luis-St
- *
- */
-
 public class FortbildungsZuordnungLoeschenAAS {
 	
 	public static final FortbildungsZuordnungLoeschenAAS INSTANZ = new FortbildungsZuordnungLoeschenAAS();

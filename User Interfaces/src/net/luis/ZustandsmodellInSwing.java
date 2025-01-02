@@ -5,12 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- *
- * @author Luis-St
- *
- */
-
 public class ZustandsmodellInSwing {
 	
 	public static void main(String[] args) {
