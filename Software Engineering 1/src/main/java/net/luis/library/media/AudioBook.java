@@ -17,7 +17,7 @@ public class AudioBook extends Media implements OnlineMedia, Streamable {
 	private final String author;
 	private final int duration;
 	
-	protected AudioBook(@NotNull String title, @NotNull Set<String> genres, @NotNull String author, int duration, int numberExist) {
+	public AudioBook(@NotNull String title, @NotNull Set<String> genres, @NotNull String author, int duration, int numberExist) {
 		super(title, genres, "audio book", numberExist);
 		this.author = author;
 		this.duration = duration;

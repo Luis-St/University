@@ -78,3 +78,13 @@ tasks.register<JavaExec>("runVisitorTest") {
 	args()
 	jvmArgs()
 }
+
+tasks.register<JavaExec>("runLayerTest") {
+	group = "run"
+	mainClass.set("net.luis.layer.Main")
+	classpath(sourceSets.test.get().runtimeClasspath)
+	standardInput = System.`in`
+	enableAssertions = true
+	args()
+	jvmArgs()
+}
