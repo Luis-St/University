@@ -14,7 +14,7 @@ public class FortbildungsZuordnungAnzeigenAAS {
 	private FortbildungsZuordnungAnzeigenAAS() {}
 	
 	public void oeffnen(JFrame fenster) {
-		String sachbearbeiter = SachbearbeiterAuswaehlenAAS.INSTANCE.selektiereSachbearbeiter();
+		/*String sachbearbeiter = SachbearbeiterAuswaehlenAAS.INSTANZ.selektiereSachbearbeiter();
 		
 		System.out.println("Welche Zuordnung möchten Sie anzeigen?");
 		ZuordnungsTyp typ = ZuordnungsTyp.values()[Auswaehlen.optionAuswaehlen("Belegt", "Bestanden") - 1];
@@ -22,7 +22,7 @@ public class FortbildungsZuordnungAnzeigenAAS {
 			this.kontrolle.gibBelegteFortbildung(sachbearbeiter).forEach(System.out::println);
 		} else if (typ == ZuordnungsTyp.BESTANDEN) {
 			this.kontrolle.gibBestandeneFortbildung(sachbearbeiter).forEach(System.out::println);
-		}
+		}*/
 	}
 	
 	private enum ZuordnungsTyp {

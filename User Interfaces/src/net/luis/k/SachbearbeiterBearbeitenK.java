@@ -4,27 +4,19 @@ import net.luis.Sachbearbeiter;
 
 public class SachbearbeiterBearbeitenK {
 	
-	public String schreibeSachbearbeiter(String alterBenutzername, String neuerBenutzername, String passwort, boolean istAdmin) {
+	public void schreibeSachbearbeiter(String alterBenutzername, String neuerBenutzername, String passwort, boolean istAdmin) {
 		Sachbearbeiter sachbearbeiter = Sachbearbeiter.gib(alterBenutzername);
+		sachbearbeiter.setzeBenutzername(neuerBenutzername);
 		
-		String fehlermeldung = sachbearbeiter.setzeBenutzername(neuerBenutzername);
-		if (fehlermeldung == null) {
-			String altesPasswort = sachbearbeiter.gibPasswort();
-			fehlermeldung = sachbearbeiter.setzePasswort(passwort);
-			if (fehlermeldung == null) {
-				fehlermeldung = sachbearbeiter.setzeIstAdmin(istAdmin);
-				if (fehlermeldung != null) {
-					// rollback benutzername und passwort
-					sachbearbeiter.setzeBenutzername(alterBenutzername);
-					sachbearbeiter.setzePasswort(altesPasswort);
-				}
-			} else {
-				// rollback des Benutzernamens, weil passwort falsch
-				sachbearbeiter.setzeBenutzername(alterBenutzername);
-			}
+		String altesPasswort = sachbearbeiter.gibPasswort();
+		try {
+			sachbearbeiter.setzePasswort(passwort);
+			sachbearbeiter.setzeIstAdmin(istAdmin);
+		} catch (Exception e) {
+			sachbearbeiter.setzePasswort(altesPasswort);
+			sachbearbeiter.setzeBenutzername(alterBenutzername);
+			throw e;
 		}
-		
-		return fehlermeldung;
 	}
 	
 	public boolean gibBerechtigung(String altenBenutzernamen) {

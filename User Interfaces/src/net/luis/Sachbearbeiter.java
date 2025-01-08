@@ -36,33 +36,29 @@ public class Sachbearbeiter implements Serializable {
 	}
 	
 	public static boolean mindestensEinAdminExistiert() {
-		
 		for (Sachbearbeiter s : dieSachbearbeiter.values()) {
 			if (s.istAdmin() == true) {
 				return true;
 			}
 		}
-		
 		return false;
 	}
 	
-	public static String pruefeBenutzername(String benutzername) {
+	public static void pruefeBenutzername(String benutzername) {
 		boolean istOk = !dieSachbearbeiter.containsKey(benutzername);
 		
 		if (!istOk) {
-			return "Den Benutzer " + benutzername + " gibt es bereits";
+			throw new RuntimeException("Den Benutzer " + benutzername + " gibt es bereits");
 		}
 		
 		String regAusdruck = "[a-zäüößA-ZÄÜÖ_]+";
 		istOk = benutzername.matches(regAusdruck);
-		if (istOk) {
-			return null;
-		} else {
-			return "Der Benutzername entspricht leider nicht den Vorgaben f r Benutzernamen";
+		if (!istOk) {
+			throw new RuntimeException("Der Benutzername entspricht leider nicht den Vorgaben f r Benutzernamen");
 		}
 	}
 	
-	public static String pruefePasswort(String passwort) {
+	public static void pruefePasswort(String passwort) {
 		String regAusdruck = ".*[A-ZÄÜÖ].*[A-ZÄÜÖ].*";
 		boolean istOk = passwort.matches(regAusdruck);
 		regAusdruck = ".*[a-zäüöß].*[a-zäüöß].*";
@@ -75,10 +71,8 @@ public class Sachbearbeiter implements Serializable {
 		regAusdruck = ".*" + sonderzeichen + ".*" + sonderzeichen + ".*";
 		istOk &= passwort.matches(regAusdruck);
 		istOk &= passwort.length() >= 10;
-		if (istOk) {
-			return null;
-		} else {
-			return "Das Passwort entspricht leider nicht den Vorgaben";
+		if (!istOk) {
+			throw new RuntimeException("Das Passwort entspricht leider nicht den Vorgaben");
 		}
 	}
 	
@@ -86,17 +80,10 @@ public class Sachbearbeiter implements Serializable {
 	// der Map dieSachbearbeiter hinzugefuegt
 	// wenn das erzeugen klappt, wird null zurueckgegeben
 	// wenn es nicht klappt, wird eine Fehlermeldung zurueckgegeben
-	public static String erzeuge(String benutzername, String passwort, boolean istAdmin) {
-		String fehlermeldung = pruefeBenutzername(benutzername);
-		if (fehlermeldung == null) {
-			fehlermeldung = pruefePasswort(passwort);
-			if (fehlermeldung == null) {
-				Sachbearbeiter s = new Sachbearbeiter(benutzername, passwort, istAdmin);
-				fuegeHinzu(s);
-				return null;
-			}
-		}
-		return fehlermeldung;
+	public static void erzeuge(String benutzername, String passwort, boolean istAdmin) {
+		pruefeBenutzername(benutzername);
+		pruefePasswort(passwort);
+		fuegeHinzu(new Sachbearbeiter(benutzername, passwort, istAdmin));
 	}
 	
 	private String benutzername;
@@ -118,48 +105,38 @@ public class Sachbearbeiter implements Serializable {
 		return benutzername;
 	}
 	
-	public String setzeBenutzername(String neuerBenutzername) {
-		String fehlermeldung = null;
+	public void setzeBenutzername(String neuerBenutzername) {
 		if (!neuerBenutzername.equals(this.benutzername)) {
-			fehlermeldung = pruefeBenutzername(neuerBenutzername);
+			pruefeBenutzername(neuerBenutzername);
 		}
 		
-		if (fehlermeldung == null) {
-			// der Schluessel der Map aendert sich
-			dieSachbearbeiter.remove(this.benutzername);
-			this.benutzername = neuerBenutzername;
-			dieSachbearbeiter.put(neuerBenutzername, this);
-		}
-		return fehlermeldung;
+		// der Schluessel der Map aendert sich
+		dieSachbearbeiter.remove(this.benutzername);
+		this.benutzername = neuerBenutzername;
+		dieSachbearbeiter.put(neuerBenutzername, this);
 	}
 	
 	public String gibPasswort() {
 		return passwort;
 	}
 	
-	public String setzePasswort(String passwort) {
-		String fehlermeldung = pruefePasswort(passwort);
-		
-		if (fehlermeldung == null) {
-			this.passwort = passwort;
-		}
-		return fehlermeldung;
+	public void setzePasswort(String passwort) {
+		pruefePasswort(passwort);
+		this.passwort = passwort;
 	}
 	
 	public boolean istAdmin() {
 		return istAdmin;
 	}
 	
-	public String setzeIstAdmin(boolean istAdmin) {
+	public void setzeIstAdmin(boolean istAdmin) {
 		boolean alteBerechtigung = this.istAdmin;
 		this.istAdmin = istAdmin;
-		if (mindestensEinAdminExistiert()) {
-			return null;
-		} else {
+		if (!mindestensEinAdminExistiert()) {
 			// rollback
 			this.istAdmin = alteBerechtigung;
-			return "Der Sachbearbeiter " + gibBenutzername() + " ist der letzte Administrator im System und kann "
-				+ "daher keine geringere Berechtigung annehmen";
+			throw new RuntimeException("Der Sachbearbeiter " + gibBenutzername() + " ist der letzte Administrator im System und kann "
+				+ "daher keine geringere Berechtigung annehmen");
 		}
 	}
 	
@@ -170,19 +147,15 @@ public class Sachbearbeiter implements Serializable {
 	}
 	
 	public boolean mindestensEineFortbildungszuordnungExistiert() {
-		boolean existiert = !this.belegteFortbildungen.isEmpty();
-		return existiert |= !this.bestandeneFortbildungen.isEmpty();
+		return !this.belegteFortbildungen.isEmpty() || !this.bestandeneFortbildungen.isEmpty();
 	}
 	
-	public String loesche() {
+	public void loesche() {
 		dieSachbearbeiter.remove(gibBenutzername());
 		// mindestens ein Admin muss in dieFortbildungen existieren
-		if (mindestensEinAdminExistiert()) {
-			return null;
-		} else {
+		if (!mindestensEinAdminExistiert()) {
 			dieSachbearbeiter.put(gibBenutzername(), this);
-			return "Der Sachbearbeiter " + gibBenutzername() + " ist der letzte Administrator im System und kann "
-				+ "daher nicht gel scht werden";
+			throw new RuntimeException("Der Sachbearbeiter " + gibBenutzername() + " ist der letzte Administrator im System und kann daher nicht gel scht werden");
 		}
 	}
 	

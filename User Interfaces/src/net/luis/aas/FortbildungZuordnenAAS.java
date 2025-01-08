@@ -2,7 +2,6 @@ package net.luis.aas;
 
 import net.luis.Auswaehlen;
 import net.luis.k.FortbildungZuordnenK;
-import net.luis.k.SachbearbeiterAuswaehlenK;
 
 import javax.swing.*;
 
@@ -15,7 +14,7 @@ public class FortbildungZuordnenAAS {
 	private FortbildungZuordnenAAS() {}
 	
 	public void oeffnen(JFrame fenster) {
-		String sachbearbeiter = SachbearbeiterAuswaehlenAAS.INSTANCE.selektiereSachbearbeiter();
+		/*String sachbearbeiter = SachbearbeiterAuswaehlenAAS.INSTANZ.selektiereSachbearbeiter();
 		String fortbildung = FortbildungAuswaehlenAAS.INSTANCE.selektiereFortbildung();
 		
 		System.out.println("Welche Zuordnung möchten Sie vornehmen?");
@@ -24,7 +23,7 @@ public class FortbildungZuordnenAAS {
 			this.kontrolle.belegeFortbildung(sachbearbeiter, fortbildung);
 		} else if (typ == ZuordnungsTyp.BESTANDEN) {
 			this.kontrolle.besteheFortbildung(sachbearbeiter, fortbildung);
-		}
+		}*/
 	}
 	
 	private enum ZuordnungsTyp {

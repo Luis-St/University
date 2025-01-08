@@ -1,5 +1,6 @@
 package net.luis.aas;
 
+import net.luis.Sachbearbeiter;
 import net.luis.k.SachbearbeiterBearbeitenK;
 
 import javax.swing.*;
@@ -12,102 +13,70 @@ public class SachbearbeiterBearbeitenAAS extends JPanel {
 	public static final SachbearbeiterBearbeitenAAS INSTANZ = new SachbearbeiterBearbeitenAAS();
 	
 	private final SachbearbeiterBearbeitenK kontrolle = new SachbearbeiterBearbeitenK();
+	
+	private final JTextField benutzerTextFeld = new JTextField();
+	private final JTextField passwortTextFeld = new JTextField();
+	private final JRadioButton normalAuswahlKnopf = new JRadioButton("Sachbearbeiter", true);
+	private final JRadioButton adminAuswahlKnopf = new JRadioButton("Admin", false);
+	private final ButtonGroup berechtigungsGruppe = new ButtonGroup();
+	
 	private JFrame fenster;
+	private Sachbearbeiter sachbearbeiter;
 	
 	private SachbearbeiterBearbeitenAAS() {
 		this.setLayout(new GridLayout(9, 2));
 		this.setSize(200, 200);
 		
-		GridBagConstraints kontext = new GridBagConstraints();
-		
 		JLabel benutzerLabel = new JLabel("Benutzername:");
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridx = 0;
-		kontext.gridy = 0;
-		this.add(benutzerLabel, kontext);
-		
-		JTextField benutzerTextFeld = new JTextField();
-		kontext.gridx = 1;
-		kontext.gridy = 0;
-		this.add(benutzerTextFeld, kontext);
-		
-		kontext.gridy = 1;
-		this.add(new JLabel(" "), kontext);
+		this.add(benutzerLabel);
+		this.add(benutzerTextFeld);
 		
 		JLabel passwortLabel = new JLabel("Passwort:");
-		kontext.gridx = 0;
-		kontext.gridy = 2;
-		this.add(passwortLabel, kontext);
-		
-		JTextField passwortTextFeld = new JTextField();
-		kontext.gridx = 1;
-		kontext.gridy = 2;
-		this.add(passwortTextFeld, kontext);
-		
-		kontext.gridy = 5;
-		this.add(new JLabel(" "), kontext);
+		this.add(passwortLabel);
+		this.add(passwortTextFeld);
 		
 		JLabel berechtigungsLabel = new JLabel("Berechtigung:");
-		kontext.gridx = 0;
-		kontext.gridy = 6;
-		this.add(berechtigungsLabel, kontext);
-		
-		JRadioButton normalAuswahlKnopf = new JRadioButton("Sachbearbeiter", true);
-		kontext.gridx = 1;
-		kontext.gridy = 6;
-		this.add(normalAuswahlKnopf, kontext);
-		
-		JRadioButton adminAuswahlKnopf = new JRadioButton("Admin", false);
-		kontext.gridx = 1;
-		kontext.gridy = 7;
-		this.add(adminAuswahlKnopf, kontext);
-		
-		ButtonGroup berechtigungsGruppe = new ButtonGroup();
+		this.add(berechtigungsLabel);
+		this.add(new JLabel());
+		this.add(normalAuswahlKnopf);
+		this.add(adminAuswahlKnopf);
 		berechtigungsGruppe.add(normalAuswahlKnopf);
 		berechtigungsGruppe.add(adminAuswahlKnopf);
-		
-		kontext.gridy = 7;
-		this.add(new JLabel(" "), kontext);
 		
 		JButton abbruchKnopf = new JButton("Abbruch");
 		abbruchKnopf.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Abbruch - SachbearbeiterBearbeitenAAS");
 				schliessen(fenster);
 			}
 		});
-		kontext.gridx = 0;
-		kontext.gridy = 8;
-		this.add(abbruchKnopf, kontext);
+		this.add(abbruchKnopf);
 		
 		JLabel fehlerLabel = new JLabel(" ");
 		fehlerLabel.setForeground(Color.RED);
-		kontext.gridwidth = GridBagConstraints.REMAINDER;
-		kontext.gridx = 0;
-		kontext.gridy = 9;
-		this.add(fehlerLabel, kontext);
+		
 		
 		JButton speichernKnopf = new JButton("Speichern");
 		speichernKnopf.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Speichern - SachbearbeiterBearbeitenAAS");
 				if (!benutzerTextFeld.getText().isBlank() && !passwortTextFeld.getText().isBlank()) {
 					try {
-						// ToDo: Sachbearbeiter speichern
-						kontrolle.schreibeSachbearbeiter(null, benutzerTextFeld.getText(), passwortTextFeld.getText(), !normalAuswahlKnopf.isSelected());
+						kontrolle.schreibeSachbearbeiter(sachbearbeiter.gibBenutzername(), benutzerTextFeld.getText(), passwortTextFeld.getText(), !normalAuswahlKnopf.isSelected());
 						schliessen(fenster);
-					} catch (IllegalArgumentException error) {
-						fehlerLabel.setText(error.getMessage());
+					} catch (Exception fehler) {
+						fehlerLabel.setText(fehler.getMessage());
 					}
 				} else {
 					fehlerLabel.setText("Benutzername oder Passwort leer");
 				}
 			}
 		});
-		kontext.gridx = 1;
-		kontext.gridy = 8;
-		this.add(speichernKnopf, kontext);
+		this.add(speichernKnopf);
+		this.add(fehlerLabel);
+		this.add(new JLabel());
 		
 		normalAuswahlKnopf.setEnabled(false);
 		adminAuswahlKnopf.setEnabled(false);
@@ -119,14 +88,15 @@ public class SachbearbeiterBearbeitenAAS extends JPanel {
 		fenster.add(this);
 		fenster.revalidate();
 		fenster.repaint();
-		
-		// ToDo: Sachbearbeiter auswählen
-		//Sachbearbeiter temp = LoginAAS.INSTANZ().sachbearbeiterToLogin;
-		//benutzerTextFeld.setText(temp.gibBenutzername());
-		//passwortTextFeld.setText(temp.gibPasswort());
-		//berechtigungsGruppe.clearSelection();
-		//normalAuswahlKnopf.setSelected(!temp.istAdmin());
-		//adminAuswahlKnopf.setSelected(temp.istAdmin());
+	}
+	
+	public void ausfuehren(Sachbearbeiter sachbearbeiter) {
+		this.sachbearbeiter = sachbearbeiter;
+		benutzerTextFeld.setText(sachbearbeiter.gibBenutzername());
+		passwortTextFeld.setText(sachbearbeiter.gibPasswort());
+		berechtigungsGruppe.clearSelection();
+		normalAuswahlKnopf.setSelected(!sachbearbeiter.istAdmin());
+		adminAuswahlKnopf.setSelected(sachbearbeiter.istAdmin());
 	}
 	
 	public void schliessen(JFrame fenster) {

@@ -22,7 +22,11 @@ public class NormalAS extends JPanel {
 		sachbearbeiterBearbeitenItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SachbearbeiterBearbeitenAAS.INSTANZ.oeffnen(NormalAS.this.fenster);
+				SachbearbeiterAuswaehlenAAS.INSTANZ.oeffnen(fenster);
+				SachbearbeiterAuswaehlenAAS.INSTANZ.ausfuehren(sachbearbeiter -> {
+					SachbearbeiterBearbeitenAAS.INSTANZ.oeffnen(fenster);
+					SachbearbeiterBearbeitenAAS.INSTANZ.ausfuehren(sachbearbeiter);
+				});
 			}
 		});
 		
@@ -30,7 +34,7 @@ public class NormalAS extends JPanel {
 		fortbildungZuordnenItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FortbildungZuordnenAAS.INSTANZ.oeffnen(NormalAS.this.fenster);
+				FortbildungZuordnenAAS.INSTANZ.oeffnen(fenster);
 			}
 		});
 		
@@ -38,7 +42,7 @@ public class NormalAS extends JPanel {
 		fortbildungsZuordnungLoeschenItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FortbildungsZuordnungLoeschenAAS.INSTANZ.oeffnen(NormalAS.this.fenster);
+				FortbildungsZuordnungLoeschenAAS.INSTANZ.oeffnen(fenster);
 			}
 		});
 		
@@ -46,7 +50,7 @@ public class NormalAS extends JPanel {
 		fortbildungsZuordnungAnzeigenItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FortbildungsZuordnungAnzeigenAAS.INSTANZ.oeffnen(NormalAS.this.fenster);
+				FortbildungsZuordnungAnzeigenAAS.INSTANZ.oeffnen(fenster);
 			}
 		});
 		

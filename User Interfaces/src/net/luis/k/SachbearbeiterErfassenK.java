@@ -4,10 +4,7 @@ import net.luis.Sachbearbeiter;
 
 public class SachbearbeiterErfassenK {
 	
-	public String erzeugeSachbearbeiter(String benutzername, String
-		passwort, boolean istAdmin) {
-		String fehlermeldung = Sachbearbeiter.erzeuge(benutzername, passwort, istAdmin);
-		
-		return fehlermeldung;
+	public void erzeugeSachbearbeiter(String benutzername, String passwort, boolean istAdmin) {
+		Sachbearbeiter.erzeuge(benutzername, passwort, istAdmin);
 	}
 }

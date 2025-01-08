@@ -16,7 +16,7 @@ public class LoginAAS extends JPanel {
 	public static final LoginAAS INSTANZ = new LoginAAS();
 	
 	private final JTextField benutzerFeld;
-	private final JPasswordField passwortFeld;
+	private final JTextField passwortFeld;
 	private final JCheckBox adminCheckBox;
 	private final JLabel nachrichtLabel;
 	private JFrame fenster;
@@ -28,7 +28,8 @@ public class LoginAAS extends JPanel {
 		JLabel benutzerLabel = new JLabel("Benutzername:");
 		this.benutzerFeld = new JTextField(20);
 		JLabel passwortLabel = new JLabel("Passwort:");
-		this.passwortFeld = new JPasswordField(20);
+		this.passwortFeld = new JTextField(20);
+		this.passwortFeld.setText("aaAA11&&aa");
 		this.adminCheckBox = new JCheckBox("Als Admin einloggen");
 		JButton loginButton = new JButton("Login");
 		this.nachrichtLabel = new JLabel("");
@@ -59,7 +60,7 @@ public class LoginAAS extends JPanel {
 	
 	private void verarbeiteLogin() {
 		String benutzername = this.benutzerFeld.getText();
-		String passwort = new String(this.passwortFeld.getPassword());
+		String passwort = this.passwortFeld.getText();
 		boolean istAdmin = this.adminCheckBox.isSelected();
 		
 		if (benutzername.isBlank() || passwort.isBlank()) {

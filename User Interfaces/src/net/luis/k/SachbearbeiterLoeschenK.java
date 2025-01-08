@@ -4,7 +4,7 @@ import net.luis.Sachbearbeiter;
 
 public class SachbearbeiterLoeschenK {
 	
-	public String loescheSachbearbeiter(String benutzername) {
-		return Sachbearbeiter.gib(benutzername).loesche();
+	public void loescheSachbearbeiter(String benutzername) {
+		Sachbearbeiter.gib(benutzername).loesche();
 	}
 }

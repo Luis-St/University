@@ -13,74 +13,50 @@ public class SachbearbeiterLoeschenAAS extends JPanel {
 	public static final SachbearbeiterLoeschenAAS INSTANZ = new SachbearbeiterLoeschenAAS();
 	
 	private final SachbearbeiterLoeschenK kontrolle = new SachbearbeiterLoeschenK();
+	
+	private final JLabel benutzerNameLabel = new JLabel();
+	
 	private JFrame fenster;
+	private Sachbearbeiter sachbearbeiter;
 	
 	private SachbearbeiterLoeschenAAS() {
 		this.setLayout(new GridLayout(8, 2));
 		this.setSize(200, 200);
 		
-		GridBagConstraints kontext = new GridBagConstraints();
-		
-		JLabel labelBenutzer = new JLabel("Sachbearbeiter:");
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridx = 0;
-		kontext.gridy = 0;
-		this.add(labelBenutzer, kontext);
-		
-		// ToDo: Sachbearbeiter auswählen
-		JComboBox<String> boxBenutzer = new JComboBox<>(Sachbearbeiter.gibAlleNamen());
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridx = 1;
-		kontext.gridy = 0;
-		this.add(boxBenutzer, kontext);
-		
-		kontext.gridy = 1;
-		this.add(new JLabel(" "), kontext);
+		JLabel benutzerLabel = new JLabel("Sachbearbeiter:");
+		this.add(benutzerLabel);
+		this.add(benutzerNameLabel);
 		
 		JButton abbruchKnopf = new JButton("Abbruch");
 		abbruchKnopf.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Abbruch - SachbearbeiterLoeschenAAS");
 				schliessen(fenster);
 			}
 		});
-		
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridx = 0;
-		kontext.gridy = 7;
-		this.add(abbruchKnopf, kontext);
+		this.add(abbruchKnopf);
 		
 		JLabel fehlerLabel = new JLabel(" ");
 		fehlerLabel.setForeground(Color.RED);
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridwidth = GridBagConstraints.REMAINDER;
-		kontext.gridx = 0;
-		kontext.gridy = 8;
-		this.add(fehlerLabel, kontext);
 		
 		JButton loeschenKnopf = new JButton("Löschen");
 		loeschenKnopf.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Löschen - SachbearbeiterLoeschenAAS");
 				try {
-					kontrolle.loescheSachbearbeiter(boxBenutzer.getSelectedItem().toString());
+					kontrolle.loescheSachbearbeiter(sachbearbeiter.gibBenutzername());
 					schliessen(fenster);
 				} catch (IllegalArgumentException error) {
 					fehlerLabel.setText(error.getMessage());
 				}
-				
 			}
 		});
+		this.add(loeschenKnopf);
 		
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridx = 1;
-		kontext.gridy = 7;
-		this.add(loeschenKnopf, kontext);
+		this.add(fehlerLabel);
+		this.add(new JLabel());
 	}
 	
 	public void oeffnen(JFrame fenster) {
@@ -88,6 +64,11 @@ public class SachbearbeiterLoeschenAAS extends JPanel {
 		fenster.add(this);
 		fenster.revalidate();
 		fenster.repaint();
+	}
+	
+	public void ausfuehren(Sachbearbeiter sachbearbeiter) {
+		this.sachbearbeiter = sachbearbeiter;
+		benutzerNameLabel.setText(sachbearbeiter.gibBenutzername());
 	}
 	
 	public void schliessen(JFrame fenster) {

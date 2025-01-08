@@ -1,6 +1,5 @@
 package net.luis.as;
 
-import net.luis.Auswaehlen;
 import net.luis.Eingabe;
 import net.luis.aas.*;
 
@@ -24,7 +23,7 @@ public class AdminAS extends JPanel {
 		sachbearbeiterErfassenItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SachbearbeiterErfassenAAS.INSTANZ.oeffnen(AdminAS.this.fenster);
+				SachbearbeiterErfassenAAS.INSTANZ.oeffnen(fenster);
 			}
 		});
 		
@@ -32,7 +31,11 @@ public class AdminAS extends JPanel {
 		sachbearbeiterBearbeitenItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AdminSachbearbeiterBearbeitenAAS.INSTANZ.oeffnen(AdminAS.this.fenster);
+				SachbearbeiterAuswaehlenAAS.INSTANZ.oeffnen(fenster);
+				SachbearbeiterAuswaehlenAAS.INSTANZ.ausfuehren(sachbearbeiter -> {
+					AdminSachbearbeiterBearbeitenAAS.INSTANZ.oeffnen(fenster);
+					AdminSachbearbeiterBearbeitenAAS.INSTANZ.ausfuehren(sachbearbeiter);
+				});
 			}
 		});
 		
@@ -40,7 +43,11 @@ public class AdminAS extends JPanel {
 		sachbearbeiterLoeschenItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SachbearbeiterLoeschenAAS.INSTANZ.oeffnen(AdminAS.this.fenster);
+				SachbearbeiterAuswaehlenAAS.INSTANZ.oeffnen(fenster);
+				SachbearbeiterAuswaehlenAAS.INSTANZ.ausfuehren(sachbearbeiter -> {
+					SachbearbeiterLoeschenAAS.INSTANZ.oeffnen(fenster);
+					SachbearbeiterLoeschenAAS.INSTANZ.ausfuehren(sachbearbeiter);
+				});
 			}
 		});
 		
@@ -48,7 +55,7 @@ public class AdminAS extends JPanel {
 		fortbildungZuordnenItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FortbildungZuordnenAAS.INSTANZ.oeffnen(AdminAS.this.fenster);
+				FortbildungZuordnenAAS.INSTANZ.oeffnen(fenster);
 			}
 		});
 		
@@ -56,7 +63,7 @@ public class AdminAS extends JPanel {
 		fortbildungsZuordnungLoeschenItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FortbildungsZuordnungLoeschenAAS.INSTANZ.oeffnen(AdminAS.this.fenster);
+				FortbildungsZuordnungLoeschenAAS.INSTANZ.oeffnen(fenster);
 			}
 		});
 		
@@ -64,7 +71,7 @@ public class AdminAS extends JPanel {
 		fortbildungsZuordnungAnzeigenItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FortbildungsZuordnungAnzeigenAAS.INSTANZ.oeffnen(AdminAS.this.fenster);
+				FortbildungsZuordnungAnzeigenAAS.INSTANZ.oeffnen(fenster);
 			}
 		});
 		

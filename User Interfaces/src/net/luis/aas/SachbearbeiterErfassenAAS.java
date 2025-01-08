@@ -15,72 +15,35 @@ public class SachbearbeiterErfassenAAS extends JPanel {
 	private JFrame fenster;
 	
 	private SachbearbeiterErfassenAAS() {
-		this.setLayout(new GridLayout(8, 2));
+		this.setLayout(new GridLayout(9, 2));
 		this.setSize(200, 200);
 		
-		GridBagConstraints kontext = new GridBagConstraints();
-		
 		JLabel benutzerLabel = new JLabel("Benutzername:");
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridx = 0;
-		kontext.gridy = 0;
-		this.add(benutzerLabel, kontext);
+		this.add(benutzerLabel);
 		
 		JTextField benutzerTextFeld = new JTextField();
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridx = 1;
-		kontext.gridy = 0;
-		this.add(benutzerTextFeld, kontext);
-		
-		kontext.gridy = 1;
-		this.add(new JLabel(" "), kontext);
+		this.add(benutzerTextFeld);
 		
 		JLabel passwortLabel = new JLabel("Passwort:");
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridx = 0;
-		kontext.gridy = 2;
-		this.add(passwortLabel, kontext);
+		this.add(passwortLabel);
 		
 		JTextField passwortTextFeld = new JTextField();
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridx = 1;
-		kontext.gridy = 2;
-		this.add(passwortTextFeld, kontext);
-		
-		kontext.gridy = 3;
-		this.add(new JLabel(" "), kontext);
+		this.add(passwortTextFeld);
 		
 		JLabel berechtigungsLabel = new JLabel("Berechtigung:");
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridx = 0;
-		kontext.gridy = 4;
-		this.add(berechtigungsLabel, kontext);
+		this.add(berechtigungsLabel);
+		
+		this.add(new JLabel());
 		
 		JRadioButton normalAuswahlKnopf = new JRadioButton("Sachbearbeiter", true);
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridx = 1;
-		kontext.gridy = 4;
-		this.add(normalAuswahlKnopf, kontext);
+		this.add(normalAuswahlKnopf);
 		
 		JRadioButton adminAuswahlKnopf = new JRadioButton("Admin", false);
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridx = 1;
-		kontext.gridy = 5;
-		this.add(adminAuswahlKnopf, kontext);
+		this.add(adminAuswahlKnopf);
 		
 		ButtonGroup berechtigungsGruppe = new ButtonGroup();
 		berechtigungsGruppe.add(normalAuswahlKnopf);
 		berechtigungsGruppe.add(adminAuswahlKnopf);
-		
-		kontext.gridy = 6;
-		this.add(new JLabel(" "), kontext);
 		
 		JButton abbruchKnopf = new JButton("Abbruch");
 		abbruchKnopf.addActionListener(new ActionListener() {
@@ -89,21 +52,10 @@ public class SachbearbeiterErfassenAAS extends JPanel {
 				schliessen(fenster);
 			}
 		});
-		
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridx = 0;
-		kontext.gridy = 7;
-		this.add(abbruchKnopf, kontext);
+		this.add(abbruchKnopf);
 		
 		JLabel fehlerLabel = new JLabel(" ");
 		fehlerLabel.setForeground(Color.RED);
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridwidth = GridBagConstraints.REMAINDER;
-		kontext.gridx = 0;
-		kontext.gridy = 8;
-		this.add(fehlerLabel, kontext);
 		
 		JButton speichernKnopf = new JButton("Speichern");
 		speichernKnopf.addActionListener(new ActionListener() {
@@ -113,20 +65,18 @@ public class SachbearbeiterErfassenAAS extends JPanel {
 					try {
 						kontrolle.erzeugeSachbearbeiter(benutzerTextFeld.getText(), passwortTextFeld.getText(), !normalAuswahlKnopf.isSelected());
 						schliessen(fenster);
-					} catch (IllegalArgumentException error) {
-						fehlerLabel.setText(error.getMessage());
+					} catch (Exception fehler) {
+						fehlerLabel.setText(fehler.getMessage());
 					}
 				} else {
 					fehlerLabel.setText("Benutzername oder Passwort leer");
 				}
 			}
 		});
+		this.add(speichernKnopf);
 		
-		kontext.weightx = 0.5;
-		kontext.fill = GridBagConstraints.HORIZONTAL;
-		kontext.gridx = 1;
-		kontext.gridy = 7;
-		this.add(speichernKnopf, kontext);
+		this.add(fehlerLabel);
+		this.add(new JLabel());
 	}
 	
 	public void oeffnen(JFrame fenster) {
