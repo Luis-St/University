@@ -15,12 +15,13 @@ public class SachbearbeiterLoeschenAAS extends JPanel {
 	private final SachbearbeiterLoeschenK kontrolle = new SachbearbeiterLoeschenK();
 	
 	private final JLabel benutzerNameLabel = new JLabel();
+	private final JLabel fehlerLabel = new JLabel();
 	
 	private JFrame fenster;
 	private Sachbearbeiter sachbearbeiter;
 	
 	private SachbearbeiterLoeschenAAS() {
-		this.setLayout(new GridLayout(8, 2));
+		this.setLayout(new GridLayout(3, 2));
 		this.setSize(200, 200);
 		
 		JLabel benutzerLabel = new JLabel("Sachbearbeiter:");
@@ -37,9 +38,6 @@ public class SachbearbeiterLoeschenAAS extends JPanel {
 		});
 		this.add(abbruchKnopf);
 		
-		JLabel fehlerLabel = new JLabel(" ");
-		fehlerLabel.setForeground(Color.RED);
-		
 		JButton loeschenKnopf = new JButton("Löschen");
 		loeschenKnopf.addActionListener(new ActionListener() {
 			@Override
@@ -48,13 +46,14 @@ public class SachbearbeiterLoeschenAAS extends JPanel {
 				try {
 					kontrolle.loescheSachbearbeiter(sachbearbeiter.gibBenutzername());
 					schliessen(fenster);
-				} catch (IllegalArgumentException error) {
+				} catch (Exception error) {
 					fehlerLabel.setText(error.getMessage());
 				}
 			}
 		});
 		this.add(loeschenKnopf);
 		
+		fehlerLabel.setForeground(Color.RED);
 		this.add(fehlerLabel);
 		this.add(new JLabel());
 	}
@@ -69,6 +68,7 @@ public class SachbearbeiterLoeschenAAS extends JPanel {
 	public void ausfuehren(Sachbearbeiter sachbearbeiter) {
 		this.sachbearbeiter = sachbearbeiter;
 		benutzerNameLabel.setText(sachbearbeiter.gibBenutzername());
+		fehlerLabel.setText("");
 	}
 	
 	public void schliessen(JFrame fenster) {

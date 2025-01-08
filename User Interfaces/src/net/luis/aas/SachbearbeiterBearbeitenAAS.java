@@ -19,6 +19,7 @@ public class SachbearbeiterBearbeitenAAS extends JPanel {
 	private final JRadioButton normalAuswahlKnopf = new JRadioButton("Sachbearbeiter", true);
 	private final JRadioButton adminAuswahlKnopf = new JRadioButton("Admin", false);
 	private final ButtonGroup berechtigungsGruppe = new ButtonGroup();
+	private final JLabel fehlerLabel = new JLabel();
 	
 	private JFrame fenster;
 	private Sachbearbeiter sachbearbeiter;
@@ -53,10 +54,6 @@ public class SachbearbeiterBearbeitenAAS extends JPanel {
 		});
 		this.add(abbruchKnopf);
 		
-		JLabel fehlerLabel = new JLabel(" ");
-		fehlerLabel.setForeground(Color.RED);
-		
-		
 		JButton speichernKnopf = new JButton("Speichern");
 		speichernKnopf.addActionListener(new ActionListener() {
 			@Override
@@ -75,6 +72,8 @@ public class SachbearbeiterBearbeitenAAS extends JPanel {
 			}
 		});
 		this.add(speichernKnopf);
+		
+		fehlerLabel.setForeground(Color.RED);
 		this.add(fehlerLabel);
 		this.add(new JLabel());
 		
@@ -97,6 +96,7 @@ public class SachbearbeiterBearbeitenAAS extends JPanel {
 		berechtigungsGruppe.clearSelection();
 		normalAuswahlKnopf.setSelected(!sachbearbeiter.istAdmin());
 		adminAuswahlKnopf.setSelected(sachbearbeiter.istAdmin());
+		fehlerLabel.setText("");
 	}
 	
 	public void schliessen(JFrame fenster) {

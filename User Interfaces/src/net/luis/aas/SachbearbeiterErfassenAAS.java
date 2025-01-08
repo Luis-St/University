@@ -12,6 +12,9 @@ public class SachbearbeiterErfassenAAS extends JPanel {
 	public static final SachbearbeiterErfassenAAS INSTANZ = new SachbearbeiterErfassenAAS();
 	
 	private final SachbearbeiterErfassenK kontrolle = new SachbearbeiterErfassenK();
+	
+	private final JLabel fehlerLabel = new JLabel();
+	
 	private JFrame fenster;
 	
 	private SachbearbeiterErfassenAAS() {
@@ -54,9 +57,6 @@ public class SachbearbeiterErfassenAAS extends JPanel {
 		});
 		this.add(abbruchKnopf);
 		
-		JLabel fehlerLabel = new JLabel(" ");
-		fehlerLabel.setForeground(Color.RED);
-		
 		JButton speichernKnopf = new JButton("Speichern");
 		speichernKnopf.addActionListener(new ActionListener() {
 			@Override
@@ -75,6 +75,7 @@ public class SachbearbeiterErfassenAAS extends JPanel {
 		});
 		this.add(speichernKnopf);
 		
+		fehlerLabel.setForeground(Color.RED);
 		this.add(fehlerLabel);
 		this.add(new JLabel());
 	}
@@ -84,6 +85,10 @@ public class SachbearbeiterErfassenAAS extends JPanel {
 		fenster.add(this);
 		fenster.revalidate();
 		fenster.repaint();
+	}
+	
+	public void ausfuehren() {
+		fehlerLabel.setText("");
 	}
 	
 	public void schliessen(JFrame fenster) {

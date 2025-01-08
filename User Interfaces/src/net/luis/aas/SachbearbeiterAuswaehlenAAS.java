@@ -14,6 +14,9 @@ public class SachbearbeiterAuswaehlenAAS extends JPanel {
 	public static final SachbearbeiterAuswaehlenAAS INSTANZ = new SachbearbeiterAuswaehlenAAS();
 	
 	private final SachbearbeiterAuswaehlenK kontrolle = new SachbearbeiterAuswaehlenK();
+	
+	private final JComboBox<String> benutzerAuswahl = new JComboBox<>();
+	
 	private JFrame fenster;
 	private Consumer<Sachbearbeiter> naechstesPanelDynamischOeffnen;
 	
@@ -23,8 +26,6 @@ public class SachbearbeiterAuswaehlenAAS extends JPanel {
 		
 		JLabel labelBenutzerAuswaehlen = new JLabel("Sachbearbeiter:");
 		this.add(labelBenutzerAuswaehlen);
-		
-		JComboBox<String> benutzerAuswahl = new JComboBox<>(this.kontrolle.gibSachbearbeiterNamen());
 		this.add(benutzerAuswahl);
 		
 		JButton abbruchKnopf = new JButton("Abbruch");
@@ -59,6 +60,10 @@ public class SachbearbeiterAuswaehlenAAS extends JPanel {
 	
 	public void ausfuehren(Consumer<Sachbearbeiter> naechstesPanelDynamischOeffnen) {
 		this.naechstesPanelDynamischOeffnen = naechstesPanelDynamischOeffnen;
+		benutzerAuswahl.removeAllItems();
+		for (String benutzer : this.kontrolle.gibSachbearbeiterNamen()) {
+			benutzerAuswahl.addItem(benutzer);
+		}
 	}
 	
 	public void schliessen(JFrame fenster) {
