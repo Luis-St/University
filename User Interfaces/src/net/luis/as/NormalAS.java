@@ -50,7 +50,11 @@ public class NormalAS extends JPanel {
 		fortbildungsZuordnungAnzeigenItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				FortbildungsZuordnungAnzeigenAAS.INSTANZ.oeffnen(fenster);
+				SachbearbeiterAuswaehlenAAS.INSTANZ.oeffnen(fenster);
+				SachbearbeiterAuswaehlenAAS.INSTANZ.ausfuehren(sachbearbeiter -> {
+					FortbildungsZuordnungAnzeigenAAS.INSTANZ.oeffnen(fenster);
+					FortbildungsZuordnungAnzeigenAAS.INSTANZ.ausfuehren(sachbearbeiter);
+				});
 			}
 		});
 		

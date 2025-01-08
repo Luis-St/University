@@ -5,29 +5,25 @@ import net.luis.k.FortbildungsZuordnungLoeschenK;
 
 import javax.swing.*;
 
-public class FortbildungsZuordnungLoeschenAAS {
+public class FortbildungsZuordnungLoeschenAAS extends JPanel {
 	
 	public static final FortbildungsZuordnungLoeschenAAS INSTANZ = new FortbildungsZuordnungLoeschenAAS();
 	
 	private FortbildungsZuordnungLoeschenK kontrolle = new FortbildungsZuordnungLoeschenK();
+	private JFrame fenster;
 	
 	private FortbildungsZuordnungLoeschenAAS() {}
 	
 	public void oeffnen(JFrame fenster) {
-	/*	String sachbearbeiter = SachbearbeiterAuswaehlenAAS.INSTANZ.selektiereSachbearbeiter();
-		String fortbildung = FortbildungAuswaehlenAAS.INSTANCE.selektiereFortbildung();
-		
-		System.out.println("Aus welcher Zuordnung möchten Sie die Fortbildung löschen?");
-		ZuordnungsTyp typ = ZuordnungsTyp.values()[Auswaehlen.optionAuswaehlen("Belegt", "Bestanden") - 1];
-		if (typ == ZuordnungsTyp.BELEGT) {
-			this.kontrolle.loescheBelegteFortbildung(sachbearbeiter, fortbildung);
-		} else if (typ == ZuordnungsTyp.BESTANDEN) {
-			this.kontrolle.loescheBestandeneFortbildung(sachbearbeiter, fortbildung);
-		}*/
+		this.fenster = fenster;
+		fenster.add(this);
+		fenster.revalidate();
+		fenster.repaint();
 	}
 	
-	private enum ZuordnungsTyp {
-		
-		BELEGT, BESTANDEN;
+	public void schliessen(JFrame fenster) {
+		fenster.remove(this);
+		fenster.revalidate();
+		fenster.repaint();
 	}
 }

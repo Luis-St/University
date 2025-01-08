@@ -5,29 +5,25 @@ import net.luis.k.FortbildungZuordnenK;
 
 import javax.swing.*;
 
-public class FortbildungZuordnenAAS {
+public class FortbildungZuordnenAAS extends JPanel {
 	
 	public static final FortbildungZuordnenAAS INSTANZ = new FortbildungZuordnenAAS();
 	
 	private final FortbildungZuordnenK kontrolle = new FortbildungZuordnenK();
+	private JFrame fenster;
 	
 	private FortbildungZuordnenAAS() {}
 	
 	public void oeffnen(JFrame fenster) {
-		/*String sachbearbeiter = SachbearbeiterAuswaehlenAAS.INSTANZ.selektiereSachbearbeiter();
-		String fortbildung = FortbildungAuswaehlenAAS.INSTANCE.selektiereFortbildung();
-		
-		System.out.println("Welche Zuordnung möchten Sie vornehmen?");
-		ZuordnungsTyp typ = ZuordnungsTyp.values()[Auswaehlen.optionAuswaehlen("Belegt", "Bestanden") - 1];
-		if (typ == ZuordnungsTyp.BELEGT) {
-			this.kontrolle.belegeFortbildung(sachbearbeiter, fortbildung);
-		} else if (typ == ZuordnungsTyp.BESTANDEN) {
-			this.kontrolle.besteheFortbildung(sachbearbeiter, fortbildung);
-		}*/
+		this.fenster = fenster;
+		fenster.add(this);
+		fenster.revalidate();
+		fenster.repaint();
 	}
 	
-	private enum ZuordnungsTyp {
-		
-		BELEGT, BESTANDEN;
+	public void schliessen(JFrame fenster) {
+		fenster.remove(this);
+		fenster.revalidate();
+		fenster.repaint();
 	}
 }
