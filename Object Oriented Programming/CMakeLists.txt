@@ -15,4 +15,11 @@ add_executable(FH_S5_OOP main.cpp
 		task9/task9.cpp task9/task9.h task9/City.cpp task9/City.h
 		task10/task10.cpp task10/task10.h task10/City.cpp task10/City.h
 		task11/task11.cpp task11/task11.h task11/Character.h
+		task12/task12.cpp task12/task12.h task12/Vehicle.cpp task12/Vehicle.h
+		task12/Van.cpp
+		task12/Van.h
+		task12/PassengerCar.cpp
+		task12/PassengerCar.h
+		task12/StationWagon.cpp
+		task12/StationWagon.h
 )
