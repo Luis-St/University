@@ -3,7 +3,7 @@
 #include "Vehicle.h"
 
 namespace lsv12 {
-	class Van : public Vehicle {
+	class Van : virtual public Vehicle {
 	private:
 		int maxLoad;
 

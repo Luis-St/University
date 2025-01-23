@@ -4,7 +4,7 @@
 #include "Van.h"
 
 namespace lsv12 {
-	class StationWagon : public Van, public PassengerCar {
+	class StationWagon : virtual public Van, virtual public PassengerCar {
 	private:
 		int numSeats;
 

@@ -3,7 +3,7 @@
 #include "Vehicle.h"
 
 namespace lsv12 {
-	class PassengerCar : public Vehicle {
+	class PassengerCar : virtual public Vehicle {
 	private:
 		bool sunRoof;
 
