@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Benutzername:" />
+
+    <EditText
+        android:id="@+id/benutzerTextFeld"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Passwort:" />
+
+    <EditText
+        android:id="@+id/passwortTextFeld"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Berechtigung:" />
+
+    <RadioGroup
+        android:id="@+id/berechtigungsGruppe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/normalAuswahlKnopf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sachbearbeiter" />
+
+        <RadioButton
+            android:id="@+id/adminAuswahlKnopf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Admin" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/fehlerLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_red_dark"
+        android:text=" " />
+
+    <Button
+        android:id="@+id/abbruchKnopf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Abbruch" />
+
+    <Button
+        android:id="@+id/speichernKnopf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Speichern" />
+</LinearLayout>

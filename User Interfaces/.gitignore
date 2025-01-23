@@ -31,4 +31,11 @@ bin/
 .DS_Store
 
 ### Projekt ###
+.gradle
+build/
+/local.properties
+/captures
+.externalNativeBuild
+.cxx
+local.properties
 *.ser

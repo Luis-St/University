@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sachbearbeiter_erfassen"
+        android:title="Sachbearbeiter erfassen" />
+    <item
+        android:id="@+id/sachbearbeiter_bearbeiten"
+        android:title="Sachbearbeiter bearbeiten" />
+    <item
+        android:id="@+id/sachbearbeiter_loeschen"
+        android:title="Sachbearbeiter löschen" />
+    <item
+        android:id="@+id/fortbildung_zuordnen"
+        android:title="Fortbildung zuordnen" />
+    <item
+        android:id="@+id/fortbildungs_zuordnung_loeschen"
+        android:title="Fortbildungszuordnung löschen" />
+    <item
+        android:id="@+id/fortbildungs_zuordnung_anzeigen"
+        android:title="Fortbildungszuordnung anzeigen" />
+</menu>
