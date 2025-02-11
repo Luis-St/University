@@ -1,6 +1,12 @@
 #include <iostream>
 #include "test.h"
 
+#include <array>
+#include <map>
+#include <memory>
+#include <set>
+#include <vector>
+
 #include "geometry/Circle.h"
 #include "geometry/Hexagon.h"
 #include "geometry/Rectangle.h"
@@ -26,11 +32,11 @@ void runPointerTest() {
 	std::cout << "Value after delete: " << *num << std::endl;
 
 	int *array = new int[10];
-	for (int i = 0; i < 10; i ++) {
+	for (int i = 0; i < 10; i++) {
 		array[i] = 10;
 	}
 	std::cout << "Array: ";
-	for (int i = 0; i < 10; i ++) {
+	for (int i = 0; i < 10; i++) {
 		std::cout << array[i];
 		if (i != 9) {
 			std::cout << ", ";
@@ -38,12 +44,11 @@ void runPointerTest() {
 	}
 	std::cout << std::endl;
 
-
-	for (int i = 0; i < 10; i ++) {
+	for (int i = 0; i < 10; i++) {
 		*(array + i) = 42;
 	}
 	std::cout << "Array: ";
-	for (int i = 0; i < 10; i ++) {
+	for (int i = 0; i < 10; i++) {
 		std::cout << i[array];
 		if (i != 9) {
 			std::cout << ", ";
@@ -56,6 +61,17 @@ void runPointerTest() {
 
 void runSmartPointerTest() {
 	std::cout << "--- Smart pointer test ---" << std::endl;
+	auto unique_point = std::make_unique<ArrayPoint>(10, 10);
+	std::cout << "(" << unique_point->getX() << ", " << unique_point->getY() << ")" << std::endl;
+	auto moved_unique_point = std::move(unique_point);
+	std::cout << unique_point << std::endl;
+
+	auto shared_point = std::make_shared<ArrayPoint>(10, 10);
+	std::cout << shared_point.use_count() << std::endl;
+	auto shared_point_two = shared_point;
+	std::cout << shared_point.use_count() << std::endl;
+	shared_point_two = nullptr;
+	std::cout << shared_point.use_count() << std::endl;
 }
 
 void runPointTest() {
@@ -119,4 +135,62 @@ void runGeometryTest() {
 
 void runCollectionTest() {
 	std::cout << std::endl << "--- Collection test ---" << std::endl;
+	// std::array example
+	std::array<int, 5> arr = {1, 2, 3, 4, 5};
+	std::cout << "Array before: ";
+	for (int i: arr) {
+		std::cout << i << " ";
+	}
+	std::cout << std::endl;
+	arr[0] = 10; // Modify an element
+	std::cout << "Array after: ";
+	for (int i: arr) {
+		std::cout << i << " ";
+	}
+	std::cout << std::endl;
+
+	// std::vector example
+	std::vector<int> vec = {1, 2, 3, 4, 5};
+	std::cout << "Vector before: ";
+	for (int i: vec) {
+		std::cout << i << " ";
+	}
+	std::cout << std::endl;
+	vec.push_back(6); // Add an element
+	vec.erase(vec.begin()); // Remove the first element
+	std::cout << "Vector after: ";
+	for (int i: vec)
+		std::cout << i << " ";
+	std::cout << std::endl;
+
+	// std::set example
+	std::set<int> s = {1, 2, 3, 4, 5};
+	std::cout << "Set before: ";
+	for (int i: s) {
+		std::cout << i << " ";
+	}
+	std::cout << std::endl;
+	s.insert(6); // Add an element
+	s.erase(1); // Remove an element
+	std::cout << "Set after: ";
+	for (int i: s) {
+		std::cout << i << " ";
+	}
+	std::cout << std::endl;
+
+	// std::map example
+	std::map<int, std::string> m = {{1, "one"}, {2, "two"}, {3, "three"}};
+	std::cout << "Map before: ";
+	for (const auto &[key, value]: m) {
+		std::cout << "{" << key << ", " << value << "} ";
+	}
+
+	std::cout << std::endl;
+	m[4] = "four"; // Add an element
+	m.erase(1); // Remove an element
+	std::cout << "Map after: ";
+	for (const auto &[key, value]: m) {
+		std::cout << "{" << key << ", " << value << "} ";
+	}
+	std::cout << std::endl;
 }

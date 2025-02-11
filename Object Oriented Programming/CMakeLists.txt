@@ -20,7 +20,6 @@ add_executable(FH_S5_OOP main.cpp
 		practise/geometry/Figure.h practise/geometry/Rectangle.cpp practise/geometry/Rectangle.h practise/geometry/Square.cpp practise/geometry/Square.h
 		
 		practise/test.cpp practise/test.h
-		practise/Person.cpp practise/Person.h
 		practise/geometry/Circle.cpp
 		practise/geometry/Circle.h
 		practise/geometry/Hexagon.cpp
