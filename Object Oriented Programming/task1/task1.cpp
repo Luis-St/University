@@ -88,4 +88,3 @@ void decodeTest() {
 		assert(true);
 	}
 }
-

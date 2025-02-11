@@ -34,8 +34,8 @@ void lsv9::test_sort_ints() {
 }
 
 void lsv9::test_sort_chars() {
-	char chars[] {'B', 'a', 'A', 'x'};
-	constexpr char expected[] {'a', 'A', 'B', 'x'};
+	char chars[]{'B', 'a', 'A', 'x'};
+	constexpr char expected[]{'a', 'A', 'B', 'x'};
 	sort(chars, 4);
 	for (int i = 0; i < 4; ++i) {
 		assert(chars[i] == expected[i]);

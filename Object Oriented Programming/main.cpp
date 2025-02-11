@@ -1,4 +1,6 @@
 #include <iostream>
+
+#include "practise/test.h"
 #include "task1/task1.h"
 #include "task10/task10.h"
 #include "task11/task11.h"
@@ -12,7 +14,14 @@
 #include "task8/task8.h"
 #include "task9/task9.h"
 
+void runTasks();
+
 int main() {
+	//runTasks();
+	runTests();
+}
+
+void runTasks() {
 	runTask1();
 	lsv2::runTask2();
 	lsv3::runTask3();

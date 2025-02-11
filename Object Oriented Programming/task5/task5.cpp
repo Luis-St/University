@@ -75,4 +75,3 @@ void lsv5::testExplicitForTask5() {
 	mordor.setPOI(2, "Cirith Ungol");
 	assert(copy.getPOI(2) == "Orodruin");
 }
-

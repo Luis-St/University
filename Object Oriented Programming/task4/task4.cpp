@@ -4,7 +4,6 @@
 #include "City.h"
 #include "../task3/Position.h"
 
-
 void lsv4::runTask4() {
 	lsv4::testCtor();
 	lsv4::testGetNameXY();

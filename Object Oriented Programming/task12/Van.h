@@ -11,7 +11,7 @@ namespace lsv12 {
 		Van(const std::string &numberPlate, const std::string &manufacturer, int maxLoad);
 		void dump() override;
 		[[nodiscard]] int getMaxLoad() const;
-		//~Van() override = default;
+		~Van() override = default;
 	};
 }
 

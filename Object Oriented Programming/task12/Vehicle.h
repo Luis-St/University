@@ -13,7 +13,7 @@ namespace lsv12 {
 		virtual void dump();
 		[[nodiscard]] const std::string &getNumberPlate() const;
 		[[nodiscard]] const std::string &getManufacturer() const;
-		//virtual ~Vehicle() = default;
+		virtual ~Vehicle() = default;
 	};
 }
 

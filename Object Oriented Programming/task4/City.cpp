@@ -3,14 +3,13 @@
 #include <stdexcept>
 
 namespace lsv4 {
-
 	void City::checkIndex(const int index) const {
 		if (index < 0 || index >= this->numberOfPOIs) {
 			throw std::out_of_range("Index out of range");
 		}
 	}
 
-	std::string* City::createPOIs(const std::string pois[], const int numberOfPOIs) {
+	std::string *City::createPOIs(const std::string pois[], const int numberOfPOIs) {
 		const auto result = new std::string[numberOfPOIs];
 		for (int i = 0; i < numberOfPOIs; i++) {
 			result[i] = pois[i];
@@ -18,7 +17,7 @@ namespace lsv4 {
 		return result;
 	}
 
-	City::City(const lsv3::Position& position, const std::string pois[], const int numberOfPOIs): position(position), pois(createPOIs(pois, numberOfPOIs)), numberOfPOIs(numberOfPOIs) {}
+	City::City(const lsv3::Position &position, const std::string pois[], const int numberOfPOIs): position(position), pois(createPOIs(pois, numberOfPOIs)), numberOfPOIs(numberOfPOIs) {}
 
 	std::string City::getName() const {
 		return this->position.getName();
@@ -37,7 +36,7 @@ namespace lsv4 {
 		return this->pois[index];
 	}
 
-	void City::setPOI(const int index, const std::string& poi) const {
+	void City::setPOI(const int index, const std::string &poi) const {
 		checkIndex(index);
 		this->pois[index] = poi;
 	}

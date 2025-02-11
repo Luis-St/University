@@ -9,7 +9,7 @@ namespace lsv3 {
 		this->y = y;
 	}*/
 
-	const std::string& Position::getName() const {
+	const std::string &Position::getName() const {
 		return this->name;
 	}
 

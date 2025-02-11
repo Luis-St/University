@@ -9,6 +9,7 @@ namespace lsv11 {
 	private:
 		std::string name;
 		uint health = 0;
+
 	public:
 		Character(const std::string &name, const uint health): name(name), health(health) {}
 
@@ -30,7 +31,7 @@ namespace lsv11 {
 			}
 		}
 
-		virtual void applyWeapon(Character& target) = 0; // Assuming that the provided character is the target
+		virtual void applyWeapon(Character &target) = 0; // Assuming that the provided character is the target
 
 		virtual ~Character() = default;
 	};
@@ -38,6 +39,7 @@ namespace lsv11 {
 	class Dwarf final : public Character {
 	private:
 		uint axeWeight;
+
 	public:
 		Dwarf(const std::string &name, const uint health, const uint axeWeight): Character(name, health), axeWeight(axeWeight) {}
 
@@ -45,7 +47,7 @@ namespace lsv11 {
 			return this->axeWeight;
 		}
 
-		void applyWeapon(Character& target) override {
+		void applyWeapon(Character &target) override {
 			if (target.isAlife()) {
 				target.hit();
 				target.hit();
@@ -57,6 +59,7 @@ namespace lsv11 {
 	class Elf final : public Character {
 	private:
 		uint arrowCount;
+
 	public:
 		Elf(const std::string &name, const uint health, const uint arrowCount): Character(name, health), arrowCount(arrowCount) {}
 
@@ -76,6 +79,7 @@ namespace lsv11 {
 	class Orc final : public Character {
 	private:
 		uint swordLength;
+
 	public:
 		Orc(const std::string &name, const uint health, const uint swordLength): Character(name, health), swordLength(swordLength) {}
 

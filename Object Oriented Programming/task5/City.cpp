@@ -3,8 +3,7 @@
 #include <stdexcept>
 
 namespace lsv5 {
-
-	City::City(const lsv3::Position& position, const std::string *pois, const int numberOfPOIs): position(position), pois(createPOIs(pois, numberOfPOIs)), numberOfPOIs(numberOfPOIs) {}
+	City::City(const lsv3::Position &position, const std::string *pois, const int numberOfPOIs): position(position), pois(createPOIs(pois, numberOfPOIs)), numberOfPOIs(numberOfPOIs) {}
 
 	void City::checkIndex(const int index) const {
 		if (index < 0 || index >= this->numberOfPOIs) {
@@ -12,7 +11,7 @@ namespace lsv5 {
 		}
 	}
 
-	std::string* City::createPOIs(const std::string *pois, const int numberOfPOIs) {
+	std::string *City::createPOIs(const std::string *pois, const int numberOfPOIs) {
 		const auto result = new std::string[numberOfPOIs];
 		for (int i = 0; i < numberOfPOIs; i++) {
 			result[i] = pois[i];
@@ -22,9 +21,9 @@ namespace lsv5 {
 
 	City::City(const std::string &name, const int x, const int y, const std::string *pois, const int numberOfPOIs): City(lsv3::Position(name, x, y), pois, numberOfPOIs) {}
 
-	City::City(const lsv5::City& other): City(other.position, other.pois, other.numberOfPOIs) {}
+	City::City(const lsv5::City &other): City(other.position, other.pois, other.numberOfPOIs) {}
 
-	const std::string& City::getName() const {
+	const std::string &City::getName() const {
 		return this->position.getName();
 	}
 
@@ -36,12 +35,12 @@ namespace lsv5 {
 		return this->position.getY();
 	}
 
-	const std::string& City::getPOI(const int index) const {
+	const std::string &City::getPOI(const int index) const {
 		checkIndex(index);
 		return this->pois[index];
 	}
 
-	void City::setPOI(const int index, const std::string& poi) const {
+	void City::setPOI(const int index, const std::string &poi) const {
 		checkIndex(index);
 		this->pois[index] = poi;
 	}

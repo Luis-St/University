@@ -6,8 +6,8 @@
 namespace lsv11 {
 	void runTask11();
 
-	void sort(std::vector<lsv7::Position>& positions);
-	void test_sort(std::vector<lsv7::Position>& positions);
+	void sort(std::vector<lsv7::Position> &positions);
+	void test_sort(std::vector<lsv7::Position> &positions);
 	void test_sort();
 
 	void test_character();

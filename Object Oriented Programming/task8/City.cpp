@@ -81,7 +81,7 @@ namespace lsv8 {
 		return found;
 	}
 
-	City& City::operator=(const City &other) {
+	City &City::operator=(const City &other) {
 		if (this != &other) {
 			this->position = other.position;
 			this->pois = copyStringArray(other.pois, other.numberOfPOIs);
@@ -99,7 +99,7 @@ namespace lsv8 {
 		return this->getPOI(index);
 	}
 
-	std::ostream& operator<<(std::ostream& os, const City& city) {
+	std::ostream &operator<<(std::ostream &os, const City &city) {
 		os << city.position << std::endl;
 		for (int i = 0; i < city.numberOfPOIs; ++i) {
 			os << city.pois[i] << std::endl;

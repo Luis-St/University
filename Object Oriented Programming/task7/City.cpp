@@ -81,7 +81,7 @@ namespace lsv7 {
 		return found;
 	}
 
-	std::ostream& operator<<(std::ostream& os, const City& city) {
+	std::ostream &operator<<(std::ostream &os, const City &city) {
 		os << city.position << std::endl;
 		for (int i = 0; i < city.numberOfPOIs; ++i) {
 			os << city.pois[i] << std::endl;

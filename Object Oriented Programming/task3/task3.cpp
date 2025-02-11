@@ -64,7 +64,7 @@ void lsv3::positionCompareTest() {
 	assert(position.compare(position_name) < 0);
 	assert(position.compare(position_x) < 0);
 	assert(position.compare(position_y) < 0);
-	assert(position_name.compare(position) >0 );
+	assert(position_name.compare(position) >0);
 	assert(position_x.compare(position) > 0);
 	assert(position_y.compare(position) > 0);
 }

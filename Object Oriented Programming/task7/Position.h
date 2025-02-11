@@ -10,10 +10,11 @@ namespace lsv7 {
 		int x;
 		int y;
 		[[nodiscard]] int compare(const lsv7::Position &other) const;
+
 	public:
 		Position(const std::string &name, int x, int y);
 
-		[[nodiscard]] const std::string& getName() const;
+		[[nodiscard]] const std::string &getName() const;
 		[[nodiscard]] int getX() const;
 		[[nodiscard]] int getY() const;
 
@@ -24,7 +25,7 @@ namespace lsv7 {
 		bool operator>(const lsv7::Position &other) const;
 		bool operator>=(const lsv7::Position &other) const;
 
-		friend std::ostream& operator<<(std::ostream& os, const Position& position);
+		friend std::ostream &operator<<(std::ostream &os, const Position &position);
 	};
 }
 

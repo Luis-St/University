@@ -73,7 +73,7 @@ namespace lsv10 {
 		return this->getPOI(index);
 	}
 
-	std::ostream& operator<<(std::ostream& os, const City& city) {
+	std::ostream &operator<<(std::ostream &os, const City &city) {
 		os << city.position << std::endl;
 		for (int i = 0; i < city.getNumberOfPOIs(); ++i) {
 			os << city.pois[i] << std::endl;

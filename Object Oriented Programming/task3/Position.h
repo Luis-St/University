@@ -12,7 +12,7 @@ namespace lsv3 {
 	public:
 		Position(const std::string &name, int x, int y);
 
-		[[nodiscard]] const std::string& getName() const;
+		[[nodiscard]] const std::string &getName() const;
 		[[nodiscard]] int getX() const;
 		[[nodiscard]] int getY() const;
 

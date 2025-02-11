@@ -52,7 +52,7 @@ namespace lsv7 {
 		return this->compare(other) >= 0;
 	}
 
-	std::ostream& operator<<(std::ostream& os, const Position& position) {
+	std::ostream &operator<<(std::ostream &os, const Position &position) {
 		os << "Name: " << position.name << ", x = " << position.x << ", y = " << position.y;
 		return os;
 	}
