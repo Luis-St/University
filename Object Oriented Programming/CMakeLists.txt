@@ -16,13 +16,13 @@ add_executable(FH_S5_OOP main.cpp
 		task10/task10.cpp task10/task10.h task10/City.cpp task10/City.h
 		task11/task11.cpp task11/task11.h task11/Character.h
 		task12/task12.cpp task12/task12.h task12/Vehicle.cpp task12/Vehicle.h task12/Van.cpp task12/Van.h task12/PassengerCar.cpp task12/PassengerCar.h task12/StationWagon.cpp task12/StationWagon.h
-		practise/Person.cpp
-		practise/Person.h
-		practise/point/Point.h
-		practise/point/ArrayPoint.cpp
-		practise/point/ArrayPoint.h
-		practise/test.cpp
-		practise/test.h
-		practise/point/SimplePoint.cpp
-		practise/point/SimplePoint.h
+		practise/point/Point.h practise/point/ArrayPoint.cpp practise/point/ArrayPoint.h practise/point/SimplePoint.cpp practise/point/SimplePoint.h
+		practise/geometry/Figure.h practise/geometry/Rectangle.cpp practise/geometry/Rectangle.h practise/geometry/Square.cpp practise/geometry/Square.h
+		
+		practise/test.cpp practise/test.h
+		practise/Person.cpp practise/Person.h
+		practise/geometry/Circle.cpp
+		practise/geometry/Circle.h
+		practise/geometry/Hexagon.cpp
+		practise/geometry/Hexagon.h
 )
