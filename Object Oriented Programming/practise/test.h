@@ -7,5 +7,6 @@ void runSmartPointerTest();
 void runPointTest();
 void runGeometryTest();
 void runCollectionTest();
+void runAssignTest();
 
 #endif

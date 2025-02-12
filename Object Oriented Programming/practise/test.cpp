@@ -20,6 +20,7 @@ void runTests() {
 	runSmartPointerTest();
 	runGeometryTest();
 	runCollectionTest();
+	runAssignTest();
 }
 
 void runPointerTest() {
@@ -169,7 +170,7 @@ void runCollectionTest() {
 	}
 	std::cout << std::endl;
 	s.insert(6);
-	s.erase(1);
+	s.erase(s.begin());
 	std::cout << "Set after: ";
 	for (const int i: s) {
 		std::cout << i << " ";
@@ -184,10 +185,37 @@ void runCollectionTest() {
 
 	std::cout << std::endl;
 	m[4] = "four";
-	m.erase(1);
+	m.erase(m.begin());
 	std::cout << "Map after: ";
 	for (const auto &[key, value]: m) {
 		std::cout << "{" << key << ", " << value << "} ";
 	}
 	std::cout << std::endl;
+}
+
+class Base {
+public:
+	virtual void dump() { std::cout << "in Base " << std::endl; }
+};
+
+class Sub : public Base {
+public:
+	void dump() override { std::cout << "in Sub " << std::endl; }
+};
+
+void runAssignTest() {
+	std::cout << std::endl << "--- Assign test ---" << std::endl;
+	Base baseVariable = Sub();
+	baseVariable.dump();
+	// Output: in Base
+
+	Sub sub;
+	Base &baseReference = sub;
+	baseReference.dump();
+	// Output: in Sub
+
+	Base *basePointer = new Sub();
+	basePointer->dump();
+	delete basePointer;
+	// Output: in Sub
 }
