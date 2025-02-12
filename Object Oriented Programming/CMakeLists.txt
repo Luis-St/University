@@ -24,4 +24,5 @@ add_executable(FH_S5_OOP main.cpp
 		practise/geometry/Circle.h
 		practise/geometry/Hexagon.cpp
 		practise/geometry/Hexagon.h
+		practise/Template.h
 )

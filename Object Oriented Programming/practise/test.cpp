@@ -66,7 +66,7 @@ void runSmartPointerTest() {
 	auto moved_unique_point = std::move(unique_point);
 	std::cout << unique_point << std::endl;
 
-	auto shared_point = std::make_shared<ArrayPoint>(10, 10);
+	const auto shared_point = std::make_shared<ArrayPoint>(10, 10);
 	std::cout << shared_point.use_count() << std::endl;
 	auto shared_point_two = shared_point;
 	std::cout << shared_point.use_count() << std::endl;
@@ -135,50 +135,47 @@ void runGeometryTest() {
 
 void runCollectionTest() {
 	std::cout << std::endl << "--- Collection test ---" << std::endl;
-	// std::array example
 	std::array<int, 5> arr = {1, 2, 3, 4, 5};
 	std::cout << "Array before: ";
-	for (int i: arr) {
+	for (const int i: arr) {
 		std::cout << i << " ";
 	}
 	std::cout << std::endl;
-	arr[0] = 10; // Modify an element
+	arr[0] = 10;
 	std::cout << "Array after: ";
-	for (int i: arr) {
+	for (const int i: arr) {
 		std::cout << i << " ";
 	}
 	std::cout << std::endl;
 
-	// std::vector example
 	std::vector<int> vec = {1, 2, 3, 4, 5};
 	std::cout << "Vector before: ";
-	for (int i: vec) {
+	for (const int i: vec) {
 		std::cout << i << " ";
 	}
 	std::cout << std::endl;
-	vec.push_back(6); // Add an element
-	vec.erase(vec.begin()); // Remove the first element
+	vec.push_back(6);
+	vec.erase(vec.begin());
 	std::cout << "Vector after: ";
-	for (int i: vec)
+	for (const int i: vec) {
 		std::cout << i << " ";
+	}
 	std::cout << std::endl;
 
-	// std::set example
 	std::set<int> s = {1, 2, 3, 4, 5};
 	std::cout << "Set before: ";
-	for (int i: s) {
+	for (const int i: s) {
 		std::cout << i << " ";
 	}
 	std::cout << std::endl;
-	s.insert(6); // Add an element
-	s.erase(1); // Remove an element
+	s.insert(6);
+	s.erase(1);
 	std::cout << "Set after: ";
-	for (int i: s) {
+	for (const int i: s) {
 		std::cout << i << " ";
 	}
 	std::cout << std::endl;
 
-	// std::map example
 	std::map<int, std::string> m = {{1, "one"}, {2, "two"}, {3, "three"}};
 	std::cout << "Map before: ";
 	for (const auto &[key, value]: m) {
@@ -186,8 +183,8 @@ void runCollectionTest() {
 	}
 
 	std::cout << std::endl;
-	m[4] = "four"; // Add an element
-	m.erase(1); // Remove an element
+	m[4] = "four";
+	m.erase(1);
 	std::cout << "Map after: ";
 	for (const auto &[key, value]: m) {
 		std::cout << "{" << key << ", " << value << "} ";
