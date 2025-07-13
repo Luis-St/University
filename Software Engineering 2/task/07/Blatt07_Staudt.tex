@@ -1,0 +1,258 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tikz}
+
+\include{../../for_latex/preamble}
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 7}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Engineering 2}
+		
+		\vspace{12cm}
+		
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 1}}
+
+\section*{Server-Client Architektur}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/epa/client_server_architecture}
+\end{figure}
+\newpage
+
+
+\section*{Logische Sicht}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[angle=90, height=0.8\textheight]{images/epa/logical_view_1}
+\end{figure}
+\newpage
+
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[angle=90, height=0.9\textheight]{images/epa/logical_view_2}
+\end{figure}
+\newpage
+
+
+\subsection*{Datenflussdiagramm}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[angle=90, height=0.9\textheight]{images/epa/data_river_diagram}
+\end{figure}
+\newpage
+
+\section*{Physische Sicht}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/epa/physical_view}
+\end{figure}
+\newpage
+
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 2}}
+
+\section*{Schichtenarchitektur}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/gka/layer_architecture}
+\end{figure}
+\newpage
+
+\section*{MVC-Architektur}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/gka/mvc_architecture}
+\end{figure}
+\newpage
+
+\section*{Datenflussdiagramm - Schichtenarchitektur}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[angle=90, height=0.9\textheight]{images/gka/data_river_diagram_layer_architecture}
+\end{figure}
+\newpage
+
+\section*{Datenflussdiagramm - MVC-Architektur}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[angle=90, height=0.9\textheight]{images/gka/data_river_diagram_mvc_architecture}
+\end{figure}
+\newpage
+
+\section*{Detaillierter Vergleich der Architekturen}
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+		\hline
+		\textbf{Kriterium} & \textbf{Schichtenarchitektur} & \textbf{MVC-Architektur} \\
+		\hline
+		\textbf{Kontrollfluss}
+		
+		Wie wird die Steuerung zwischen den Komponenten verteilt?
+		&
+		Hierarchisch, streng gerichtet von oben nach unten
+		
+		Jede Schicht dient der darüberliegenden &
+		Zyklisch, dreieckig
+		
+		Controller koordiniert zwischen View und Model \\
+		\hline
+		\textbf{Abhängigkeiten}
+		
+		Wie stark sind die Komponenten voneinander abhängig?
+		&
+		Unidirektional, vorhersehbar
+		
+		Jede Schicht hängt nur von der direkt darunter liegenden Schicht ab &
+		Bidirektional, komplexer
+		
+		View kann Model beobachten
+		
+		Controller hängt von View und Model ab \\
+		\hline
+		\textbf{Modularität}
+		
+		Austauschbarkeit, Erweiterbarkeit &
+		Gut für horizontale Modularität
+		
+		Schichten können ausgetauscht werden &
+		Besser für UI-bezogene Modularität
+		
+		Views können leicht geändert werden \\
+		\hline
+		\textbf{Testbarkeit}
+		
+		Wie gut lassen sich die einzelnen Komponenten testen?
+		&
+		Gut für Unit-Tests der Geschäftslogik
+		
+		Mocks für untere Schichten nötig
+		
+		UI-Tests schwieriger isolierbar &
+		Sehr gut für isolierte Tests
+		
+		Model kann ohne UI getestet werden
+		
+		Controller separat testbar \\
+		\hline
+		\textbf{Wartbarkeit}
+		
+		Wie einfach ist es, das System zu warten und zu ändern?
+		&
+		Gut für große Änderungen in einer Schicht
+		
+		Funktionen gut kategorisierbar
+		
+		Klare Verantwortlichkeiten je Schicht &
+		Sehr gut für UI-Änderungen
+		
+		Komplexere Struktur bei großen Anwendungen
+		
+		Weniger Doppelcode bei Features \\
+		\hline
+	\end{tabular}
+	\caption{Vergleich zwischen Schichtenarchitektur und MVC-Architektur}
+\end{table}
+\newpage
+
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 3}}
+
+Fahrzeug-Diagnosesystem in einer modernen Autowerkstatt
+
+\section*{Beschreibung}
+
+\subsection*{Zentrale Datenhaltung}
+Fahrzeugdaten aus verschiedensten Quellen (Bordsensoren, Fehlerspeicher, historische Reparaturdaten, Herstellerdatenbanken) werden in einer zentralen Struktur gespeichert.
+
+\subsection*{Unabhängige Analysekomponenten}
+Verschiedene Diagnosemodule können unabhängig voneinander auf dieselben Daten zugreifen.
+
+\subsection*{Ereignis- und zustandsbasierte Verarbeitung}
+Das System kann sowohl auf neue eingehende Daten (wie bei einer traditionellen Datenbank) als auch auf bestimmte Datenzustände (wie bei einem Blackboard) reagieren.
+
+\subsection*{Erweiterbarkeit}
+Neue Diagnosemodule können ohne Änderung bestehender Komponenten hinzugefügt werden.
+
+\subsection*{Integration verschiedener Expertisen}
+Ähnlich wie bei Blackboard-Systemen können verschiedene \("\)Knowledge Sources\("\) (Fahrwerksdiagnose, Motordiagnose, elektrische Systeme) unabhängig arbeite
+
+\newpage
+\section*{Repository-Architektur}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/repository_architecture}
+\end{figure}
+\newpage
+
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 4}}
+
+\section*{Pipe and Filter Architektur}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/pipe_and_filter_logical_view}
+\end{figure}
+\newpage
+
+\section*{Datenflussdiagramm - Pipe and Filter Architektur}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[angle=90, height=0.9\textheight]{images/data_river_diagram_pipe_and_filter}
+\end{figure}
+\newpage
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}

@@ -1,0 +1,143 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tikz}
+
+\include{../../for_latex/preamble}
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 9}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Engineering 2}
+		
+		\vspace{12cm}
+		
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 1}}
+
+\section*{Klassendiagramm}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{images/klassendiagramm_boerse}
+	\caption{Klassendiagramm für Börsen-Aktienhandel mit Observer- und Strategy-Pattern}
+\end{figure}
+
+\section*{Sequenzdiagramm}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{images/sequenzdiagramm_boerse}
+	\caption{Sequenzdiagramm für Aktienhandel-Simulation}
+\end{figure}
+
+\section*{Erläuterung der Entwurfsmuster}
+
+\subsection{Observer Pattern}
+Das Observer Pattern wird verwendet, um die Anleger automatisch über Änderungen der Aktienkurse zu benachrichtigen:
+\begin{itemize}
+	\item Die \texttt{Aktie} fungiert als Subject/Observable
+	\item \texttt{Anleger} sind Observer, die über Preisänderungen benachrichtigt werden
+	\item Bei Preisänderungen werden alle registrierten Anleger automatisch informiert
+	\item Dies ermöglicht eine lose Kopplung zwischen Aktien und Anlegern
+\end{itemize}
+
+\subsection*{Strategy Pattern}
+Das Strategy Pattern ermöglicht es, verschiedene Anlagestrategien zur Laufzeit auszuwählen:
+\begin{itemize}
+	\item \texttt{InvestmentStrategy} definiert das Interface für verschiedene Anlagestrategien
+	\item Konkrete Strategien implementieren unterschiedliche Entscheidungslogiken:
+	\begin{itemize}
+		\item \texttt{LowRiskStrategy}: Konservative Anlagestrategie
+		\item \texttt{MediumRiskStrategy}: Ausgewogene Anlagestrategie
+		\item \texttt{HighRiskStrategy}: Risikoreiche Anlagestrategie
+	\end{itemize}
+	\item Anleger können ihre Strategie zur Laufzeit wechseln
+\end{itemize}
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 2}}
+
+\section*{Klassendiagramm}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{images/klassendiagramm_kaffeemaschine}
+	\caption{Klassendiagramm für Kaffeemaschine mit State-Pattern}
+\end{figure}
+
+\section*{Zustandsdiagramm}
+
+Das gegebene Zustandsdiagramm zeigt die verschiedenen Zustände der Kaffeemaschine und die Übergänge zwischen ihnen.
+Die Implementierung folgt diesem Diagramm exakt.
+
+\section*{Erläuterung des State Patterns}
+
+Das State Pattern ermöglicht es der Kaffeemaschine, ihr Verhalten abhängig vom aktuellen Zustand zu ändern:
+
+\begin{itemize}
+	\item \textbf{Context:} \texttt{CoffeeMachine} verwaltet den aktuellen Zustand und delegiert Aktionen an das State-Objekt
+	\item \textbf{State Interface:} \texttt{CoffeeMachineState} definiert die gemeinsame Schnittstelle für alle Zustände
+	\item \textbf{Concrete States:} Jeder Zustand implementiert das Verhalten für alle möglichen Aktionen
+	\item \textbf{Zustandsübergänge:} Werden durch die State-Objekte selbst gesteuert
+\end{itemize}
+
+\subsection*{Vorteile des State Patterns}
+\begin{itemize}
+	\item Saubere Trennung der zustandsspezifischen Logik
+	\item Einfache Erweiterbarkeit um neue Zustände
+	\item Vermeidung von komplexen if-else Strukturen
+	\item Klare Zuständigkeiten für jeden Zustand
+	\item Zustandsübergänge sind explizit und nachvollziehbar
+\end{itemize}
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}

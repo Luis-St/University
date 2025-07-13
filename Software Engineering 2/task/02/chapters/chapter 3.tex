@@ -1,0 +1,112 @@
+\section*{1. Grundidee/Grundprinzip}
+Scrum ist ein agiles Framework für komplexe Produktentwicklung, das auf empirischer Prozesskontrolle basiert. Es folgt drei Grundprinzipien:
+\begin{itemize}
+	\item \textbf{Transparenz:} Alle wichtigen Aspekte des Prozesses müssen für alle Beteiligten sichtbar sein
+	\item \textbf{Überprüfung:} Regelmäßige Überprüfung der Artefakte und des Fortschritts
+	\item \textbf{Anpassung:} Schnelle Anpassung bei Abweichungen vom Ziel
+\end{itemize}
+
+Scrum organisiert die Arbeit in kurzen, zeitlich begrenzten Entwicklungszyklen (Sprints) und betont selbstorganisierte, cross-funktionale Teams.
+
+\section*{2. Aktivitäten}
+\begin{itemize}
+	\item \textbf{Sprint:} Zeitlich begrenzte Entwicklungsphase (1-4 Wochen) mit festem Ziel
+	\item \textbf{Sprint Planning:} Meeting zur Festlegung der Sprintziele und Aufgabenauswahl
+	\item \textbf{Daily Scrum:} Tägliches 15-minütiges Statusmeeting des Teams
+	\item \textbf{Sprint Review:} Präsentation des fertigen Inkrements am Ende des Sprints
+	\item \textbf{Sprint Retrospective:} Reflexion über den abgeschlossenen Sprint mit Fokus auf Verbesserungspotential
+	\item \textbf{Product Backlog Refinement:} Kontinuierliche Pflege und Priorisierung des Backlogs
+\end{itemize}
+
+\section*{3. Rollen und Verantwortlichkeiten}
+\begin{itemize}
+	\item \textbf{Product Owner:}
+	\begin{itemize}
+		\item Verantwortlich für Produktvision und Maximierung des Wertes
+		\item Verwaltet das Product Backlog und priorisiert Anforderungen
+		\item Entscheidet über Produktfunktionalitäten
+	\end{itemize}
+	
+	\item \textbf{Scrum Master:}
+	\begin{itemize}
+		\item Fördert und unterstützt Scrum-Praktiken
+		\item Beseitigt Hindernisse
+		\item Schützt das Team vor externen Störungen
+		\item Coaching des Teams und der Organisation
+	\end{itemize}
+	
+	\item \textbf{Entwicklungsteam:}
+	\begin{itemize}
+		\item Selbstorganisiert und cross-funktional
+		\item Verantwortlich für die Umsetzung der Anforderungen
+		\item Gemeinsame Verantwortung für das Ergebnis
+	\end{itemize}
+\end{itemize}
+
+\section*{4. Produkte/Dokumente (Deliverables)}
+\begin{itemize}
+	\item \textbf{Product Backlog:} Priorisierte Liste aller gewünschten Produktfeatures
+	\item \textbf{Sprint Backlog:} Auswahl von Product Backlog-Einträgen für den aktuellen Sprint
+	\item \textbf{Inkrement:} Summe aller abgeschlossenen Product Backlog-Einträge, die \("\)Done\("\) sind
+	\item \textbf{Definition of Done:} Gemeinsames Verständnis darüber, wann ein Inkrement als fertig gilt
+	\item \textbf{Burndown Chart:} Visualisierung des verbleibenden Arbeitsaufwands
+\end{itemize}
+
+\section*{5. Methoden, Richtlinien, Standards und Werkzeuge}
+\begin{itemize}
+	\item \textbf{User Stories:} Format zur Beschreibung von Anforderungen aus Benutzersicht
+	\item \textbf{Planning Poker:} Methode zur Aufwandsschätzung
+	\item \textbf{Task Board:} Visualisierung des Arbeitsfortschritts (oft mit Kanban-Boards)
+	\item \textbf{Velocity:} Metrik zur Messung der Teamleistung
+	\item \textbf{Werkzeuge:} JIRA, Trello, Azure DevOps, physical boards, etc.
+	\item \textbf{Timeboxing:} Strenge zeitliche Begrenzung aller Meetings und Aktivitäten
+	\item \textbf{Continuous Integration/Continuous Delivery:} Technische Praktiken, die oft mit Scrum kombiniert werden
+\end{itemize}
+
+\section*{6. Vor- und Nachteile}
+
+\subsection*{Vorteile:}
+\begin{itemize}
+	\item Hohe Flexibilität und Anpassungsfähigkeit bei sich ändernden Anforderungen
+	\item Frühe und regelmäßige Lieferung von funktionsfähiger Software
+	\item Hohe Transparenz über Fortschritt und Hindernisse
+	\item Starker Fokus auf Kundenzufriedenheit
+	\item Verbesserung der Teamkommunikation und -zusammenarbeit
+	\item Reduzierte Risiken durch regelmäßiges Feedback
+\end{itemize}
+
+\subsection*{Nachteile:}
+\begin{itemize}
+	\item Weniger geeignet für sehr große oder verteilte Teams ohne Anpassungen
+	\item Erfordert erfahrene und engagierte Teammitglieder
+	\item Kann bei mangelndem Commitment des Managements scheitern
+	\item Herausfordernd bei festen Lieferterminen und festem Budget
+	\item Dokumentation kann vernachlässigt werden
+	\item Schwieriger bei sicherheitskritischen Systemen ohne zusätzliche Maßnahmen
+\end{itemize}
+
+\section*{Bewertungstabelle der Modelleigenschaften für Scrum}
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|l|c|}
+		\hline
+		\textbf{Eigenschaften des Modells}          &                     & \textbf{Note} \\
+		\hline
+		\multirow{3}{*}{Projektgröße und Komplexität} & Klein               & 1             \\
+		& Mittel              & 1             \\
+		& Groß                & 3             \\
+		\hline
+		\multirow{2}{*}{Qualität von Anforderungen}   & Klar                & 2             \\
+		& Vage                & 1             \\
+		\hline
+		\multirow{3}{*}{Änderungen an Anforderungen}  & Keine               & 4             \\
+		& Moderat             & 1             \\
+		& Häufig              & 1             \\
+		\hline
+		\multirow{3}{*}{Sicherheit}                   & Sicherheitskritisch & 3             \\
+		& Hoch                & 2             \\
+		& Mittel              & 1             \\
+		\hline
+	\end{tabular}
+	\caption{Bewertung der Modelleigenschaften für Scrum (1 = sehr gut geeignet, 6 = ungeeignet)}
+\end{table}

@@ -1,0 +1,82 @@
+\begin{table}[hf]
+	\centering
+	\begin{tabular}{|p{0.3\textwidth}|p{0.7\textwidth}|}
+		\hline
+		\textbf{Projekt} & \textbf{Anwendbarkeit agiler Prinzipien} \\
+		\hline
+		Kaffeemaschinen-Steuerung &
+		Nur bedingt anwendbar.
+		Stabile Anforderungen und sequenzielle Funktionsabhängigkeiten passen eher zum Wasserfall-Modell.
+		Hardware-Software-Interaktion erfordert detaillierte Vorabplanung.
+		Fehlender direkter Kundenkontakt während der Entwicklung limitiert agile Kundenzusammenarbeit. \\
+		\hline
+		Pizza-Bestellsoftware &
+		Sehr gut anwendbar.
+		Direkter Kundenkontakt ermöglicht Anforderungsanpassungen.
+		Kundenspezifische Natur unterstützt iterative Entwicklung mit frühem Feedback.
+		Die drei Hauptkomponenten können inkrementell entwickelt werden.
+		Nicht-funktionale Anforderungen betonen Individuen über Prozesse. \\
+		\hline
+		Elektronische Patientenakte &
+		Teilweise anwendbar mit Anpassungsbedarf.
+		Umfassende Dokumentationspflicht steht im Kontrast zum agilen Prinzip \("\)Funktionierende Software über Dokumentation\("\).
+		Hohe Sicherheitsstandards erfordern gründliche Planung.
+		Inkrementelle Funktionsentwicklung möglich.
+		Komplexe Stakeholder-Landschaft erfordert formellere Abstimmungsprozesse. \\
+		\hline
+		Klausurgenerator &
+		Moderat anwendbar.
+		Klare Funktionalitäten eignen sich für iterative Entwicklung mit frühen Prototypen.
+		Desktop-Installation vereinfacht Bereitstellung früher Versionen.
+		Direkte Einbeziehung von Dozierenden möglich.
+		Stabile Anforderungen und lokale Nutzung erschweren kontinuierliche Integration. \\
+		\hline
+	\end{tabular}
+	\caption{Anwendbarkeit agiler Prinzipien auf verschiedene Softwareprojekte}
+	\label{tab:agile-anwendbarkeit}
+\end{table}
+
+\newpage
+
+\section*{1. Software für die Steuerung einer Kaffeemaschine}
+Die Entwicklung der Kaffeemaschinen-Steuerungssoftware \textbf{eignet sich weniger} für agile Methoden:
+\begin{itemize}
+	\item Technisches System mit klaren physikalischen Einschränkungen
+	\item Dokumentation wichtig für Sicherheit, Regulierung und Wartung
+	\item Stabile, vordefinierte Anforderungen
+	\item Deterministische Prozessfolge mit klaren Abhängigkeiten
+	\item Geringer Raum für Änderungen
+\end{itemize}
+
+
+\section*{2. Software „Pizza bestellen"}
+Die Pizza-Bestellsoftware \textbf{eignet sich sehr gut} für agile Entwicklungsmethoden:
+\begin{itemize}
+	\item Kundenorientierte Software erfordert tiefes Verständnis der Benutzerinteraktionen
+	\item Schnelle Markteinführung wichtiger als umfassende Dokumentation
+	\item Direkte Zusammenarbeit mit dem Auftraggeber möglich
+	\item Anforderungen anpassbar während der Entwicklung
+	\item Iterative Verbesserung der Benutzererfahrung und Sicherheit
+\end{itemize}
+
+
+\section*{3. Software „Elektronische Patientenakte"}
+Die Patientenakten-Software \textbf{eignet sich teilweise} für agile Methoden:
+\begin{itemize}
+	\item Enge Zusammenarbeit zwischen Fachexperten und Entwicklern nötig
+	\item Umfassende Dokumentation für Regulierung und Patientensicherheit unerlässlich
+	\item Öffentliche Ausschreibung mit weniger flexiblen Vertragsbedingungen
+	\item Hohe Sicherheitsanforderungen erfordern stabile Architektur
+	\item Hybrider Ansatz empfehlenswert
+\end{itemize}
+
+
+\section*{4. Software zur Generierung von Klausuren}
+Die Klausurgenerierungs-Software \textbf{eignet sich gut} für agile Entwicklungsmethoden:
+\begin{itemize}
+	\item Enge Interaktion mit Dozierenden als Endnutzer
+	\item Frühes Feedback wichtiger als umfassende Vorabdokumentation
+	\item Kontinuierliche Abstimmung zu spezifischen Anforderungen nötig
+	\item Anforderungen können sich während der Implementierung ändern
+	\item Überschaubare Komplexität, Fokus auf Benutzerfreundlichkeit
+\end{itemize}

@@ -1,0 +1,271 @@
+\section*{Revisionshistorie}
+\begin{center}
+	\begin{tabular}{|l|l|l|p{8cm}|}
+		\hline
+		\textbf{Datum} & \textbf{Version} & \textbf{Autor} & \textbf{Beschreibung} \\
+		\hline
+		\today & 1.0 & Luis Staudt & Initiale Version \\
+		\hline
+		&  &  &  \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\section*{Definitionen}
+\begin{tabular}{p{4cm}p{11cm}}
+	\textbf{Begriff} & \textbf{Definition} \\
+	\hline
+	Bloom'sche Taxonomie & Hierarchisches System zur Klassifizierung von Lernzielen in sechs Ebenen: erinnern, verstehen, anwenden, analysieren, bewerten, erschaffen \\
+	Geschlossene Aufgabe & Aufgabentyp mit vorgegebenen Antwortmöglichkeiten \\
+	Offene Aufgabe & Aufgabentyp ohne vorgegebene Antwortmöglichkeiten \\
+	Modul & Lehrveranstaltungseinheit im akademischen Kontext \\
+\end{tabular}
+
+\section*{Referenzen}
+\begin{enumerate}
+	\item Fallstudie: Generierung von Klausuren aus bestehender Klausuraufgabensammlung
+\end{enumerate}
+
+\section*{Akronyme und Abkürzungen}
+\begin{tabular}{p{4cm}p{11cm}}
+	\textbf{Akronym/Abkürzung} & \textbf{Definition} \\
+	\hline
+	SRS & Software Requirements Specification \\
+	DB & Datenbank \\
+\end{tabular}
+
+\section*{Einleitung}
+
+\subsection*{Zweck}
+Diese Softwareanforderungsspezifikation (SRS) beschreibt die funktionalen und nicht-funktionalen Anforderungen an den Klausurgenerator, der zur Erstellung und Verwaltung von Klausuraufgaben und zur Zusammenstellung von Klausuren dient. Dieses Dokument richtet sich an das Entwicklungsteam sowie an die zukünftigen Nutzer des Systems.
+
+\subsection*{Umfang}
+Der Klausurgenerator soll Dozenten ermöglichen, Klausuraufgaben zu erstellen, zu verwalten und zu kategorisieren, sowie aus diesen Aufgaben Klausuren zusammenzustellen. Die Software soll folgende Hauptfunktionen bieten:
+\begin{itemize}
+	\item Eingabe und Speicherung von Klausuraufgaben mit definierten Attributen in einer Datenbank
+	\item Speicherung von Musterlösungen oder richtigen Lösungen
+	\item Zuordnung von Aufgaben zu Lehrveranstaltungen/Modulen
+	\item Zusammenstellung von Klausuren nach definierten Kriterien
+	\item Druck von einzelnen Aufgaben und vollständigen Klausuren
+\end{itemize}
+
+\subsection*{Produktperspektive}
+Der Klausurgenerator ist ein eigenständiges System, das von Dozenten zur Klausurerstellung und -verwaltung genutzt wird. Es ist nicht in bestehende Systeme integriert.
+
+\subsubsection*{Systemschnittstellen}
+Der Klausurgenerator benötigt keine externen Systemschnittstellen in der ersten Version.
+
+\subsubsection*{Benutzerschnittstellen}
+Die Benutzerschnittstelle soll intuitiv und benutzerfreundlich sein und folgende Bereiche umfassen:
+\begin{itemize}
+	\item Eingabeformulare für Klausuraufgaben mit allen Attributen
+	\item Verwaltungsbereich für bestehende Aufgaben
+	\item Filterbereich zur Auswahl von Aufgaben nach verschiedenen Kriterien
+	\item Klausurzusammenstellungsbereich
+	\item Druck- und Exportfunktionen
+\end{itemize}
+
+\subsection*{Produktfunktionen}
+Die Hauptfunktionen des Klausurgenerators sind:
+\begin{itemize}
+	\item Verwaltung von Klausuraufgaben (Erstellen, Bearbeiten, Löschen)
+	\item Kategorisierung von Aufgaben nach Bloom'scher Taxonomie, Format und Typ
+	\item Zusammenstellung von Klausuren aus vorhandenen Aufgaben
+	\item Druck von Aufgaben und Klausuren
+\end{itemize}
+
+\subsection*{Benutzermerkmale}
+Die primären Nutzer sind Dozenten an Bildungseinrichtungen, die regelmäßig Klausuren erstellen müssen. Es wird erwartet, dass die Nutzer grundlegende Computerkenntnisse besitzen und mit pädagogischen Konzepten wie der Bloom'schen Taxonomie vertraut sind.
+
+\subsection*{Einschränkungen}
+\begin{itemize}
+	\item Die Software soll auf gängigen Betriebssystemen lauffähig sein
+	\item Die Benutzerschnittstelle soll in deutscher Sprache sein
+\end{itemize}
+
+\subsection*{Annahmen und Abhängigkeiten}
+\begin{itemize}
+	\item Es wird angenommen, dass die Nutzer über ein geeignetes Computersystem verfügen
+	\item Es wird angenommen, dass die Nutzer Grundkenntnisse über Klausurerstellung haben
+\end{itemize}
+
+\section*{Spezifische Anforderungen}
+
+\subsection*{Externe Schnittstellen}
+\subsubsection*{Benutzerschnittstellen}
+\begin{itemize}
+	\item Die Benutzerschnittstelle soll übersichtlich und intuitiv bedienbar sein
+	\item Formulare zur Eingabe von Aufgaben sollen alle erforderlichen Felder enthalten
+	\item Die Zusammenstellung von Klausuren soll durch einen Assistenten unterstützt werden
+\end{itemize}
+
+\subsection*{Funktionen}
+\subsubsection*{Aufgabenverwaltung}
+\begin{itemize}
+	\item Die Software soll das Erstellen, Bearbeiten und Löschen von Klausuraufgaben ermöglichen
+	\item Jede Aufgabe soll folgende Attribute haben: Name, Aufgabentext, Antwortmöglichkeiten (bei geschlossenen Aufgaben), geschätzte Zeit, Modulzugehörigkeit
+	\item Jede Aufgabe soll nach folgenden Kriterien kategorisiert werden:
+	\begin{itemize}
+		\item Bloom'sche Taxonomie (Level 1-6)
+		\item Aufgabenformat (offen/geschlossen)
+		\item Typ der geschlossenen Aufgabe
+	\end{itemize}
+	\item Zu jeder Aufgabe soll eine Musterlösung oder richtige Lösung gespeichert werden
+\end{itemize}
+
+\subsubsection*{Klausurzusammenstellung}
+\begin{itemize}
+	\item Die Software soll die Zusammenstellung von Klausuren aus vorhandenen Aufgaben ermöglichen
+	\item Aufgaben sollen nach verschiedenen Kriterien filterbar sein
+	\item Die Zusammenstellung soll gespeichert werden können
+\end{itemize}
+
+\subsubsection*{Druck und Export}
+\begin{itemize}
+	\item Die Software soll den Druck einzelner Aufgaben ermöglichen
+	\item Die Software soll den Druck vollständiger Klausuren ermöglichen
+\end{itemize}
+
+\subsection*{Leistungsanforderungen}
+\begin{itemize}
+	\item Die Software soll auch bei einer großen Anzahl von Aufgaben performant bleiben
+	\item Die Reaktionszeit bei Filteroperationen soll angemessen sein
+\end{itemize}
+
+\subsection{*Softwaresystemattribute}
+
+\subsubsection*{Zuverlässigkeit}
+Die Software soll stabil laufen und keine Datenverluste verursachen.
+
+\subsubsection*{Verfügbarkeit}
+Die Software soll als lokale Anwendung jederzeit verfügbar sein.
+
+\subsubsection*{Sicherheit}
+Der Zugriff auf die Software soll durch ein Anmeldesystem geschützt sein.
+
+\subsubsection*{Wartbarkeit}
+Die Software soll über Import- und Exportfunktionen für die Datensicherung verfügen.
+
+\subsection*{Verifizierung}
+Für jede Anforderung sollen Testfälle definiert werden, um die korrekte Implementierung zu überprüfen.
+
+\section*{Anhänge}
+
+\subsection*{Konzeptionelle Modellierung}
+
+\subsubsection*{User Stories mit Akzeptanzkriterien}
+
+\subsubsubsection*{User Story 1}
+\textbf{Als} Dozent \textbf{möchte ich} Aufgaben mit allen notwendigen Attributen und Kategorisierungen in der Datenbank speichern können, \textbf{damit} ich eine umfangreiche Sammlung an Klausuraufgaben erstellen kann.
+
+\textbf{Akzeptanzkriterien:}
+\begin{itemize}
+	\item Alle definierten Attribute können eingegeben werden
+	\item Bloom'sche Taxonomie Level kann ausgewählt werden
+	\item Aufgabenformat kann festgelegt werden
+	\item Bei geschlossenen Aufgaben kann der Typ spezifiziert werden
+	\item Die Lösung oder Musterlösung kann gespeichert werden
+\end{itemize}
+
+\subsubsubsection*{User Story 2}
+\textbf{Als} Dozent \textbf{möchte ich} Klausuren aus vorhandenen Aufgaben nach definierten Kriterien zusammenstellen können, \textbf{damit} ich effizient Prüfungen erstellen kann.
+
+\textbf{Akzeptanzkriterien:}
+\begin{itemize}
+	\item Aufgaben können nach Modul gefiltert werden
+	\item Aufgaben können nach Bloom'scher Taxonomie gefiltert werden
+	\item Aufgaben können nach Format und Typ gefiltert werden
+	\item Die Gesamtzeit der Klausur wird angezeigt
+	\item Die ausgewählten Aufgaben können als Klausur gespeichert werden
+\end{itemize}
+
+\subsubsection*{Anwendungsfälle}
+
+\subsubsubsection*{Anwendungsfall 1: Aufgabe erstellen und speichern}
+
+\begin{table}[h]
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Name:} & Aufgabe erstellen und speichern \\
+		\hline
+		\textbf{Akteur:} & Dozent \\
+		\hline
+		\textbf{Beschreibung:} & Der Dozent erstellt eine neue Klausuraufgabe und speichert sie mit allen erforderlichen Attributen und Kategorisierungen in der Datenbank. \\
+		\hline
+		\textbf{Vorbedingung:} & Der Dozent ist im System angemeldet. \\
+		\hline
+		\textbf{Standardablauf:} &
+		1. Der Dozent wählt die Option \("\)Neue Aufgabe erstellen\("\). \\
+		& 2. Das System zeigt ein Formular zur Eingabe aller Attribute. \\
+		& 3. Der Dozent gibt den Namen, Aufgabentext und ggf. Antwortmöglichkeiten ein. \\
+		& 4. Der Dozent wählt die Zugehörigkeit zu einem Modul. \\
+		& 5. Der Dozent schätzt die Bearbeitungszeit. \\
+		& 6. Der Dozent ordnet die Aufgabe einem kognitiven Level der Bloom'schen Taxonomie zu. \\
+		& 7. Der Dozent legt das Aufgabenformat fest (offen/geschlossen). \\
+		& 8. Bei geschlossenen Aufgaben wählt der Dozent den Typ. \\
+		& 9. Der Dozent gibt die Lösung oder Musterlösung ein. \\
+		& 10. Der Dozent speichert die Aufgabe. \\
+		& 11. Das System bestätigt die erfolgreiche Speicherung. \\
+		\hline
+		\textbf{Alternative Abläufe:} & Wenn der Dozent nicht alle erforderlichen Felder ausfüllt, zeigt das System eine Fehlermeldung. \\
+		\hline
+		\textbf{Nachbedingung:} & Die neue Aufgabe ist in der Datenbank gespeichert. \\
+		\hline
+	\end{tabularx}
+\end{table}
+
+\subsubsubsection*{Anwendungsfall 2: Klausur zusammenstellen}
+
+\begin{table}[h]
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Name:} & Klausur zusammenstellen \\
+		\hline
+		\textbf{Akteur:} & Dozent \\
+		\hline
+		\textbf{Beschreibung:} & Der Dozent stellt aus vorhandenen Aufgaben eine Klausur zusammen. \\
+		\hline
+		\textbf{Vorbedingung:} & Der Dozent ist im System angemeldet und es sind Aufgaben in der Datenbank vorhanden. \\
+		\hline
+		\textbf{Standardablauf:} &
+		1. Der Dozent wählt die Option \("\)Klausur erstellen\("\). \\
+		& 2. Das System zeigt die Filtermöglichkeiten für Aufgaben. \\
+		& 3. Der Dozent wählt das gewünschte Modul. \\
+		& 4. Der Dozent filtert nach weiteren Kriterien (Bloom'sche Taxonomie, Format, Typ). \\
+		& 5. Das System zeigt die passenden Aufgaben. \\
+		& 6. Der Dozent wählt Aufgaben aus und fügt sie zur Klausur hinzu. \\
+		& 7. Das System berechnet die Gesamtzeit der Klausur. \\
+		& 8. Der Dozent speichert die zusammengestellte Klausur. \\
+		& 9. Der Dozent kann die Klausur ausdrucken oder als Datei exportieren. \\
+		\hline
+		\textbf{Alternative Abläufe:} & Wenn keine passenden Aufgaben vorhanden sind, erhält der Dozent eine entsprechende Meldung. \\
+		\hline
+		\textbf{Nachbedingung:} & Die Klausur ist zusammengestellt und kann verwendet werden. \\
+		\hline
+	\end{tabularx}
+\end{table}
+
+\subsubsection*{Architekturdesign auf konzeptioneller Ebene}
+
+\begin{itemize}
+	\item \textbf{Präsentationsschicht:}
+	\begin{itemize}
+		\item Benutzeroberfläche für Dozenten
+		\item Formulare zur Eingabe von Aufgaben
+		\item Übersichten und Filtermöglichkeiten
+		\item Druckvorschau
+	\end{itemize}
+	\item \textbf{Anwendungsschicht:}
+	\begin{itemize}
+		\item Aufgabenverwaltung
+		\item Klausurzusammenstellung
+		\item Filterlogik
+		\item Druckaufbereitung
+	\end{itemize}
+	\item \textbf{Datenhaltungsschicht:}
+	\begin{itemize}
+		\item Datenbank für Aufgaben und deren Attribute
+		\item Datenbank für erstellte Klausuren
+		\item Import/Export-Funktionalität
+	\end{itemize}
+\end{itemize}

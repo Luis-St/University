@@ -1,0 +1,69 @@
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{0.3\textwidth}|p{0.7\textwidth}|}
+		\hline
+		\textbf{Name} & \textbf{Eigenschaften} \\
+		\hline
+		Software für die Steuerung einer Kaffeemaschine &
+		\begin{itemize}
+			\item \textbf{Kunde:} Nicht explizit genannt, vermutlich ein Hersteller von Kaffeemaschinen
+			\item \textbf{Art der Applikation:} Eingebettete Software zur Steuerung der Hardware einer Kaffeemaschine
+			\item \textbf{Zusätzliche Komponenten:}
+			\begin{itemize}
+				\item Benötigt: Schnittstellen zu Sensoren und Aktuatoren der Kaffeemaschine
+				\item Nicht benötigt: Keine externe Datenbank, keine Netzwerkverbindung
+			\end{itemize}
+			\item \textbf{Besonderheiten:} Fest definierte Anforderungen, stabile Spezifikation
+		\end{itemize} \\
+		\hline
+		Software \("\)Pizza bestellen\("\) &
+		\begin{itemize}
+			\item \textbf{Kunde:} Pizza-Kette oder ähnlicher Gastronomiebetrieb mit direktem Kontakt zum Entwicklungsteam
+			\item \textbf{Art der Applikation:} Web- oder Mobile-Anwendung für Kunden zur Bestellung von Pizza
+			\item \textbf{Zusätzliche Komponenten:}
+			\begin{itemize}
+				\item Benötigt: Datenbank für Bestellungen und Kundenprofile, Zahlungsschnittstelle, Sicherheitsmaßnahmen für Kundendaten
+				\item Nicht explizit erwähnt: Mail-Server für Bestellbestätigungen
+			\end{itemize}
+			\item \textbf{Besonderheiten:} Kundenspezifische Entwicklung, Anforderungen können sich ändern
+		\end{itemize} \\
+		\hline
+	\end{tabular}
+	\caption{Zusammenfassung der Software-Projekte (Teil 1)}
+	\label{tab:software-projekte-1}
+\end{table}
+
+\begin{table}[hf]
+	\centering
+	\begin{tabular}{|p{0.3\textwidth}|p{0.7\textwidth}|}
+		\hline
+		\textbf{Name} & \textbf{Eigenschaften} \\
+		\hline
+		Software \("\)Elektronische Patientenakte\("\) &
+		\begin{itemize}
+			\item \textbf{Kunde:} Öffentlicher Auftraggeber (Bund), gewonnen durch Ausschreibung
+			\item \textbf{Art der Applikation:} Datenbanksystem mit verteilten Zugriffsrechten für medizinische Einrichtungen
+			\item \textbf{Zusätzliche Komponenten:}
+			\begin{itemize}
+				\item Benötigt: Hochsichere Datenbank, Authentifizierungssystem, Zugriffskontrolle, Audit-Trail-System
+				\item Nicht explizit erwähnt: Schnittstellen zu bestehenden Krankenhausinformationssystemen
+			\end{itemize}
+			\item \textbf{Besonderheiten:} Höchste Sicherheitsstandards, umfangreiche Dokumentationspflicht
+		\end{itemize} \\
+		\hline
+		Software zur Generierung von Klausuren &
+		\begin{itemize}
+			\item \textbf{Kunde:} Hochschulen bzw. Bildungseinrichtungen
+			\item \textbf{Art der Applikation:} Desktop-Software zur lokalen Installation
+			\item \textbf{Zusätzliche Komponenten:}
+			\begin{itemize}
+				\item Benötigt: Lokale Datenbank für Aufgabensammlung, Druckfunktionalität
+				\item Nicht benötigt: Keine zentrale Serverinfrastruktur, keine Netzwerkkomponenten
+			\end{itemize}
+			\item \textbf{Besonderheiten:} Muss lokal installierbar sein, keine Onlineverbindung erforderlich
+		\end{itemize} \\
+		\hline
+	\end{tabular}
+	\caption{Zusammenfassung der Software-Projekte (Teil 2)}
+	\label{tab:software-projekte-2}
+\end{table}

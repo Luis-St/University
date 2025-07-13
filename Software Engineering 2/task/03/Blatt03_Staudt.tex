@@ -1,0 +1,323 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tikz}
+
+\include{../../for_latex/preamble}
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 3}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Engineering 2}
+		
+		\vspace{12cm}
+		
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+
+\section*{User Stories mit Story Cards}
+
+\subsection*{User Story 1}
+
+Als Kunde \\
+möchte ich eine Pizza nach meinen individuellen Vorlieben konfigurieren können \\
+um eine maßgeschneiderte Bestellung aufgeben zu können, die genau meinen Geschmack trifft.
+
+\vspace{0.5cm}
+\textbf{Akzeptanzkriterien:}
+\begin{itemize}
+	\item Ich kann die Pizzagröße aus vier Optionen (Klein, Mittel, Groß, Familienpizza) auswählen.
+	\item Ich kann zwischen verschiedenen Teigarten wählen (Klassisch, dünn, Vollkorn, glutenfrei, Käserand).
+	\item Ich kann eine Saucenbasis auswählen (Tomatensauce, BBQ-Sauce, Creme Fraiche, Pesto).
+	\item Ich kann eine oder mehrere Käsesorten auswählen oder veganen Käse wählen.
+	\item Ich kann Toppings aus verschiedenen Kategorien hinzufügen.
+	\item Der Preis wird automatisch aktualisiert, wenn ich Optionen ändere.
+	\item Bei unzulässigen Kombinationen erhalte ich sofort eine Warnung und Hinweise.
+\end{itemize}
+
+\textbf{Story Points:} 8 \\
+\textbf{Priorität:} Hoch
+
+\subsection*{User Story 2}
+
+Als Kunde \\
+möchte ich meine früheren Bestellungen einsehen können \\
+um schnell Lieblingsbestellungen erneut aufgeben zu können oder meine Bestellhistorie zu überprüfen.
+
+\vspace{0.5cm}
+\textbf{Akzeptanzkriterien:}
+\begin{itemize}
+	\item Ich kann eine chronologische Liste meiner früheren Bestellungen einsehen.
+	\item Zu jeder früheren Bestellung werden Details angezeigt (Datum, bestellte Artikel, Gesamtpreis).
+	\item Ich kann eine frühere Bestellung auswählen und als neue Bestellung übernehmen.
+	\item Ich kann eine frühere Bestellung auswählen und vor dem erneuten Bestellen anpassen.
+	\item Die Bestellhistorie ist nach der Anmeldung sofort verfügbar.
+\end{itemize}
+
+\textbf{Story Points:} 5 \\
+\textbf{Priorität:} Mittel
+
+\newpage
+
+\section*{Anwendungsfalldiagramm}
+
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}[
+		actor/.style={draw, rounded corners, fill=white, minimum width=1cm, minimum height=2cm},
+		usecase/.style={draw, ellipse, fill=white, minimum width=3cm, minimum height=1cm},
+		system/.style={draw, rounded corners, fill=white!90, minimum width=8cm, minimum height=10cm},
+		line/.style={draw, -latex},
+		include/.style={draw, -latex, dashed},
+	]
+		% System box
+		\node[system] (system) at (6,0) {};
+		\node at (6,4.5) {Pizza-Bestellsystem};
+		
+		% Actors
+		\node[actor] (kunde) at (0,0) {Kunde};
+		\node[actor] (bezahlsystem) at (14,0) {Bezahlsystem};
+		
+		% Use cases
+		\node[usecase] (konfigurieren) at (6,2) {Pizza konfigurieren};
+		\node[usecase] (bestellen) at (6,0) {Bestellung aufgeben};
+		\node[usecase] (bezahlen) at (6,-2) {Bezahlung durchführen};
+		\node[usecase] (historie) at (6,-4) {Frühere Bestellungen ansehen};
+		
+		% Connections from actors to use cases
+		\draw[line] (kunde) -- (konfigurieren);
+		\draw[line] (kunde) -- (bestellen);
+		\draw[line] (kunde) -- (bezahlen);
+		\draw[line] (kunde) -- (historie);
+		\draw[line] (bezahlsystem) -- (bezahlen);
+		
+		% Include relationships
+		\draw[include] (bestellen) -- node[midway, above] {<<include>>} (konfigurieren);
+		\draw[include] (bestellen) -- node[midway, below] {<<include>>} (bezahlen);
+	\end{tikzpicture}
+	\caption{Anwendungsfalldiagramm für das Pizza-Bestellsystem}
+\end{figure}
+
+\newpage
+
+\section*{Anwendungsfalltabellen}
+
+\subsection*{Anwendungsfall: Pizza konfigurieren}
+
+\begin{tabular}{|p{4cm}|p{10cm}|}
+	\hline
+	\rowcolor[HTML]{C0C0C0}
+	\textbf{Anwendungsfall} & \textbf{Pizza konfigurieren}
+	\\ \hline
+	\textbf{Akteur} & Kunde
+	\\ \hline
+	\textbf{Beschreibung} & Der Kunde stellt eine individuelle Pizza zusammen, indem er verschiedene Optionen für Größe, Teig, Sauce, Käse und Toppings auswählt.
+	\\ \hline
+	\textbf{Auslöser} & Der Kunde möchte eine Pizza bestellen oder eine existierende Konfiguration ändern.
+	\\ \hline
+	\textbf{Vorbedingung} & Der Kunde hat die Bestellseite aufgerufen.
+	\\ \hline
+	\textbf{Nachbedingung (Erfolg)} & Die Pizza ist vollständig konfiguriert und bereit zur Bestellung.
+	\\ \hline
+	\textbf{Nachbedingung (Fehlschlag)} & Die Pizzakonfiguration wurde abgebrochen oder enthält ungültige Kombinationen.
+	\\ \hline
+	\multirow{6}{*}{\textbf{Standardablauf}} & 1.
+	Der Kunde wählt eine Pizzagröße aus.
+	\\ \cline{2-2}
+	& 2.
+	Der Kunde wählt eine Teigart aus.
+	\\ \cline{2-2}
+	& 3.
+	Der Kunde wählt eine Saucenbasis aus.
+	\\ \cline{2-2}
+	& 4.
+	Der Kunde wählt die gewünschte Käseart(en) aus.
+	\\ \cline{2-2}
+	& 5.
+	Der Kunde wählt Toppings aus.
+	\\ \cline{2-2}
+	& 6.
+	Der Kunde wählt den Backgrad aus.
+	\\ \cline{2-2}
+	& 7.
+	Das System berechnet und zeigt den Preis an.
+	\\ \hline
+	\multirow{3}{*}{\textbf{Alternative Abläufe}} & 3a.
+	Bei glutenfreiem Teig werden nur Tomatensauce oder BBQ-Sauce als Optionen angezeigt.
+	\\ \cline{2-2}
+	& 4a.
+	Bei Auswahl von veganem Käse werden keine weiteren Käseoptionen angezeigt.
+	\\ \cline{2-2}
+	& 5a.
+	Bei Auswahl von Spezialitäten werden andere Toppingoptionen deaktiviert.
+	\\ \hline
+	\textbf{Ausnahmen} & Wenn unzulässige Kombinationen gewählt werden, wird eine Fehlermeldung angezeigt und der Kunde wird aufgefordert, die Auswahl zu korrigieren.
+	\\ \hline
+	\textbf{Häufigkeit} & Sehr häufig (bei jeder Bestellung)
+	\\ \hline
+\end{tabular}
+
+\subsection*{Anwendungsfall: Frühere Bestellungen ansehen}
+
+\begin{tabular}{|p{4cm}|p{10cm}|}
+	\hline
+	\rowcolor[HTML]{C0C0C0}
+	\textbf{Anwendungsfall}            & \textbf{Frühere Bestellungen ansehen}                                                    \\ \hline
+	\textbf{Akteur}                     & Kunde                                                                                    \\ \hline
+	\textbf{Beschreibung}               & Der Kunde kann seine früher getätigten Bestellungen einsehen und bei Bedarf wiederholen. \\ \hline
+	\textbf{Auslöser}                   & Der Kunde navigiert zum Bestellarchiv oder wählt \("\)Meine Bestellungen\("\).           \\ \hline
+	\textbf{Vorbedingung}               & Der Kunde ist angemeldet und hat bereits frühere Bestellungen getätigt.                  \\ \hline
+	\textbf{Nachbedingung (Erfolg)}     & Die Liste der früheren Bestellungen wird angezeigt.                                      \\ \hline
+	\textbf{Nachbedingung (Fehlschlag)} & Es werden keine Bestellungen angezeigt oder ein Systemfehler tritt auf.                  \\ \hline
+	\multirow{3}{*}{\textbf{Standardablauf}} & 1.
+	Der Kunde wählt die Option \("\)Frühere Bestellungen\("\) aus. \\ \cline{2-2}
+	& 2.
+	Das System zeigt eine chronologisch sortierte Liste aller früheren Bestellungen an. \\ \cline{2-2}
+	& 3.
+	Der Kunde kann Details zu jeder Bestellung einsehen. \\ \hline
+	\multirow{2}{*}{\textbf{Alternative Abläufe}} & 3a.
+	Der Kunde wählt eine frühere Bestellung aus, um sie zu wiederholen. \\ \cline{2-2}
+	& 3b.
+	Der Kunde wählt eine frühere Bestellung aus, um sie vor dem erneuten Bestellen anzupassen. \\ \hline
+	\textbf{Ausnahmen}                  & Wenn keine früheren Bestellungen existieren, wird eine entsprechende Meldung angezeigt.  \\ \hline
+	\textbf{Häufigkeit}                 & Regelmäßig (bei wiederkehrenden Kunden)                                                  \\ \hline
+\end{tabular}
+
+\newpage
+
+\section*{Aktivitätsdiagramm für den Pizza-Konfigurator}
+
+Anmerkung: LaTex bekommt es leider nicht besser hin das Diagramm darzustellen.
+
+\begin{figure}[h]
+	\centering
+	\scalebox{0.75}{ % Etwas verkleinern, aber nicht zu stark
+		\begin{tikzpicture}[node distance=1.2cm]
+			% Knoten-Stile definieren (kleinere Größen)
+			\tikzstyle{start} = [circle, minimum width=0.7cm, fill=black, inner sep=0pt, text=white, font=\small]
+			\tikzstyle{end} = [circle, minimum width=0.7cm, fill=black, inner sep=0pt, draw=black, double, text=white, font=\small]
+			\tikzstyle{activity} = [rectangle, rounded corners, minimum width=2.5cm, minimum height=0.8cm, text centered, draw=black, fill=blue!20, font=\small]
+			\tikzstyle{decision} = [diamond, aspect=2, minimum width=2.5cm, minimum height=0.8cm, text centered, draw=black, fill=green!20, font=\small]
+			\tikzstyle{arrow} = [thick,->,>=stealth]
+			
+			% Startpunkt
+			\node (start) [start] {Start};
+			
+			% Aktivitäten (mit reduzierten vertikalen Abständen)
+			\node (pizza_size) [activity, below of=start, yshift=-0.3cm] {Pizzagröße auswählen};
+			\node (dough_type) [activity, below of=pizza_size, yshift=-0.3cm] {Teigart auswählen};
+			
+			% Entscheidung für Käserand (horizontale Abstände reduziert)
+			\node (cheese_edge_decision) [decision, below of=dough_type, yshift=-0.8cm] {Käserand?};
+			\node (size_check) [decision, right of=cheese_edge_decision, xshift=2cm] {Klein?};
+			\node (error) [activity, right of=size_check, xshift=2cm] {Fehlermeldung};
+			
+			% Fortsetzung des Hauptflusses
+			\node (sauce) [activity, below of=cheese_edge_decision, yshift=-0.8cm] {Sauce wählen};
+			
+			% Entscheidung für glutenfreien Teig
+			\node (gluten_free_decision) [decision, below of=sauce, yshift=-0.8cm] {Glutenfrei?};
+			\node (sauce_restriction) [activity, right of=gluten_free_decision, xshift=2cm] {Nur Tomaten-/BBQ};
+			
+			% Fortsetzung des Hauptflusses
+			\node (cheese) [activity, below of=gluten_free_decision, yshift=-0.8cm] {Käseart wählen};
+			
+			% Entscheidung für veganen Käse
+			\node (vegan_decision) [decision, below of=cheese, yshift=-0.8cm] {Vegan?};
+			\node (cheese_restriction) [activity, right of=vegan_decision, xshift=2cm] {Keine weiteren Käsesorten};
+			
+			% Fortsetzung des Hauptflusses
+			\node (toppings) [activity, below of=vegan_decision, yshift=-0.8cm] {Toppings wählen};
+			\node (baking) [activity, below of=toppings, yshift=-0.3cm] {Backgrad wählen};
+			\node (extras) [activity, below of=baking, yshift=-0.3cm] {Extras hinzufügen};
+			\node (price) [activity, below of=extras, yshift=-0.3cm] {Preis berechnen};
+			\node (add_to_cart) [activity, below of=price, yshift=-0.3cm] {Zur Bestellung hinzufügen};
+			
+			% Endpunkt
+			\node (end) [end, below of=add_to_cart, yshift=-0.3cm] {Ende};
+			
+			% Pfeile
+			\draw [arrow] (start) -- (pizza_size);
+			\draw [arrow] (pizza_size) -- (dough_type);
+			\draw [arrow] (dough_type) -- (cheese_edge_decision);
+			
+			% Käserand-Entscheidung
+			\draw [arrow] (cheese_edge_decision) -- node[anchor=south, font=\scriptsize] {Ja} (size_check);
+			\draw [arrow] (cheese_edge_decision) -- node[anchor=east, font=\scriptsize] {Nein} (sauce);
+			\draw [arrow] (size_check) -- node[anchor=south, font=\scriptsize] {Ja} (error);
+			\draw [arrow] (size_check) -- node[anchor=east, font=\scriptsize] {Nein} ++(0,-0.4) -| (sauce);
+			\draw [arrow] (error) -- ++(0,-0.4) -| (sauce);
+			
+			% Glutenfreier Teig-Entscheidung
+			\draw [arrow] (sauce) -- (gluten_free_decision);
+			\draw [arrow] (gluten_free_decision) -- node[anchor=south, font=\scriptsize] {Ja} (sauce_restriction);
+			\draw [arrow] (gluten_free_decision) -- node[anchor=east, font=\scriptsize] {Nein} (cheese);
+			\draw [arrow] (sauce_restriction) -- ++(0,-0.4) -| (cheese);
+			
+			% Veganer Käse-Entscheidung
+			\draw [arrow] (cheese) -- (vegan_decision);
+			\draw [arrow] (vegan_decision) -- node[anchor=south, font=\scriptsize] {Ja} (cheese_restriction);
+			\draw [arrow] (vegan_decision) -- node[anchor=east, font=\scriptsize] {Nein} (toppings);
+			\draw [arrow] (cheese_restriction) -- ++(0,-0.4) -| (toppings);
+			
+			% Hauptfluss fortsetzen
+			\draw [arrow] (toppings) -- (baking);
+			\draw [arrow] (baking) -- (extras);
+			\draw [arrow] (extras) -- (price);
+			\draw [arrow] (price) -- (add_to_cart);
+			\draw [arrow] (add_to_cart) -- (end);
+		\end{tikzpicture}
+	}
+	\caption{Aktivitätsdiagramm für den Pizza-Konfigurator}
+\end{figure}
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}

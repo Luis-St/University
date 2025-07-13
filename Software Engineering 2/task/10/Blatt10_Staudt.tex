@@ -1,0 +1,310 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tikz}
+
+\include{../../for_latex/preamble}
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 10}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Engineering 2}
+		
+		\vspace{12cm}
+		
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 1}}
+
+\section*{Testfall für User Story 1}
+
+\subsection*{User Story 1:}
+Als Dozent möchte ich Aufgaben mit allen notwendigen Attributen und Kategorisierungen in der Datenbank speichern können, damit ich eine umfangreiche Sammlung an Klausuraufgaben erstellen kann.
+
+\subsection*{Testfall 1.1: Vollständige Aufgabe erfolgreich speichern}
+\begin{enumerate}
+	\item Anmeldung im System als Dozent mit gültigen Anmeldedaten
+	\item Navigation zur Funktion ``Neue Aufgabe erstellen''
+	\item Eingabe aller erforderlichen Attribute:
+	\begin{itemize}
+		\item Name: ``Relationale Algebra Grundlagen''
+		\item Aufgabentext: ``Erklären Sie die grundlegenden Operatoren der relationalen Algebra und geben Sie je ein Beispiel an.''
+		\item Modulzugehörigkeit: ``Datenbanken I''
+		\item Geschätzte Bearbeitungszeit: ``15 Minuten''
+		\item Bloom'sche Taxonomie: ``Level 2 - Verstehen''
+		\item Aufgabenformat: ``Offen''
+		\item Musterlösung: ``Die grundlegenden Operatoren sind Selektion, Projektion, Vereinigung, Differenz, Kartesisches Produkt und Verbund...''
+	\end{itemize}
+	\item Bestätigung der Eingabe durch Klick auf ``Speichern''
+	\item Überprüfung der Erfolgsmeldung: ``Aufgabe erfolgreich gespeichert''
+	\item Verifikation in der Aufgabenübersicht: Die gespeicherte Aufgabe erscheint in der Liste mit allen eingegebenen Attributen
+	\item Filtertest: Aufgabe kann über alle definierten Filterkriterien gefunden werden
+\end{enumerate}
+
+\subsection*{Erwartetes Ergebnis:}
+Die Aufgabe wird vollständig mit allen Attributen in der Datenbank gespeichert und ist über die Suchfunktionen auffindbar.
+
+
+\section*{Testfall für User Story 2}
+\subsection*{User Story 2:}
+Als Dozent möchte ich Klausuren aus vorhandenen Aufgaben nach definierten Kriterien zusammenstellen können, damit ich effizient Prüfungen erstellen kann.
+
+\subsection*{Testfall 2.1: Klausur nach Filterkriterien zusammenstellen}
+\begin{enumerate}
+	\item Anmeldung im System als Dozent
+	\item Vorbereitung: Mindestens 5 verschiedene Aufgaben mit unterschiedlichen Attributen sind in der Datenbank vorhanden
+	\item Navigation zur Funktion ``Klausur zusammenstellen''
+	\item Anwendung der Filterkriterien:
+	\begin{itemize}
+		\item Modul: ``Datenbanken I''
+		\item Bloom'sche Taxonomie: Level 1-3 (Grundlagen bis Anwendung)
+		\item Format: Gemischt (offen und geschlossen)
+	\end{itemize}
+	\item Überprüfung der Filterergebnisse: Nur Aufgaben, die den Kriterien entsprechen, werden angezeigt
+	\item Auswahl von 4 Aufgaben durch Markierung
+	\item Überprüfung der automatischen Zeitberechnung: Gesamtzeit wird korrekt summiert angezeigt
+	\item Speicherung der Klausurzusammenstellung unter dem Namen ``Datenbanken I - Zwischenprüfung''
+	\item Bestätigung der Speicherung durch Erfolgsmeldung
+	\item Verifikation: Klausur erscheint in der Übersicht gespeicherter Klausuren
+	\item Exporttest: Klausur kann als PDF-Datei exportiert werden
+\end{enumerate}
+
+\subsection*{Erwartetes Ergebnis:}
+Eine Klausur wird erfolgreich aus gefilterten Aufgaben zusammengestellt, die Gesamtzeit wird korrekt berechnet, und die Klausur kann gespeichert und exportiert werden.
+
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 2}}
+
+Für die Kaffeemaschine werden folgende Unit-Test-Klassen erstellt, um alle wichtigen Methoden und Zustandsübergänge abzudecken:
+
+\section*{Testabdeckung}
+\subsection*{Zu testende Klassen und Methoden:}
+\begin{enumerate}
+	\item \textbf{CoffeeMachine Klasse:}
+	\begin{itemize}
+		\item Konstruktor und Initialisierung
+		\item setState() - Zustandswechsel
+		\item Getter/Setter für Zutaten und Münzguthaben
+		\item hasEnoughIngredients() - Zutatenprüfung
+	\end{itemize}
+	
+	\item \textbf{State-Klassen:} Alle Zustandsübergänge für jeden State
+	\begin{itemize}
+		\item IdleState
+		\item CoinAcceptedState
+		\item CheckingIngredientsState
+		\item PreparingCoffeeState
+		\item CoffeeReadyState
+		\item ErrorState
+	\end{itemize}
+\end{enumerate}
+
+\subsection*{Testszenarien:}
+\begin{itemize}
+	\item \textbf{Normale Abläufe:} Vollständiger Kaffeezubereitungsprozess
+	\item \textbf{Fehlerfälle:} Fehlende Zutaten, mehrfache Münzeinwürfe
+	\item \textbf{Grenzfälle:} Zustandsübergänge bei verschiedenen Bedingungen
+	\item \textbf{Zutatenverwaltung:} Auffüllen und Verbrauch von Ressourcen
+\end{itemize}
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 3}}
+
+\section*{Identifikation der Äquivalenzklassen}
+Für die Bestellmenge mit dem gültigen Bereich 1--1000 Stück ergeben sich folgende Äquivalenzklassen:
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\textbf{Klasse} & \textbf{Beschreibung} & \textbf{Bereich} & \textbf{Erwartetes Verhalten} \\
+		\hline
+		ÄK1 & Ungültig (zu klein) & $< 1$ & Ablehnung \\
+		\hline
+		ÄK2 & Gültig & $1 \leq x \leq 1000$ & Annahme \\
+		\hline
+		ÄK3 & Ungültig (zu groß) & $> 1000$ & Ablehnung \\
+		\hline
+	\end{tabular}
+	\caption{Äquivalenzklassen für Bestellmenge}
+\end{table}
+
+\section*{Grenzwertanalyse}
+Die kritischen Grenzwerte sind:
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\textbf{Grenzwert} & \textbf{Wert} & \textbf{Erwartetes Verhalten} \\
+		\hline
+		Untere Grenze - 1 & 0 & Ablehnung \\
+		\hline
+		Untere Grenze & 1 & Annahme \\
+		\hline
+		Untere Grenze + 1 & 2 & Annahme \\
+		\hline
+		Obere Grenze - 1 & 999 & Annahme \\
+		\hline
+		Obere Grenze & 1000 & Annahme \\
+		\hline
+		Obere Grenze + 1 & 1001 & Ablehnung \\
+		\hline
+	\end{tabular}
+	\caption{Grenzwertanalyse für Bestellmenge}
+\end{table}
+\newpage
+
+\section*{Testfälle}
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{2cm}|p{3cm}|p{2cm}|p{4cm}|p{3cm}|}
+		\hline
+		\textbf{Test-ID} & \textbf{Beschreibung} & \textbf{Eingabe} & \textbf{Erwartetes Ergebnis} & \textbf{Äquivalenz-klasse} \\
+		\hline
+		T1 & Negative Bestellmenge & -5 & Fehlermeldung: ``Bestellung abgelehnt'' & ÄK1 \\
+		\hline
+		T2 & Bestellmenge Null & 0 & Fehlermeldung: ``Bestellung abgelehnt'' & ÄK1 \\
+		\hline
+		T3 & Minimum gültige Menge & 1 & Bestellung akzeptiert & ÄK2 \\
+		\hline
+		T4 & Menge knapp über Minimum & 2 & Bestellung akzeptiert & ÄK2 \\
+		\hline
+		T5 & Mittlere gültige Menge & 500 & Bestellung akzeptiert & ÄK2 \\
+		\hline
+		T6 & Menge knapp unter Maximum & 999 & Bestellung akzeptiert & ÄK2 \\
+		\hline
+		T7 & Maximum gültige Menge & 1000 & Bestellung akzeptiert & ÄK2 \\
+		\hline
+		T8 & Menge über Maximum & 1001 & Fehlermeldung: ``Bestellung abgelehnt'' & ÄK3 \\
+		\hline
+		T9 & Sehr große Menge & 5000 & Fehlermeldung: ``Bestellung abgelehnt'' & ÄK3 \\
+		\hline
+	\end{tabular}
+	\caption{Testfälle für Online-Bestellung}
+\end{table}
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 4}}
+
+\section*{Identifikation der Äquivalenzklassen}
+Für ein Programm zur Dreieckerkennung mit drei ganzzahligen positiven Werten ergeben sich folgende Äquivalenzklassen:
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|l|l|}
+		\hline
+		\textbf{Klasse} & \textbf{Beschreibung} & \textbf{Erwartetes Ergebnis} \\
+		\hline
+		ÄK1 & Ungültige Eingabe (nicht-positive Werte) & Fehlermeldung \\
+		\hline
+		ÄK2 & Keine Dreiecksungleichung erfüllt & Fehlermeldung \\
+		\hline
+		ÄK3 & Gleichseitiges Dreieck ($a = b = c$) & ``Gleichseitiges Dreieck'' \\
+		\hline
+		ÄK4 & Gleichschenkliges Dreieck (zwei Seiten gleich) & ``Gleichschenkliges Dreieck'' \\
+		\hline
+		ÄK5 & Ungleichseitiges Dreieck (alle Seiten verschieden) & ``Ungleichseitiges Dreieck'' \\
+		\hline
+	\end{tabular}
+	\caption{Äquivalenzklassen für Dreieckerkennung}
+\end{table}
+
+\section*{Detaillierte Äquivalenzklassen}
+\subsection*{Mathematische Bedingungen:}
+\begin{itemize}
+	\item \textbf{Gültige Dreiecke:} $a + b > c$ und $a + c > b$ und $b + c > a$
+	\item \textbf{Gleichseitig:} $a = b = c$
+	\item \textbf{Gleichschenklig:} $a = b \neq c$ oder $a = c \neq b$ oder $b = c \neq a$
+	\item \textbf{Ungleichseitig:} $a \neq b \neq c \neq a$
+\end{itemize}
+
+\subsection*{Testfälle}
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|p{1.5cm}|p{4cm}|p{2.5cm}|p{4cm}|p{2cm}|}
+		\hline
+		\textbf{Test-ID} & \textbf{Beschreibung} & \textbf{Eingabe (a,b,c)} & \textbf{Erwartetes Ergebnis} & \textbf{ÄK} \\
+		\hline
+		T1 & Negative Werte & (-1, 5, 3) & Fehlermeldung & ÄK1 \\
+		\hline
+		T2 & Null-Werte & (0, 4, 5) & Fehlermeldung & ÄK1 \\
+		\hline
+		T3 & Dreiecksungleichung verletzt (1) & (1, 2, 5) & Fehlermeldung & ÄK2 \\
+		\hline
+		T4 & Dreiecksungleichung verletzt (2) & (1, 1, 3) & Fehlermeldung & ÄK2 \\
+		\hline
+		T5 & Gleichseitiges Dreieck & (5, 5, 5) & ``Gleichseitiges Dreieck'' & ÄK3 \\
+		\hline
+		T6 & Gleichseitiges Dreieck (klein) & (1, 1, 1) & ``Gleichseitiges Dreieck'' & ÄK3 \\
+		\hline
+		T7 & Gleichschenklig (a=b) & (5, 5, 3) & ``Gleichschenkliges Dreieck'' & ÄK4 \\
+		\hline
+		T8 & Gleichschenklig (a=c) & (4, 6, 4) & ``Gleichschenkliges Dreieck'' & ÄK4 \\
+		\hline
+		T9 & Gleichschenklig (b=c) & (3, 5, 5) & ``Gleichschenkliges Dreieck'' & ÄK4 \\
+		\hline
+		T10 & Ungleichseitig & (3, 4, 5) & ``Ungleichseitiges Dreieck'' & ÄK5 \\
+		\hline
+		T11 & Ungleichseitig (groß) & (13, 14, 15) & ``Ungleichseitiges Dreieck'' & ÄK5 \\
+		\hline
+		T12 & Grenzfall Dreiecksungleichung & (1, 2, 3) & Fehlermeldung & ÄK2 \\
+		\hline
+	\end{tabular}
+	\caption{Testfälle für Dreieckerkennung}
+\end{table}
+\newpage
+
+\section*{Zusätzliche Grenzfälle:}
+\begin{itemize}
+	\item \textbf{Minimale gültige Werte:} (1, 1, 1) - Gleichseitig
+	\item \textbf{Grenzfall Gleichschenklig:} (2, 2, 3) - Gerade noch gültiges gleichschenkliges Dreieck
+	\item \textbf{Grenzfall Ungleichung:} (5, 5, 9) - Gerade noch gültiges gleichschenkliges Dreieck
+	\item \textbf{Große Werte:} (100, 150, 200) - Test mit größeren Zahlen
+\end{itemize}
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}

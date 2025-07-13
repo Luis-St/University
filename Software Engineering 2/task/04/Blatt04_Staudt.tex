@@ -1,0 +1,117 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tikz}
+
+\include{../../for_latex/preamble}
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 4}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Engineering 2}
+		
+		\vspace{12cm}
+		
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 1}}
+
+\section*{1. Ziele der Spezifikationen:}
+\begin{itemize}
+	\item \textbf{SyRS (System Requirements Specification)}: Identifiziert technische Anforderungen für das System-of-Interest und beschreibt, was das System aus technischer Sicht tun soll.
+	Dient als Brücke zwischen Auftraggeber und technischer Community, indem sie alle Eingaben, Ausgaben und erforderlichen Beziehungen zwischen diesen vollständig beschreibt.
+	\item \textbf{SRS (Software Requirements Specification)}: Spezifiziert detailliert die Anforderungen für ein bestimmtes Softwareprodukt oder Programm in einer spezifischen Umgebung.
+	Definiert alle erforderlichen Fähigkeiten, dokumentiert Bedingungen und Einschränkungen unter denen die Software arbeiten muss.
+\end{itemize}
+
+\section*{2. Notwendigkeit:}
+\begin{itemize}
+	\item \textbf{SyRS}: Wird benötigt, wenn ein System entwickelt wird, das mehrere Komponenten umfasst und eine übergeordnete technische Beschreibung erforderlich ist.
+	\item \textbf{SRS}: Wird benötigt, wenn spezifisch ein Softwareprodukt entwickelt wird.
+	Bei größeren Systemen erweitert die SRS die im SyRS definierten softwarebezogenen Anforderungen und stimmt mit diesen überein.
+\end{itemize}
+
+\newpage
+\section*{2. Vergleich zwischen SyRS und SRS}
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{>{\raggedright\arraybackslash}p{2.5cm}>{\raggedright\arraybackslash}p{6cm}>{\raggedright\arraybackslash}p{6cm}}
+		\toprule
+		\textbf{Aspekt} & \textbf{System Requirements Specification (SyRS)} & \textbf{Software Requirements Specification (SRS)} \\
+		\midrule
+		Fokus & Gesamtsystem (Hardware, Software, Mensch) & Speziell Softwarekomponenten \\
+		\midrule
+		Umfang & Systemebene, kann mehrere Komponenten umfassen & Fokussiert auf Softwareprogramm oder -set \\
+		\midrule
+		Detaillierungsgrad & Übergeordnete Systemanforderungen & Detaillierte Softwareanforderungen \\
+		\midrule
+		Spezifische Inhalte & Physikalische Eigenschaften, Umgebungsbedingungen, Systemsicherheit & Logische Datenbankanforderungen, Softwareattribute \\
+		\midrule
+		Gemeinsamkeiten & \multicolumn{2}{p{12cm}}{Beide enthalten: funktionale Anforderungen, Schnittstellen, Leistungsanforderungen, Benutzeranforderungen und Verifizierungsansätze} \\
+		\midrule
+		Verantwortung & Anforderer und Entwicklerteam & Lieferant, Auftraggeber oder beide \\
+		\bottomrule
+	\end{tabular}
+	\caption{Vergleich zwischen SyRS und SRS}
+	\label{tab:comparison}
+\end{table}
+
+\newpage
+{\let\cleardoublepage\relax \chapter*{Aufgabe 2}}
+\input{./template}
+\newpage
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 3}}
+\input{./example}
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}

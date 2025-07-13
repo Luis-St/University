@@ -1,0 +1,370 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tikz}
+
+\include{../../for_latex/preamble}
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 8}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Engineering 2}
+		
+		\vspace{12cm}
+		
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 1}}
+
+\section*{Client-Server Architektur mit Microservices}
+
+\subsection*{Überblick der Architektur}
+
+Die vorgeschlagene Architektur folgt dem Microservices-Architekturstil und besteht aus mehreren unabhängigen Services, die über definierte APIs kommunizieren.
+Ein API-Gateway dient als zentraler Eingangspunkt für alle Client-Anfragen.
+
+\begin{figure}[!htbpf] % Mermaid-Diagramm 1: Überblick der Microservices-Architektur (mermaid_diagram_1)
+	\centering
+	\includegraphics[width=\textwidth]{images/mermaid_diagram_1}
+	\caption{Überblick der Microservices-Architektur}
+\end{figure}
+
+\section*{Designaspekte der Microservices-Architektur}
+\subsection*{a) Dekomposition von Microservices}
+\subsubsection*{Logische Sicht der Microservices}
+
+\newpage
+\begin{figure}[!htbpf] % Mermaid-Diagramm 2: Logische Sicht der Microservices-Dekomposition (mermaid_diagram_2)
+	\centering
+	\includegraphics[angle=90, height=0.9\textheight]{images/mermaid_diagram_2}
+	\caption{Logische Sicht der Microservices-Dekomposition}
+\end{figure}
+
+\subsubsection*{Beschreibung der Microservices}
+
+\textbf{Authentication Service:}
+Verwaltet die Benutzerauthentifizierung und -autorisierung für alle Clients (Kunden, Händler, Servicepartner).
+Stellt JWT-Token aus und validiert Berechtigungen für den Zugriff auf verschiedene Services.
+Implementiert Multi-Factor-Authentication für erhöhte Sicherheit.
+
+
+\textbf{Vehicle Configuration Service:} Verwaltet die Fahrzeugkonfiguration und ermöglicht Kunden die Auswahl von Modellen, Motorisierungen, Farben und Ausstattungsmerkmalen.
+Stellt Konfigurations-APIs bereit und validiert die Kompatibilität der gewählten Optionen.
+Speichert Konfigurationsdaten und stellt diese anderen Services zur Verfügung.
+
+
+\textbf{Pricing Service:} Berechnet Echtzeit-Preise basierend auf der Fahrzeugkonfiguration und aktuellen Marktbedingungen.
+Verwaltet Preislisten, Rabatte und Aktionen für verschiedene Märkte und Kundengruppen.
+Integriert externe Preisdatenquellen und führt dynamische Preisberechnungen durch.
+
+
+\textbf{Customer Management Service:} Verwaltet alle Kundeninformationen, Profile und Präferenzen zentral.
+Stellt APIs für CRUD-Operationen auf Kundendaten bereit und gewährleistet DSGVO-Konformität.
+Integriert Kundensegmentierung und personalisierte Empfehlungen.
+
+\textbf{Order Management Service:} Verarbeitet Bestellungen von der Konfiguration bis zur Auslieferung und verwaltet den gesamten Bestellworkflow.
+Koordiniert mit anderen Services für Preisberechnung, Lagerverfügbarkeit und Zahlungsabwicklung.
+Stellt Bestellstatus-Updates und Tracking-Informationen bereit.
+
+\textbf{Inventory Service:} Verwaltet die Verfügbarkeit von Fahrzeugen, Komponenten und Ersatzteilen in Echtzeit.
+Synchronisiert Lagerbestände über verschiedene Standorte und Lieferanten hinweg.
+Stellt Verfügbarkeitsprüfungen für Konfigurationen und geschätzte Lieferzeiten bereit.
+
+\textbf{Payment Service:} Verarbeitet alle Zahlungstransaktionen sicher und unterstützt verschiedene Zahlungsmethoden.
+Integriert externe Zahlungsdienstleister und gewährleistet PCI-DSS-Konformität.
+Verwaltet Zahlungspläne, Raten und Rückerstattungen.
+
+\textbf{Financing Service:} Stellt verschiedene Finanzierungsoptionen bereit und berechnet Raten und Konditionen.
+Integriert externe Finanzpartner und führt Bonitätsprüfungen durch.
+Verwaltet Leasingverträge und Finanzierungsanträge.
+
+\textbf{Insurance Service:} Bietet Versicherungsoptionen und ermöglicht den Abschluss von Versicherungen direkt im Portal.
+Integriert Versicherungspartner und berechnet Prämien basierend auf Fahrzeug und Fahrer.
+Verwaltet Versicherungsverträge und Schadensmeldungen.
+
+\textbf{Vehicle Status Service:} Überwacht den Status aller verkauften Fahrzeuge und sammelt Telemetriedaten.
+Stellt Echtzeitinformationen über Fahrzeugzustand, Position und Leistungsdaten bereit.
+Erkennt potenzielle Probleme und löst präventive Wartungsempfehlungen aus.
+
+\textbf{Maintenance Service:} Verwaltet Wartungspläne, Servicetermine und Reparaturhistorien für alle Fahrzeuge.
+Sendet Erinnerungen für anstehende Wartungen und koordiniert mit Servicepartnern.
+Stellt Wartungsempfehlungen basierend auf Fahrzeugdaten und -nutzung bereit.
+
+\textbf{OTA Update Service:} Verwaltet Over-The-Air-Softwareupdates für Fahrzeuge und stellt sichere Update-Mechanismen bereit.
+Führt Rollout-Strategien durch und überwacht Update-Erfolg.
+Ermöglicht Feature-Freischaltungen und Konfigurationsänderungen remote.
+
+\textbf{Service Booking Service:} Ermöglicht die Buchung verschiedener Services wie Helpdesk, Notruf oder Zusatzleistungen.
+Verwaltet Service-Kataloge und Verfügbarkeiten von Servicepartnern.
+Koordiniert Terminplanung und Ressourcenzuweisung.
+
+\textbf{Notification Service:} Sendet Benachrichtigungen über verschiedene Kanäle (E-Mail, SMS, Push) an Kunden und Partner.
+Verwaltet Benachrichtigungsvorlagen und Personalisierung.
+Stellt Event-basierte Benachrichtigungen für wichtige Systemereignisse bereit.
+
+\subsection*{b) Kommunikation zwischen Microservices}
+\subsubsection*{Synchrone vs. Asynchrone Kommunikation}
+Für das Auto Portal wird eine hybride Kommunikationsstrategie vorgeschlagen, die sowohl synchrone als auch asynchrone Kommunikation nutzt.
+Synchrone Kommunikation wird für zeitkritische Operationen wie Preisberechnungen und Verfügbarkeitsprüfungen verwendet, da Kunden sofortiges Feedback erwarten.
+Asynchrone Kommunikation wird für nicht-zeitkritische Prozesse wie Benachrichtigungen, Wartungsempfehlungen und Datenreplikation eingesetzt.
+Diese Strategie optimiert die Benutzererfahrung durch schnelle Antwortzeiten bei kritischen Operationen und verbessert gleichzeitig die Systemresilienz durch lose Kopplung bei unkritischen Prozessen.
+
+\newpage
+\begin{figure}[!htbpf] % Mermaid-Diagramm 3: Synchrone Kommunikation - Preisberechnung mit Verfügbarkeitsprüfung (mermaid_diagram_3)
+	\centering
+	\includegraphics[angle=90, height=0.9\textheight]{images/mermaid_diagram_3}
+	\caption{Synchrone Kommunikation - Preisberechnung mit Verfügbarkeitsprüfung}
+\end{figure}
+
+\newpage
+\begin{figure}[!htbpf] % Mermaid-Diagramm 4: Asynchrone Kommunikation - Event-basierte Bestellverarbeitung (mermaid_diagram_4)
+	\centering
+	\includegraphics[angle=90, height=0.9\textheight]{images/mermaid_diagram_4}
+	\caption{Asynchrone Kommunikation - Event-basierte Bestellverarbeitung}
+\end{figure}
+
+\subsubsection*{Direkte vs. Indirekte Kommunikation}
+Direkte Kommunikation wird für einfache Request-Response-Szenarien zwischen Services verwendet, bei denen eine klare 1:1-Beziehung besteht.
+Indirekte Kommunikation über Message Broker wird für komplexe Workflows eingesetzt, bei denen mehrere Services auf Ereignisse reagieren müssen.
+Der Message Broker entkoppelt Services voneinander und ermöglicht eine bessere Skalierbarkeit und Fehlertoleranz.
+Pattern wie Publish-Subscribe werden für Ereignisse verwendet, die von mehreren Services verarbeitet werden müssen, während direkte API-Aufrufe für spezifische Datenanfragen genutzt werden.
+
+\begin{figure}[!htbpf] % Mermaid-Diagramm 5: Direkte Kommunikation zwischen Services (mermaid_diagram_5)
+	\centering
+	\includegraphics[width=\textwidth]{images/mermaid_diagram_5}
+	\caption{Direkte Kommunikation zwischen Services}
+	\label{fig:direct_comm}
+\end{figure}
+
+\begin{figure}[!htbpf] % Mermaid-Diagramm 6: Indirekte Kommunikation über Message Broker (mermaid_diagram_6)
+	\centering
+	\includegraphics[width=\textwidth]{images/mermaid_diagram_6}
+	\caption{Indirekte Kommunikation über Message Broker}
+	\label{fig:indirect_comm}
+\end{figure}
+
+\subsection*{c) Verteilung und gemeinsame Nutzung von Daten}
+\subsubsection*{Datenverwaltungsstrategie}
+Das System folgt dem \("\)Database per Service\("\)-Pattern, wobei jeder Microservice seine eigenen Daten verwaltet und andere Services nicht direkt auf diese Datenbank zugreifen können.
+Für gemeinsam genutzte Referenzdaten werden dedizierte Services bereitgestellt.
+Event Sourcing wird für kritische Geschäftsereignisse verwendet, um Konsistenz zwischen Services zu gewährleisten.
+CQRS (Command Query Responsibility Segregation) trennt Lese- und Schreibvorgänge für bessere Performance und Skalierbarkeit.
+
+\begin{figure}[!htbpf] % Mermaid-Diagramm 7: Datenverteilung und -sharing zwischen Microservices (mermaid_diagram_7)
+	\centering
+	\includegraphics[width=\textwidth]{images/mermaid_diagram_7}
+	\caption{Datenverteilung und -sharing zwischen Microservices}
+	\label{fig:data_sharing}
+\end{figure}
+
+\subsubsection*{Datenklassifizierung}
+
+\textbf{Exklusive Servicedaten:}
+\begin{itemize}
+	\item Authentication Service: Benutzeranmeldedaten, Passwort-Hashes, Session-Tokens
+	\item Customer Service: Persönliche Kundendaten, Präferenzen, Kommunikationshistorie
+	\item Payment Service: Zahlungsinformationen, Transaktionsdetails, Kreditkartendaten
+	\item Order Service: Bestelldetails, Status, Workflow-Zustand
+\end{itemize}
+
+\textbf{Gemeinsam genutzte Daten:}
+\begin{itemize}
+	\item Vehicle Reference Data: Modelle, Spezifikationen, Kompatibilitätsregeln
+	\item Pricing Data: Basispresse, Währungskurse, regionale Aufschläge
+	\item Location Data: Händlerstandorte, Servicezentren, Lagerstandorte
+	\item Configuration Rules: Gültige Kombinationen, Abhängigkeiten
+\end{itemize}
+
+\subsection*{d) Koordination von Microservices}
+\subsubsection*{Koordinationsstrategie}
+Für die Koordination der Microservices wird eine hybride Strategie aus Choreografie und Orchestration verwendet.
+Choreografie wird für einfache, lose gekoppelte Workflows bevorzugt, da sie die Autonomie der Services erhöht und Single Points of Failure vermeidet.
+Orchestration wird nur für komplexe Geschäftsprozesse eingesetzt, die eine zentrale Kontrolle erfordern, wie die Bestellabwicklung.
+Das API Gateway fungiert als zentraler Koordinationspunkt für Client-Anfragen, während interne Service-zu-Service-Kommunikation hauptsächlich event-driven abläuft.
+Service Mesh-Technologien unterstützen bei der Service Discovery und Load Balancing.
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[node distance=2.5cm]
+		% API Gateway coordination
+		\node (client) [client] {Client};
+		\node (gateway) [gateway, below of=client] {API Gateway};
+		\node (orchestrator) [service, below of=gateway] {Order Orchestrator};
+		
+		% Services
+		\node (inventory) [service, left of=orchestrator, xshift=-2.5cm] {Inventory\\Service};
+		\node (pricing) [service, above left of=orchestrator, xshift=-1.5cm, yshift=1cm] {Pricing\\Service};
+		\node (payment) [service, right of=orchestrator, xshift=2.5cm] {Payment\\Service};
+		\node (customer) [service, above right of=orchestrator, xshift=1.5cm, yshift=1cm] {Customer\\Service};
+		
+		% Orchestration flow
+		\draw [arrow] (client) -- node[left] {Place Order} (gateway);
+		\draw [arrow] (gateway) -- node[left] {Create Order} (orchestrator);
+		
+		\draw [arrow] (orchestrator) -- node[above] {1. Check Stock} (inventory);
+		\draw [arrow] (orchestrator) -- node[above left] {2. Calculate Price} (pricing);
+		\draw [arrow] (orchestrator) -- node[above right] {3. Validate Customer} (customer);
+		\draw [arrow] (orchestrator) -- node[above] {4. Process Payment} (payment);
+		
+		% Return path
+		\draw [arrow] (orchestrator) -- node[right] {Order Confirmation} (gateway);
+		\draw [arrow] (gateway) -- node[right] {Response} (client);
+	
+	\end{tikzpicture}
+	\caption{Orchestration Pattern für komplexe Bestellabwicklung}
+	\label{fig:orchestration}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[node distance=2cm]
+		% Event-driven choreography
+		\node (vehicle) [service] {Vehicle Status\\Service};
+		\node (eventbus) [gateway, right of=vehicle, xshift=3cm] {Event Bus};
+		
+		\node (maintenance) [service, above right of=eventbus, xshift=2cm, yshift=1.5cm] {Maintenance\\Service};
+		\node (notification) [service, right of=eventbus, xshift=3cm] {Notification\\Service};
+		\node (customer) [service, below right of=eventbus, xshift=2cm, yshift=-1.5cm] {Customer\\Service};
+		\node (dealer) [service, below of=eventbus, yshift=-2cm] {Dealer\\Service};
+		
+		% Event flow
+		\draw [message] (vehicle) -- node[above] {Maintenance Due Event} (eventbus);
+		\draw [message] (eventbus) -- node[above right] {Schedule Service} (maintenance);
+		\draw [message] (eventbus) -- node[above] {Send Alert} (notification);
+		\draw [message] (eventbus) -- node[below right] {Update Profile} (customer);
+		\draw [message] (eventbus) -- node[below] {Dealer Notification} (dealer);
+	
+	\end{tikzpicture}
+	\caption{Choreography Pattern für Event-basierte Koordination}
+	\label{fig:choreography}
+\end{figure}
+
+
+\subsection*{e) Fehlermanagement und Überwachung}
+\subsubsection*{Überwachungsstrategie}
+Das Überwachungssystem implementiert ein zentralisiertes Monitoring-Dashboard, das Metriken, Logs und Traces von allen Microservices sammelt und korreliert.
+Health Checks überwachen die Verfügbarkeit und Performance jedes Services kontinuierlich.
+Distributed Tracing verfolgt Anfragen durch das gesamte System und identifiziert Bottlenecks.
+Circuit Breaker Pattern verhindert Kaskadenausfälle bei Service-Fehlern.
+Alerting-Mechanismen benachrichtigen Operations-Teams bei kritischen Problemen automatisch.
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[node distance=2cm]
+		% Monitoring Infrastructure
+		\node (dashboard) [gateway] {Monitoring Dashboard};
+		
+		% Monitoring Components
+		\node (metrics) [service, above left of=dashboard, xshift=-2cm, yshift=1.5cm] {Metrics\\Collector};
+		\node (logs) [service, above of=dashboard, yshift=1.5cm] {Log\\Aggregator};
+		\node (traces) [service, above right of=dashboard, xshift=2cm, yshift=1.5cm] {Trace\\Collector};
+		\node (alerts) [service, below of=dashboard, yshift=-1.5cm] {Alert\\Manager};
+		
+		% Microservices being monitored
+		\node (service1) [service, below left of=metrics, yshift=-2cm] {Config\\Service};
+		\node (service2) [service, below of=logs, yshift=-2cm] {Order\\Service};
+		\node (service3) [service, below right of=traces, yshift=-2cm] {Payment\\Service};
+		
+		% Data stores
+		\node (metricsdb) [database, left of=metrics, xshift=-2cm] {Metrics\\DB};
+		\node (logsdb) [database, above of=logs, yshift=1cm] {Log\\Store};
+		\node (tracesdb) [database, right of=traces, xshift=2cm] {Trace\\DB};
+		
+		% Health Check Service
+		\node (health) [service, right of=dashboard, xshift=3cm] {Health Check\\Service};
+		
+		% Connections
+		\draw [arrow] (metrics) -- (dashboard);
+		\draw [arrow] (logs) -- (dashboard);
+		\draw [arrow] (traces) -- (dashboard);
+		\draw [arrow] (dashboard) -- (alerts);
+		\draw [arrow] (dashboard) -- (health);
+		
+		\draw [arrow] (metrics) -- (metricsdb);
+		\draw [arrow] (logs) -- (logsdb);
+		\draw [arrow] (traces) -- (tracesdb);
+		
+		% Monitoring connections
+		\draw [message] (service1) -- (metrics);
+		\draw [message] (service1) -- (logs);
+		\draw [message] (service2) -- (logs);
+		\draw [message] (service2) -- (traces);
+		\draw [message] (service3) -- (traces);
+		\draw [message] (service3) -- (metrics);
+		
+		% Health checks
+		\draw [message] (health) -- (service1);
+		\draw [message] (health) -- (service2);
+		\draw [message] (health) -- (service3);
+	
+	\end{tikzpicture}
+	\caption{Integriertes Überwachungs-Dashboard für Microservices}
+	\label{fig:monitoring}
+\end{figure}
+
+\subsubsection*{Fehlerbehandlungsstrategien}
+\begin{enumerate}
+	\item \textbf{Circuit Breaker Pattern:} Verhindert wiederholte Aufrufe fehlgeschlagener Services und ermöglicht schnelle Wiederherstellung.
+	\item \textbf{Retry mit Exponential Backoff:} Automatische Wiederholung fehlgeschlagener Anfragen mit zunehmenden Wartezeiten.
+	\item \textbf{Bulkhead Pattern:} Isolierung kritischer Ressourcen zur Verhinderung von Kaskadenausfällen.
+	\item \textbf{Graceful Degradation:} Reduzierte Funktionalität bei Teilausfällen statt kompletter Systemausfall.
+	\item \textbf{Chaos Engineering:} Proaktive Testung der Systemresilienz durch kontrollierte Fehlerinjektionen.
+\end{enumerate}
+
+\section*{Fazit}
+Die vorgeschlagene Microservices-Architektur für das Auto Portal bietet eine skalierbare, resiliente und wartbare Lösung für die komplexen Anforderungen des Online-Automobilverkaufs.
+Durch die sorgfältige Dekomposition in fachlich abgegrenzte Services, eine durchdachte Kommunikationsstrategie und robuste Überwachungsmechanismen wird eine Architektur geschaffen, die sowohl aktuelle als auch zukünftige Geschäftsanforderungen erfüllen kann.
+
+Die hybride Ansätze bei Kommunikation und Koordination ermöglichen es, die Vorteile verschiedener Patterns zu nutzen und gleichzeitig die Komplexität überschaubar zu halten.
+Das umfassende Monitoring- und Fehlerbehandlungskonzept gewährleistet hohe Verfügbarkeit und schnelle Problemidentifikation.
+
+Diese Architektur bildet eine solide Grundlage für die digitale Transformation des Automobilvertriebs und unterstützt innovative Services wie Over-The-Air-Updates und präventive Wartung.
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}

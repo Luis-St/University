@@ -1,0 +1,114 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../for_latex/preamble}
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Fragen zum Themengebiet 6}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Qualitatssicherung und Test}
+		
+		\vspace{12cm}
+		
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\section*{Frage 1}
+\textbf{Bloom'sche Taxonomie:} Verstehen/Anwenden
+
+Erklären Sie den Unterschied zwischen Qualitätssicherung (QA) und Qualitätskontrolle (QC).
+Geben Sie für jeden Bereich ein konkretes Beispiel aus der Softwareentwicklung an.
+
+\section*{Frage 2}
+\textbf{Bloom'sche Taxonomie:} Erinnern
+
+Nennen Sie die vier Teststufen und erklären Sie, welche Fehler in welcher Stufe typischerweise gefunden werden.
+
+\section*{Frage 3}
+\textbf{Bloom'sche Taxonomie:} Anwenden
+
+Ein Programm zur Notenberechnung akzeptiert Punktzahlen von 0--100 und wandelt diese in Noten um (1: 90--100, 2: 80--89, 3: 70--79, 4: 60--69, 5: 0--59).
+Definieren Sie die Äquivalenzklassen und wählen Sie geeignete Testfälle aus (sowohl gültige als auch ungültige).
+
+\section*{Frage 4}
+\textbf{Bloom'sche Taxonomie:} Anwenden
+
+Ergänzen Sie die Äquivalenzklassen aus Frage 5 mit einer Grenzwertanalyse.
+Welche zusätzlichen Testfälle würden Sie für die Grenze zwischen Note B und C (79/80 Punkte) definieren?
+
+\section*{Frage 5}
+\textbf{Bloom'sche Taxonomie:} Anwenden
+
+Entwerfen Sie für die gegebene Methode $public boolean isLeapYear(int year)$ drei Unit Tests unter Verwendung von Black-Box-Techniken.
+Die Methode soll true zurückgeben, wenn das Jahr ein Schaltjahr ist (teilbar durch 4, aber nicht durch 100, außer auch durch 400 teilbar).
+
+\section*{Frage 6}
+\textbf{Bloom'sche Taxonomie:} Erinnern
+
+Nennen Sie die drei Faktoren, die zu Softwarefehlern führen können, und geben Sie jeweils ein Beispiel an.
+
+\section*{Frage 7}
+\textbf{Bloom'sche Taxonomie:} Verstehen
+
+Was versteht man unter \("\)Fehlermaskierung\("\) und warum kann sie problematisch sein?
+
+\section*{Frage 8}
+\textbf{Bloom'sche Taxonomie:} Verstehen
+
+Warum ist die statische Prüfung eine wichtige Ergänzung zur dynamischen Prüfung?
+
+\section*{Frage 9}
+\textbf{Bloom'sche Taxonomie:} Verstehen
+
+Was bedeutet es, wenn ein Unit-Test \("\)selbstverifizierend\("\) ist?
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}

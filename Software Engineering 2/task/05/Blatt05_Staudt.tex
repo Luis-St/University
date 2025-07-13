@@ -1,0 +1,208 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tikz}
+
+\include{../../for_latex/preamble}
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 5}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Engineering 2}
+		
+		\vspace{12cm}
+		
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 1}}
+
+\section*{Fallstudie 1: Software Elektronische Patientenakte}
+
+\subsection*{Logische Sicht}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[width=0.7\textwidth]{./views/logic_view_1}
+\end{figure}
+\newpage
+
+\subsection*{Physische Sicht}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[width=0.7\textwidth]{./views/physical_view_1}
+\end{figure}
+\newpage
+
+\section*{Fallstudie 2: Software zur Generierung von Klausuren}
+
+\subsection*{Logische Sicht}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[width=0.7\textwidth]{./views/logic_view_2}
+\end{figure}
+\newpage
+
+\subsection*{Physische Sicht}
+\begin{figure}[!htbpf]
+	\centering
+	\includegraphics[width=0.7\textwidth]{./views/physical_view_2}
+\end{figure}
+\newpage
+
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 2}}
+Die wichtigsten Architekturaspekte für ein Softwareprodukt für Finanzunternehmen wären meiner Meinung nach die Softwarekompatibilität und die nichtfunktionalen Produkteigenschaften.
+\\
+Die Softwarekompatibilität ist entscheidend, da Finanzunternehmen oft komplexe Systemlandschaften mit Legacy-Systemen haben,
+die nahtlos integriert werden müssen, um Datenflüsse ohne Verluste zu gewährleisten.
+Die nichtfunktionalen Produkteigenschaften wie Sicherheit, Compliance und Zuverlässigkeit sind im Finanzsektor besonders wichtig,
+da sie strengen regulatorischen Anforderungen unterliegen und mit sensiblen Kundendaten arbeiten.
+Ein Produkt, das diese beiden Aspekte priorisiert, bietet Finanzunternehmen nicht nur die technische Integration,
+sondern auch die Gewissheit, dass es die hohen Branchenstandards für Datensicherheit und Betriebsstabilität erfüllt,
+was für die Akzeptanz und den Erfolg im Markt ausschlaggebend ist.
+
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 3}}
+
+\section*{Zentralisiertes Sicherheitsmodell}
+
+\subsection*{Vorteile}
+\begin{itemize}
+	\item Einfachere Verwaltung und Überwachung, da alle Sicherheitskontrollen an einem Ort implementiert werden.
+	\item Konsistente Durchsetzung von Sicherheitsrichtlinien und -standards.
+	\item Geringere Kosten für Sicherheitsinfrastruktur und Personal.
+	\item Vereinfachte Compliance-Nachweise und Audits.
+	\item Klare Verantwortlichkeiten und Zuständigkeiten.
+\end{itemize}
+
+
+\subsection*{Nachteile}
+\begin{itemize}
+	\item Single Point of Failure -- bei Kompromittierung sind alle Daten gefährdet.
+	\item Höheres Schadensausmaß bei erfolgreichen Angriffen.
+	\item Kann zu Leistungsengpässen führen, besonders bei geografisch verteilten Nutzern.
+	\item Begrenzte Skalierbarkeit bei wachsenden Datenmengen.
+	\item Potentiell höhere Latenz bei Datenzugriffen.
+\end{itemize}
+
+
+\section*{Verteiltes Sicherheitsmodell}
+
+\subsection*{Vorteile}
+\begin{itemize}
+	\item Höhere Ausfallsicherheit -- kein einzelner Fehlerpunkt.
+	\item Größere Skalierbarkeit für wachsende Datenmengen.
+	\item Bessere Performance durch lokale Datenzugriffe.
+	\item Geringeres Risiko eines vollständigen Datenverlusts.
+	\item Kann besser an lokale rechtliche Anforderungen angepasst werden.
+\end{itemize}
+
+\subsection*{Nachteile}
+\begin{itemize}
+	\item Komplexere Verwaltung und Überwachung mehrerer Sicherheitssysteme.
+	\item Schwierigere Durchsetzung einheitlicher Sicherheitsrichtlinien.
+	\item Höhere Kosten für verteilte Sicherheitsinfrastruktur.
+	\item Kompliziertere Compliance-Nachweise und Audits.
+	\item Größere Angriffsfläche durch mehrere potenzielle Einstiegspunkte.
+\end{itemize}
+
+
+{\let\cleardoublepage\relax \chapter*{Aufgabe 4}}
+
+\section*{Fallstudie 1: Software Elektronische Patientenakte}
+
+\begin{tabular}{|p{4cm}|p{11.5cm}|}
+	\hline
+	\textbf{Technologieaspekte} & \textbf{Architekturentscheidung Fallstudie Elektronische Patientenakte mit Begründung} \\
+	\hline
+	Datenbank & \textbf{Relationale SQL-Datenbank}.
+	Eine relationale Datenbank gewährleistet durch das ACID-Prinzip die Integrität der medizinischen Daten und bildet komplexe Beziehungen zwischen Patienten, Behandlungen und Zugriffsberechtigungen optimal ab.
+	Die ausgereiften Sicherheitsmechanismen und Auditmöglichkeiten erfüllen die regulatorischen Anforderungen im Gesundheitsbereich.
+	\\ \hline
+	Plattform & \textbf{Webplattform mit nativer mobiler App}.
+	Die Webplattform ermöglicht medizinischem Personal einen vollumfänglichen Zugriff an stationären Arbeitsplätzen, während die native App durch optimierte Bedienung und biometrische Authentifizierung sicheren mobilen Zugriff bietet.
+	Diese Kombination gewährleistet höchste Sicherheitsstandards bei gleichzeitiger universeller Verfügbarkeit für alle Nutzergruppen.
+	\\ \hline
+	Server & \textbf{Hybridlösung mit dedizierten Servern und spezialisierter Healthcare-Cloud}.
+	Dedizierte Server in deutschen Rechenzentren sichern sensible Kernfunktionen und gewährleisten die Einhaltung strengster Datenschutzanforderungen.
+	Die ergänzende Healthcare-Cloud (z.B.\ Azure oder AWS mit Gesundheitszertifizierungen) bietet Skalierbarkeit und Hochverfügbarkeit bei gleichzeitiger Einhaltung von Standards wie HIPAA.
+	\\ \hline
+	Open Source & \textbf{Selektiver Einsatz geprüfter Open-Source-Komponenten}.
+	Für die Patientenakte sollten nur sicherheitsgeprüfte Open-Source-Komponenten wie OpenEHR oder HAPI FHIR für Standardschnittstellen eingesetzt werden.
+	Sicherheitskritische Kernfunktionen sollten durch proprietäre, speziell entwickelte und zertifizierte Lösungen abgedeckt werden, um höchste Sicherheitsstandards zu garantieren.
+	\\ \hline
+\end{tabular}
+
+\section*{Fallstudie 2: Software zur Generierung von Klausuren}
+
+\begin{tabular}{|p{4cm}|p{11.5cm}|}
+	\hline
+	\textbf{Technologieaspekte} & \textbf{Architekturentscheidung Fallstudie Klausurgenerierung mit Begründung} \\
+	\hline
+	Datenbank & \textbf{Relationale SQL-Datenbank}.
+	Die klar strukturierten Aufgaben mit definierten Beziehungen zu Lehrveranstaltungen, Modulen und Musterlösungen passen optimal zum relationalen Modell.
+	SQLite eignet sich besonders gut, da es als eingebettete Datenbank keine separate Serverinstallation erfordert und die lokale Desktop-Installation erleichtert.
+	\\ \hline
+	Plattform & \textbf{Desktop-Anwendung mit optionaler Web-Oberfläche}.
+	Eine plattformübergreifende Desktop-Anwendung (z.B.\ mit Electron) erfüllt die explizite Anforderung der lokalen Installation und unterstützt den typischen Arbeitsablauf von Dozierenden.
+	Eine optionale Web-Oberfläche könnte für einfache Aufgaben wie das Durchsuchen der Aufgabensammlung ergänzend angeboten werden.
+	\\ \hline
+	Server & \textbf{Keine Cloud-Lösung, nur lokal}.
+	Die Software sollte vollständig offline funktionieren, da eine lokale Desktop-Installation gefordert ist und sensible Prüfungsdaten lokal geschützt werden müssen.
+	Für erweiterte Funktionen wie die Zusammenarbeit zwischen Dozierenden könnte optional ein lokaler Server im Hochschulnetzwerk ausreichen.
+	\\ \hline
+	Open Source & \textbf{Umfangreicher Einsatz von Open-Source-Komponenten}.
+	Bibliotheken für PDF-Generierung (wie PDFKit), Rich-Text-Editoren (wie TinyMCE) und UI-Frameworks beschleunigen die Entwicklung und verbessern die Wartbarkeit.
+	Da es sich nicht um ein hochsensibles System handelt, ist der umfassende Einsatz von Open-Source-Komponenten mit geringeren Sicherheitsbedenken verbunden.
+	\\ \hline
+\end{tabular}
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
