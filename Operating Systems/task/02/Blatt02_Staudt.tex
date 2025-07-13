@@ -1,0 +1,248 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\usepackage{amssymb}
+
+\title{Betriebssysteme Aufgabenblatt 2 - Lösungen}
+\author{Luis Staudt}
+\date{}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 2}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Betriebssysteme}
+		
+		\vspace{12cm}
+		
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\section*{c) maximale Anzahl an Threads}
+
+Auf zwei Systemen getestet:
+Beide liefen über eine halbe Stunde ohne Probleme.
+Ich vermute, dass es keine Begrenzung für die Anzahl der Threads gibt.
+Es könnte eine Limitierung durch die Systemressourcen geben.
+
+\section*{d) Programmabläufe mit unterschiedlichen Ergebnissen}
+
+\subsection*{Endergebnis: 0 und 1}
+
+In diesem Fall führt zuerst Thread X die ersten drei Zeilen seiner \texttt{tausche}-Methode auf Objekt a0 aus.
+Dadurch wird der Wert von a0 zu 1 und der Wert von a1 zu 0.
+Anschließend führt Thread Y die komplette \texttt{tausche}-Methode auf Objekt a1 aus.
+Hierbei wird der Wert von a1 wieder auf 1 gesetzt und der Wert von a0 auf 0.
+Am Ende haben wir also die ursprünglichen Werte.
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|l|c|c|c|c|}
+		\hline
+		\multicolumn{2}{|c|}{Zeilennr. Thread} & \multicolumn{2}{c|}{Objekt a0} & \multicolumn{2}{c|}{Objekt a1} \\
+		\hline
+		X in a0 & Y in a1 & wert & h & wert & h \\
+		\hline
+		1       & -       & 0    & 0 & 1    & - \\
+		2       & -       & 1    & 0 & 1    & - \\
+		3       & -       & 1    & 0 & 0    & - \\
+		-       & 1       & 1    & 0 & 0    & 0 \\
+		-       & 2       & 1    & 0 & 1    & 0 \\
+		-       & 3       & 0    & 0 & 1    & 0 \\
+		\hline
+	\end{tabular}
+	\caption{Thread-Ausführungsreihenfolge für Endergebnis: 0 und 1}
+\end{table}
+
+\subsection*{Endergebnis: 1 und 1}
+
+Bei dieser Ausführungsreihenfolge führt zuerst Thread Y Zeile 1 seiner \texttt{tausche}-Methode aus und speichert den Wert 1 von a1 in seiner lokalen Variable h.
+Dann führt Thread X alle drei Zeilen seiner \texttt{tausche}-Methode aus, wodurch a0 den Wert 1 erhält und a1 den Wert 0.
+Anschließend führt Thread Y die restlichen Zeilen 2 und 3 aus,
+wodurch a1 wieder Wert 1 erhält und a0 ebenfalls Wert 1 (aus der in Zeile 1 gespeicherten Variable h).
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|l|c|c|c|c|}
+		\hline
+		\multicolumn{2}{|c|}{Zeilennr. Thread} & \multicolumn{2}{c|}{Objekt a0} & \multicolumn{2}{c|}{Objekt a1} \\
+		\hline
+		X in a0 & Y in a1 & wert & h & wert & h \\
+		\hline
+		-       & 1       & 0    & - & 1    & 1 \\
+		1       & -       & 0    & 0 & 1    & 1 \\
+		2       & -       & 1    & 0 & 1    & 1 \\
+		3       & -       & 1    & 0 & 0    & 1 \\
+		-       & 2       & 1    & 0 & 1    & 1 \\
+		-       & 3       & 1    & 0 & 1    & 1 \\
+		\hline
+	\end{tabular}
+	\caption{Thread-Ausführungsreihenfolge für Endergebnis: 1 und 1}
+\end{table}
+
+\subsection*{Endergebnis: 1 und 0}
+
+Hier führt Thread X zuerst Zeile 1 seiner \texttt{tausche}-Methode aus und speichert den Wert 0 von a0 in seiner lokalen Variable h.
+Dann führt Thread Y alle drei Zeilen aus, wodurch a1 den Wert 0 erhält und a0 den Wert 1.
+Anschließend führt Thread X die restlichen Zeilen 2 und 3 aus, bestätigt den Wert 1 für a0 und setzt a1 auf 0.
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|l|c|c|c|c|}
+		\hline
+		\multicolumn{2}{|c|}{Zeilennr. Thread} & \multicolumn{2}{c|}{Objekt a0} & \multicolumn{2}{c|}{Objekt a1} \\
+		\hline
+		X in a0 & Y in a1 & wert & h & wert & h \\
+		\hline
+		1       & -       & 0    & 0 & 1    & - \\
+		-       & 1       & 0    & 0 & 1    & 1 \\
+		-       & 2       & 1    & 0 & 1    & 1 \\
+		-       & 3       & 1    & 0 & 0    & 1 \\
+		2       & -       & 1    & 0 & 0    & - \\
+		3       & -       & 1    & 0 & 0    & - \\
+		\hline
+	\end{tabular}
+	\caption{Thread-Ausführungsreihenfolge für Endergebnis: 1 und 0}
+\end{table}
+
+\subsection*{Endergebnis: 0 und 0}
+
+Bei dieser Ausführungsreihenfolge werden verschiedene Zeilen der \texttt{tausche}-Methode durch die Threads
+ausgeführt, wobei am Ende beide Objekte den Wert 0 haben.
+Thread Y führt seine Zeilen in einer bestimmten Reihenfolge aus, setzt a0 auf 1 und a1 auf 0.
+Anschließend führt Thread X Zeilen 2 und 3 aus, wobei hier besonders der Unterschied zum vorherigen Fall ist,
+dass a0 bereits vor Zeile 2 den Wert 0 besitzt und somit der Wert von a0 bei 0 bleibt.
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|l|l|c|c|c|c|}
+		\hline
+		\multicolumn{2}{|c|}{Zeilennr. Thread} & \multicolumn{2}{c|}{Objekt a0} & \multicolumn{2}{c|}{Objekt a1} \\
+		\hline
+		X in a0 & Y in a1 & wert & h & wert & h \\
+		\hline
+		1       & -       & 0    & 0 & 1    & - \\
+		-       & 1       & 0    & 0 & 1    & 1 \\
+		-       & 2       & 0    & 0 & 0    & 1 \\
+		-       & 3       & 1    & 0 & 0    & 1 \\
+		2       & -       & 0    & 0 & 0    & - \\
+		3       & -       & 0    & 0 & 0    & - \\
+		\hline
+	\end{tabular}
+	\caption{Thread-Ausführungsreihenfolge für Endergebnis: 0 und 0}
+\end{table}
+
+\section*{Änderung des Verhaltens mit privater Synchronisation}
+
+\begin{itemize}
+	\item Das Verhalten des Programms gegenüber I) ändert sich \textbf{nicht}.
+	\item Begründung: Jedes A-Objekt hat sein eigenes privates Lock-Objekt \texttt{o}.
+	\item Wenn Thread X auf \texttt{a0.tausche(a1)} zugreift, synchronisiert es auf das private Lock von \texttt{a0}.
+	\item Wenn Thread Y auf \texttt{a1.tausche(a0)} zugreift, synchronisiert es auf das private Lock von \texttt{a1}.
+	\item Da es sich um verschiedene Lock-Objekte handelt, können beide Threads immer noch parallel ausgeführt werden.
+	\item Die gleichen vier Ergebnisse wie in Teil I) sind weiterhin möglich.
+\end{itemize}
+
+Die private Synchronisation bewirkt lediglich, dass die \texttt{tausche}-Methode atomar in Bezug auf dasselbe Objekt ausgeführt wird.
+Da die beiden Threads jedoch auf unterschiedlichen Objekten operieren und somit unterschiedliche Locks verwenden, bleibt die Race-Condition zwischen den Threads bestehen.
+
+\section*{Änderung des Verhaltens mit statischer Synchronisation}
+
+\begin{itemize}
+	\item Mit einem statischen Lock-Objekt ändert sich das Verhalten grundlegend.
+	\item Da alle A-Objekte dasselbe Lock verwenden, kann zu jedem Zeitpunkt nur ein Thread in den synchronisierten Block eintreten.
+	\item Dies bedeutet:
+	\begin{itemize}
+		\item Die Methode \texttt{tausche} wird atomar ausgeführt
+		\item Es sind keine Verzahnungen von Threads mehr möglich
+		\item Nur zwei Ausführungsreihenfolgen sind noch möglich, die aber zum gleichen Endergebnis führen
+	\end{itemize}
+	\item Ergebnis in beiden Fällen: \texttt{a0.wert = 0, a1.wert = 1}
+	\begin{itemize}
+		\item Fall 1: Thread X führt vollständig aus, dann Thread Y
+		\item Fall 2: Thread Y führt vollständig aus, dann Thread X
+	\end{itemize}
+	\item In beiden Fällen tauschen sich die Werte erst komplett und dann wieder zurück.
+\end{itemize}
+
+Durch die Verwendung eines statischen Lock-Objekts wird ein globaler Synchronisationspunkt für alle Instanzen der Klasse A geschaffen.
+Dies verhindert jegliche verzahnte Ausführung der \texttt{tausche}-Methode und garantiert, dass immer nur ein Thread zu einem Zeitpunkt innerhalb des synchronisierten Blocks ist.
+Dadurch reduzieren sich die möglichen Endzustände auf nur einen Fall.
+
+\section*{Bewertung der unterschiedlichen Synchronisationsmethoden}
+
+\begin{itemize}
+	\item \textbf{Methode III (statisches Lock)} ist besser geeignet, weil:
+	\begin{itemize}
+		\item Sie verhindert alle möglichen Race Conditions
+		\item Sie ist einfacher zu verstehen
+		\item Sie vermeidet Deadlocks
+	\end{itemize}
+	\item \textbf{Methode IV (verschachtelte Locks)} hat ein kritisches Problem:
+	\begin{itemize}
+		\item Sie kann zu Deadlocks führen, wenn zwei Threads die Methode gleichzeitig mit vertauschten Argumenten aufrufen
+		\item Beispiel für Deadlock:
+		\begin{itemize}
+			\item Thread X ruft \texttt{a0.tausche(a1)} auf und erhält das Lock für \texttt{a0}
+			\item Thread Y ruft \texttt{a1.tausche(a0)} auf und erhält das Lock für \texttt{a1}
+			\item Thread X wartet auf das Lock für \texttt{a1} (das Y hält)
+			\item Thread Y wartet auf das Lock für \texttt{a0} (das X hält)
+			\item Beide Threads blockieren sich gegenseitig - klassischer Deadlock
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+Die Methode mit statischem Lock bietet den Vorteil der Einfachheit und Sicherheit, indem sie globale Synchronisation gewährleistet.
+Die verschachtelte Synchronisation in Methode IV führt zu einem klassischen Deadlock-Problem durch zyklische Abhängigkeiten, was in produktiven Umgebungen kritisch wäre und vermieden werden sollte.
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}

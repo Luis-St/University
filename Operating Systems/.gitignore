@@ -1,0 +1,28 @@
+# Obsidian
+.obsidian/workspace.json
+.obsidian/graph.json
+.obsidian/plugins/various-complements/histories.json
+.obsidian/
+
+# LaTeX
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz
+*.bcf
+*.out
+*.xml
+*.synctex(busy)
+*.bbl
+*.blg
+
+# Editor
+.vscode/
+.idea/
+out/
+*.bbl-SAVE-ERROR
+*.iml
+
+# Java
+*.class

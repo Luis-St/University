@@ -1,0 +1,135 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\usepackage{amssymb}
+
+\title{Betriebssysteme Aufgabenblatt 7 - Lösungen}
+\author{Luis Staudt}
+\date{}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 7}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Betriebssysteme}
+		
+		\vspace{12cm}
+		
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\section*{Aufgabe b)}
+
+\subsection*{I) Beide Reisebüros verkaufen Ticket 3}
+\begin{enumerate}
+	\item Ausgangszustand: \texttt{VerfuegbareTickets = 4}
+	\item Thread Reiseland: ruft \+texttt{TicketsVerfuegbar()} auf $\rightarrow$ \texttt{return true} (4 > 0)
+	\item Thread Happy Travel: ruft \texttt{TicketsVerfuegbar()} auf $\rightarrow$ \texttt{return true} (4 > 0)
+	\item Thread Reiseland: ruft \texttt{TicketVerkauf()} auf
+	\begin{itemize}
+		\item \texttt{nr = VerfuegbareTickets} $\rightarrow$ \texttt{nr = 4}
+		\item Context Switch zu Happy Travel
+	\end{itemize}
+	\item Thread Happy Travel: ruft \texttt{TicketVerkauf()} auf
+	\begin{itemize}
+		\item \texttt{nr = VerfuegbareTickets} $\rightarrow$ \texttt{nr = 4} (noch unverändert!)
+		\item \texttt{VerfuegbareTickets = 3}
+		\item \texttt{return 4}
+	\end{itemize}
+	\item Thread Reiseland: setzt Ausführung fort
+	\begin{itemize}
+		\item \texttt{VerfuegbareTickets = 3} (überschreibt den Wert von Happy Travel)
+		\item \texttt{return 4}
+	\end{itemize}
+	\item Beide Threads geben aus: "verkauft Ticket 4"
+	\item \texttt{VerfuegbareTickets} ist jetzt 3, aber beide haben Ticket 4 verkauft
+\end{enumerate}
+
+\subsection*{II) Verkauf von Ticket 0 trotz synchronized}
+\begin{enumerate}
+	\item Ausgangszustand: \texttt{VerfuegbareTickets = 1}
+	\item Thread Reiseland: ruft \texttt{synchronized TicketsVerfuegbar()} auf
+	\begin{itemize}
+		\item Erhält Monitor
+		\item \texttt{return true} (1 > 0)
+		\item Gibt Monitor frei
+	\end{itemize}
+	\item Thread Happy Travel: ruft \texttt{synchronized TicketsVerfuegbar()} auf
+	\begin{itemize}
+		\item Erhält Monitor
+		\item \texttt{return true} (1 > 0)
+		\item Gibt Monitor frei
+	\end{itemize}
+	\item Thread Reiseland: ruft \texttt{synchronized TicketVerkauf()} auf
+	\begin{itemize}
+		\item Erhält Monitor
+		\item \texttt{nr = 1}
+		\item \texttt{VerfuegbareTickets = 0}
+		\item \texttt{return 1}
+		\item Gibt Monitor frei
+	\end{itemize}
+	\item Thread Happy Travel: ruft \texttt{synchronized TicketVerkauf()} auf
+	\begin{itemize}
+		\item Erhält Monitor
+		\item \texttt{nr = 0} (aktueller Wert!)
+		\item \texttt{VerfuegbareTickets = -1}
+		\item \texttt{return 0}
+		\item Gibt Monitor frei
+	\end{itemize}
+	\item Ausgabe: \("\) Happy Travel verkauft Ticket \(0"\)
+\end{enumerate}
+
+Problem: Die Prüfung (TicketsVerfuegbar()) und die Aktion (TicketVerkauf()) sind zwar einzeln synchronisiert, aber nicht als atomare Einheit.
+Zwischen der Prüfung und dem Verkauf kann ein anderer Thread dazwischenkommen.
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}

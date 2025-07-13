@@ -1,0 +1,130 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\usepackage{amssymb}
+
+\title{Betriebssysteme Aufgabenblatt 5 - Lösungen}
+\author{Luis Staudt}
+\date{}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 5}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Betriebssysteme}
+		
+		\vspace{12cm}
+		
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\section*{Aufgabe a) - PipedInputStream und PipedOutputStream}
+
+\begin{center}
+	\begin{tabular}{|c|p{5cm}|p{4cm}|p{5cm}|}
+		\hline
+		\textbf{Programm-} & \textbf{Läuft das Programm} & \textbf{Wenn eine Exception} & \textbf{Wie ist das Verhalten} \\
+		\textbf{version} & \textbf{fehlerfrei zu Ende,} & \textbf{geworfen wird,} & \textbf{des Programms jeweils} \\
+		& \textbf{wird eine Exception} & \textbf{welche und mit} & \textbf{zu erklären?} \\
+		& \textbf{geworfen oder} & \textbf{welchem Text?} & \\
+		& \textbf{verklemmt das} & & \\
+		& \textbf{Programm?} & & \\
+		\hline
+		I) & Wird eine Exception geworfen & IOException: \("\)Write end dead\("\) & Thread B liest alle Bytes, aber ohne close() beendet Thread A, wodurch die Pipe ungültig wird \\
+		\hline
+		II) & Läuft fehlerfrei zu Ende & Keine & Thread B liest bis -1 (EOF nach close()), sauberes Beenden \\
+		\hline
+		III) & Läuft fehlerfrei zu Ende & Keine & Pipe-Buffer (1024 Bytes) ist groß genug \\
+		\hline
+		IV) & Programm verklemmt & Keine & Thread A blockiert bei write(), da Pipe-Buffer voll ist \\
+		\hline
+		V) & Wird eine Exception geworfen & IOException: \("\)Write end dead\("\) & Thread B liest alle 2048 Bytes, Exception erst nach Beenden von Thread A \\
+		\hline
+		VI) & Wird eine Exception geworfen & IOException: \("\)Read end dead\("\) & Thread B liest nur 1 Byte, Thread A kann Rest nicht schreiben \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\section*{Aufgabe b) - pop() und InterruptedException}
+
+\textbf{Antwort:}
+Die Schleife wird nie verlassen, weil:
+\begin{enumerate}
+	\item \texttt{pop()} wirft \texttt{InterruptedException}, wenn der Thread interrupted wird
+	\item Der leere \texttt{catch}-Block fängt die Exception, tut aber nichts
+	\item \texttt{InterruptedException} löscht automatisch das Interrupt-Flag
+	\item Daher bleibt \texttt{isInterrupted()} = \texttt{false}
+	\item Die Schleifenbedingung \texttt{!isInterrupted()} bleibt wahr $\Rightarrow$ Endlosschleife
+\end{enumerate}
+
+\textbf{Lösung:} Im \texttt{catch}-Block entweder:
+\begin{itemize}
+	\item \texttt{Thread.currentThread().interrupt()} aufrufen, um das Flag wieder zu setzen
+	\item oder die Schleife mit \texttt{break} verlassen
+\end{itemize}
+
+\section*{Aufgabe c) - Verarbeitungskette}
+
+\textbf{Implementierungshinweise:}
+\begin{itemize}
+	\item Die \texttt{Queue}-Klasse verwendet \texttt{synchronized}-Methoden mit \texttt{wait/notify} für Thread-Synchronisation
+	\item Die zufällige Reihenfolge in der \texttt{OutputQueue} entsteht durch:
+	\begin{itemize}
+		\item Unterschiedliche Sleep-Zeiten der Einspeiser (0-2 Sekunden)
+		\item Nicht-deterministische Thread-Scheduling des Betriebssystems
+	\end{itemize}
+	\item Nach dem Interrupt werden die \texttt{InputQueues} vollständig geleert
+	\item Das Programm beendet sich korrekt durch \texttt{join()} auf alle Threads
+\end{itemize}
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}

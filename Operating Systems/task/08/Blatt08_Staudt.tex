@@ -1,0 +1,126 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\usepackage{amssymb}
+
+\title{Betriebssysteme Aufgabenblatt 8 - Lösungen}
+\author{Luis Staudt}
+\date{}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 8}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Betriebssysteme}
+		
+		\vspace{12cm}
+		
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\section*{Aufgabe 1: Körner Zähler (KoernerZaehler)}
+
+\textbf{Frage 1.1: Wie erhält man die Körnerzahl der aktuellen Kachel?}
+$$\text{Antwort: } \texttt{gibTerritorium().gibKoerner(gibPosition())}$$
+
+\subsection*{Frage 1.2: Wie wird das Ergebnis aus einem Future-Objekt geholt?}
+$$\text{Antwort: } \texttt{future.get()}$$
+
+
+\section*{Aufgabe 2: Größte Körnerzahl (KoernerMaximal)}
+
+\subsection*{Frage 2.1 Hier fehlt ein Attribut zur Synchronisation der Sucher}
+$$\text{Antwort: } \texttt{private CountDownLatch latch;}$$
+
+\subsection*{Frage 2.2: Hier fehlt ein Parameter zur Synchronisation der Sucher}
+$$\text{Antwort: } \texttt{CountDownLatch latch}$$
+
+\subsection*{Frage 2.3: Warum ist die aktive Warteschleife schlecht?}
+$$\text{Antwort: Verschwendet CPU-Zyklen unnötig - } \texttt{CountDownLatch.await()}$$
+$$\text{ist effizienter und blockiert den Thread passiv.}$$
+
+
+\section*{Aufgabe 3: Körner Tauscher (KoernerTauscher)}
+
+\subsection*{Frage 3.1: Mit welcher Methode wird die Körnerzahl ausgetauscht?}
+$$\text{Antwort: } \texttt{austauscher.exchange(meineKoernerZahl)}$$
+
+\subsection*{Frage 3.2: Wie wird die neue Körnerzahl gesetzt?}
+$$\text{Antwort: } \texttt{gibTerritorium().setzeKoernerZahl(gibPosition(), andereKoernerZahl)}$$
+
+
+\section*{Aufgabe 4: Körner Esser (KoernerEsser)}
+
+\subsection*{Frage 4.1: Hier fehlt ein Parameter im Konstruktor - welcher?}
+$$\text{Antwort: } \texttt{CyclicBarrier barriere}$$
+
+\subsection*{Frage 4.2: Wieviele Threads müssen es sein? Warum dürfen es nicht weniger sein als die Zahl der Esser?}
+$$\text{Antwort: Mindestens so viele wie Esser. Grund: Alle Esser müssen}$$
+$$\text{gleichzeitig an der CyclicBarrier warten können, sonst Deadlock.}$$
+
+\subsection*{Frage 4.3: Bekommt jeder KoernerEsser seine eigene CyclicBarrier oder dieselbe?}
+$$\text{Antwort: Dieselbe - nur so können sie sich synchronisieren.}$$
+
+\subsection*{Frage 4.4: Mit welchem Wert muss die CyclicBarrier erzeugt werden?}
+$$\text{Antwort: Mit der Anzahl der Esser } (\texttt{zahlEsser})$$
+
+\subsection*{Frage 4.5: Hier fehlt ein Übergabeparameter - welcher?}
+$$\text{Antwort: } \texttt{CyclicBarrier barriere}$$
+
+\subsection*{Frage 4.6: Mit welcher Methode von Territorium kann man die Zahl der Körner um eins verringern?}
+$$\text{Antwort: } \texttt{dekrementiereKoerner(int[] position)}$$
+
+\subsection*{Frage 4.7: Wie kann man die CyclicBarrier verwenden, damit jeder Esser die ursprüngliche Zahl der Körner sieht?}
+$$\text{Antwort: } \texttt{barriere.await()} \text{ vor dem Lesen der Körnerzahl aufrufen}$$
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
