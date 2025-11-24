@@ -1,0 +1,473 @@
+{\let\cleardoublepage\relax \chapter*{Kategorie 3: Methodenfehler}}
+
+\section*{9. Aufruf nicht-statischer Methoden aus statischem Kontext}
+
+\subsection*{Beschreibung:}\\
+Genau wie bei Variablen können statische Methoden nicht direkt auf nicht-statische Methoden zugreifen, da diese zu einem Objekt gehören müssen.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: In main-Methode
+public class Test {
+    public void printMessage() {
+        System.out.println("Hello");
+    }
+    
+    public static void main(String[] args) {
+        printMessage();  // FEHLER: printMessage ist nicht static
+    }
+}
+
+// Beispiel 2: Von statischer Hilfsmethode
+public class Calculator {
+    public int add(int a, int b) {
+        return a + b;
+    }
+    
+    public static int calculate() {
+        return add(5, 3);  // FEHLER: add ist nicht static
+    }
+}
+
+// Beispiel 3: Getter-Methode
+public class Person {
+    private String name = "Max";
+    
+    public String getName() {
+        return name;
+    }
+    
+    public static void displayName() {
+        System.out.println(getName());  // FEHLER: getName ist nicht static
+    }
+}
+
+// Beispiel 4: Setter-Methode
+public class Counter {
+    private int count = 0;
+    
+    public void increment() {
+        count++;
+    }
+    
+    public static void resetAndIncrement() {
+        increment();  // FEHLER: increment ist nicht static
+    }
+}
+
+// Beispiel 5: Void-Methode aufrufen
+public class Helper {
+    public void doSomething() {
+        System.out.println("Doing...");
+    }
+    
+    public static void execute() {
+        doSomething();  // FEHLER: doSomething ist nicht static
+    }
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Gleiche Regel wie bei Variablen
+		\item Ohne \texttt{static} brauchst du ein Objekt
+		\item In \texttt{main}: schreibe \texttt{static} vor die Methode
+		\item Oder erstelle erst ein Objekt: \texttt{new Test().printMessage();}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{10. Falsche Anzahl von Parametern bei Methodenaufrufen}
+
+\subsection*{Beschreibung:}\\
+Die Anzahl der übergebenen Argumente muss exakt mit der Anzahl der deklarierten Parameter übereinstimmen (außer bei Varargs).
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: Zu wenige Parameter
+public static int add(int a, int b) {
+    return a + b;
+}
+// Aufruf:
+int result = add(5);  // FEHLER: 2 Parameter erwartet, nur 1 uebergeben
+
+// Beispiel 2: Zu viele Parameter
+public static void printName(String name) {
+    System.out.println(name);
+}
+// Aufruf:
+printName("Max", "Mustermann");  // FEHLER: 1 Parameter erwartet, 2 uebergeben
+
+// Beispiel 3: Keine Parameter erwartet
+public static void greet() {
+    System.out.println("Hello!");
+}
+// Aufruf:
+greet("World");  // FEHLER: 0 Parameter erwartet, 1 uebergeben
+
+// Beispiel 4: Drei Parameter, zwei uebergeben
+public static double calculate(int a, int b, int c) {
+    return (a + b) * c;
+}
+// Aufruf:
+double result = calculate(5, 10);  // FEHLER: 3 Parameter erwartet
+
+// Beispiel 5: Ein Parameter fehlt
+public static boolean isInRange(int value, int min, int max) {
+    return value >= min && value <= max;
+}
+// Aufruf:
+boolean check = isInRange(50, 0);  // FEHLER: 3 Parameter erwartet, 2 uebergeben
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Zähle die Werte in den Klammern bei der Methodendefinition
+		\item Gib beim Aufruf genauso viele Werte
+		\item Jeder Wert in der Definition braucht einen beim Aufruf
+		\item Fehlt einer? Java beschwert sich!
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{11. Falsche Parametertypen bei Methodenaufrufen}
+
+\subsection*{Beschreibung:}\\
+Die Typen der übergebenen Argumente müssen mit den Parametertypen der Methode übereinstimmen oder kompatibel sein.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: String statt int
+public static void printNumber(int num) {
+    System.out.println("Number: " + num);
+}
+// Aufruf:
+printNumber("42");  // FEHLER: String statt int
+
+// Beispiel 2: int statt boolean
+public static void setFlag(boolean flag) {
+    System.out.println("Flag: " + flag);
+}
+// Aufruf:
+setFlag(1);  // FEHLER: int statt boolean
+
+// Beispiel 3: double statt String
+public static void displayMessage(String message) {
+    System.out.println(message);
+}
+// Aufruf:
+displayMessage(3.14);  // FEHLER: double statt String
+
+// Beispiel 4: Array statt einzelner Wert
+public static int square(int x) {
+    return x * x;
+}
+// Aufruf:
+int[] numbers = {2, 3, 4};
+int result = square(numbers);  // FEHLER: Array statt int
+
+// Beispiel 5: Mehrere Parameter mit falschen Typen
+public static void register(String name, int age, boolean active) {
+    System.out.println(name + ", " + age + ", " + active);
+}
+// Aufruf:
+register(25, "Max", 1);  // FEHLER: alle Typen falsch
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Schau nach: will die Methode eine Zahl oder Text?
+		\item Zahlen in Anführungszeichen (\("42"\)) sind Text
+		\item true/false sind keine Zahlen (nicht 1 oder 0)
+		\item Die Typen müssen genau passen
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{12. Fehlende return-Anweisungen in Methoden mit Rückgabewert}
+
+\subsection*{Beschreibung:}\\
+Wenn eine Methode einen Rückgabetyp hat (nicht void), muss sie in jedem möglichen Ausführungspfad einen Wert zurückgeben.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: Komplett fehlendes return
+public static int getValue() {
+    int x = 5;
+    // FEHLER: kein return
+}
+
+// Beispiel 2: return nur in if, nicht in else
+public static int getNumber(boolean condition) {
+    if (condition) {
+        return 10;
+    }
+    // FEHLER: was wenn condition false ist?
+}
+
+// Beispiel 3: return nach unerreichbarem Code
+public static double calculate() {
+    if (true) {
+        return 3.14;
+    }
+    // Dieser Code ist unerreichbar, aber return fehlt formal
+}
+
+// Beispiel 4: return in Schleife, aber nicht ausserhalb
+public static String findName() {
+    for (int i = 0; i < 10; i++) {
+        if (i == 5) {
+            return "Found";
+        }
+    }
+    // FEHLER: was wenn die Schleife durchlaeuft ohne return?
+}
+
+// Beispiel 5: switch ohne default
+public static int getDays(int month) {
+    switch (month) {
+        case 1: return 31;
+        case 2: return 28;
+        // ...
+    }
+    // FEHLER: was bei ungueltigen month?
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Methode gibt was zurück? Dann brauchst du \texttt{return}
+		\item Jeder mögliche Weg muss zu einem \texttt{return} führen
+		\item Auch wenn nur vielleicht kein \texttt{return}: Fehler!
+		\item Am sichersten: \texttt{return} am Ende der Methode
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{13. Nicht alle Codepfade führen zu einem return}
+
+\subsection*{Beschreibung:}\\
+Der Compiler analysiert alle möglichen Wege durch den Code.
+Wenn auch nur ein Pfad ohne return existiert, gibt es einen Fehler.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: if ohne else
+public static int getResult(boolean flag) {
+    if (flag) {
+        return 1;
+    }
+    // FEHLER: wenn flag false ist, kein return
+}
+
+// Beispiel 2: mehrere if ohne finales return
+public static String getGrade(int points) {
+    if (points >= 90) {
+        return "A";
+    }
+    if (points >= 80) {
+        return "B";
+    }
+    // FEHLER: was bei points < 80?
+}
+
+// Beispiel 3: while-Schleife
+public static int findValue() {
+    int i = 0;
+    while (i < 10) {
+        if (i == 5) {
+            return i;
+        }
+        i++;
+    }
+    // FEHLER: was wenn 5 nie erreicht wird?
+}
+
+// Beispiel 4: try-catch ohne return ausserhalb
+public static int parseValue(String s) {
+    try {
+        return Integer.parseInt(s);
+    } catch (Exception e) {
+        System.out.println("Error");
+    }
+    // FEHLER: im catch-Block fehlt return
+}
+
+// Beispiel 5: Verschachtelte Bedingungen
+public static double compute(int a, int b) {
+    if (a > 0) {
+        if (b > 0) {
+            return a + b;
+        }
+    }
+    // FEHLER: mehrere Pfade ohne return
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Java prüft alle if/else Möglichkeiten
+		\item Mindestens ein Weg ohne \texttt{return}? Fehler!
+		\item Lösung: \texttt{return} ganz am Ende einfügen
+		\item Oder: zu jedem \texttt{if} ein \texttt{else} mit \texttt{return}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{14. Rückgabe eines falschen Datentyps}
+
+\subsection*{Beschreibung:}\\
+Der Typ des zurückgegebenen Wertes muss exakt mit dem deklarierten Rückgabetyp der Methode übereinstimmen (oder kompatibel sein).
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: int statt String
+public static String getNumber() {
+    return 42;  // FEHLER: int wird zurueckgegeben, String erwartet
+}
+
+// Beispiel 2: String statt int
+public static int getValue() {
+    return "123";  // FEHLER: String statt int
+}
+
+// Beispiel 3: double statt boolean
+public static boolean check() {
+    return 1.0;  // FEHLER: double statt boolean
+}
+
+// Beispiel 4: Array statt einzelner Wert
+public static int getFirst() {
+    int[] numbers = {1, 2, 3};
+    return numbers;  // FEHLER: Array statt int
+}
+
+// Beispiel 5: boolean statt int
+public static int calculate() {
+    return true;  // FEHLER: boolean statt int
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Schau dir den Typ vor dem Methodennamen an
+		\item Das Gleiche muss nach \texttt{return} kommen
+		\item \texttt{int} → gib eine Zahl zurück
+		\item \texttt{String} → gib Text zurück
+		\item \texttt{boolean} → gib true oder false zurück
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{15. Rückgabe eines Wertes in einer Methode ohne Rückgabe (void)}
+
+\subsection*{Beschreibung:}\\
+Methoden mit dem Rückgabetyp \texttt{void} dürfen keinen Wert zurückgeben. Sie können nur \texttt{return;} ohne Wert verwenden (optional).
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: String zurueckgeben
+public static void printMessage() {
+    return "Hello";  // FEHLER: void-Methode kann keinen Wert zurueckgeben
+}
+
+// Beispiel 2: int zurueckgeben
+public static void calculate() {
+    int result = 5 * 5;
+    return result;  // FEHLER: void kann keinen int zurueckgeben
+}
+
+// Beispiel 3: boolean zurueckgeben
+public static void checkValue(int x) {
+    if (x > 0) {
+        return true;  // FEHLER: void kann keinen boolean zurueckgeben
+    }
+}
+
+// Beispiel 4: double zurueckgeben
+public static void computeAverage(int a, int b) {
+    double avg = (a + b) / 2.0;
+    return avg;  // FEHLER: void kann keinen double zurueckgeben
+}
+
+// Beispiel 5: Object zurueckgeben
+public static void createObject() {
+    Object obj = new Object();
+    return obj;  // FEHLER: void kann kein Object zurueckgeben
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item \texttt{void} bedeutet: gibt nichts zurück
+		\item Kein \texttt{return} mit Wert erlaubt
+		\item Willst du was zurückgeben? Ändere \texttt{void} zu \texttt{int}, \texttt{String}, etc.
+		\item \texttt{return;} ohne Wert ist ok (zum Beenden)
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{16. Verschachtelte Methodendefinitionen}
+
+\subsection*{Beschreibung:}\\
+In Java können Methoden nicht innerhalb anderer Methoden definiert werden.
+Jede Methode muss direkt in einer Klasse definiert sein.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: Methode in Methode
+public static void outerMethod() {
+    public static void innerMethod() {  // FEHLER: nicht verschachtelt erlaubt
+        System.out.println("Inner");
+    }
+}
+
+// Beispiel 2: Hilfsmethode innerhalb
+public static int calculate(int x) {
+    public static int helper(int y) {  // FEHLER: nicht erlaubt
+        return y * 2;
+    }
+    return helper(x);
+}
+
+// Beispiel 3: main mit innerer Methode
+public static void main(String[] args) {
+    public static void greet() {  // FEHLER: nicht innerhalb main
+        System.out.println("Hello");
+    }
+    greet();
+}
+
+// Beispiel 4: Mehrfach verschachtelt
+public static void methodA() {
+    public static void methodB() {  // FEHLER
+        public static void methodC() {  // FEHLER
+            System.out.println("C");
+        }
+    }
+}
+
+// Beispiel 5: return-Typ-Methode verschachtelt
+public static int getValue() {
+    public static int compute() {  // FEHLER
+        return 42;
+    }
+    return compute();
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Methoden gehören in die Klasse, nicht in andere Methoden
+		\item Alle Methoden auf der gleichen Ebene schreiben
+		\item Einrückung hilft: Methoden auf gleicher Einrückung wie \texttt{main}
+		\item Jede Methode zwischen Klassen-\texttt{\{} und Klassen-\texttt{\}}
+	\end{itemize}
+\end{achtung}

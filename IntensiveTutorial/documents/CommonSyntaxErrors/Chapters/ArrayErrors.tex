@@ -1,0 +1,93 @@
+{\let\cleardoublepage\relax \chapter*{Kategorie 6: Array-Fehler}}
+
+\section*{21. Falsche Array-Deklaration}
+
+\subsection*{Beschreibung:}\\
+Die Größe eines Arrays wird bei der Deklaration nicht angegeben, sondern erst bei der Initialisierung.
+Die eckigen Klammern gehören zum Typ, nicht zur Variable.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: Groesse bei Deklaration
+int[5] numbers;  // FEHLER: Groesse nicht bei Deklaration
+
+// Korrekt waere:
+int[] numbers = new int[5];
+// oder
+int[] numbers;
+numbers = new int[5];
+
+// Beispiel 2: Klammern am falschen Ort
+int numbers[5];  // FEHLER: Groesse nicht erlaubt
+
+// Beispiel 3: Falsche Syntax mit String
+String[10] names;  // FEHLER: Groesse nicht bei Deklaration
+
+// Beispiel 4: Mehrere Dimensionen falsch
+int[3][4] matrix;  // FEHLER: Groessen nicht bei Deklaration
+
+// Beispiel 5: Boolean-Array
+boolean[20] flags;  // FEHLER: Groesse nicht hier
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Erst sagen WAS: \texttt{int[] numbers;}
+		\item Dann sagen WIE VIELE: \texttt{numbers = new int[5];}
+		\item Nie Zahlen in die \texttt{[]} bei der Deklaration
+		\item Die Zahl kommt später beim \texttt{new}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{22. Falsche Array-Initialisierung}
+
+\subsection*{Beschreibung:}\\
+Bei der Array-Initialisierung mit Werten darf keine Größe angegeben werden, wenn man die Werte in geschweiften Klammern auflistet.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: Groesse und Werte gleichzeitig
+int[] numbers = new int[3] {1, 2, 3};  // FEHLER: entweder Groesse oder Werte
+
+// Korrekt waere:
+int[] numbers = new int[3];  // Groesse ohne Werte
+// oder
+int[] numbers = {1, 2, 3};  // Werte ohne Groesse/new
+// oder
+int[] numbers = new int[] {1, 2, 3};  // new ohne Groesse
+
+// Beispiel 2: String-Array
+String[] names = new String[2] {"Max", "Anna"};  // FEHLER
+
+// Korrekt:
+String[] names = {"Max", "Anna"};
+
+// Beispiel 3: Double-Array
+double[] values = new double[4] {1.1, 2.2, 3.3, 4.4};  // FEHLER
+
+// Korrekt:
+double[] values = {1.1, 2.2, 3.3, 4.4};
+
+// Beispiel 4: Boolean-Array
+boolean[] flags = new boolean[3] {true, false, true};  // FEHLER
+
+// Korrekt:
+boolean[] flags = {true, false, true};
+
+// Beispiel 5: Char-Array
+char[] letters = new char[5] {'a', 'b', 'c', 'd', 'e'};  // FEHLER
+
+// Korrekt:
+char[] letters = {'a', 'b', 'c', 'd', 'e'};
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Entweder Größe ODER Werte angeben
+		\item Mit Werten: \texttt{\{1, 2, 3\}} - Java zählt selbst
+		\item Mit Größe: \texttt{new int[5]} - leer, füllst du später
+		\item Beides zusammen geht nicht!
+	\end{itemize}
+\end{achtung}

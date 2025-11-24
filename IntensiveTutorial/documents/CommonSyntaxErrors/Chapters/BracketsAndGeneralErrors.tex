@@ -1,0 +1,175 @@
+{\let\cleardoublepage\relax \chapter*{Kategorie 7: Klammer und Syntax-Fehler}}
+
+\section*{23. Fehlende geschweifte Klammern}
+
+\subsection*{Beschreibung:}\\
+Jede öffnende geschweifte Klammer \{ braucht eine schließende \}.
+Dies betrifft Klassen, Methoden, Schleifen und Bedingungen.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: Methode nicht geschlossen
+public class Test {
+    public static void main(String[] args) {
+        System.out.println("Hello");
+    // FEHLER: } fehlt fuer main
+    
+    public static void other() {
+        System.out.println("Other");
+    }
+}
+
+// Beispiel 2: if-Block nicht geschlossen
+public static void check(int x) {
+    if (x > 0) {
+        System.out.println("Positive");
+        // FEHLER: } fehlt fuer if
+}
+
+// Beispiel 3: Verschachtelte Bloecke
+public static void complex() {
+    for (int i = 0; i < 10; i++) {
+        if (i % 2 == 0) {
+            System.out.println(i);
+        // FEHLER: } fehlt fuer if
+    }
+}
+
+// Beispiel 4: Klasse nicht geschlossen
+public class MyClass {
+    private int value;
+    
+    public void setValue(int v) {
+        this.value = v;
+    }
+    // FEHLER: } fehlt fuer Klasse
+
+// Beispiel 5: while-Schleife
+public static void loop() {
+    int i = 0;
+    while (i < 5) {
+        System.out.println(i);
+        i++;
+        // FEHLER: } fehlt
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Jede \texttt{\{} braucht eine passende \texttt{\}}
+		\item Zähle die Klammern: gleich viele auf und zu?
+		\item Bei Verwirrung: jede Methode einzeln prüfen
+		\item IDEs zeigen oft an, wo eine \texttt{\}} fehlt
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{24. Fehlende Semikolons}
+
+\subsection*{Beschreibung:}\\
+Jede Anweisung (Statement) in Java muss mit einem Semikolon ; enden.
+Ausnahmen sind Klassen-, Methoden- und Block-Deklarationen.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: Variable ohne Semikolon
+public static void main(String[] args) {
+    int x = 5  // FEHLER: ; fehlt
+    System.out.println(x);
+}
+
+// Beispiel 2: Methodenaufruf
+public static void test() {
+    System.out.println("Hello")  // FEHLER: ; fehlt
+    System.out.println("World");
+}
+
+// Beispiel 3: Return-Statement
+public static int getValue() {
+    return 42  // FEHLER: ; fehlt
+}
+
+// Beispiel 4: Zuweisung
+public static void calculate() {
+    int a = 10;
+    int b = 20;
+    int sum = a + b  // FEHLER: ; fehlt
+    System.out.println(sum);
+}
+
+// Beispiel 5: Mehrere Anweisungen
+public static void demo() {
+    int x = 1  // FEHLER: ; fehlt
+    int y = 2  // FEHLER: ; fehlt
+    int z = x + y  // FEHLER: ; fehlt
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Fast jede Zeile mit Code braucht \texttt{;} am Ende
+		\item Ausnahme: \texttt{\{}, \texttt{\}}, \texttt{if}, \texttt{while} etc.
+		\item Nach \texttt{=} kommt erst der Wert, dann \texttt{;}
+		\item Vergiss nie das \texttt{;} am Zeilenende!
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{25. Fehlende runde Klammern}
+
+\subsection*{Beschreibung:}\\
+Kontrollstrukturen (if, while, for) und Methodenaufrufe benötigen runde Klammern.
+Die Bedingung oder Parameter müssen in ( ) stehen.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: if ohne Klammern
+public static void check(boolean flag) {
+    if flag {  // FEHLER: () fehlen
+        System.out.println("True");
+    }
+}
+
+// Korrekt:
+if (flag) {
+    System.out.println("True");
+}
+
+// Beispiel 2: while ohne Klammern
+public static void loop() {
+    int i = 0;
+    while i < 10 {  // FEHLER: () fehlen
+        i++;
+    }
+}
+
+// Beispiel 3: for-Schleife
+public static void iterate() {
+    for int i = 0; i < 5; i++ {  // FEHLER: () fehlen um gesamte for-Deklaration
+        System.out.println(i);
+    }
+}
+
+// Beispiel 4: Methodenaufruf
+public static void greet() {
+    System.out.println;  // FEHLER: () fehlen
+}
+
+// Beispiel 5: Verschachtelte Bedingung
+public static void complex(int x, int y) {
+    if x > 0 && y > 0 {  // FEHLER: () fehlen
+        System.out.println("Both positive");
+    }
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item \texttt{if}, \texttt{while}, \texttt{for}: Bedingung in \texttt{()} setzen
+		\item Methoden aufrufen: immer \texttt{()} dahinter
+		\item Auch ohne Parameter: \texttt{println()} nicht \texttt{println}
+		\item Beide Klammern nicht vergessen: \texttt{(} und \texttt{)}
+	\end{itemize}
+\end{achtung}

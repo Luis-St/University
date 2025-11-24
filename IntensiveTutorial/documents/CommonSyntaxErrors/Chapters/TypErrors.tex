@@ -1,0 +1,177 @@
+{\let\cleardoublepage\relax \chapter*{Kategorie 1: Typfehler}}
+
+\section*{1. Zuweisung falscher Datentypen}
+
+\subsection*{Beschreibung:}\\
+Bei der Zuweisung von Werten an Variablen muss der Datentyp des Wertes mit dem Datentyp der Variable kompatibel sein.
+Java ist eine streng typisierte Sprache und erlaubt keine automatische Konvertierung zwischen inkompatiblen Typen.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: int zu boolean
+boolean flag = 42;  // FEHLER: int kann nicht zu boolean werden
+
+// Beispiel 2: String zu int
+int number = "123";  // FEHLER: String ist kein int
+
+// Beispiel 3: double zu int ohne Cast
+int x = 3.14;  // FEHLER: double kann nicht ohne Cast zu int werden
+
+// Beispiel 4: char zu boolean
+boolean isTrue = 'A';  // FEHLER: char ist kein boolean
+
+// Beispiel 5: Array zu einzelnem Wert
+int value = new int[5];  // FEHLER: Array kann nicht zu int werden
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Links und rechts vom \texttt{=} müssen zusammenpassen
+		\item Zahlen (wie 42) sind keine Wahrheitswerte (true/false)
+		\item Text in Anführungszeichen ist immer ein String
+		\item Kommazahlen (3.14) passen nicht in ganze Zahlen (int)
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{2. Vergleich inkompatibler Typen}
+
+\subsection*{Beschreibung:}\\
+Beim Vergleich mit \texttt{==}, \texttt{!=}, \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=} müssen die Operanden kompatible Typen haben.
+Bei Objekten (wie String) sollte \texttt{.equals()} statt \texttt{==} verwendet werden.
+
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: String mit int vergleichen
+String text = "Hello";
+int number = 5;
+if (text == number) { }  // FEHLER: String und int sind inkompatibel
+
+// Beispiel 2: boolean mit int vergleichen
+boolean flag = true;
+if (flag == 1) { }  // FEHLER: boolean und int sind nicht vergleichbar
+
+// Beispiel 3: double mit String vergleichen
+double pi = 3.14;
+if (pi > "3") { }  // FEHLER: double kann nicht mit String verglichen werden
+
+// Beispiel 4: Array mit einzelnem Wert
+int[] numbers = {1, 2, 3};
+if (numbers == 1) { }  // FEHLER: Array kann nicht mit int verglichen werden
+
+// Beispiel 5: char mit String
+char c = 'A';
+String s = "A";
+if (c == s) { }  // FEHLER: char und String sind verschiedene Typen
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}[leftmargin=*]
+		\item Man kann nur gleiche Datentypen vergleichen
+		\item Zahlen mit Zahlen, Text mit Text
+		\item true/false nur mit true/false vergleichen
+		\item Bei Text: benutze \texttt{.equals()} statt \texttt{==}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{3. Verwendung von Operatoren mit falschen Typen}
+
+\subsection*{Beschreibung:}\\
+Arithmetische Operatoren (+, -, *, /, \%) funktionieren nur mit numerischen Typen.
+Logische Operatoren (\&\&, ||, !) nur mit boolean.
+Der +-Operator bei Strings ist eine Ausnahme für Konkatenation.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: boolean addieren
+boolean a = true;
+int result = a + 5;  // FEHLER: boolean kann nicht addiert werden
+
+// Beispiel 2: String subtrahieren
+String text = "Hello";
+String result = text - "ll";  // FEHLER: - funktioniert nicht mit Strings
+
+// Beispiel 3: int mit && verknuepfen
+int x = 5;
+int y = 10;
+if (x && y) { }  // FEHLER: && braucht boolean-Operanden
+
+// Beispiel 4: String multiplizieren
+String s = "abc";
+String result = s * 3;  // FEHLER: * funktioniert nicht mit Strings
+
+// Beispiel 5: boolean modulo
+boolean b1 = true;
+boolean b2 = false;
+boolean result = b1 % b2;  // FEHLER: % funktioniert nicht mit boolean
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}[leftmargin=*]
+		\item Rechnen (+, -, *, /) geht nur mit Zahlen
+		\item \texttt{\&\&} und \texttt{||} gehen nur mit true/false
+		\item Text kann man nur mit \texttt{+} zusammenfügen
+		\item true/false kann man nicht rechnen
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{4. Methodenaufrufe mit falschen Datentypen}
+
+\subsection*{Beschreibung:}\\
+Beim Aufruf einer Methode müssen die übergebenen Argumente mit den deklarierten Parametertypen übereinstimmen.
+Die Reihenfolge und Anzahl müssen ebenfalls passen.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: int-Methode mit double aufrufen
+public static boolean isEven(int number) {
+    return number % 2 == 0;
+}
+// Aufruf:
+double x = 4.5;
+boolean result = isEven(x);  // FEHLER: double passt nicht zu int
+
+// Beispiel 2: String-Methode mit int aufrufen
+public static void printMessage(String msg) {
+    System.out.println(msg);
+}
+// Aufruf:
+printMessage(42);  // FEHLER: int ist kein String
+
+// Beispiel 3: Mehrere Parameter in falscher Reihenfolge
+public static void display(String name, int age) {
+    System.out.println(name + " ist " + age);
+}
+// Aufruf:
+display(25, "Anna");  // FEHLER: Reihenfolge ist falsch
+
+// Beispiel 4: boolean statt int
+public static int multiply(int a, int b) {
+    return a * b;
+}
+// Aufruf:
+int result = multiply(5, true);  // FEHLER: boolean statt int
+
+// Beispiel 5: Array statt einzelner Wert
+public static void printNumber(int num) {
+    System.out.println(num);
+}
+// Aufruf:
+int[] numbers = {1, 2, 3};
+printNumber(numbers);  // FEHLER: Array statt int
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}[leftmargin=*]
+		\item Schau dir an, was die Methode erwartet
+		\item Die Werte müssen in der richtigen Reihenfolge sein
+		\item Wenn Methode \texttt{int} will, gib kein \texttt{String}
+		\item Kommazahlen sind nicht das gleiche wie ganze Zahlen
+	\end{itemize}
+\end{achtung}

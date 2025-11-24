@@ -1,0 +1,221 @@
+{\let\cleardoublepage\relax \chapter*{Kategorie 2: Variablen-Fehler}}
+
+\section*{5. Verwendung nicht deklarierter Variablen}
+
+\subsection*{Beschreibung:}\\
+Jede Variable muss deklariert werden, bevor sie verwendet wird.
+Java muss wissen, welcher Datentyp die Variable hat.
+
+
+\subsection*{Beispiele:}\\
+\begin{lstlisting}
+// Beispiel 1: Variable nie deklariert
+public static void main(String[] args) {
+    System.out.println(name);  // FEHLER: name wurde nie deklariert
+}
+
+// Beispiel 2: Tippfehler im Variablennamen
+int counter = 0;
+counter++;
+System.out.println(countr);  // FEHLER: Tippfehler (countr statt counter)
+
+// Beispiel 3: Variable ausserhalb des Scopes
+if (true) {
+    int localVar = 5;
+}
+System.out.println(localVar);  // FEHLER: localVar existiert hier nicht mehr
+
+// Beispiel 4: Falsche Gross-/Kleinschreibung
+int myValue = 10;
+System.out.println(MyValue);  // FEHLER: Java ist case-sensitive
+
+// Beispiel 5: Variable in falscher Reihenfolge verwendet
+System.out.println(result);  // FEHLER: result wird erst spaeter deklariert
+int result = 5;
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Erst \texttt{int x;} schreiben, dann \texttt{x} benutzen
+		\item Achte auf Schreibfehler im Namen
+		\item Groß- und Kleinbuchstaben machen einen Unterschied
+		\item Variable muss vorher im Code stehen
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{6. Verwendung nicht initialisierter Variablen}
+
+\subsection*{Beschreibung:}\\
+Lokale Variablen müssen initialisiert werden, bevor sie gelesen werden.
+Anders als Instanzvariablen erhalten lokale Variablen keinen Standardwert.
+
+\subsection*{Beispiele:}\\
+\begin{lstlisting}
+// Beispiel 1: Einfache nicht initialisierte Variable
+public static void main(String[] args) {
+    int x;
+    int y = x + 5;  // FEHLER: x wurde nicht initialisiert
+}
+
+// Beispiel 2: Bedingte Initialisierung
+int value;
+if (Math.random() > 0.5) {
+    value = 10;
+}
+System.out.println(value);  // FEHLER: value koennte uninitialisiert sein
+
+// Beispiel 3: Variable in Schleife
+int sum;
+for (int i = 0; i < 10; i++) {
+    sum += i;  // FEHLER: sum wurde nicht initialisiert
+}
+
+// Beispiel 4: String ohne Initialisierung
+String message;
+message = message.toUpperCase();  // FEHLER: message hat keinen Wert
+
+// Beispiel 5: Array-Element
+int[] numbers = new int[5];
+int first = numbers[0];  // OK: Arrays werden mit 0 initialisiert
+int standalone;
+int test = standalone;  // FEHLER: lokale Variable nicht initialisiert
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Schreibe \texttt{int x = 0;} statt nur \texttt{int x;}
+		\item Die Variable braucht einen Startwert
+		\item Java gibt dir keinen automatischen Wert
+		\item Bei if/else: beide Wege müssen einen Wert geben
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{7. Zugriff auf nicht-statische Variablen aus statischem Kontext}
+
+\subsection*{Beschreibung:}\\
+Statische Methoden (wie main) können nicht direkt auf nicht-statische (Instanz-) Variablen zugreifen, da diese zu einem Objekt gehören, das möglicherweise nicht existiert.
+
+\subsection*{Beispiele:}\\
+\begin{lstlisting}
+// Beispiel 1: Direkte Verwendung in main
+public class Test {
+    int instanceVar = 10;
+    
+    public static void main(String[] args) {
+        System.out.println(instanceVar);  // FEHLER: nicht-static in static
+    }
+}
+
+// Beispiel 2: In statischer Methode
+public class Calculator {
+    double result = 0;
+    
+    public static void reset() {
+        result = 0;  // FEHLER: result ist nicht static
+    }
+}
+
+// Beispiel 3: String-Variable
+public class Program {
+    String name = "Test";
+    
+    public static void printInfo() {
+        System.out.println(name);  // FEHLER: name ist nicht static
+    }
+}
+
+// Beispiel 4: Array-Variable
+public class Data {
+    int[] numbers = {1, 2, 3};
+    
+    public static void process() {
+        int first = numbers[0];  // FEHLER: numbers ist nicht static
+    }
+}
+
+// Beispiel 5: boolean-Variable
+public class App {
+    boolean isActive = true;
+    
+    public static void check() {
+        if (isActive) { }  // FEHLER: isActive ist nicht static
+    }
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item \texttt{static} bedeutet: gehört zur Klasse selbst
+		\item Ohne \texttt{static}: gehört zu einem einzelnen Objekt
+		\item In \texttt{main} kannst du nur \texttt{static} Sachen direkt benutzen
+		\item Lösung: Schreibe \texttt{static} vor die Variable
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{8. Zugriff auf lokale Variablen außerhalb ihres Gültigkeitsbereichs}
+
+\subsection*{Beschreibung:}\\
+Variablen, die in einem Block (z.B. if, while, for) deklariert werden, existieren nur innerhalb dieses Blocks.
+Nach der schließenden Klammer sind sie nicht mehr verfügbar.
+
+\subsection*{Beispiele:}\\
+\begin{lstlisting}
+// Beispiel 1: if-Block
+public static void main(String[] args) {
+    if (true) {
+        int x = 5;
+    }
+    System.out.println(x);  // FEHLER: x existiert hier nicht
+}
+
+// Beispiel 2: for-Schleife
+public static void main(String[] args) {
+    for (int i = 0; i < 10; i++) {
+        int sum = i * 2;
+    }
+    System.out.println(sum);  // FEHLER: sum existiert hier nicht
+}
+
+// Beispiel 3: while-Schleife
+public static void main(String[] args) {
+    while (true) {
+        String message = "Loop";
+        break;
+    }
+    System.out.println(message);  // FEHLER: message existiert hier nicht
+}
+
+// Beispiel 4: Verschachtelte Bloecke
+public static void main(String[] args) {
+    {
+        int temp = 100;
+    }
+    int value = temp;  // FEHLER: temp existiert hier nicht
+}
+
+// Beispiel 5: Switch-Case
+public static void main(String[] args) {
+    int choice = 1;
+    switch (choice) {
+        case 1:
+            String result = "One";
+            break;
+    }
+    System.out.println(result);  // FEHLER: result existiert hier nicht
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Variablen leben nur zwischen \texttt{\{} und \texttt{\}}
+		\item Nach der \texttt{\}} ist die Variable weg
+		\item Wenn du sie später brauchst: Schreibe sie vor die \texttt{\{}
+		\item Schleifenvariablen wie \texttt{i} existieren nur in der Schleife
+	\end{itemize}
+\end{achtung}

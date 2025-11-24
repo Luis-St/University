@@ -1,0 +1,151 @@
+{\let\cleardoublepage\relax \chapter*{Kategorie 5: Zugriffsmodifikator-Fehler}}
+
+\section*{19. Zugriff auf private Variablen von außen}
+
+\subsection*{Beschreibung:}\\
+Private Variablen und Methoden können nur innerhalb derselben Klasse verwendet werden.
+Von außen (andere Klassen) sind sie nicht sichtbar.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: Einfacher Zugriff von aussen
+class MyClass {
+    private int secret = 42;
+}
+
+public class Test {
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+        System.out.println(obj.secret);  // FEHLER: secret ist private
+    }
+}
+
+// Beispiel 2: Private String
+class Person {
+    private String password = "1234";
+}
+
+public class App {
+    public static void main(String[] args) {
+        Person p = new Person();
+        String pw = p.password;  // FEHLER: password ist private
+    }
+}
+
+// Beispiel 3: Private Methode
+class Calculator {
+    private int multiply(int a, int b) {
+        return a * b;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Calculator calc = new Calculator();
+        int result = calc.multiply(5, 3);  // FEHLER: multiply ist private
+    }
+}
+
+// Beispiel 4: Private Array
+class DataHolder {
+    private int[] data = {1, 2, 3};
+}
+
+public class Processor {
+    public static void main(String[] args) {
+        DataHolder holder = new DataHolder();
+        int first = holder.data[0];  // FEHLER: data ist private
+    }
+}
+
+// Beispiel 5: Aenderung von private Variable
+class Counter {
+    private int count = 0;
+}
+
+public class Program {
+    public static void main(String[] args) {
+        Counter c = new Counter();
+        c.count = 10;  // FEHLER: count ist private
+    }
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item \texttt{private} = nur in der eigenen Klasse nutzbar
+		\item Von außen nicht sichtbar
+		\item Lösung: Getter/Setter Methoden benutzen
+		\item Oder: \texttt{private} durch \texttt{public} ersetzen
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{20. Zugriff auf nicht-statische Elemente aus statischem Kontext}
+
+\subsection*{Beschreibung:}\\
+Dies ist ein Sonderfall von \#7 und \#9, aber so häufig, dass er nochmal erwähnt wird: Statische Methoden können nicht direkt auf Instanzvariablen oder -methoden zugreifen.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: main greift auf Instanzvariable zu
+public class Test {
+    int number = 10;
+    
+    public static void main(String[] args) {
+        System.out.println(number);  // FEHLER: number ist nicht static
+    }
+}
+
+// Beispiel 2: Static Methode ruft Instanzmethode auf
+public class Helper {
+    public void help() {
+        System.out.println("Helping...");
+    }
+    
+    public static void doWork() {
+        help();  // FEHLER: help ist nicht static
+    }
+}
+
+// Beispiel 3: String-Variable in main
+public class App {
+    String message = "Hello";
+    
+    public static void main(String[] args) {
+        System.out.println(message);  // FEHLER: message ist nicht static
+    }
+}
+
+// Beispiel 4: Instanzvariable in statischer Hilfsmethode
+public class Calculator {
+    double result = 0;
+    
+    public static void reset() {
+        result = 0;  // FEHLER: result ist nicht static
+    }
+    
+    public static void main(String[] args) {
+        reset();
+    }
+}
+
+// Beispiel 5: Array-Zugriff
+public class Data {
+    int[] values = {1, 2, 3, 4, 5};
+    
+    public static void printFirst() {
+        System.out.println(values[0]);  // FEHLER: values ist nicht static
+    }
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Ist in \texttt{main}? Dann nur \texttt{static} Sachen benutzen
+		\item Lösung: Schreibe \texttt{static} vor die Variable
+		\item Oder: Erstelle ein Objekt mit \texttt{new}
+		\item \texttt{main} ist immer static - häufigster Fehler!
+	\end{itemize}
+\end{achtung}

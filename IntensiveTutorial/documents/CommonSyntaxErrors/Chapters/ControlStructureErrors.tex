@@ -1,0 +1,98 @@
+{\let\cleardoublepage\relax \chapter*{Kategorie 4: Kontrollstruktur-Fehler}}
+
+\section*{17. Verwendung von nicht-boolean Ausdrücken in if-Bedingungen}
+
+\subsection*{Beschreibung:}\\
+Die Bedingung in einer if-Anweisung muss immer einen boolean-Wert (true oder false) ergeben.
+Zahlen oder andere Typen sind nicht erlaubt.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: int statt boolean
+int x = 5;
+if (x) {  // FEHLER: x ist int, nicht boolean
+    System.out.println("true");
+}
+
+// Beispiel 2: String-Bedingung
+String name = "Max";
+if (name) {  // FEHLER: String ist nicht boolean
+    System.out.println("Name exists");
+}
+
+// Beispiel 3: Zuweisung statt Vergleich
+int value = 10;
+if (value = 5) {  // FEHLER: = ist Zuweisung, nicht Vergleich (sollte == sein)
+    System.out.println("Five");
+}
+
+// Beispiel 4: Null-Wert
+Object obj = null;
+if (obj) {  // FEHLER: Object ist nicht boolean
+    System.out.println("Exists");
+}
+
+// Beispiel 5: Arithmetischer Ausdruck
+int a = 10, b = 20;
+if (a + b) {  // FEHLER: a + b ist int (30), nicht boolean
+    System.out.println("Sum");
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Nach \texttt{if} muss etwas mit true/false kommen
+		\item Schreibe \texttt{if (x > 0)} statt \texttt{if (x)}
+		\item Ein \texttt{=} setzt einen Wert, \texttt{==} vergleicht
+		\item Zahlen sind nicht automatisch true oder false
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+\section*{18. Verwendung von nicht-boolean Ausdrücken in while-Schleifen}
+
+\subsection*{Beschreibung:}\\
+Genau wie bei if-Anweisungen muss die Bedingung einer while-Schleife einen boolean-Wert ergeben.
+
+\subsection*{Beispiele:}
+\begin{lstlisting}
+// Beispiel 1: int statt boolean
+int count = 5;
+while (count) {  // FEHLER: count ist int, nicht boolean
+    System.out.println(count);
+    count--;
+}
+
+// Beispiel 2: Zahl als Bedingung
+while (10) {  // FEHLER: 10 ist kein boolean
+    System.out.println("Loop");
+}
+
+// Beispiel 3: String-Bedingung
+String text = "running";
+while (text) {  // FEHLER: String ist nicht boolean
+    System.out.println(text);
+}
+
+// Beispiel 4: Zuweisung statt Vergleich
+int x = 0;
+while (x = 5) {  // FEHLER: = statt == (und dann ist es auch noch int)
+    x++;
+}
+
+// Beispiel 5: Array als Bedingung
+int[] numbers = {1, 2, 3};
+while (numbers) {  // FEHLER: Array ist nicht boolean
+    System.out.println("Array");
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Gleiche Regel wie bei \texttt{if}
+		\item Schreibe \texttt{while (count > 0)} statt \texttt{while (count)}
+		\item \texttt{while (true)} für Endlosschleife ist richtig
+		\item Achte auf \texttt{=} (setzen) vs \texttt{==} (vergleichen)
+	\end{itemize}
+\end{achtung}
