@@ -1,0 +1,206 @@
+\documentclass[
+    fontsize=12pt,          % default font size 12pt
+    paper=a4,               % DIN A4 page format
+    numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+    listof=totoc,           % add list of figures, tables, etc. to ToC
+    listof=entryprefix,     % add entry name to figures, tables, etc.
+    listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+    bibliography=totoc,     % add bibliography to ToC but without a chapter number
+    parskip=half            % half line spacing between paragraphs
+    openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{amsmath}
+
+\include{../../for_latex/preamble}
+
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu.jpg}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 5}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Automaten und formale Sprachen Praktikum}
+
+		\vspace{12cm}
+
+		\begin{tabular}{ll}
+			% Teamname:       & SPInkompetent  \\\\
+			Teammitglieder: & Luis Staudt \\ & Dominik Meurer
+		\end{tabular}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+{\let\cleardoublepage\relax \chapter{}}
+
+$L(G)=\{ab,aba,abaa,abaaa,abaaaa,...\}$
+
+{\let\cleardoublepage\relax \chapter{}}
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|l|l|l|}
+    \hline
+        G & Zwischen & G' \\ \hline
+        $S \rightarrow aB$ & $B \rightarrow Sa$ & $B \rightarrow Sa$ \\ \hline
+        $B \rightarrow bA$ & $A \rightarrow Bb$ & $A \rightarrow Bb$ \\ \hline
+        $A \rightarrow aA$ & $A \rightarrow Aa$ & $A \rightarrow Aa$ \\ \hline
+        $A\rightarrow \epsilon$ & $X \rightarrow A$ & ~ \\ \hline
+        ~ & ~ & $X \rightarrow Bb$ \\ \hline
+        ~ & ~ & $X \rightarrow Aa$ \\ \hline
+        ~ & ~ & $S \rightarrow \epsilon$ \\ \hline
+    \end{tabular}
+\end{table}
+
+{\let\cleardoublepage\relax \chapter{}}
+
+Als regulärer Ausdruck: $a*b+$
+
+Dann ist $L(G)=\{b,ab,aab,aaab,bb,bbb,abb,abbb,aabb,...\}$
+
+{\let\cleardoublepage\relax \chapter{}}
+
+Weil $S \rightarrow aa$ nur Terminale hat.
+
+$P=\{S\rightarrow aB, B\rightarrow aC, C\rightarrow \epsilon, S \rightarrow Sab\}$
+
+{\let\cleardoublepage\relax \chapter{}}
+
+$P=\{S\rightarrow aA, S\rightarrow bA, A\rightarrow aB, A\rightarrow bB, B\rightarrow aC, B\rightarrow bC, C\rightarrow \epsilon, C\rightarrow aA, C\rightarrow bA\}$
+
+{\let\cleardoublepage\relax \chapter{}}
+
+{\let\cleardoublepage\relax \section{}}
+
+$P=\{S\rightarrow aA, A\rightarrow aB, A\rightarrow bB, B\rightarrow bB, B\rightarrow aC, C\rightarrow bB, C\rightarrow aC, C\rightarrow \epsilon\}$
+
+{\let\cleardoublepage\relax \section{}}
+
+$P=\{S\rightarrow aA, A\rightarrow bB, B\rightarrow aC, C\rightarrow aA, C\rightarrow \epsilon\}$
+
+{\let\cleardoublepage\relax \chapter{}}
+
+$P=\{S\rightarrow (S), S\rightarrow SS, S\rightarrow \epsilon\}$
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{./images/Task05_7.png}
+\end{figure}
+
+{\let\cleardoublepage\relax \chapter{}}
+
+\begin{align*}
+    P=\{\\
+    ex &::= (ex) | ex op ex | str | num,\\
+    op &::= + | - | * | /,\\
+    str &::= \{char\},\\
+    num &::= 0 | numA \{ numB \},\\
+    numA &::= 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9,\\
+    numB &::= 0 |numA,\\
+    char &::= a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z,\\
+    \}\\
+\end{align*}
+
+{\let\cleardoublepage\relax \chapter{}}
+
+{\let\cleardoublepage\relax \section{}}
+
+\begin{itemize}
+	\item $ba$
+	\item $ab$
+	\item $baba$
+	\item $abab$
+	\item $abba$
+	\item $baab$
+\end{itemize}
+
+{\let\cleardoublepage\relax \section{}}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.4\textwidth]{./images/Task05_9_2_1.png}
+    \caption{Automat baabbbaa}
+    \label{fig:baabbbaa}
+\end{figure}
+
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.4\textwidth]{./images/9_2_2.png}
+    \caption{Automat ababaabb}
+    \label{fig:ababaabb}
+\end{figure}
+
+{\let\cleardoublepage\relax \section{}}
+
+
+$S \rightarrow bA$\\
+$S \rightarrow aB$
+
+$A \rightarrow a$\\
+$A \rightarrow aS$\\
+$A \rightarrow bAA$
+
+$B \rightarrow b$\\
+$B \rightarrow bS$\\
+$B \rightarrow aBB$
+
+S
+aB
+aaBB
+aabB
+aabaBB
+aababB
+aababb
+
+S
+aB
+aaBB
+aaBb
+aabSb
+aabaBb
+aababb
+
+{\let\cleardoublepage\relax \section{}}
+
+Es erzeugt nur wörter mit gleich vielen a wie b.
+
+
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}

@@ -1,0 +1,379 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\include{../../for_latex/preamble}
+
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu.jpg}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 6}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Automaten und formale Sprachen Praktikum}
+		
+		\vspace{12cm}
+		
+		\begin{tabular}{ll}
+			% Teamname:       & SPInkompetent  \\\\
+			Teammitglieder: & Luis Staudt \\ & Dominik Meurer
+		\end{tabular}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+{\let\cleardoublepage\relax \chapter{}}
+
+{\let\cleardoublepage\relax \section{}}
+
+% funktion, um Q auf N abzubilden
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|l|l|l|l|l|l|l|}
+    \hline
+        \textbf{} & \textbf{0} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{...} \\ \hline
+        \textbf{0} & 0 & 1 & 3 & 6 & 10 & ~ \\ \hline
+        \textbf{1} & 2 & 4 & 7 & 11 & 16 & ~ \\ \hline
+        \textbf{2} & 5 & 8 & 12 & 17 & 23 & ~ \\ \hline
+        \textbf{3} & 9 & 13 & 18 & 24 & 31 & ~ \\ \hline
+        \textbf{4} & 14 & 19 & 25 & 32 & 39 & ~ \\ \hline
+        \textbf{5} & 20 & 26 & 33 & 40 & 47 & ~ \\ \hline
+        \textbf{6} & 27 & 34 & 41 & 48 & 55 & ~ \\ \hline
+        \textbf{...} & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+    \end{tabular}
+\end{table}
+
+Horizontale $0$ Zeile
+
+$f_0(n)=\frac{n(n+1)}{2}$
+
+{\let\cleardoublepage\relax \subsection{Gesamte Funktion}}
+
+\begin{align*}
+	f(n,m)=\frac{(n+m)(n+m+1)}{2}+m
+\end{align*}
+
+{\let\cleardoublepage\relax \section{}}
+
+
+Es kann wie ein Zahlensystem mit 3 Zeichen gesehen werden, das in das Dezimalsystem übersetzt wird.
+
+\begin{align*}
+	a &:= 1\\
+	b &:= 2\\
+	c &:= 3\\
+	\Sigma^* &= c_n*3^n + c_{n-1}*3^{n-1} + ... + c_1*3^1 + c_0*3^0\\
+	aaabbbaaac &= 1*3^9 + 1*3^8 + 1*3^7 + 2*3^6 + 2*3^5 + 2*3^4 + 1*3^3 + 1*3^2 + 1*3^1 + 3*3^0\\
+	&= 19683 + 6561 + 2187 + 1458 + 486 + 162 + 27 + 9 + 3 + 3\\
+	&= 30579
+\end{align*}
+
+\begin{align*}
+	\Sigma^* &\rightarrow \mathbb{N}\\
+	a &\rightarrow 1\\
+	b &\rightarrow 2\\
+	c &\rightarrow 3\\
+	aa &\rightarrow 4\\
+	ab &\rightarrow 5\\
+	ac &\rightarrow 6\\
+	ba &\rightarrow 7\\
+	\end{align*}
+
+{\let\cleardoublepage\relax \section{}}
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+    \hline
+        ~ & 0 & 1 & 2 & 3 & 4 & ... & ~ & ~ \\ \hline
+        0 & $f_0(0)$ & $f_0(1)$ & $f_0(2)$ & $f_0(3)$ & $f_0(4)$ & ~ & ~ & gerade is 0 \\ \hline
+        1 & $f_1(0)$ & $f_1(1)$ & $f_1(2)$ & $f_1(3)$ & $f_1(4)$ & ~ & ~ & ungerade ist 0 \\ \hline
+        2 & $f_2(0)$ & $f_2(1)$ & $f_2(2)$ & $f_2(3)$ & $f_2(4)$ & ~ & ~ & durch 5 teilbar ist 0 \\ \hline
+        3 & $f_3(0)$ & $f_3(1)$ & $f_3(2)$ & $f_3(3)$ & $f_3(4)$ & ~ & ~ & ... \\ \hline
+        4 & $f_4(0)$ & $f_4(1)$ & $f_4(2)$ & $f_4(3)$ & $f_4(4)$ & ~ & ~ & ~ \\ \hline
+        5 & $f_5(0)$ & $f_5(1)$ & $f_5(2)$ & $f_5(3)$ & $f_5(4)$ & ~ & ~ & ~ \\ \hline
+        6 & $f_6(0)$ & $f_6(1)$ & $f_6(2)$ & $f_6(3)$ & $f_6(4)$ & ~ & ~ & ~ \\ \hline
+        ... & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        $g$ & $f_0(0)+1$ & $f_1(1)+1$ & $f_2(2)+1$ & $f_3(3)+1$ & $f_4(4)+1$ & ~ & ~ & hier gilt $1+1 = 0$ \\ \hline
+    \end{tabular}
+\end{table}
+
+die funktion $g$ ist per definition nicht oben enthalten. Daher kann die Tabelle nicht vollständig sein.
+Aus dem Wiederspruch folgt, dass die Menge aller Funktionen nicht abzählbar ist.
+
+{\let\cleardoublepage\relax \chapter{}}
+
+{\let\cleardoublepage\relax \section{}}
+
+\begin{lstlisting}[caption=Inkrementieren (A \= 5)]
+whilenot iszero(A) do # Setzt A auf 0
+	pred(A);
+od;
+
+# Inkrementiert A auf 5
+succ(A);
+succ(A);
+succ(A);
+succ(A);
+succ(A);
+\end{lstlisting}
+
+{\let\cleardoublepage\relax \section{}}
+
+\begin{lstlisting}[caption=Addition (A + B)]
+whilenot iszero(B) do # Dekrementiert B auf 0 und A hoch (A = A + B)
+	succ(A);
+	pred(B);
+od;
+\end{lstlisting}
+
+{\let\cleardoublepage\relax \section{}}
+
+\begin{lstlisting}[caption=Kopieren (A nach B)]
+whilenot iszero(C) do # Setzt C auf 0
+	pred(C);
+od;
+
+whilenot iszero(A) do # Addiert A auf B und kopiert A nach C
+	succ(B);
+	pred(A);
+	succ(C);
+od;
+
+whilenot iszero(C) do # Restauriert A aus C
+	pred(C);
+	succ(A);
+od;
+\end{lstlisting}
+
+{\let\cleardoublepage\relax \section{}}
+
+\begin{lstlisting}[caption=Signum-(Vorzeichen-)Test]
+whilenot iszero(B) do # Setzt B auf 0
+	pred(B);
+od;
+
+whilenot iszero(A) do # Dekrementiert A auf 0, B ist nach jedem Schritt 1
+	pred(A);
+	pred(B);
+	succ(B);
+od;
+\end{lstlisting}
+
+{\let\cleardoublepage\relax \section{}}
+
+\begin{lstlisting}[caption=Vergleichstest (A > B)]
+whilenot iszero(C) do # Setzt C auf 0
+	pred(C);
+od;
+
+whilenot iszero(B) do # Dekrementiert B auf 0 und dekrementiert A
+	pred(A);
+	pred(B);
+od;
+
+whilenot iszero(A) do # Dekrementiert A auf 0, C ist nach jedem Schritt 1
+	pred(A);
+	pred(C);
+	succ(C);
+od;
+\end{lstlisting}
+
+{\let\cleardoublepage\relax \chapter{}}
+
+{\let\cleardoublepage\relax \section{}}
+
+\begin{lstlisting}[caption=Subtraktion (A - B)]
+whilenot iszero(B) do # Dekrementiert B auf 0 und dekrementiert A (A = A - B)
+	pred(A);
+	pred(B);
+od;
+\end{lstlisting}
+
+{\let\cleardoublepage\relax \section{}}
+
+\begin{lstlisting}[caption=Multiplikation (A * B)]
+whilenot iszero(C) do # Setzt C auf 0
+	pred(C);
+od;
+
+whilenot iszero(B) do # Dekrementiert B auf 0 und addiert A zu C in jedem Schritt
+	whilenot iszero(A) do # Addiert A zu C und inkrementiert Temp
+		succ(C);
+		pred(A);
+		succ(Temp);
+	od;
+	
+	# A ist hier 0
+ 
+	whilenot iszero(Temp) do # Restauriert A aus Temp
+		succ(A);
+		pred(Temp);
+	od;
+
+	pred(B); # B wird um 1 dekrementiert nach jedem Schritt
+od;
+\end{lstlisting}
+
+\newpage
+
+{\let\cleardoublepage\relax \section{}}
+
+{\let\cleardoublepage\relax \subsection{}}
+
+\begin{lstlisting}[caption=Testen auf Gleicheit]
+whilenot iszero(Temp) do # Setzt Temp auf 0
+	pred(Temp);
+od;
+
+succ(Temp); # Temp auf 1 setzen
+whilenot iszero(Temp) do # Dekrementiert A und B, bis eines von beiden 0 ist
+	if iszero(A) then
+		pred(Temp);
+	fi;
+	if iszero(B) then
+		pred(Temp);
+	fi;
+	
+	pred(A);
+	pred(B);
+od;
+
+# Wenn A und B 0 sind, dann sind sie gleich
+if iszero(A) then
+	if iszero(B) then
+		succ(C);
+	fi;
+fi;
+\end{lstlisting}
+
+\newpage
+
+{\let\cleardoublepage\relax \subsection{}}
+
+\begin{lstlisting}[caption=Testen auf Gleicheit -> Komplex aber erster Versuch]
+copy(R1, R2) # Kopiert R1 nach R2
+	whilenot iszero(R_Copy) do # Setzt R_Copy auf 0
+		pred(R_Copy);
+	od;
+	
+	whilenot iszero(R1) do # Kopiert R1 nach R2 und R_Copy
+		succ(R2);
+		pred(R1);
+		succ(R_Copy);
+	od;
+	
+	whilenot iszero(R_Copy) do # Restauriert R1 aus R_Copy
+		pred(R_Copy);
+		succ(R1);
+	od;
+
+whilenot iszero(C) do
+	pred(C);
+od;
+
+copy(A, A_Copy);
+copy(B, B_Copy);
+
+whilenot iszero(A) do # Dekrementiert A auf 0 (A wird 0, B unbekannt)
+	pred(A);
+	pred(B);
+od;
+
+whilenot iszero(B_Copy) do # Dekrementiert B auf 0 (A unbekannt, B_Copy wird 0)
+	pred(B_Copy);
+	pred(A_Copy);
+od;
+
+# Wenn A und B_Copy 0 sind, dann sind A und B gleich
+if iszero(B) then
+	if iszero(A_Copy) then
+		succ(C);
+	fi;
+fi;
+\end{lstlisting}
+
+\newpage
+
+{\let\cleardoublepage\relax \section{}}
+
+\begin{lstlisting}[caption=Abstand]
+whilenot iszero(Temp) do # Setzt Temp auf 0
+	pred(Temp);
+od;
+
+succ(Temp); # Setzt Temp auf 1
+whilenot iszero(Temp) do # Dekrementiert A und B, bis eines von beiden 0 ist
+		if iszero(A) then # Temp wird 0, da A 0 ist
+		pred(Temp);
+	fi;
+	if iszero(B) then # Temp wird 0, da B 0 ist
+		pred(Temp);
+	fi;
+	
+	pred(A);
+	pred(B);
+od;
+
+if iszero(A) then # Wenn A 0 ist, dann ist B der Abstand
+	whilenot iszero(B) do # Dekrementiert B und C, bis B 0 ist
+		pred(B);
+		succ(C);
+	od;
+else # Wenn B 0 ist, dann ist A der Abstand
+	whilenot iszero(A) do # Dekrementiert A und C, bis A 0 ist
+		pred(A);
+		succ(C);
+	od;
+fi;
+\end{lstlisting}
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}

@@ -1,0 +1,198 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu.jpg}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 1}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Automaten und formale Sprachen Praktikum}
+		
+		\vspace{12cm}
+		
+		\begin{tabular}{ll}
+			% Teamname:       & SPInkompetent  \\\\
+			Teammitglieder: & Luis Staudt \\ & Dominik Meurer
+		\end{tabular}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+{\let\cleardoublepage\relax \chapter{Wortmengen durch Aufzählen aller Element}}
+
+\begin{enumerate}
+	\item $\{a,0\}^{*}_{1} = \{a;0\}$
+	\item $\{a,0\}^{*}_{2} = \{aa;a0;0a;00\}$
+	\item $\{a,b,c\}^{+}_{3} = \\\{aaa;aab;aac;aba;abb;abc;aca;acb;acc;\\baa;bab;bac;bba;bbb;bbc;bcb;bcc;\\caa;cab;cac;cba;cbb;cca;ccb;ccc\}$
+	\item $\{a\}^{*} = \{a;aa;aaa;aaaa;...\}$
+	\item $\{b\}^{*} = \{b;bb;bbb;bbbb;...\}$
+	\item $\{a,b\}^{*} = \{\epsilon ;a;b;aa;bb;ab;ba;aab;...\}$
+\end{enumerate}
+
+{\let\cleardoublepage\relax \chapter{Richtig oder falsch?}}
+
+\begin{enumerate}
+	\item $\{a\}^{*} \cup \{b\}^{*} = \{a,b\}^{*}$ Das ist falsch. Links wäre es $\{a,aa,...,b,bb,...\}$ und rechts  $\{a,b,aa,ab,ba,bb,...\}$
+	\item $\{a\}^{*} \cup \{b\}^{*} \subseteq \{a,b\}^{*}$ Das ist richtig, da auch jedes $e \in \{a,aa,...,b,bb,...\}$ auch in $\{a,b,aa,ab,ba,bb,...\}$ vorkommt.
+	\item $\{a\}^{*} \cap \{b\}^{*} \cap \{c\}^{*} = \{\}$ Das stimmt nicht, die richtige Lösung wäre $\{\epsilon\}$
+	\item $\{a,b\}^{*} \cap \{b,c\}^{*} = \{b\}^{*}$ Das stimmt, da nur diese Elemente übrig bleiben.
+\end{enumerate}
+
+{\let\cleardoublepage\relax \chapter{Behauptungen überprüfen}}
+
+\begin{enumerate}
+	\item Nein, gilt nicht für $v=`abbbb`$, $w=`aaa`$
+	\item Nein, gilt nicht für $v=`aab`$, $w=`abb`$
+	\item Ja, die Wörter werden aneinander gehängt, und somit die Länge um die
+	entsprechende Zahl erhöht.
+	\item Ja, macht nur Sinn. Wenn $`aa`$ ein Teilwort von $`aaa`$ ist und das wiederum
+	von $`aaab`$, dann muss $`aa`$ auch ein Teilwort von $`aaab`$ sein.
+	\item Nein, denn $(ab)^4 = abababab$.
+	\item Ja, wenn $u$ mehr `a` hat, dann wäre es kein Teilwort.
+	\item Ja, da sie beide echte Teilwörter oder gleich sind. Da sie nicht beide
+	gleichzeitig echte Teilwörter von einander sein können, müssen sie gleich sein.
+	\item Ja, wenn das Wort $\epsilon$. Das ist das neutrale Element.
+	\item Ja, in ihrer Vorlesung hieß es, die Operation sei assoziativ.
+	\item Nein, bei $v=`a`$ und $u=`b`$ wäre das Ergebnis $ab = ba$, was nicht stimmt.
+\end{enumerate}
+
+{\let\cleardoublepage\relax \chapter{Programmieraufgabe}}
+
+\begin{figure}[h]
+	\includegraphics[width=13cm]{./tests.png}
+	\caption{Screenshot Testprotokoll}
+\end{figure}
+
+Unten gibts noch den Code dazu:
+
+\begin{lstlisting}[language=java, caption=Implementierung]
+package task1;
+
+import java.util.Objects;
+
+public class WortImpl implements Wort {
+	
+	private final String internal;
+	
+	public WortImpl(char[] internal) {
+		this.internal = new String(internal);
+	}
+	
+	public WortImpl(String internal) {
+		this.internal = internal;
+	}
+	
+	@Override
+	public char position(int k) {
+		if (k <= 0) {
+			throw new IllegalArgumentException("Index must not be greater than 0");
+		}
+		if (k > this.internal.length()) {
+			throw new IndexOutOfBoundsException("Index must not be greater than the length of the word");
+		}
+		return this.internal.charAt(k - 1);
+	}
+	
+	@Override
+	public int laenge() {
+		return this.internal.length();
+	}
+	
+	@Override
+	public Wort concat(Wort w) {
+		return new WortImpl(this.internal + w.toString());
+	}
+	
+	@Override
+	public int anzahl(char c) {
+		return (int) this.internal.chars().filter(ch -> ch == c).count();
+	}
+	
+	@Override
+	public Wort tausche(char c1, char c2) {
+		return new WortImpl(this.internal.replace(c1, c2));
+	}
+	
+	@Override
+	public int istTeilwortVon(Wort w) {
+		return this.internal.indexOf(w.toString()) + 1;
+	}
+	
+	@Override
+	public Wort teilwort(int start, int laenge) {
+		return new WortImpl(this.internal.substring(start - 1, start - 1 + laenge));
+	}
+	
+	@Override
+	public Wort ersetze(Wort w1, Wort w2) {
+		return new WortImpl(this.internal.replace(w1.toString(), w2.toString()));
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof WortImpl wort)) return false;
+		
+		return this.internal.equals(wort.internal);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.internal);
+	}
+	
+	@Override
+	public String toString() {
+		return this.internal;
+	}
+}
+\end{lstlisting}
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}

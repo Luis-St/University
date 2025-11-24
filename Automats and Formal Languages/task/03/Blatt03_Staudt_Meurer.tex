@@ -1,0 +1,194 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu.jpg}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 3}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Automaten und formale Sprachen Praktikum}
+		
+		\vspace{12cm}
+		
+		\begin{tabular}{ll}
+			% Teamname:       & SPInkompetent  \\\\
+			Teammitglieder: & Luis Staudt \\ & Dominik Meurer
+		\end{tabular}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+{\let\cleardoublepage\relax \chapter{}}
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./images/Task03_01(2).png}
+	\label{graph:Task03_01}
+\end{figure}
+
+{\let\cleardoublepage\relax \chapter{}}
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./images/Task03_02(1).png}
+	\label{graph:Task03_02}
+\end{figure}
+
+{\let\cleardoublepage\relax \chapter{}}
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./images/Task03_03(1).png}
+	\label{graph:Task03_03}
+\end{figure}
+
+{\let\cleardoublepage\relax \chapter{}}
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./images/Task03_04(1).png}
+	\label{graph:Task03_04}
+\end{figure}
+
+{\let\cleardoublepage\relax \chapter{}}
+
+
+\section{}
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./images/Task03_05A(1).png}
+	\label{graph:Task03_05}
+\end{figure}
+
+
+\section{}
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./images/Task03_05B(2).png}
+	\label{graph:Task03_05}
+\end{figure}
+
+\newpage
+
+
+\section{}
+
+\begin{figure}[!htbp]
+	\centering
+	\vspace{-20px}
+	\includegraphics[width=0.8\textwidth]{./images/Task03_05C(1).png}
+	\label{graph:Task03_05}
+\end{figure}
+
+{\let\cleardoublepage\relax \chapter{}}
+
+\begin{figure}[!htbp]
+	\centering
+	\vspace{-20px}
+	\includegraphics[width=0.8\textwidth]{./images/Task03_06(2).png}
+	\label{graph:Task03_05}
+\end{figure}
+
+$(ac+(c*b|c*ba))*$
+
+\newpage
+
+{\let\cleardoublepage\relax \chapter{}}
+
+\begin{enumerate}
+	\item $10*$
+	\item $a(a|b)+a$
+	\item $(aba)+$
+	\item $(00|11|(01|10)(00|11)*(01|10))*$
+	\item Mehrere
+	\begin{enumerate}
+		\item $(a|b|c)*abc$
+		\item $(a|(b|c)*a)(a?|c(b|c)*a)*b((a|b)(b|c)*a(a?|c(b|c)*a)*b)*c$
+		\item $((a|(b|c)*a)(a?|c(b|c)*a)*b|(a|(b|c)*a)(a?|c(b|c)*a)*b((a|b)\\(b|c)*a(a?|c(b|c)*a)*b)*|(a|(b|c)*a)(a?|c(b|c)*a)*b((a|b)(b|c)*a(a?|c(b|c)*a)\\*b)*((a|b)(b|c)*a|(a|b)(b|c)*a(a?|c(b|c)*a)+)|(a|(b|c)*a)(a?|c(b|c)*a)+\\|a|(b|c)*a|(a|(b|c)*a)(a?|c(b|c)*a)*b((a|b)(b|c)*a(a?|c(b|c)*a)*b)*((a\\|b)(b|c)*a(a?|c(b|c)*a)*(c|c(b|c)*)|(a|b)(b|c)*|a|b)|(b|c)\\*|(a|(b|c)*a)(a?|c(b|c)*a)*(c|c(b|c)*))$
+	\end{enumerate}
+\end{enumerate}
+
+\newpage
+
+{\let\cleardoublepage\relax \chapter{}}
+
+\begin{figure}[!htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{./images/regex.png}
+	\label{graph:Task03_07}
+\end{figure}
+
+
+{\let\cleardoublepage\relax \chapter{}}
+
+\begin{itemize}
+	\item $aa$
+	\item $abbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbba$
+	\item $aaba$
+	\item $ababababababababababababababababababababa$
+	\item $abbbbbbbbbbbbbbbbbbbababababababababababa$
+	\item $b$
+	\item $baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$
+\end{itemize}
+
+$(b|(ab*a(b+a+)*))a*$
+	
+	{\let\cleardoublepage\relax
+
+
+\chapter{}}
+
+Es wird nur die leere Sprache akzeptiert.
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}

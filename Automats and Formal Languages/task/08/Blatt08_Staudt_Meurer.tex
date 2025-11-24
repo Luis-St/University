@@ -1,0 +1,257 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+% ############################################################################
+% WIE MACH ICH DAS HIER?
+% 
+% 1. Schreibe im "titlepage" Abschnitt den Titel in das element mit "\fontsize{22}{22}"
+% 2. Aus obsidian raus kopieren mit "Copy to LaTeX"
+% 3. Zwischen "CONTENT STARTS HERE" und "CONTENT ENDS HERE" den Inhalt einfügen
+% 4. Sections anpassen. Damit man ne gescheite Chapter > Section > Subsection Struktur hat
+% 5. Leere Seite nach Titelseite am Anfang mit {\let\cleardoublepage\relax \chapter{Erstes Kapitel}} verhindern
+%
+% TABELLEN
+% Müssen extra gemacht werden, da obsidian das nicht unterstützt
+% Kann ich nur empfehlen: https://tableconvert.com/markdown-to-latex
+%
+% BILDER
+% Muss man vermutlich auch extra machen, hab ich aber noch nicht probiert
+% ############################################################################
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu.jpg}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 8}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Automaten und formale Sprachen Praktikum}
+		
+		\vspace{12cm}
+		
+		\begin{tabular}{ll}
+			% Teamname:       & SPInkompetent  \\\\
+			Teammitglieder: & Luis Staudt \\ & Dominik Meurer
+		\end{tabular}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+{\let\cleardoublepage\relax \chapter{}}
+
+\section{Multiplikation}
+
+Basisfall: $\text{mult}(1, n) = n$\\
+Rekursionsfall: $\text{mult}(m + 1, n) = \text{mult}(m, n) + n$
+
+\section{Differenz}
+
+Basisfall: $\text{diff}(m, 0) = m$\\
+Rekursionsfall: $\text{diff}(m, n + 1) = \text{diff}(m, n) - 1$
+
+\section{Absolute Differenz}
+
+Rekursionsfall:  $\text{absdiff}(m, n) = \text{diff}(m, n) + \text{diff}(n,m)$
+
+\section{Ist ungerade}
+
+Basisfall: $\text{isOdd}(0) = 0$\\
+Rekursionsfall: $\text{isOdd}(n + 1) = 1 - \text{isOdd}(n)$
+
+\section{minimum}
+
+\subsection{Verwendet sign()}
+
+$$
+\text{sign}(n) = \begin{cases*}
+	1 & n > 0 \\
+	0 & n = 0
+\end{cases*}
+$$
+\\
+Basisfall: $\text{sign}(0) = 0$\\
+Rekursionsfall: $\text{sign}(n + 1) = (\text{sign}(n) - 1) + 1$
+
+\subsection{Lösung}
+
+Rekursionsfall: $\text{min}(m, n) = \text{sign}(\text{diff}(m, n)) * n + \text{sign}(\text{diff}(n,m)) * m$
+
+\chapter{}
+
+\begin{lstlisting}[language=java]
+public class Ackermann {
+  public static int ack(int x, int y){
+    if (x == 0) {
+      return y + 1;
+    } else if (y == 0) {
+      return ack(x - 1, 1);
+    } else {
+      return ack(x - 1, ack(x, y - 1));
+    }
+  }
+
+  public static void main(String[] args){
+    System.out.println(ack(3,2));
+    System.out.println(ack(3,3));
+    System.out.println(ack(4,1));
+  }
+}
+\end{lstlisting}
+
+\newpage
+{\let\cleardoublepage\relax \chapter{}}
+
+\section{$f(m, n) = (9 \ominus m^2) \times (n^2 \ominus 4)$}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+		\hline
+		m | n & 0 & 1 & 2 & 3 & 4 & .. \\
+		\hline
+		0 & 9 * 0 = 0 & 9 * 0 = 0 & 9 * 0 = 0 & 9 * 2 = 2 & 9 * 4 = 36 & .. \\
+		\hline
+		1 & 8 * 0 = 0 & 8 * 0 = 0 & 8 * 0 = 0 & 8 * 2 = 18 & 8 * 4 = 32 & .. \\
+		\hline
+		2 & 5 * 0 = 0 & 5 * 0 = 0 & 5 * 0 = 0 & 5 * 2 = 10 & 5 * 4 = 20 & .. \\
+		\hline
+		3 & 0 * 0 = 0 & 0 * 0 = 0 & 0 * 0 = 0 & 0 * 2 = 0 & 0 * 4 = 0 & .. \\
+		\hline
+		.. & .. & .. & .. & .. & .. & .. \\
+		\hline
+	\end{tabular}
+\end{table}
+$f(m, n)$ is null für $\{0 <= n <= 2\}$\\
+daher:\\
+$$
+\mu f(n) = \begin{cases*}
+	0 & für 0 <= n <= 2 \\
+	3 & sonst
+\end{cases*}
+$$
+
+\section{$f(k, m, n) = (m \ominus k) + (n \ominus k)$}
+
+$f(k, m, n) = 0$, wenn:
+\begin{enumerate}
+	\item $k >= m$
+	\item $k >= n$
+\end{enumerate}
+somit ist $f(k, m, n) = 0$, wenn $k >= \text{max}(m, n)$\\
+daher:\\
+$\mu f(m, n) = \text{max}(m, n)$
+
+\newpage
+\section{$f(m, n) = \text{absdiff}(m, n)$}
+
+
+\begin{table}[!ht]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c|c|}
+		\hline
+		m | n & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\
+		\hline
+		0 & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\
+		\hline
+		1 & 1 & 0 & 1 & 2 & 3 & 4 & 5 \\
+		\hline
+		2 & 2 & 1 & 0 & 1 & 2 & 3 & 4 \\
+		\hline
+		3 & 3 & 2 & 1 & 0 & 1 & 2 & 3 \\
+		\hline
+		4 & 4 & 3 & 2 & 1 & 0 & 1 & 2 \\
+		\hline
+		5 & 5 & 4 & 3 & 2 & 1 & 0 & 1 \\
+		\hline
+		6 & 6 & 5 & 4 & 3 & 2 & 1 & 0 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+$f(m, n) = 0$, wenn $n = m$\\
+daher:\\
+$\mu f(n) = n$
+
+\newpage
+
+{\let\cleardoublepage\relax \chapter{}}
+
+\section{$\mu f(n) = 3 \times n$}
+
+$f(n, m) = \text{absdiff}(n \times 3, m)$
+
+\begin{table}[!ht]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c|c|}
+		\hline
+		m | n & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\
+		\hline
+		0 & 0 & 3 & 6 & 9 & 12 & 15 & 18 \\
+		\hline
+		1 & 1 & 2 & 5 & 8 & 11 & 14 & 17 \\
+		\hline
+		2 & 2 & 1 & 4 & 7 & 10 & 13 & 16 \\
+		\hline
+		3 & 3 & 0 & 3 & 6 & 9 & 12 & 15 \\
+		\hline
+		4 & 4 & 1 & 2 & 5 & 8 & 11 & 14 \\
+		\hline
+		5 & 5 & 2 & 1 & 4 & 7 & 10 & 13 \\
+		\hline
+		6 & 6 & 3 & 0 & 3 & 6 & 9 & 12 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\section{$\mu f(n) = \{0 \text{ für } 0 <= n <= 3 \text{ sonst } \bot\}$}
+
+$f(m, n) = (n^2 \ominus 6)$
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+		\hline
+		m | n & 0 & 1 & 2 & 3 & 4 & .. \\
+		\hline
+		0 & 0 & 0 & 0 & 3 & 6 & .. \\
+		\hline
+		1 & 0 & 0 & 0 & 3 & 6 & .. \\
+		\hline
+		2 & 0 & 0 & 0 & 3 & 6 & .. \\
+		\hline
+		3 & 0 & 0 & 0 & 3 & 6 & .. \\
+		\hline
+		.. & .. & .. & .. & .. & .. & .. \\
+		\hline
+	\end{tabular}
+\end{table}
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
