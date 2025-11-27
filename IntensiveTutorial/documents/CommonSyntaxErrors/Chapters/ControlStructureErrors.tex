@@ -1,6 +1,15 @@
-{\let\cleardoublepage\relax \chapter*{Kategorie 4: Kontrollstruktur-Fehler}}
+\begingroup
+\let\cleardoublepage\relax
+
+
+\chapter*{Kategorie 4: Kontrollstruktur-Fehler}
+\label{ch:kategorie-4:-kontrollstruktur-fehler}
+addcontentsline{toc}{chapter}{Kategorie 4: Kontrollstruktur-Fehler}
+\endgroup
+
 
 \section*{17. Verwendung von nicht-boolean Ausdrücken in if-Bedingungen}
+\addcontentsline{toc}{section}{17. Verwendung von nicht-boolean Ausdrücken in if-Bedingungen}
 
 \subsection*{Beschreibung:}\\
 Die Bedingung in einer if-Anweisung muss immer einen boolean-Wert (true oder false) ergeben.
@@ -50,7 +59,10 @@ if (a + b) {  // FEHLER: a + b ist int (30), nicht boolean
 
 % ============================================================
 \newpage
+
+
 \section*{18. Verwendung von nicht-boolean Ausdrücken in while-Schleifen}
+\addcontentsline{toc}{section}{18. Verwendung von nicht-boolean Ausdrücken in while-Schleifen}
 
 \subsection*{Beschreibung:}\\
 Genau wie bei if-Anweisungen muss die Bedingung einer while-Schleife einen boolean-Wert ergeben.

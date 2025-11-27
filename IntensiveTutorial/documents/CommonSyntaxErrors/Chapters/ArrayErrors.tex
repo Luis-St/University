@@ -1,6 +1,15 @@
-{\let\cleardoublepage\relax \chapter*{Kategorie 6: Array-Fehler}}
+\begingroup
+\let\cleardoublepage\relax
+
+
+\chapter*{Kategorie 6: Array-Fehler}
+\label{ch:kategorie-6:-array-fehler}
+\addcontentsline{toc}{chapter}{Kategorie 6: Array-Fehler}
+\endgroup
+
 
 \section*{21. Falsche Array-Deklaration}
+\addcontentsline{toc}{section}{21. Falsche Array-Deklaration}
 
 \subsection*{Beschreibung:}\\
 Die Größe eines Arrays wird bei der Deklaration nicht angegeben, sondern erst bei der Initialisierung.
@@ -41,7 +50,10 @@ boolean[20] flags;  // FEHLER: Groesse nicht hier
 
 % ============================================================
 \newpage
+
+
 \section*{22. Falsche Array-Initialisierung}
+\addcontentsline{toc}{section}{22. Falsche Array-Initialisierung}
 
 \subsection*{Beschreibung:}\\
 Bei der Array-Initialisierung mit Werten darf keine Größe angegeben werden, wenn man die Werte in geschweiften Klammern auflistet.

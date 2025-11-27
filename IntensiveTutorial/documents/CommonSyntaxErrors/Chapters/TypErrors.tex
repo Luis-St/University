@@ -1,6 +1,15 @@
-{\let\cleardoublepage\relax \chapter*{Kategorie 1: Typfehler}}
+\begingroup
+\let\cleardoublepage\relax
+
+
+\chapter*{Kategorie 1: Typfehler}
+\label{ch:kategorie-1:-typfehler}
+\addcontentsline{toc}{chapter}{Kategorie 1: Typfehler}
+\endgroup
+
 
 \section*{1. Zuweisung falscher Datentypen}
+\addcontentsline{toc}{section}{1. Zuweisung falscher Datentypen}
 
 \subsection*{Beschreibung:}\\
 Bei der Zuweisung von Werten an Variablen muss der Datentyp des Wertes mit dem Datentyp der Variable kompatibel sein.
@@ -35,12 +44,14 @@ int value = new int[5];  // FEHLER: Array kann nicht zu int werden
 
 % ============================================================
 \newpage
+
+
 \section*{2. Vergleich inkompatibler Typen}
+\addcontentsline{toc}{section}{2. Vergleich inkompatibler Typen}
 
 \subsection*{Beschreibung:}\\
 Beim Vergleich mit \texttt{==}, \texttt{!=}, \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=} müssen die Operanden kompatible Typen haben.
 Bei Objekten (wie String) sollte \texttt{.equals()} statt \texttt{==} verwendet werden.
-
 
 \subsection*{Beispiele:}
 \begin{lstlisting}
@@ -78,7 +89,10 @@ if (c == s) { }  // FEHLER: char und String sind verschiedene Typen
 
 % ============================================================
 \newpage
+
+
 \section*{3. Verwendung von Operatoren mit falschen Typen}
+\addcontentsline{toc}{section}{3. Verwendung von Operatoren mit falschen Typen}
 
 \subsection*{Beschreibung:}\\
 Arithmetische Operatoren (+, -, *, /, \%) funktionieren nur mit numerischen Typen.
@@ -121,7 +135,10 @@ boolean result = b1 % b2;  // FEHLER: % funktioniert nicht mit boolean
 
 % ============================================================
 \newpage
+
+
 \section*{4. Methodenaufrufe mit falschen Datentypen}
+\addcontentsline{toc}{section}{4. Methodenaufrufe mit falschen Datentypen}
 
 \subsection*{Beschreibung:}\\
 Beim Aufruf einer Methode müssen die übergebenen Argumente mit den deklarierten Parametertypen übereinstimmen.

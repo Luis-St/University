@@ -1,11 +1,19 @@
-{\let\cleardoublepage\relax \chapter*{Kategorie 2: Variablen-Fehler}}
+\begingroup
+\let\cleardoublepage\relax
+
+
+\chapter*{Kategorie 2: Variablen-Fehler}
+\label{ch:kategorie-2:-variablen-fehler}
+\addcontentsline{toc}{chapter}{Kategorie 2: Variablen-Fehler}
+\endgroup
+
 
 \section*{5. Verwendung nicht deklarierter Variablen}
+\addcontentsline{toc}{section}{5. Verwendung nicht deklarierter Variablen}
 
 \subsection*{Beschreibung:}\\
 Jede Variable muss deklariert werden, bevor sie verwendet wird.
 Java muss wissen, welcher Datentyp die Variable hat.
-
 
 \subsection*{Beispiele:}\\
 \begin{lstlisting}
@@ -45,7 +53,10 @@ int result = 5;
 
 % ============================================================
 \newpage
+
+
 \section*{6. Verwendung nicht initialisierter Variablen}
+\addcontentsline{toc}{section}{6. Verwendung nicht initialisierter Variablen}
 
 \subsection*{Beschreibung:}\\
 Lokale Variablen müssen initialisiert werden, bevor sie gelesen werden.
@@ -94,7 +105,10 @@ int test = standalone;  // FEHLER: lokale Variable nicht initialisiert
 
 % ============================================================
 \newpage
+
+
 \section*{7. Zugriff auf nicht-statische Variablen aus statischem Kontext}
+\addcontentsline{toc}{section}{7. Zugriff auf nicht-statische Variablen aus statischem Kontext}
 
 \subsection*{Beschreibung:}\\
 Statische Methoden (wie main) können nicht direkt auf nicht-statische (Instanz-) Variablen zugreifen, da diese zu einem Objekt gehören, das möglicherweise nicht existiert.
@@ -158,7 +172,10 @@ public class App {
 
 % ============================================================
 \newpage
+
+
 \section*{8. Zugriff auf lokale Variablen außerhalb ihres Gültigkeitsbereichs}
+\addcontentsline{toc}{section}{8. Zugriff auf lokale Variablen außerhalb ihres Gültigkeitsbereichs}
 
 \subsection*{Beschreibung:}\\
 Variablen, die in einem Block (z.B. if, while, for) deklariert werden, existieren nur innerhalb dieses Blocks.

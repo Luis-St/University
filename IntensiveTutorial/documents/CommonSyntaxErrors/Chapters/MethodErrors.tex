@@ -1,6 +1,15 @@
-{\let\cleardoublepage\relax \chapter*{Kategorie 3: Methodenfehler}}
+\begingroup
+\let\cleardoublepage\relax
+
+
+\chapter*{Kategorie 3: Methodenfehler}
+\label{ch:kategorie-3:-methodenfehler}
+\addcontentsline{toc}{chapter}{Kategorie 3: Methodenfehler}
+\endgroup
+
 
 \section*{9. Aufruf nicht-statischer Methoden aus statischem Kontext}
+\addcontentsline{toc}{section}{9. Aufruf nicht-statischer Methoden aus statischem Kontext}
 
 \subsection*{Beschreibung:}\\
 Genau wie bei Variablen können statische Methoden nicht direkt auf nicht-statische Methoden zugreifen, da diese zu einem Objekt gehören müssen.
@@ -78,7 +87,10 @@ public class Helper {
 
 % ============================================================
 \newpage
+
+
 \section*{10. Falsche Anzahl von Parametern bei Methodenaufrufen}
+\addcontentsline{toc}{section}{10. Falsche Anzahl von Parametern bei Methodenaufrufen}
 
 \subsection*{Beschreibung:}\\
 Die Anzahl der übergebenen Argumente muss exakt mit der Anzahl der deklarierten Parameter übereinstimmen (außer bei Varargs).
@@ -132,7 +144,10 @@ boolean check = isInRange(50, 0);  // FEHLER: 3 Parameter erwartet, 2 uebergeben
 
 % ============================================================
 \newpage
+
+
 \section*{11. Falsche Parametertypen bei Methodenaufrufen}
+\addcontentsline{toc}{section}{11. Falsche Parametertypen bei Methodenaufrufen}
 
 \subsection*{Beschreibung:}\\
 Die Typen der übergebenen Argumente müssen mit den Parametertypen der Methode übereinstimmen oder kompatibel sein.
@@ -187,7 +202,10 @@ register(25, "Max", 1);  // FEHLER: alle Typen falsch
 
 % ============================================================
 \newpage
+
+
 \section*{12. Fehlende return-Anweisungen in Methoden mit Rückgabewert}
+\addcontentsline{toc}{section}{12. Fehlende return-Anweisungen in Methoden mit Rückgabewert}
 
 \subsection*{Beschreibung:}\\
 Wenn eine Methode einen Rückgabetyp hat (nicht void), muss sie in jedem möglichen Ausführungspfad einen Wert zurückgeben.
@@ -248,7 +266,10 @@ public static int getDays(int month) {
 
 % ============================================================
 \newpage
+
+
 \section*{13. Nicht alle Codepfade führen zu einem return}
+\addcontentsline{toc}{section}{13. Nicht alle Codepfade führen zu einem return}
 
 \subsection*{Beschreibung:}\\
 Der Compiler analysiert alle möglichen Wege durch den Code.
@@ -319,7 +340,10 @@ public static double compute(int a, int b) {
 
 % ============================================================
 \newpage
+
+
 \section*{14. Rückgabe eines falschen Datentyps}
+\addcontentsline{toc}{section}{14. Rückgabe eines falschen Datentyps}
 
 \subsection*{Beschreibung:}\\
 Der Typ des zurückgegebenen Wertes muss exakt mit dem deklarierten Rückgabetyp der Methode übereinstimmen (oder kompatibel sein).
@@ -365,7 +389,10 @@ public static int calculate() {
 
 % ============================================================
 \newpage
+
+
 \section*{15. Rückgabe eines Wertes in einer Methode ohne Rückgabe (void)}
+\addcontentsline{toc}{section}{15. Rückgabe eines Wertes in einer Methode ohne Rückgabe (void)}
 
 \subsection*{Beschreibung:}\\
 Methoden mit dem Rückgabetyp \texttt{void} dürfen keinen Wert zurückgeben. Sie können nur \texttt{return;} ohne Wert verwenden (optional).
@@ -414,7 +441,10 @@ public static void createObject() {
 
 % ============================================================
 \newpage
+
+
 \section*{16. Verschachtelte Methodendefinitionen}
+\addcontentsline{toc}{section}{16. Verschachtelte Methodendefinitionen}
 
 \subsection*{Beschreibung:}\\
 In Java können Methoden nicht innerhalb anderer Methoden definiert werden.
