@@ -15,24 +15,24 @@
 Werden für mathematische Berechnungen verwendet.
 
 \begin{center}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Ergebnis} \\
-\hline
-\texttt{+} & Addition & \texttt{5 + 3} & \texttt{8} \\
-\hline
-\texttt{-} & Subtraktion & \texttt{5 - 3} & \texttt{2} \\
-\hline
-\texttt{*} & Multiplikation & \texttt{5 * 3} & \texttt{15} \\
-\hline
-\texttt{/} & Division & \texttt{10 / 3} & \texttt{3} (bei int) \\
-\hline
-\texttt{\%} & Modulo (Rest) & \texttt{10 \% 3} & \texttt{1} \\
-\hline
-\end{tabular}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Ergebnis} \\
+		\hline
+		\texttt{+} & Addition & \texttt{5 + 3} & \texttt{8} \\
+		\hline
+		\texttt{-} & Subtraktion & \texttt{5 - 3} & \texttt{2} \\
+		\hline
+		\texttt{*} & Multiplikation & \texttt{5 * 3} & \texttt{15} \\
+		\hline
+		\texttt{/} & Division & \texttt{10 / 3} & \texttt{3} (bei int) \\
+		\hline
+		\texttt{\%} & Modulo (Rest) & \texttt{10 \% 3} & \texttt{1} \\
+		\hline
+	\end{tabular}
 \end{center}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 int a = 10;
 int b = 3;
@@ -51,7 +51,7 @@ if (zahl % 2 == 0) {
 }
 \end{lstlisting}
 
-\textbf{Wichtig bei Division:}
+\subsubsection*{Wichtig bei Division:}
 \begin{lstlisting}
 int x = 7 / 2;      // x = 3 (int-Division schneidet ab)
 double y = 7.0 / 2; // y = 3.5 (mit Kommazahl)
@@ -68,26 +68,26 @@ double y = 7.0 / 2; // y = 3.5 (mit Kommazahl)
 Vergleichen zwei Werte und geben \texttt{true} oder \texttt{false} zurück.
 
 \begin{center}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Ergebnis} \\
-\hline
-\texttt{==} & Gleich & \texttt{5 == 5} & \texttt{true} \\
-\hline
-\texttt{!=} & Ungleich & \texttt{5 != 3} & \texttt{true} \\
-\hline
-\texttt{>} & Größer & \texttt{5 > 3} & \texttt{true} \\
-\hline
-\texttt{<} & Kleiner & \texttt{5 < 3} & \texttt{false} \\
-\hline
-\texttt{>=} & Größer oder gleich & \texttt{5 >= 5} & \texttt{true} \\
-\hline
-\texttt{<=} & Kleiner oder gleich & \texttt{5 <= 3} & \texttt{false} \\
-\hline
-\end{tabular}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Ergebnis} \\
+		\hline
+		\texttt{==} & Gleich & \texttt{5 == 5} & \texttt{true} \\
+		\hline
+		\texttt{!=} & Ungleich & \texttt{5 != 3} & \texttt{true} \\
+		\hline
+		\texttt{>} & Größer & \texttt{5 > 3} & \texttt{true} \\
+		\hline
+		\texttt{<} & Kleiner & \texttt{5 < 3} & \texttt{false} \\
+		\hline
+		\texttt{>=} & Größer oder gleich & \texttt{5 >= 5} & \texttt{true} \\
+		\hline
+		\texttt{<=} & Kleiner oder gleich & \texttt{5 <= 3} & \texttt{false} \\
+		\hline
+	\end{tabular}
 \end{center}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 int a = 10;
 int b = 5;
@@ -112,7 +112,7 @@ if (index >= 0 && index < zahlen.length) {
 }
 \end{lstlisting}
 
-\textbf{Wichtig bei Strings:}
+\subsubsection*{Wichtig bei Strings:}
 \begin{lstlisting}
 String text1 = "Hallo";
 String text2 = "Hallo";
@@ -135,20 +135,20 @@ if (text1.equals(text2)) { }
 Verknüpfen mehrere Bedingungen.
 
 \begin{center}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Ergebnis} \\
-\hline
-\texttt{\&\&} & Und (AND) & \texttt{true \&\& false} & \texttt{false} \\
-\hline
-\texttt{||} & Oder (OR) & \texttt{true || false} & \texttt{true} \\
-\hline
-\texttt{!} & Nicht (NOT) & \texttt{!true} & \texttt{false} \\
-\hline
-\end{tabular}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Ergebnis} \\
+		\hline
+		\texttt{\&\&} & Und (AND) & \texttt{true \&\& false} & \texttt{false} \\
+		\hline
+		\texttt{||} & Oder (OR) & \texttt{true || false} & \texttt{true} \\
+		\hline
+		\texttt{!} & Nicht (NOT) & \texttt{!true} & \texttt{false} \\
+		\hline
+	\end{tabular}
 \end{center}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 int alter = 20;
 boolean hatFuehrerschein = true;
@@ -184,7 +184,7 @@ if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
 }
 \end{lstlisting}
 
-\textbf{Kurzschluss-Auswertung:}
+\subsubsection*{Kurzschluss-Auswertung:}
 \begin{lstlisting}
 // Bei && wird rechts nicht mehr ausgewertet, wenn links schon false ist
 int[] zahlen = {1, 2, 3};
@@ -205,26 +205,26 @@ if (index < zahlen.length && zahlen[index] > 0) {
 Weisen einer Variable einen Wert zu oder ändern ihn.
 
 \begin{center}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Entspricht} \\
-\hline
-\texttt{=} & Zuweisung & \texttt{a = 5} & - \\
-\hline
-\texttt{+=} & Addition und Zuweisung & \texttt{a += 3} & \texttt{a = a + 3} \\
-\hline
-\texttt{-=} & Subtraktion und Zuweisung & \texttt{a -= 3} & \texttt{a = a - 3} \\
-\hline
-\texttt{*=} & Multiplikation und Zuweisung & \texttt{a *= 3} & \texttt{a = a * 3} \\
-\hline
-\texttt{/=} & Division und Zuweisung & \texttt{a /= 3} & \texttt{a = a / 3} \\
-\hline
-\texttt{\%=} & Modulo und Zuweisung & \texttt{a \%= 3} & \texttt{a = a \% 3} \\
-\hline
-\end{tabular}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Entspricht} \\
+		\hline
+		\texttt{=} & Zuweisung & \texttt{a = 5} & - \\
+		\hline
+		\texttt{+=} & Addition und Zuweisung & \texttt{a += 3} & \texttt{a = a + 3} \\
+		\hline
+		\texttt{-=} & Subtraktion und Zuweisung & \texttt{a -= 3} & \texttt{a = a - 3} \\
+		\hline
+		\texttt{*=} & Multiplikation und Zuweisung & \texttt{a *= 3} & \texttt{a = a * 3} \\
+		\hline
+		\texttt{/=} & Division und Zuweisung & \texttt{a /= 3} & \texttt{a = a / 3} \\
+		\hline
+		\texttt{\%=} & Modulo und Zuweisung & \texttt{a \%= 3} & \texttt{a = a \% 3} \\
+		\hline
+	\end{tabular}
 \end{center}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 int x = 10;
 x += 5;   // x = 15 (entspricht: x = x + 5)
@@ -261,18 +261,18 @@ for (int i = 0; i < text.length(); i++) {
 Erhöhen oder verringern einen Wert um 1.
 
 \begin{center}
-\begin{tabular}{|l|l|l|l|}
-\hline
-\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Ergebnis} \\
-\hline
-\texttt{++} & Inkrement (erhöhen um 1) & \texttt{i++} & \texttt{i = i + 1} \\
-\hline
-\texttt{--} & Dekrement (verringern um 1) & \texttt{i--} & \texttt{i = i - 1} \\
-\hline
-\end{tabular}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Ergebnis} \\
+		\hline
+		\texttt{++} & Inkrement (erhöhen um 1) & \texttt{i++} & \texttt{i = i + 1} \\
+		\hline
+		\texttt{--} & Dekrement (verringern um 1) & \texttt{i--} & \texttt{i = i - 1} \\
+		\hline
+	\end{tabular}
 \end{center}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 int i = 5;
 i++;        // i = 6 (entspricht: i = i + 1)
@@ -300,7 +300,7 @@ for (int k = 0; k < text.length(); k++) {
 }
 \end{lstlisting}
 
-\textbf{Unterschied: Prä- vs. Post-Inkrement:}
+\subsubsection*{Unterschied: Prä- vs. Post-Inkrement:}
 \begin{lstlisting}
 int a = 5;
 int b = a++;  // b = 5, dann a = 6 (Post-Inkrement: erst zuweisen, dann erhoehen)
@@ -319,7 +319,7 @@ int d = ++c;  // c = 6, dann d = 6 (Prae-Inkrement: erst erhoehen, dann zuweisen
 \subsection*{Beschreibung:}\\
 Der \texttt{+} Operator verbindet Strings.
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 String vorname = "Anna";
 String nachname = "Schmidt";
@@ -359,7 +359,7 @@ for (int i = 0; i < zahlen.length; i++) {
 \subsection*{Beschreibung:}\\
 Operatoren werden in einer bestimmten Reihenfolge ausgewertet.
 
-\textbf{Von höchster zu niedrigster Priorität:}
+\subsubsection*{Von höchster zu niedrigster Priorität:}
 
 \begin{enumerate}
 	\item \textbf{Klammern}: \texttt{( )}
@@ -374,7 +374,7 @@ Operatoren werden in einer bestimmten Reihenfolge ausgewertet.
 	\item \textbf{Zuweisung}: \texttt{=}, \texttt{+=}, \texttt{-=}, etc.
 \end{enumerate}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 int ergebnis = 5 + 3 * 2;      // ergebnis = 11 (nicht 16!)
 // * wird vor + ausgefuehrt: 5 + (3 * 2) = 5 + 6 = 11

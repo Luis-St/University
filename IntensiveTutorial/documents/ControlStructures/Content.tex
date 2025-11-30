@@ -15,7 +15,7 @@
 If-Bedingungen ermöglichen es, Code nur unter bestimmten Voraussetzungen auszuführen.
 Sie sind notwendig, wenn das Programm Entscheidungen treffen soll: \("\)Wenn eine Bedingung erfüllt ist, dann führe diese Anweisungen aus.\("\)
 
-\textbf{Typische Anwendungsfälle:}
+\subsubsection*{Typische Anwendungsfälle:}
 \begin{itemize}
 	\item Prüfen, ob ein Wert einen bestimmten Zustand hat
 	\item Vergleichen von Werten
@@ -29,14 +29,14 @@ Sie sind notwendig, wenn das Programm Entscheidungen treffen soll: \("\)Wenn ein
 
 \subsection*{Einfache If-Bedingung}
 
-\textbf{Syntax:}
+\subsubsection*{Syntax:}
 \begin{lstlisting}
 if (Bedingung) {
     Anweisung;
 }
 \end{lstlisting}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 // Zahl pruefen
 int alter = 18;
@@ -80,7 +80,7 @@ for (int i = 0; i < liste.length; i++) {
 
 \subsection*{If-Else-Bedingung}
 
-\textbf{Syntax:}
+\subsubsection*{Syntax:}
 \begin{lstlisting}
 if (Bedingung) {
     Anweisung1;
@@ -89,7 +89,7 @@ if (Bedingung) {
 }
 \end{lstlisting}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 // Gerade oder ungerade
 int zahl = 7;
@@ -131,7 +131,7 @@ if (text.length() > 0) {
 
 \subsection*{If-Else-If-Bedingung}
 
-\textbf{Syntax:}
+\subsubsection*{Syntax:}
 \begin{lstlisting}
 if (Bedingung1) {
     Anweisung1;
@@ -142,7 +142,7 @@ if (Bedingung1) {
 }
 \end{lstlisting}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 // Notenbewertung
 int punkte = 85;
@@ -197,7 +197,7 @@ if (index < 0) {
 
 \subsection*{Verschachtelte If-Bedingungen}
 
-\textbf{Syntax:}
+\subsubsection*{Syntax:}
 \begin{lstlisting}
 if (Bedingung1) {
     if (Bedingung2) {
@@ -206,7 +206,7 @@ if (Bedingung1) {
 }
 \end{lstlisting}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 // Doppelte Pruefung
 String text = "Test";
@@ -258,30 +258,30 @@ For-Schleifen ermöglichen es, Code mehrfach auszuführen. Sie sind besonders n�
 
 \subsection*{Standard For-Schleife}
 
-\textbf{Syntax:}
+\subsubsection*{Syntax:}
 \begin{lstlisting}
 for (Initialisierung; Bedingung; Inkrement) {
     Anweisung;
 }
 \end{lstlisting}
 
-\textbf{Wichtig:} Alle drei Teile (Initialisierung, Bedingung, Inkrement) sind \textbf{optional} und können weggelassen werden!
+\subsubsection*{Wichtig:} Alle drei Teile (Initialisierung, Bedingung, Inkrement) sind \textbf{optional} und können weggelassen werden!
 
-\textbf{Typisches Muster für Arrays:}
+\subsubsection*{Typisches Muster für Arrays:}
 \begin{lstlisting}
 for (int i = 0; i < array.length; i++) {
     // Verwende array[i]
 }
 \end{lstlisting}
 
-\textbf{Typisches Muster für Strings:}
+\subsubsection*{Typisches Muster für Strings:}
 \begin{lstlisting}
 for (int i = 0; i < text.length(); i++) {
     // Verwende text.charAt(i)
 }
 \end{lstlisting}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 // Zahlen von 0 bis 4 ausgeben
 for (int i = 0; i < 5; i++) {
@@ -358,9 +358,9 @@ for (int i = 2; i < satz.length(); i++) {
 
 \subsection*{Optionale Teile der For-Schleife}
 
-\textbf{Alle drei Teile können weggelassen werden!}
+\subsubsection*{Alle drei Teile können weggelassen werden!}
 
-\textbf{Initialisierung weglassen}
+\subsubsection*{Initialisierung weglassen}
 
 Wenn die Variable bereits vorher deklariert wurde:
 
@@ -378,7 +378,7 @@ for (; startIndex < 10; startIndex++) {
 }
 \end{lstlisting}
 
-\textbf{Bedingung weglassen}
+\subsubsection*{Bedingung weglassen}
 
 Wenn die Bedingung immer wahr sein soll (Endlosschleife oder mit \texttt{break} beenden):
 
@@ -405,7 +405,7 @@ for (int i = 0; ; i++) {
 }
 \end{lstlisting}
 
-\textbf{Inkrement weglassen}
+\subsubsection*{Inkrement weglassen}
 
 Wenn die Erhöhung manuell im Schleifenkörper erfolgt:
 
@@ -433,7 +433,7 @@ for (int i = 0; i < text.length(); ) {
 }
 \end{lstlisting}
 
-\textbf{Mehrere Teile weglassen}
+\subsubsection*{Mehrere Teile weglassen}
 
 \begin{lstlisting}
 // Alle Teile weggelassen = Endlosschleife
@@ -455,7 +455,7 @@ for (; i < 5; ) {
 
 \subsection*{Verschachtelte For-Schleifen}
 
-\textbf{Syntax:}
+\subsubsection*{Syntax:}
 \begin{lstlisting}
 for (int i = 0; i < n; i++) {
     for (int j = 0; j < m; j++) {
@@ -464,7 +464,7 @@ for (int i = 0; i < n; i++) {
 }
 \end{lstlisting}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 // Multiplikationstabelle
 for (int i = 1; i <= 3; i++) {
@@ -525,7 +525,7 @@ While-Schleifen verwendet man, wenn:
 	\item Man nach einem bestimmten Element sucht und abbrechen will, wenn es gefunden wurde
 \end{itemize}
 
-\textbf{Unterschied zur For-Schleife:}
+\subsubsection*{Unterschied zur For-Schleife:}
 \begin{itemize}
 	\item For-Schleife: \("\)Wiederhole genau n-mal\("\) oder \("\)Durchlaufe alle Elemente\("\)
 	\item While-Schleife: \("\)Wiederhole solange diese Bedingung wahr ist\("\)
@@ -537,14 +537,14 @@ While-Schleifen verwendet man, wenn:
 
 \subsection*{While-Schleife}
 
-\textbf{Syntax:}
+\subsubsection*{Syntax:}
 \begin{lstlisting}
 while (Bedingung) {
     Anweisung;
 }
 \end{lstlisting}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 // Zahlen von 0 bis 4 ausgeben
 int i = 0;

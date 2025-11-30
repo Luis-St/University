@@ -13,15 +13,15 @@
 
 \subsection*{length() - Länge eines Strings}
 
-\textbf{Was macht die Methode?}\\
+\subsubsection*{Was macht die Methode?}\\
 Gibt die Anzahl der Zeichen im String zurück.
 
-\textbf{Syntax:}
+\subsubsection*{Syntax:}
 \begin{lstlisting}
 int laenge = text.length();
 \end{lstlisting}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 String name = "Anna";
 int laenge = name.length();  // laenge = 4
@@ -53,15 +53,15 @@ for (int i = 0; i < satz.length(); i++) {
 
 \subsection*{charAt(int index) - Zeichen an Position}
 
-\textbf{Was macht die Methode?}\\
+\subsubsection*{Was macht die Methode?}\\
 Gibt das Zeichen an der angegebenen Position zurück. Die Zählung beginnt bei 0!
 
-\textbf{Syntax:}
+\subsubsection*{Syntax:}
 \begin{lstlisting}
 char zeichen = text.charAt(index);
 \end{lstlisting}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 String wort = "Hallo";
 char erstes = wort.charAt(0);   // erstes = 'H'
@@ -106,15 +106,15 @@ if (code.charAt(2) == '3') {
 
 \subsection*{array.length - Länge eines Arrays}
 
-\textbf{Was macht es?}\\
-Gibt die Anzahl der Elemente im Array zurück. \textbf{Achtung:} Ist ein Attribut, keine Methode!
+\subsubsection*{Was macht es?}\\
+Gibt die Anzahl der Elemente im Array zurück. \subsubsection*{Achtung:} Ist ein Attribut, keine Methode!
 
-\textbf{Syntax:}
+\subsubsection*{Syntax:}
 \begin{lstlisting}
 int laenge = array.length;  // OHNE Klammern!
 \end{lstlisting}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 int[] zahlen = {10, 20, 30, 40, 50};
 int anzahl = zahlen.length;  // anzahl = 5
@@ -152,15 +152,15 @@ int laenge = leer.length;  // laenge = 0
 
 \subsection*{array[index] - Element lesen}
 
-\textbf{Was macht es?}\\
+\subsubsection*{Was macht es?}\\
 Greift auf das Element an der angegebenen Position im Array zu. Die Zählung beginnt bei 0!
 
-\textbf{Syntax:}
+\subsubsection*{Syntax:}
 \begin{lstlisting}
 Type element = array[index];
 \end{lstlisting}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 int[] zahlen = {10, 20, 30, 40, 50};
 int erstes = zahlen[0];   // erstes = 10
@@ -204,15 +204,15 @@ int summe = preise[0] + preise[1] + preise[2];  // summe = 450
 
 \subsection*{array[index] = wert - Element schreiben}
 
-\textbf{Was macht es?}\\
+\subsubsection*{Was macht es?}\\
 Weist dem Element an der angegebenen Position einen neuen Wert zu.
 
-\textbf{Syntax:}
+\subsubsection*{Syntax:}
 \begin{lstlisting}
 array[index] = neuerWert;
 \end{lstlisting}
 
-\textbf{Beispiele:}
+\subsubsection*{Beispiele:}
 \begin{lstlisting}
 int[] zahlen = new int[5];  // Array mit 5 Plaetzen, alle 0
 zahlen[0] = 10;  // Erstes Element auf 10 setzen
