@@ -2,9 +2,9 @@
 \let\cleardoublepage\relax
 
 
-\chapter*{Grundlegende String- und Array-Methoden in Java}
-\label{ch:grundlegende-string-und-array-methoden-in-java}
-\addcontentsline{toc}{chapter}{Grundlegende String- und Array-Methoden in Java}
+\chapter*{Grundlegende String-Methoden in Java}
+\label{ch:grundlegende-string-methoden-in-java}
+\addcontentsline{toc}{chapter}{Grundlegende String-Methoden in Java}
 \endgroup
 
 
@@ -101,200 +101,29 @@ if (code.charAt(2) == '3') {
 \newpage
 
 
-\section*{Array-Operationen}
-\addcontentsline{toc}{section}{Array-Operationen}
+\section*{Häufige Fehler bei Strings}
+\addcontentsline{toc}{section}{Häufige Fehler bei Strings}
 
-\subsection*{array.length - Länge eines Arrays}
-
-\subsubsection*{Was macht es?}\\
-Gibt die Anzahl der Elemente im Array zurück. \subsubsection*{Achtung:} Ist ein Attribut, keine Methode!
-
-\subsubsection*{Syntax:}
-\begin{lstlisting}
-int laenge = array.length;  // OHNE Klammern!
-\end{lstlisting}
-
-\subsubsection*{Beispiele:}
-\begin{lstlisting}
-int[] zahlen = {10, 20, 30, 40, 50};
-int anzahl = zahlen.length;  // anzahl = 5
-
-String[] namen = new String[10];
-int groesse = namen.length;  // groesse = 10 (auch wenn leer!)
-
-// In Schleife verwenden
-int[] werte = {1, 2, 3, 4};
-for (int i = 0; i < werte.length; i++) {
-    System.out.println(werte[i]);
-}
-
-// Letztes Element zugreifen
-int[] liste = {100, 200, 300};
-int letzter = liste[liste.length - 1];  // letzter = 300
-
-// Leeres Array
-int[] leer = new int[0];
-int laenge = leer.length;  // laenge = 0
-\end{lstlisting}
-
-\begin{achtung}
-	\begin{itemize}
-		\item \texttt{.length} \textbf{ohne Klammern} (bei Arrays)
-		\item \texttt{.length()} \textbf{mit Klammern} (bei Strings)
-		\item Gibt die Größe zurück, mit der das Array erstellt wurde
-		\item Auch bei \("\)leeren\("\) Arrays (nur \texttt{null}-Werte) ist die Länge die Anzahl der Plätze
-	\end{itemize}
-\end{achtung}
-
-% ============================================================
-\newpage
-
-
-\subsection*{array[index] - Element lesen}
-
-\subsubsection*{Was macht es?}\\
-Greift auf das Element an der angegebenen Position im Array zu. Die Zählung beginnt bei 0!
-
-\subsubsection*{Syntax:}
-\begin{lstlisting}
-Type element = array[index];
-\end{lstlisting}
-
-\subsubsection*{Beispiele:}
-\begin{lstlisting}
-int[] zahlen = {10, 20, 30, 40, 50};
-int erstes = zahlen[0];   // erstes = 10
-int zweites = zahlen[1];  // zweites = 20
-int letztes = zahlen[4];  // letztes = 50
-
-// Alle Elemente durchlaufen
-String[] woerter = {"Hallo", "Welt", "Java"};
-for (int i = 0; i < woerter.length; i++) {
-    String wort = woerter[i];
-    System.out.println(wort);
-}
-
-// Bestimmte Position pruefen
-int[] noten = {1, 2, 3, 2, 1};
-if (noten[2] == 3) {
-    System.out.println("Dritte Note ist eine 3");
-}
-
-// Letztes Element
-int[] liste = {5, 10, 15, 20};
-int letzterWert = liste[liste.length - 1];  // letzterWert = 20
-
-// Element in Berechnung verwenden
-int[] preise = {100, 200, 150};
-int summe = preise[0] + preise[1] + preise[2];  // summe = 450
-\end{lstlisting}
-
-\begin{achtung}
-	\begin{itemize}
-		\item Index beginnt bei 0
-		\item Index muss zwischen 0 und \texttt{array.length - 1} liegen
-		\item Bei ungültigem Index: \texttt{ArrayIndexOutOfBoundsException}
-		\item Letztes Element: \texttt{array[array.length - 1]}
-	\end{itemize}
-\end{achtung}
-
-% ============================================================
-\newpage
-
-
-\subsection*{array[index] = wert - Element schreiben}
-
-\subsubsection*{Was macht es?}\\
-Weist dem Element an der angegebenen Position einen neuen Wert zu.
-
-\subsubsection*{Syntax:}
-\begin{lstlisting}
-array[index] = neuerWert;
-\end{lstlisting}
-
-\subsubsection*{Beispiele:}
-\begin{lstlisting}
-int[] zahlen = new int[5];  // Array mit 5 Plaetzen, alle 0
-zahlen[0] = 10;  // Erstes Element auf 10 setzen
-zahlen[1] = 20;  // Zweites Element auf 20 setzen
-zahlen[4] = 50;  // Letztes Element auf 50 setzen
-// Ergebnis: {10, 20, 0, 0, 50}
-
-// Werte aendern
-String[] namen = {"Anna", "Bob", "Clara"};
-namen[1] = "Max";  // "Bob" wird zu "Max"
-// Ergebnis: {"Anna", "Max", "Clara"}
-
-// In Schleife befuellen
-int[] quadrate = new int[5];
-for (int i = 0; i < quadrate.length; i++) {
-    quadrate[i] = i * i;
-}
-// Ergebnis: {0, 1, 4, 9, 16}
-
-// Wert erhoehen
-int[] punkte = {10, 20, 30};
-punkte[0] = punkte[0] + 5;  // Erstes Element um 5 erhoehen
-// Ergebnis: {15, 20, 30}
-
-// Array "leeren" (auf Standard-Wert setzen)
-int[] werte = {1, 2, 3, 4, 5};
-for (int i = 0; i < werte.length; i++) {
-    werte[i] = 0;
-}
-// Ergebnis: {0, 0, 0, 0, 0}
-
-// Zwei Elemente tauschen
-int[] liste = {10, 20, 30};
-int temp = liste[0];
-liste[0] = liste[2];
-liste[2] = temp;
-// Ergebnis: {30, 20, 10}
-\end{lstlisting}
-
-\begin{achtung}
-	\begin{itemize}
-		\item Index muss zwischen 0 und \texttt{array.length - 1} liegen
-		\item Bei ungültigem Index: \texttt{ArrayIndexOutOfBoundsException}
-		\item Der Wert muss zum Datentyp des Arrays passen
-		\item Überschreibt den vorherigen Wert an dieser Position
-	\end{itemize}
-\end{achtung}
-
-% ============================================================
-\newpage
-
-
-\section*{Häufige Fehler und Verwechslungen}
-\addcontentsline{toc}{section}{Häufige Fehler und Verwechslungen}
-
-\subsection*{String vs. Array - length}
+\subsection*{String.length ohne Klammern}
 
 \begin{lstlisting}
 // FALSCH
 String text = "Hallo";
 int laenge = text.length;  // Fehler: Strings brauchen ()
 
-int[] zahlen = {1, 2, 3};
-int anzahl = zahlen.length();  // Fehler: Arrays haben KEINE ()
-
 // RICHTIG
 int laenge = text.length();    // String MIT Klammern
-int anzahl = zahlen.length;    // Array OHNE Klammern
 \end{lstlisting}
 
-\subsection*{Index-Grenzen}
+\subsection*{Index-Grenzen bei charAt}
 
 \begin{lstlisting}
 String wort = "Test";  // length = 4, Indizes: 0, 1, 2, 3
 char c = wort.charAt(4);  // Fehler! Index 4 existiert nicht
 
-int[] zahlen = {10, 20, 30};  // length = 3, Indizes: 0, 1, 2
-int x = zahlen[3];  // Fehler! Index 3 existiert nicht
-
 // RICHTIG
 char letztes = wort.charAt(wort.length() - 1);  // Index 3
-int letzter = zahlen[zahlen.length - 1];  // Index 2
+char erstes = wort.charAt(0);                   // Index 0
 \end{lstlisting}
 
 \subsection*{char vs. String}
