@@ -2,9 +2,9 @@
 \let\cleardoublepage\relax
 
 
-\chapter*{Grundlegende String-Methoden in Java}
-\label{ch:grundlegende-string-methoden-in-java}
-\addcontentsline{toc}{chapter}{Grundlegende String-Methoden in Java}
+\chapter*{Grundlegende Methoden in Java}
+\label{ch:grundlegende-methoden-in-java}
+\addcontentsline{toc}{chapter}{Grundlegende Methoden in Java}
 \endgroup
 
 
@@ -96,6 +96,491 @@ if (code.charAt(2) == '3') {
 		\item Gibt ein \texttt{char} zurück, keinen \texttt{String}
 	\end{itemize}
 \end{achtung}
+
+% ============================================================
+\newpage
+
+
+\section*{ConsoleReader - Eingaben von der Konsole}
+\addcontentsline{toc}{section}{ConsoleReader - Eingaben von der Konsole}
+
+Der \texttt{ConsoleReader} ist eine Hilfsklasse zum einfachen Einlesen von Benutzereingaben.
+Die Klasse wird typischerweise mit statischem Import verwendet:
+
+\begin{lstlisting}
+import static prog.ConsoleReader.*;
+\end{lstlisting}
+
+Alle Methoden haben zwei Varianten:
+\begin{itemize}
+	\item Ohne Parameter: Liest direkt die Eingabe
+	\item Mit String-Parameter: Zeigt zuerst einen Prompt (Aufforderungstext) an
+\end{itemize}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readString() - String einlesen}
+\addcontentsline{toc}{subsection}{readString() - String einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest eine Zeile Text von der Konsole ein und gibt sie als String zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+String text = readString();                // Ohne Prompt
+String text = readString("Eingabetext");   // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Einfache Eingabe
+String name = readString("Wie heisst du? ");
+System.out.println("Hallo " + name);
+
+// Mehrere Eingaben
+String vorname = readString("Vorname");
+String nachname = readString("Nachname");
+String vollername = vorname + " " + nachname;
+
+// Ohne Prompt
+System.out.println("Gib einen Text ein:");
+String eingabe = readString();
+
+// In Schleife verwenden
+String antwort;
+do {
+    antwort = readString("Weiter? (ja/nein)");
+} while (!antwort.equals("nein"));
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Liest die gesamte Zeile bis Enter
+		\item Gibt einen String zurück (auch bei Zahlen!)
+		\item Für Zahlen: spezielle read-Methoden verwenden
+		\item Bei leerem Input: leerer String \texttt{""}, nicht \texttt{null}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readInt() - Ganzzahl einlesen}
+\addcontentsline{toc}{subsection}{readInt() - Ganzzahl einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest eine Ganzzahl von der Konsole ein und gibt sie als \texttt{int} zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int zahl = readInt();                      // Ohne Prompt
+int zahl = readInt("Gib eine Zahl ein");   // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Alter einlesen
+int alter = readInt("Wie alt bist du? ");
+System.out.println("Du bist " + alter + " Jahre alt");
+
+// Berechnungen
+int a = readInt("Erste Zahl");
+int b = readInt("Zweite Zahl");
+int summe = a + b;
+System.out.println("Summe: " + summe);
+
+// Array-Groesse einlesen
+int anzahl = readInt("Wie viele Zahlen? ");
+int[] zahlen = new int[anzahl];
+for (int i = 0; i < zahlen.length; i++) {
+    zahlen[i] = readInt("Zahl " + (i + 1));
+}
+
+// Schleifensteuerung
+int wiederholungen = readInt("Wie oft wiederholen? ");
+for (int i = 0; i < wiederholungen; i++) {
+    System.out.println("Durchlauf " + (i + 1));
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Bei ungültiger Eingabe (z.B. Text): Programm bricht ab
+		\item Nur Ganzzahlen im int-Bereich: -2.147.483.648 bis 2.147.483.647
+		\item Für größere Zahlen: \texttt{readLong()} verwenden
+		\item Für Kommazahlen: \texttt{readDouble()} verwenden
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readDouble() - Kommazahl einlesen}
+\addcontentsline{toc}{subsection}{readDouble() - Kommazahl einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest eine Kommazahl von der Konsole ein und gibt sie als \texttt{double} zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+double zahl = readDouble();                    // Ohne Prompt
+double zahl = readDouble("Gib eine Zahl ein"); // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Preis einlesen
+double preis = readDouble("Preis in Euro");
+double mehrwertsteuer = preis * 0.19;
+double gesamtpreis = preis + mehrwertsteuer;
+System.out.println("Gesamt: " + gesamtpreis + " Euro");
+
+// Durchschnitt berechnen
+double note1 = readDouble("Note 1");
+double note2 = readDouble("Note 2");
+double note3 = readDouble("Note 3");
+double durchschnitt = (note1 + note2 + note3) / 3.0;
+System.out.println("Durchschnitt: " + durchschnitt);
+
+// Temperatur
+double celsius = readDouble("Temperatur in Celsius");
+double fahrenheit = celsius * 9.0 / 5.0 + 32.0;
+System.out.println(celsius + "°C = " + fahrenheit + "°F");
+
+// Auch Ganzzahlen moeglich
+double wert = readDouble("Zahl");  // Eingabe: 5
+// wert = 5.0
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Dezimaltrennzeichen: Komma \texttt{,} oder Punkt \texttt{.} (je nach System)
+		\item Bei ungültiger Eingabe (z.B. Text): Programm bricht ab
+		\item Kann auch Ganzzahlen einlesen (werden zu double konvertiert)
+		\item Für einfache Kommazahlen: \texttt{readFloat()} verwenden
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readByte() - Sehr kleine Ganzzahl einlesen}
+\addcontentsline{toc}{subsection}{readByte() - Sehr kleine Ganzzahl einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest eine sehr kleine Ganzzahl von der Konsole ein und gibt sie als \texttt{byte} zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+byte zahl = readByte();                    // Ohne Prompt
+byte zahl = readByte("Gib eine Zahl ein"); // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Alter (wenn < 127)
+byte alter = readByte("Alter");
+
+// Prozent (0-100)
+byte prozent = readByte("Prozent (0-100)");
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Wertebereich: nur -128 bis 127
+		\item Bei zu großen Zahlen: Fehler
+		\item Meist wird \texttt{readInt()} bevorzugt
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readShort() - Kleine Ganzzahl einlesen}
+\addcontentsline{toc}{subsection}{readShort() - Kleine Ganzzahl einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest eine kleine Ganzzahl von der Konsole ein und gibt sie als \texttt{short} zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+short zahl = readShort();                    // Ohne Prompt
+short zahl = readShort("Gib eine Zahl ein"); // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Jahr
+short jahr = readShort("Geburtsjahr");
+
+// Distanz in Metern
+short meter = readShort("Distanz in Metern");
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Wertebereich: -32.768 bis 32.767
+		\item Bei zu großen Zahlen: Fehler
+		\item Meist wird \texttt{readInt()} bevorzugt
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readLong() - Sehr große Ganzzahl einlesen}
+\addcontentsline{toc}{subsection}{readLong() - Sehr große Ganzzahl einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest eine sehr große Ganzzahl von der Konsole ein und gibt sie als \texttt{long} zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+long zahl = readLong();                    // Ohne Prompt
+long zahl = readLong("Gib eine Zahl ein"); // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Sehr große Zahlen
+long weltbevoelkerung = readLong("Weltbevoelkerung");
+
+// Millisekunden
+long millis = readLong("Millisekunden");
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Für sehr große Zahlen (größer als ca. 2 Milliarden)
+		\item Wertebereich: ca. -9,2 $\times$ 10$^{18}$ bis 9,2 $\times$ 10$^{18}$
+		\item Für normale Zahlen: \texttt{readInt()} verwenden
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readFloat() - Einfache Kommazahl einlesen}
+\addcontentsline{toc}{subsection}{readFloat() - Einfache Kommazahl einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest eine Kommazahl mit einfacher Genauigkeit von der Konsole ein und gibt sie als \texttt{float} zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+float zahl = readFloat();                    // Ohne Prompt
+float zahl = readFloat("Gib eine Zahl ein"); // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Gewicht
+float gewicht = readFloat("Gewicht in kg");
+
+// Groesse
+float groesse = readFloat("Groesse in m");
+float bmi = gewicht / (groesse * groesse);
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Weniger genau als \texttt{double} (ca. 6-7 Dezimalstellen)
+		\item Meist wird \texttt{readDouble()} bevorzugt
+		\item Dezimaltrennzeichen: Komma oder Punkt (je nach System)
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readIntArray() - Ganzzahl-Array einlesen}
+\addcontentsline{toc}{subsection}{readIntArray() - Ganzzahl-Array einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest mehrere Ganzzahlen von der Konsole ein und gibt sie als \texttt{int[]}-Array zurück.
+Die Zahlen müssen durch Leerzeichen getrennt eingegeben werden.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int[] zahlen = readIntArray();                    // Ohne Prompt
+int[] zahlen = readIntArray("Gib Zahlen ein");    // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Mehrere Zahlen auf einmal einlesen
+int[] noten = readIntArray("Noten (durch Leerzeichen getrennt)");
+// Eingabe: 1 2 3 2 1
+// noten = {1, 2, 3, 2, 1}
+
+// Durchschnitt berechnen
+int summe = 0;
+for (int note : noten) {
+    summe += note;
+}
+double durchschnitt = (double) summe / noten.length;
+System.out.println("Durchschnitt: " + durchschnitt);
+
+// Array direkt ausgeben
+int[] zahlen = readIntArray("Zahlen");
+System.out.println("Anzahl: " + zahlen.length);
+for (int i = 0; i < zahlen.length; i++) {
+    System.out.println("Zahl " + (i + 1) + ": " + zahlen[i]);
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Zahlen müssen durch \textbf{Leerzeichen} getrennt werden
+		\item Array-Größe ergibt sich automatisch aus der Anzahl der Eingaben
+		\item Bei ungültiger Eingabe (z.B.\ Text): Programm bricht ab
+		\item Alle Zahlen müssen in einer Zeile eingegeben werden
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readDoubleArray() - Kommazahl-Array einlesen}
+\addcontentsline{toc}{subsection}{readDoubleArray() - Kommazahl-Array einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest mehrere Kommazahlen von der Konsole ein und gibt sie als \texttt{double[]}-Array zurück.
+Die Zahlen müssen durch Leerzeichen getrennt eingegeben werden.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+double[] zahlen = readDoubleArray();                    // Ohne Prompt
+double[] zahlen = readDoubleArray("Gib Zahlen ein");    // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Preise einlesen
+double[] preise = readDoubleArray("Preise");
+// Eingabe: 9.99 14.50 7.25
+// preise = {9.99, 14.50, 7.25}
+
+// Gesamtpreis berechnen
+double gesamt = 0.0;
+for (double preis : preise) {
+    gesamt += preis;
+}
+System.out.println("Gesamt: " + gesamt + " Euro");
+
+// Temperaturwerte
+double[] temps = readDoubleArray("Temperaturen");
+double min = temps[0];
+double max = temps[0];
+for (double temp : temps) {
+    if (temp < min) min = temp;
+    if (temp > max) max = temp;
+}
+System.out.println("Min: " + min + ", Max: " + max);
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Zahlen müssen durch \textbf{Leerzeichen} getrennt werden
+		\item Dezimaltrennzeichen: Komma oder Punkt (je nach System)
+		\item Array-Größe ergibt sich automatisch aus der Anzahl der Eingaben
+		\item Bei ungültiger Eingabe: Programm bricht ab
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readStringArray() - String-Array einlesen}
+\addcontentsline{toc}{subsection}{readStringArray() - String-Array einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest mehrere Wörter von der Konsole ein und gibt sie als \texttt{String[]}-Array zurück.
+Die Wörter müssen durch Leerzeichen getrennt eingegeben werden.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+String[] woerter = readStringArray();                    // Ohne Prompt
+String[] woerter = readStringArray("Gib Woerter ein");   // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Namen einlesen
+String[] namen = readStringArray("Namen");
+// Eingabe: Anna Bob Clara
+// namen = {"Anna", "Bob", "Clara"}
+
+// Alle Namen ausgeben
+System.out.println("Teilnehmer:");
+for (String name : namen) {
+    System.out.println("- " + name);
+}
+
+// Woerter zaehlen
+String[] woerter = readStringArray("Satz");
+System.out.println("Anzahl Woerter: " + woerter.length);
+
+// Laengstes Wort finden
+String[] text = readStringArray("Text");
+String laengstes = text[0];
+for (String wort : text) {
+    if (wort.length() > laengstes.length()) {
+        laengstes = wort;
+    }
+}
+System.out.println("Laengstes Wort: " + laengstes);
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Wörter müssen durch \textbf{Leerzeichen} getrennt werden
+		\item Sätze mit Leerzeichen können nicht direkt eingelesen werden
+		\item Array-Größe ergibt sich automatisch aus der Anzahl der Wörter
+		\item Für Sätze: \texttt{readString()} verwenden und dann \texttt{.split(" ")}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{Weitere Array-Methoden}
+\addcontentsline{toc}{subsection}{Weitere Array-Methoden}
+
+Der ConsoleReader bietet auch Methoden für andere Datentypen:
+
+\begin{itemize}
+	\item \texttt{readByteArray()} - Liest \texttt{byte[]}-Array ein
+	\item \texttt{readShortArray()} - Liest \texttt{short[]}-Array ein
+	\item \texttt{readLongArray()} - Liest \texttt{long[]}-Array ein
+	\item \texttt{readFloatArray()} - Liest \texttt{float[]}-Array ein
+\end{itemize}
+
+Diese funktionieren analog zu \texttt{readIntArray()} und \texttt{readDoubleArray()}.
+
+\subsubsection*{Beispiel:}
+\begin{lstlisting}
+// Byte-Array
+byte[] bytes = readByteArray("Bytes");
+
+// Long-Array fuer grosse Zahlen
+long[] ids = readLongArray("IDs");
+
+// Float-Array
+float[] gewichte = readFloatArray("Gewichte");
+\end{lstlisting}
 
 % ============================================================
 \newpage
