@@ -101,6 +101,227 @@ if (code.charAt(2) == '3') {
 \newpage
 
 
+\section*{Ausgabe auf der Konsole}
+\addcontentsline{toc}{section}{Ausgabe auf der Konsole}
+
+Mit \texttt{System.out.println()} und \texttt{System.out.print()} kannst du Text und Zahlen auf der Konsole ausgeben.
+
+
+\subsection*{println() - Ausgabe mit Zeilenumbruch}
+\addcontentsline{toc}{subsection}{println() - Ausgabe mit Zeilenumbruch}
+
+\subsubsection*{Was macht die Methode?}\\
+Gibt Text, Zahlen oder andere Werte auf der Konsole aus und springt danach in die nächste Zeile.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+System.out.println(wert);
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Text ausgeben
+System.out.println("Hallo Welt!");
+// Ausgabe: Hallo Welt!
+
+// Zahlen ausgeben
+System.out.println(42);
+// Ausgabe: 42
+
+System.out.println(3.14);
+// Ausgabe: 3.14
+
+// Variablen ausgeben
+String name = "Anna";
+System.out.println(name);
+// Ausgabe: Anna
+
+int alter = 25;
+System.out.println(alter);
+// Ausgabe: 25
+
+// Text und Variablen kombinieren
+System.out.println("Ich bin " + alter + " Jahre alt");
+// Ausgabe: Ich bin 25 Jahre alt
+
+System.out.println("Hallo " + name + "!");
+// Ausgabe: Hallo Anna!
+
+// Mehrere Ausgaben hintereinander
+System.out.println("Erste Zeile");
+System.out.println("Zweite Zeile");
+System.out.println("Dritte Zeile");
+// Ausgabe:
+// Erste Zeile
+// Zweite Zeile
+// Dritte Zeile
+
+// Berechnungen direkt ausgeben
+System.out.println(5 + 3);
+// Ausgabe: 8
+
+System.out.println("Ergebnis: " + (10 * 2));
+// Ausgabe: Ergebnis: 20
+
+// Leere Zeile ausgeben
+System.out.println();
+// Ausgabe: (eine leere Zeile)
+
+// Boolean-Werte ausgeben
+boolean istWahr = true;
+System.out.println(istWahr);
+// Ausgabe: true
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Nach der Ausgabe springt der Cursor automatisch in die nächste Zeile
+		\item Du kannst Text, Zahlen, Variablen und sogar Berechnungen ausgeben
+		\item Zum Verbinden von Text und Variablen benutzt du das Plus-Zeichen (+)
+		\item Ohne Wert macht \texttt{println()} einfach eine neue Zeile
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{print() - Ausgabe ohne Zeilenumbruch}
+\addcontentsline{toc}{subsection}{print() - Ausgabe ohne Zeilenumbruch}
+
+\subsubsection*{Was macht die Methode?}\\
+Gibt Text, Zahlen oder andere Werte auf der Konsole aus, bleibt aber in der gleichen Zeile.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+System.out.print(wert);
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Text ausgeben ohne Zeilenumbruch
+System.out.print("Hallo ");
+System.out.print("Welt!");
+// Ausgabe: Hallo Welt!
+
+// Zahlen ausgeben
+System.out.print(1);
+System.out.print(2);
+System.out.print(3);
+// Ausgabe: 123
+
+// Mit Leerzeichen trennen
+System.out.print("Eins ");
+System.out.print("Zwei ");
+System.out.print("Drei");
+// Ausgabe: Eins Zwei Drei
+
+// Zähler in einer Zeile
+for (int i = 1; i <= 5; i++) {
+    System.out.print(i + " ");
+}
+// Ausgabe: 1 2 3 4 5
+
+// Sterne in einer Reihe ausgeben
+for (int i = 0; i < 10; i++) {
+    System.out.print("*");
+}
+// Ausgabe: **********
+
+// Kombination mit println()
+System.out.print("Name: ");
+System.out.println("Anna");
+System.out.print("Alter: ");
+System.out.println(25);
+// Ausgabe:
+// Name: Anna
+// Alter: 25
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Der Cursor bleibt in der gleichen Zeile - es gibt keinen Zeilenumbruch
+		\item Nützlich, wenn du mehrere Dinge in eine Zeile schreiben willst
+		\item Oft wird \texttt{print()} mit \texttt{println()} kombiniert
+		\item Denk daran, Leerzeichen einzufügen, wenn du Wörter trennen willst
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{Der Unterschied: print() vs. println()}
+
+\subsubsection*{Direkter Vergleich:}
+\begin{lstlisting}
+// Mit println() - jedes Mal eine neue Zeile
+System.out.println("A");
+System.out.println("B");
+System.out.println("C");
+// Ausgabe:
+// A
+// B
+// C
+
+// Mit print() - alles in einer Zeile
+System.out.print("A");
+System.out.print("B");
+System.out.print("C");
+// Ausgabe:
+// ABC
+
+// Gemischt - Kombination aus beiden
+System.out.print("Vorname: ");
+System.out.println("Max");
+System.out.print("Nachname: ");
+System.out.println("Mustermann");
+// Ausgabe:
+// Vorname: Max
+// Nachname: Mustermann
+\end{lstlisting}
+
+\subsubsection*{Wann benutzt du was?}
+
+\begin{itemize}
+	\item \textbf{println()}: Wenn jede Ausgabe in einer eigenen Zeile stehen soll
+	\item \textbf{print()}: Wenn du mehrere Dinge in einer Zeile ausgeben willst
+	\item \textbf{Kombination}: print() für die Beschriftung, println() für den Wert
+\end{itemize}
+
+\subsubsection*{Praktisches Beispiel:}
+\begin{lstlisting}
+// Quadratzahlen ausgeben
+System.out.println("Quadratzahlen von 1 bis 5:");
+for (int i = 1; i <= 5; i++) {
+    System.out.print(i + "² = ");
+    System.out.println(i * i);
+}
+// Ausgabe:
+// Quadratzahlen von 1 bis 5:
+// 1² = 1
+// 2² = 4
+// 3² = 9
+// 4² = 16
+// 5² = 25
+
+// Muster ausgeben
+for (int zeile = 1; zeile <= 3; zeile++) {
+    for (int spalte = 1; spalte <= 5; spalte++) {
+        System.out.print("* ");
+    }
+    System.out.println();  // Neue Zeile nach jeder Reihe
+}
+// Ausgabe:
+// * * * * *
+// * * * * *
+// * * * * *
+\end{lstlisting}
+
+% ============================================================
+\newpage
+
+
 \section*{ConsoleReader - Eingaben von der Konsole}
 \addcontentsline{toc}{section}{ConsoleReader - Eingaben von der Konsole}
 
