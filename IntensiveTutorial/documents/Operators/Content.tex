@@ -12,7 +12,7 @@
 \addcontentsline{toc}{section}{Arithmetische Operatoren}
 
 \subsection*{Beschreibung:}\\
-Werden für mathematische Berechnungen verwendet.
+Mit diesen Operatoren kannst du rechnen (plus, minus, mal, geteilt).
 
 \begin{center}
 	\begin{tabular}{|l|l|l|l|}
@@ -65,7 +65,7 @@ double y = 7.0 / 2; // y = 3.5 (mit Kommazahl)
 \addcontentsline{toc}{section}{Vergleichsoperatoren}
 
 \subsection*{Beschreibung:}\\
-Vergleichen zwei Werte und geben \texttt{true} oder \texttt{false} zurück.
+Mit diesen Operatoren kannst du Werte vergleichen. Das Ergebnis ist immer \texttt{true} (wahr) oder \texttt{false} (falsch).
 
 \begin{center}
 	\begin{tabular}{|l|l|l|l|}
@@ -132,7 +132,7 @@ if (text1.equals(text2)) { }
 \addcontentsline{toc}{section}{Logische Operatoren}
 
 \subsection*{Beschreibung:}\\
-Verknüpfen mehrere Bedingungen.
+Mit diesen Operatoren kannst du mehrere Bedingungen kombinieren (z.B. "wenn A UND B wahr sind").
 
 \begin{center}
 	\begin{tabular}{|l|l|l|l|}
@@ -184,13 +184,14 @@ if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
 }
 \end{lstlisting}
 
-\subsubsection*{Kurzschluss-Auswertung:}
+\subsubsection*{Wichtig - Kurzschluss-Auswertung:}
 \begin{lstlisting}
-// Bei && wird rechts nicht mehr ausgewertet, wenn links schon false ist
+// Bei && prueft Java die rechte Seite nicht mehr, wenn die linke schon false ist
 int[] zahlen = {1, 2, 3};
 int index = 5;
 if (index < zahlen.length && zahlen[index] > 0) {
-    // Kein Fehler! zahlen[index] wird nicht ausgefuehrt, da index < zahlen.length bereits false ist
+    // Kein Fehler! zahlen[index] wird gar nicht mehr ausgefuehrt,
+    // weil index < zahlen.length bereits false ist
 }
 \end{lstlisting}
 
@@ -202,7 +203,7 @@ if (index < zahlen.length && zahlen[index] > 0) {
 \addcontentsline{toc}{section}{Zuweisungsoperatoren}
 
 \subsection*{Beschreibung:}\\
-Weisen einer Variable einen Wert zu oder ändern ihn.
+Mit diesen Operatoren kannst du Werte in Variablen speichern oder ändern.
 
 \begin{center}
 	\begin{tabular}{|l|l|l|l|}
@@ -258,7 +259,7 @@ for (int i = 0; i < text.length(); i++) {
 \addcontentsline{toc}{section}{Inkrement- und Dekrement-Operatoren}
 
 \subsection*{Beschreibung:}\\
-Erhöhen oder verringern einen Wert um 1.
+Mit diesen Operatoren kannst du eine Zahl um 1 erhöhen oder verringern.
 
 \begin{center}
 	\begin{tabular}{|l|l|l|l|}
@@ -300,13 +301,13 @@ for (int k = 0; k < text.length(); k++) {
 }
 \end{lstlisting}
 
-\subsubsection*{Unterschied: Prä- vs. Post-Inkrement:}
+\subsubsection*{Unterschied: Vorher oder nachher erhöhen:}
 \begin{lstlisting}
 int a = 5;
-int b = a++;  // b = 5, dann a = 6 (Post-Inkrement: erst zuweisen, dann erhoehen)
+int b = a++;  // b = 5, dann a = 6 (++ nachher: erst den Wert nehmen, dann erhoehen)
 
 int c = 5;
-int d = ++c;  // c = 6, dann d = 6 (Prae-Inkrement: erst erhoehen, dann zuweisen)
+int d = ++c;  // c = 6, dann d = 6 (++ vorher: erst erhoehen, dann den Wert nehmen)
 \end{lstlisting}
 
 % ============================================================
@@ -317,7 +318,7 @@ int d = ++c;  // c = 6, dann d = 6 (Prae-Inkrement: erst erhoehen, dann zuweisen
 \addcontentsline{toc}{section}{String-Konkatenation}
 
 \subsection*{Beschreibung:}\\
-Der \texttt{+} Operator verbindet Strings.
+Der \texttt{+} Operator kann auch Texte zusammenfügen (z.B. "Hallo" + " " + "Welt" ergibt "Hallo Welt").
 
 \subsubsection*{Beispiele:}
 \begin{lstlisting}
@@ -357,7 +358,7 @@ for (int i = 0; i < zahlen.length; i++) {
 \addcontentsline{toc}{section}{Operatorrangfolge (Priorität)}
 
 \subsection*{Beschreibung:}\\
-Operatoren werden in einer bestimmten Reihenfolge ausgewertet.
+Wenn du mehrere Operatoren in einer Zeile hast, werden sie in einer bestimmten Reihenfolge ausgeführt (wie in Mathe: "Punkt vor Strich").
 
 \subsubsection*{Von höchster zu niedrigster Priorität:}
 
@@ -394,9 +395,9 @@ int z = ((10 + 5) * 2) - 3;     // z = 27 (macht Absicht deutlich)
 
 \begin{achtung}
 	\begin{itemize}
-		\item Im Zweifelsfall immer Klammern setzen, um die Absicht klar zu machen!
-		\item Multiplikation und Division haben höhere Priorität als Addition und Subtraktion
-		\item Vergleichsoperatoren werden vor logischen Operatoren ausgewertet
-		\item Klammern haben immer höchste Priorität
+		\item Wenn du dir unsicher bist, setze Klammern! Das macht den Code klarer.
+		\item "Punkt vor Strich": Mal und Geteilt kommen vor Plus und Minus
+		\item Vergleiche (z.B. \texttt{>}) werden vor logischen Operatoren (z.B. \texttt{\&\&}) ausgeführt
+		\item Klammern haben immer Vorrang - nutze sie, um die Reihenfolge festzulegen
 	\end{itemize}
 \end{achtung}

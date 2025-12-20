@@ -40,10 +40,10 @@ for (int i = 0; i < satz.length(); i++) {
 
 \begin{achtung}
 	\begin{itemize}
-		\item Die Zählung der Zeichen beginnt bei 1 (erster Buchstabe = Position 0, aber length = 1)
+		\item \texttt{length()} zählt alle Zeichen: Der Text "Hi" hat die Länge 2
 		\item Leerzeichen und Sonderzeichen zählen mit
-		\item Bei Strings: \texttt{.length()} \textbf{mit Klammern}
-		\item Bei Arrays: \texttt{.length} \textbf{ohne Klammern}
+		\item Bei Strings: \texttt{.length()} mit Klammern
+		\item Bei Arrays: \texttt{.length} ohne Klammern - das ist ein wichtiger Unterschied!
 	\end{itemize}
 \end{achtung}
 
@@ -54,7 +54,7 @@ for (int i = 0; i < satz.length(); i++) {
 \subsection*{charAt(int index) - Zeichen an Position}
 
 \subsubsection*{Was macht die Methode?}\\
-Gibt das Zeichen an der angegebenen Position zurück. Die Zählung beginnt bei 0!
+Gibt dir das Zeichen an einer bestimmten Stelle im Text zurück. Wichtig: Die Zählung beginnt bei 0!
 
 \subsubsection*{Syntax:}
 \begin{lstlisting}
@@ -90,10 +90,10 @@ if (code.charAt(2) == '3') {
 
 \begin{achtung}
 	\begin{itemize}
-		\item Index beginnt bei 0
-		\item Index muss zwischen 0 und \texttt{text.length() - 1} liegen
-		\item Bei ungültigem Index: \texttt{StringIndexOutOfBoundsException}
-		\item Gibt ein \texttt{char} zurück, keinen \texttt{String}
+		\item Die Nummerierung beginnt bei 0
+		\item Die Nummer muss zwischen 0 und \texttt{text.length() - 1} liegen
+		\item Wenn die Nummer zu groß oder zu klein ist, stürzt das Programm ab
+		\item Du bekommst ein einzelnes Zeichen (char) zurück, keinen Text (String)
 	\end{itemize}
 \end{achtung}
 
@@ -104,17 +104,17 @@ if (code.charAt(2) == '3') {
 \section*{ConsoleReader - Eingaben von der Konsole}
 \addcontentsline{toc}{section}{ConsoleReader - Eingaben von der Konsole}
 
-Der \texttt{ConsoleReader} ist eine Hilfsklasse zum einfachen Einlesen von Benutzereingaben.
-Die Klasse wird typischerweise mit statischem Import verwendet:
+Der \texttt{ConsoleReader} ist ein Werkzeug, mit dem du Eingaben vom Benutzer einlesen kannst.
+Um ihn zu benutzen, schreibst du am Anfang deines Programms:
 
 \begin{lstlisting}
 import static prog.ConsoleReader.*;
 \end{lstlisting}
 
-Alle Methoden haben zwei Varianten:
+Alle Eingabe-Methoden gibt es in zwei Varianten:
 \begin{itemize}
-	\item Ohne Parameter: Liest direkt die Eingabe
-	\item Mit String-Parameter: Zeigt zuerst einen Prompt (Aufforderungstext) an
+	\item Ohne Text: Wartet einfach auf die Eingabe
+	\item Mit Text: Zeigt zuerst eine Aufforderung an (z.B. "Wie heißt du?")
 \end{itemize}
 
 % ============================================================
@@ -157,10 +157,10 @@ do {
 
 \begin{achtung}
 	\begin{itemize}
-		\item Liest die gesamte Zeile bis Enter
-		\item Gibt einen String zurück (auch bei Zahlen!)
-		\item Für Zahlen: spezielle read-Methoden verwenden
-		\item Bei leerem Input: leerer String \texttt{""}, nicht \texttt{null}
+		\item Liest alles, was der Benutzer eingibt, bis er Enter drückt
+		\item Du bekommst immer Text (String) zurück, auch wenn jemand "123" eingibt
+		\item Wenn du Zahlen brauchst, benutze \texttt{readInt()} oder \texttt{readDouble()}
+		\item Wenn der Benutzer nur Enter drückt, bekommst du einen leeren Text \texttt{""} zurück
 	\end{itemize}
 \end{achtung}
 
@@ -208,10 +208,10 @@ for (int i = 0; i < wiederholungen; i++) {
 
 \begin{achtung}
 	\begin{itemize}
-		\item Bei ungültiger Eingabe (z.B. Text): Programm bricht ab
-		\item Nur Ganzzahlen im int-Bereich: -2.147.483.648 bis 2.147.483.647
-		\item Für größere Zahlen: \texttt{readLong()} verwenden
-		\item Für Kommazahlen: \texttt{readDouble()} verwenden
+		\item Wenn jemand Text statt einer Zahl eingibt, stürzt das Programm ab
+		\item Funktioniert nur für ganze Zahlen von etwa -2 Milliarden bis +2 Milliarden
+		\item Für größere Zahlen: \texttt{readLong()} benutzen
+		\item Für Kommazahlen: \texttt{readDouble()} benutzen
 	\end{itemize}
 \end{achtung}
 
@@ -258,10 +258,10 @@ double wert = readDouble("Zahl");  // Eingabe: 5
 
 \begin{achtung}
 	\begin{itemize}
-		\item Dezimaltrennzeichen: Komma \texttt{,} oder Punkt \texttt{.} (je nach System)
-		\item Bei ungültiger Eingabe (z.B. Text): Programm bricht ab
-		\item Kann auch Ganzzahlen einlesen (werden zu double konvertiert)
-		\item Für einfache Kommazahlen: \texttt{readFloat()} verwenden
+		\item Je nach Computer funktioniert Komma \texttt{,} oder Punkt \texttt{.} als Trennzeichen
+		\item Wenn jemand normalen Text eingibt, stürzt das Programm ab
+		\item Du kannst auch ganze Zahlen eingeben - sie werden automatisch zu Kommazahlen
+		\item Für die meisten Fälle ist \texttt{readDouble()} besser als \texttt{readFloat()}
 	\end{itemize}
 \end{achtung}
 
@@ -406,8 +406,8 @@ float bmi = gewicht / (groesse * groesse);
 \addcontentsline{toc}{subsection}{readIntArray() - Ganzzahl-Array einlesen}
 
 \subsubsection*{Was macht die Methode?}\\
-Liest mehrere Ganzzahlen von der Konsole ein und gibt sie als \texttt{int[]}-Array zurück.
-Die Zahlen müssen durch Leerzeichen getrennt eingegeben werden.
+Liest mehrere Ganzzahlen auf einmal ein und gibt sie als Array zurück.
+Die Zahlen müssen mit Leerzeichen getrennt werden.
 
 \subsubsection*{Syntax:}
 \begin{lstlisting}
@@ -440,10 +440,10 @@ for (int i = 0; i < zahlen.length; i++) {
 
 \begin{achtung}
 	\begin{itemize}
-		\item Zahlen müssen durch \textbf{Leerzeichen} getrennt werden
-		\item Array-Größe ergibt sich automatisch aus der Anzahl der Eingaben
-		\item Bei ungültiger Eingabe (z.B.\ Text): Programm bricht ab
-		\item Alle Zahlen müssen in einer Zeile eingegeben werden
+		\item Die Zahlen müssen mit Leerzeichen getrennt sein (z.B. "1 2 3")
+		\item Die Größe des Arrays passt sich automatisch an die Anzahl der Zahlen an
+		\item Wenn jemand Text eingibt, stürzt das Programm ab
+		\item Alle Zahlen müssen in einer Zeile stehen (Enter beendet die Eingabe)
 	\end{itemize}
 \end{achtung}
 
@@ -545,10 +545,10 @@ System.out.println("Laengstes Wort: " + laengstes);
 
 \begin{achtung}
 	\begin{itemize}
-		\item Wörter müssen durch \textbf{Leerzeichen} getrennt werden
-		\item Sätze mit Leerzeichen können nicht direkt eingelesen werden
-		\item Array-Größe ergibt sich automatisch aus der Anzahl der Wörter
-		\item Für Sätze: \texttt{readString()} verwenden und dann \texttt{.split(" ")}
+		\item Die Wörter müssen mit Leerzeichen getrennt sein
+		\item Wenn du ganze Sätze einlesen willst, benutze lieber \texttt{readString()}
+		\item Die Größe des Arrays passt sich automatisch an die Anzahl der Wörter an
+		\item Für Sätze: \texttt{readString()} benutzen und dann mit \texttt{.split(" ")} aufteilen
 	\end{itemize}
 \end{achtung}
 
@@ -589,9 +589,9 @@ float[] gewichte = readFloatArray("Gewichte");
 \section*{Bildverarbeitung}
 \addcontentsline{toc}{section}{Bildverarbeitung}
 
-Die \texttt{Picture}-Klasse ermöglicht das Laden, Anzeigen und Verarbeiten von Bildern.
-Bilder werden als \texttt{int[][]}-Arrays dargestellt, wobei jeder Integer einen Farbwert (RGB) repräsentiert.
-Die Klasse wird typischerweise mit statischem Import verwendet:
+Die \texttt{Picture}-Klasse ist ein Werkzeug zum Arbeiten mit Bildern.
+Bilder werden als zweidimensionale Arrays gespeichert, wobei jeder Wert eine Farbe darstellt.
+Um sie zu benutzen, schreibst du am Anfang:
 
 \begin{lstlisting}
 import static prog.Picture.*;
@@ -641,10 +641,10 @@ show(neuBild, "Rotes Quadrat");
 
 \begin{achtung}
 	\begin{itemize}
-		\item Format: \texttt{int[Höhe][Breite]} - erste Dimension ist die Höhe (y), zweite ist die Breite (x)
-		\item Jeder int-Wert repräsentiert einen RGB-Farbwert
-		\item Fenster bleibt offen, bis es manuell geschlossen wird
-		\item Ohne Titel: Standardtitel wird verwendet
+		\item Das Array hat das Format \texttt{int[Höhe][Breite]} - erst Höhe, dann Breite
+		\item Jede Zahl im Array stellt eine Farbe dar
+		\item Das Fenster bleibt offen, bis du es schließt
+		\item Wenn du keinen Titel angibst, wird ein Standardtitel verwendet
 	\end{itemize}
 \end{achtung}
 
@@ -689,10 +689,10 @@ show(bearbeitet, "Bearbeitet");
 
 \begin{achtung}
 	\begin{itemize}
-		\item Unterstützt gängige Formate: JPG, PNG, BMP, GIF
-		\item Pfad kann absolut oder relativ sein
-		\item Bei ungültigem Pfad: Fehler (Datei nicht gefunden)
-		\item Für Bilder im Projekt: \texttt{loadResource()} verwenden
+		\item Funktioniert mit den gängigen Bildformaten: JPG, PNG, BMP, GIF
+		\item Du kannst den vollständigen Pfad oder einen relativen Pfad angeben
+		\item Wenn die Datei nicht existiert, stürzt das Programm ab
+		\item Für Bilder, die zu deinem Programm gehören: benutze \texttt{loadResource()}
 	\end{itemize}
 \end{achtung}
 
@@ -704,8 +704,8 @@ show(bearbeitet, "Bearbeitet");
 \addcontentsline{toc}{subsection}{loadResource() - Bild aus Projekt laden}
 
 \subsubsection*{Was macht die Methode?}\\
-Lädt ein Bild aus dem Projekt-Package und gibt es als \texttt{int[][]}-Array zurück.
-In einfachen Projekten liegt die Bilddatei direkt im gleichen Package wie die Klasse.
+Lädt ein Bild, das zu deinem Projekt gehört, und gibt es als Array zurück.
+Das Bild muss im selben Ordner liegen wie dein Programm.
 
 \subsubsection*{Syntax:}
 \begin{lstlisting}
@@ -749,10 +749,10 @@ show(bild2);
 
 \begin{achtung}
 	\begin{itemize}
-		\item Nur für Bilder \textbf{im Projekt-Package} verwenden
-		\item Bilddatei muss im gleichen Verzeichnis wie die Klasse liegen
-		\item Nur Dateiname angeben, \textbf{kein} Pfad
-		\item Für Bilder außerhalb: \texttt{loadFromFileSystem()} verwenden
+		\item Nur für Bilder benutzen, die zu deinem Projekt gehören
+		\item Das Bild muss im selben Ordner liegen wie dein Programm
+		\item Gib nur den Dateinamen an, keinen Pfad
+		\item Für Bilder von woanders auf deinem Computer: benutze \texttt{loadFromFileSystem()}
 	\end{itemize}
 \end{achtung}
 
@@ -816,10 +816,10 @@ show(foto);
 
 \begin{achtung}
 	\begin{itemize}
-		\item Wertebereich: 0 bis 255 für jeden Farbkanal
-		\item 0 = keine Farbe, 255 = maximale Intensität
-		\item RGB-Format: Rot, Grün, Blau
-		\item Rückgabewert ist ein int, der alle drei Farbkanäle enthält
+		\item Jede Farbe (Rot, Grün, Blau) kann einen Wert von 0 bis 255 haben
+		\item 0 bedeutet "gar nichts von dieser Farbe", 255 bedeutet "maximale Helligkeit"
+		\item RGB steht für: Rot, Grün, Blau
+		\item Die Methode gibt eine einzige Zahl zurück, die alle drei Farben enthält
 	\end{itemize}
 \end{achtung}
 
@@ -831,7 +831,7 @@ show(foto);
 \addcontentsline{toc}{subsection}{red(), green(), blue() - Farbkanäle extrahieren}
 
 \subsubsection*{Was machen die Methoden?}\\
-Extrahieren den Rot-, Grün- oder Blau-Anteil aus einem Farbwert.
+Holen den Rot-, Grün- oder Blau-Anteil aus einer Farbe heraus.
 
 \subsubsection*{Syntax:}
 \begin{lstlisting}
@@ -903,10 +903,10 @@ System.out.println("Helligkeit: " + helligkeit);
 
 \begin{achtung}
 	\begin{itemize}
-		\item Rückgabewert: immer 0 bis 255
-		\item Nützlich für Bildverarbeitung und Filter
-		\item Kombiniert mit \texttt{color()} zum Ändern einzelner Kanäle
-		\item Typische Anwendung: Graustufen-Konvertierung, Farbfilter
+		\item Du bekommst immer eine Zahl zwischen 0 und 255 zurück
+		\item Sehr nützlich, wenn du Bilder bearbeiten willst
+		\item Zusammen mit \texttt{color()} kannst du einzelne Farbanteile ändern
+		\item Häufige Anwendung: Bilder in Graustufen umwandeln oder Farbfilter erstellen
 	\end{itemize}
 \end{achtung}
 

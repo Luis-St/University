@@ -11,8 +11,8 @@
 \section*{Primitive Datentypen}
 \addcontentsline{toc}{section}{Primitive Datentypen}
 
-Java unterscheidet zwischen primitiven Datentypen und Referenztypen (Objekten).
-Primitive Datentypen sind die grundlegenden Bausteine und speichern direkt Werte.
+Java arbeitet mit verschiedenen Arten von Daten. Die einfachsten davon heißen "primitive Datentypen".
+Diese speichern direkte Werte wie Zahlen oder Ja/Nein-Antworten.
 
 % ============================================================
 \newpage
@@ -22,7 +22,7 @@ Primitive Datentypen sind die grundlegenden Bausteine und speichern direkt Werte
 \addcontentsline{toc}{subsection}{int - Ganzzahlen}
 
 \subsubsection*{Was ist int?}\\
-Der Datentyp \texttt{int} (Integer) speichert ganze Zahlen ohne Nachkommastellen.
+Der Datentyp \texttt{int} speichert ganze Zahlen - also Zahlen ohne Komma (wie 5, -10, oder 1000).
 
 \subsubsection*{Wertebereich:}
 \begin{itemize}
@@ -74,10 +74,10 @@ wert /= 4;                    // wert = 6
 
 \begin{achtung}
 	\begin{itemize}
-		\item Division von int durch int ergibt int: \texttt{5 / 2 = 2} (nicht 2.5!)
-		\item Bei Überschreitung des Wertebereichs: \textbf{Overflow} (Wert springt um)
-		\item Standard-Wert bei Arrays: \texttt{0}
-		\item Keine Nachkommastellen möglich
+		\item Wenn du eine int-Zahl durch eine int-Zahl teilst, bekommst du wieder eine int-Zahl: \texttt{5 / 2 = 2} (nicht 2.5! Die Nachkommastellen werden einfach abgeschnitten)
+		\item Wenn die Zahl zu groß oder zu klein wird, springt sie auf die andere Seite um (das nennt man Überlauf)
+		\item In einem Array ist der Anfangswert immer \texttt{0}
+		\item Mit int kannst du keine Kommazahlen speichern
 	\end{itemize}
 \end{achtung}
 
@@ -89,7 +89,7 @@ wert /= 4;                    // wert = 6
 \addcontentsline{toc}{subsection}{double - Fließkommazahlen}
 
 \subsubsection*{Was ist double?}\\
-Der Datentyp \texttt{double} speichert Zahlen mit Nachkommastellen (Gleitkommazahlen mit doppelter Genauigkeit).
+Der Datentyp \texttt{double} speichert Kommazahlen - also Zahlen mit Nachkommastellen (wie 3.14, -5.5, oder 0.001).
 
 \subsubsection*{Wertebereich:}
 \begin{itemize}
@@ -140,11 +140,11 @@ double absolut = Math.abs(-5.5);   // absolut = 5.5
 
 \begin{achtung}
 	\begin{itemize}
-		\item Punkt als Dezimaltrennzeichen, \textbf{nicht} Komma: \texttt{3.14} nicht \texttt{3,14}
-		\item Rundungsfehler möglich: \texttt{0.1 + 0.2 = 0.30000000000000004}
-		\item Division \texttt{5 / 2} ergibt \texttt{2}, aber \texttt{5.0 / 2.0} ergibt \texttt{2.5}
-		\item Standard-Wert bei Arrays: \texttt{0.0}
-		\item Für Geldbeträge besser \texttt{BigDecimal} verwenden
+		\item In Java schreibst du einen Punkt statt Komma: \texttt{3.14} ist richtig, \texttt{3,14} ist falsch
+		\item Computer können nicht immer exakt rechnen: manchmal kommt bei \texttt{0.1 + 0.2} nicht genau \texttt{0.3} heraus
+		\item Wichtig: \texttt{5 / 2} ergibt \texttt{2}, aber \texttt{5.0 / 2.0} ergibt \texttt{2.5} - mindestens eine Zahl muss eine Kommazahl sein
+		\item In einem Array ist der Anfangswert immer \texttt{0.0}
+		\item Für Geld solltest du andere Datentypen verwenden (z.B. \texttt{BigDecimal}), weil Rundungsfehler problematisch sein können
 	\end{itemize}
 \end{achtung}
 
@@ -216,10 +216,10 @@ boolean istMax = name.equals("Max");       // true
 
 \begin{achtung}
 	\begin{itemize}
-		\item Nur \texttt{true} oder \texttt{false}, \textbf{keine} Zahlen (nicht wie in C: 0 = false, 1 = true)
-		\item Kleinschreibung: \texttt{true}/\texttt{false}, nicht \texttt{True}/\texttt{False}
-		\item Standard-Wert bei Arrays: \texttt{false}
-		\item \texttt{==} für primitive Typen, \texttt{.equals()} für Objekte (z.B. Strings)
+		\item Es gibt nur zwei Werte: \texttt{true} (wahr) oder \texttt{false} (falsch) - keine Zahlen!
+		\item Alles klein schreiben: \texttt{true} und \texttt{false}, nicht \texttt{True} oder \texttt{False}
+		\item In einem Array ist der Anfangswert immer \texttt{false}
+		\item Zum Vergleichen: Bei Zahlen \texttt{==}, bei Text \texttt{.equals()}
 	\end{itemize}
 \end{achtung}
 
@@ -231,7 +231,7 @@ boolean istMax = name.equals("Max");       // true
 \addcontentsline{toc}{subsection}{char - Einzelnes Zeichen}
 
 \subsubsection*{Was ist char?}\\
-Der Datentyp \texttt{char} speichert ein einzelnes Zeichen (Character) im Unicode-Format.
+Der Datentyp \texttt{char} speichert genau ein einzelnes Zeichen (wie 'A', '5' oder '!').
 
 \subsubsection*{Wertebereich:}
 \begin{itemize}
@@ -294,11 +294,11 @@ char erstes = text.charAt(0);              // erstes = 'H'
 
 \begin{achtung}
 	\begin{itemize}
-		\item \textbf{Einfache} Anführungszeichen: \texttt{'A'}, nicht \texttt{"A"}
-		\item Nur \textbf{ein} Zeichen: \texttt{'A'} ist char, \texttt{"A"} ist String
-		\item \texttt{char} ist \textbf{nicht} dasselbe wie \texttt{String}
-		\item Standard-Wert bei Arrays: \texttt{'\textbackslash u0000'} (Null-Zeichen)
-		\item Kann als Zahlenwert verwendet werden (Unicode-Wert)
+		\item Immer einfache Anführungszeichen verwenden: \texttt{'A'} ist richtig, \texttt{"A"} ist falsch
+		\item Nur genau ein Zeichen erlaubt: \texttt{'A'} funktioniert, \texttt{'AB'} nicht
+		\item \texttt{char} ist etwas anderes als \texttt{String} - ein char ist nur ein einzelnes Zeichen
+		\item In einem Array ist der Anfangswert das "Null-Zeichen" (ein unsichtbares Zeichen)
+		\item Jedes Zeichen hat intern eine Nummer - deshalb kannst du mit char auch rechnen
 	\end{itemize}
 \end{achtung}
 
@@ -311,7 +311,7 @@ char erstes = text.charAt(0);              // erstes = 'H'
 
 \subsubsection*{Was ist byte?}\\
 Der Datentyp \texttt{byte} speichert sehr kleine ganze Zahlen.
-Wird verwendet, wenn Speicherplatz wichtig ist.
+Wird selten benutzt, meist nur wenn man Speicherplatz sparen muss.
 
 \subsubsection*{Wertebereich:}
 \begin{itemize}
@@ -347,9 +347,9 @@ byte ueberlauf = (byte) (max + 1);         // ueberlauf = -128 (Overflow!)
 \begin{achtung}
 	\begin{itemize}
 		\item Sehr kleiner Wertebereich: nur -128 bis 127
-		\item Bei Überschreitung: Overflow
-		\item Wird oft für Binärdaten verwendet
-		\item Standard-Wert bei Arrays: \texttt{0}
+		\item Wenn die Zahl zu groß wird, springt sie um (Überlauf)
+		\item Wird meistens nur für spezielle Dinge verwendet
+		\item In einem Array ist der Anfangswert immer \texttt{0}
 	\end{itemize}
 \end{achtung}
 
@@ -403,7 +403,7 @@ short klein = (short) gross;
 \addcontentsline{toc}{subsection}{long - Sehr große Ganzzahlen}
 
 \subsubsection*{Was ist long?}\\
-Der Datentyp \texttt{long} speichert sehr große ganze Zahlen, die über den \texttt{int}-Bereich hinausgehen.
+Der Datentyp \texttt{long} speichert sehr große ganze Zahlen - noch größer als int.
 
 \subsubsection*{Wertebereich:}
 \begin{itemize}
@@ -434,10 +434,10 @@ long summe = 1000000000L + 2000000000L;
 
 \begin{achtung}
 	\begin{itemize}
-		\item Bei großen Zahlen: \texttt{L} am Ende anhängen: \texttt{1000000000L}
-		\item Ohne \texttt{L} wird Zahl als \texttt{int} interpretiert (kann zu Fehlern führen)
-		\item Standard-Wert bei Arrays: \texttt{0L}
-		\item Verwenden, wenn Zahlen größer als ca. 2 Milliarden sind
+		\item Bei großen Zahlen musst du ein \texttt{L} ans Ende schreiben: \texttt{1000000000L}
+		\item Ohne \texttt{L} denkt Java, es ist eine int-Zahl, und das kann schiefgehen
+		\item In einem Array ist der Anfangswert immer \texttt{0L}
+		\item Benutze long, wenn deine Zahlen größer als etwa 2 Milliarden werden können
 	\end{itemize}
 \end{achtung}
 
@@ -499,14 +499,14 @@ float summe = 10.5F + 20.3F;
 \subsection*{Was ist ein String?}
 
 \subsubsection*{Beschreibung}\\
-Ein \texttt{String} ist \textbf{kein primitiver Datentyp}, sondern eine Klasse (Referenztyp).
-Er speichert Zeichenketten (Text).
+Ein \texttt{String} speichert Text - also mehrere Zeichen zusammen (wie "Hallo" oder "Max Mustermann").
+String ist etwas Besonderes: Er gehört nicht zu den primitiven Datentypen.
 
 \subsubsection*{Eigenschaften:}
 \begin{itemize}
-	\item Unveränderlich (immutable): Einmal erstellt, kann der Inhalt nicht geändert werden
-	\item Wird mit \textbf{doppelten} Anführungszeichen erstellt: \texttt{"Text"}
-	\item Kann beliebig lang sein
+	\item Wenn du einen String einmal erstellt hast, kannst du ihn nicht mehr ändern - nur einen neuen erstellen
+	\item Strings schreibst du mit doppelten Anführungszeichen: \texttt{"Text"}
+	\item Ein String kann so lang sein wie du willst
 \end{itemize}
 
 \subsubsection*{Syntax:}
@@ -588,12 +588,12 @@ double komma = Double.parseDouble("3.14"); // 3.14
 
 \begin{achtung}
 	\begin{itemize}
-		\item \textbf{Doppelte} Anführungszeichen: \texttt{"Text"}, nicht \texttt{'Text'}
-		\item Strings mit \texttt{.equals()} vergleichen, \textbf{nicht} mit \texttt{==}
-		\item \texttt{String} mit großem \textbf{S} schreiben
-		\item Strings sind unveränderlich: Methoden geben neuen String zurück
-		\item \texttt{null} ist möglich, aber \texttt{""} (leerer String) ist etwas anderes
-		\item Standard-Wert bei Arrays: \texttt{null}
+		\item Doppelte Anführungszeichen verwenden: \texttt{"Text"} ist richtig, \texttt{'Text'} ist falsch
+		\item Zum Vergleichen von Strings immer \texttt{.equals()} benutzen, nicht \texttt{==}
+		\item String schreibst du immer mit großem S am Anfang
+		\item Wenn du einen String ändern willst, bekommst du eigentlich einen neuen String zurück
+		\item \texttt{null} bedeutet "gar kein Text", \texttt{""} ist "leerer Text" - das ist ein Unterschied
+		\item In einem Array ist der Anfangswert immer \texttt{null}
 	\end{itemize}
 \end{achtung}
 
@@ -607,7 +607,7 @@ double komma = Double.parseDouble("3.14"); // 3.14
 \subsection*{Implizite Konvertierung (Automatisch)}
 
 \subsubsection*{Beschreibung}\\
-Java konvertiert automatisch von \("\)kleinerem\("\) zu \("\)größerem\("\) Datentyp ohne Datenverlust.
+Java wandelt automatisch kleinere Zahlen in größere um. Zum Beispiel wird eine int-Zahl automatisch zu double, wenn nötig.
 
 \subsubsection*{Beispiele:}
 \begin{lstlisting}
@@ -632,8 +632,8 @@ double ergebnis = a + b;                   // ergebnis = 7.5
 \subsection*{Explizite Konvertierung (Type Cast)}
 
 \subsubsection*{Beschreibung}\\
-Von \("\)größerem\("\) zu \("\)kleinerem\("\) Datentyp muss explizit gecastet werden.
-Kann zu Datenverlust führen!
+Wenn du eine größere Zahl in eine kleinere umwandeln willst, musst du Java das ausdrücklich sagen.
+Dabei können Informationen verloren gehen!
 
 \subsubsection*{Syntax:}
 \begin{lstlisting}
@@ -666,11 +666,11 @@ int gerundet = (int) Math.round(wert);     // gerundet = 4
 
 \begin{achtung}
 	\begin{itemize}
-		\item Cast von double zu int: Nachkommastellen werden \textbf{abgeschnitten}, nicht gerundet!
-		\item Bei Überschreitung: Datenverlust oder unerwartete Werte
-		\item Für Rundung: \texttt{Math.round()} verwenden
-		\item Implizite Konvertierung: klein → groß
-		\item Explizite Konvertierung (Cast): groß → klein
+		\item Wenn du double zu int umwandelst, werden die Nachkommastellen einfach weggeschnitten, nicht gerundet! (3.9 wird zu 3, nicht zu 4)
+		\item Wenn die Zahl zu groß ist, können seltsame Werte herauskommen
+		\item Zum Runden benutze \texttt{Math.round()}
+		\item Automatisch: klein zu groß (z.B. int zu double)
+		\item Mit Klammern: groß zu klein (z.B. double zu int)
 	\end{itemize}
 \end{achtung}
 
@@ -714,15 +714,15 @@ int gerundet = (int) Math.round(wert);     // gerundet = 4
 \subsection*{Was ist ein Array?}
 
 \subsubsection*{Beschreibung}\\
-Ein Array ist eine Datenstruktur, die eine \textbf{feste Anzahl} von Elementen des \textbf{gleichen Datentyps} speichert.
-Arrays sind Referenztypen (wie Strings), keine primitiven Datentypen.
+Ein Array ist wie eine Liste mit nummerierten Fächern. Jedes Fach kann einen Wert speichern.
+Wichtig: Alle Werte müssen vom gleichen Typ sein (z.B. nur Zahlen oder nur Text). Die Anzahl der Fächer ist fest.
 
 \subsubsection*{Eigenschaften:}
 \begin{itemize}
-	\item Feste Größe: Nach der Erstellung kann die Größe nicht mehr geändert werden
-	\item Index beginnt bei 0: Erstes Element hat Index 0, letztes Element hat Index \texttt{length - 1}
-	\item Alle Elemente müssen den gleichen Typ haben
-	\item Standard-Werte: Arrays werden automatisch mit Standard-Werten initialisiert (0, false, null, etc.)
+	\item Die Größe ist fest: Wenn du ein Array mit 5 Plätzen erstellst, bleiben es 5 Plätze
+	\item Die Nummerierung beginnt bei 0: Das erste Fach hat die Nummer 0, das letzte die Nummer \texttt{length - 1}
+	\item Alle Werte im Array müssen vom gleichen Typ sein
+	\item Neue Arrays sind automatisch mit Startwerten gefüllt (0 für Zahlen, false für boolean, null für Text)
 \end{itemize}
 
 \subsubsection*{Syntax:}
@@ -753,10 +753,10 @@ int[][] tabelle = {{1, 2}, {3, 4}, {5, 6}};
 
 \begin{achtung}
 	\begin{itemize}
-		\item Größe ist \textbf{fix} nach Erstellung
-		\item Index beginnt bei \textbf{0}, nicht bei 1
-		\item Alle Elemente müssen den \textbf{gleichen Typ} haben
-		\item Standard-Wert bei Array-Variablen: \texttt{null}
+		\item Die Größe kannst du nach dem Erstellen nicht mehr ändern
+		\item Die Nummerierung beginnt bei 0, nicht bei 1!
+		\item Alle Werte müssen vom gleichen Typ sein
+		\item Wenn du ein Array noch nicht erstellt hast, ist es \texttt{null}
 	\end{itemize}
 \end{achtung}
 
@@ -768,7 +768,7 @@ int[][] tabelle = {{1, 2}, {3, 4}, {5, 6}};
 \addcontentsline{toc}{subsection}{array.length - Länge eines Arrays}
 
 \subsubsection*{Was ist array.length?}\\
-\texttt{length} ist ein \textbf{Attribut} (keine Methode!), das die Anzahl der Elemente im Array zurückgibt.
+Mit \texttt{length} kannst du herausfinden, wie viele Plätze das Array hat. Wichtig: Bei Arrays schreibst du \textbf{keine} Klammern dahinter!
 
 \subsubsection*{Eigenschaften:}
 \begin{itemize}
@@ -813,10 +813,10 @@ int spalten = matrix[0].length;           // spalten = 4
 
 \begin{achtung}
 	\begin{itemize}
-		\item \texttt{.length} \textbf{ohne Klammern} (bei Arrays)
-		\item \texttt{.length()} \textbf{mit Klammern} (bei Strings)
-		\item Gibt die Größe zurück, mit der das Array erstellt wurde
-		\item Auch bei "leeren" Arrays (nur \texttt{null}-Werte) ist die Länge die Anzahl der Plätze
+		\item Bei Arrays: \texttt{.length} ohne Klammern
+		\item Bei Strings: \texttt{.length()} mit Klammern - das ist ein häufiger Fehler!
+		\item Gibt die Anzahl der Plätze zurück, nicht die Anzahl der gefüllten Plätze
+		\item Auch wenn alle Werte noch 0 oder null sind, hat das Array trotzdem seine feste Länge
 	\end{itemize}
 \end{achtung}
 
@@ -828,8 +828,8 @@ int spalten = matrix[0].length;           // spalten = 4
 \addcontentsline{toc}{subsection}{array[index] - Element lesen}
 
 \subsubsection*{Was ist array[index]?}\\
-Mit der eckigen Klammer \texttt{[]} greift man auf ein einzelnes Element im Array zu.
-Der Index gibt die Position an.
+Mit eckigen Klammern \texttt{[]} kannst du auf ein bestimmtes Fach im Array zugreifen.
+Die Zahl in den Klammern ist die Nummer des Fachs (beginnt bei 0).
 
 \subsubsection*{Eigenschaften:}
 \begin{itemize}
@@ -879,10 +879,10 @@ int wert = matrix[0][1];                  // wert = 2 (1. Zeile, 2. Spalte)
 
 \begin{achtung}
 	\begin{itemize}
-		\item Index beginnt bei \textbf{0}, nicht bei 1
-		\item Index muss zwischen 0 und \texttt{array.length - 1} liegen
-		\item Bei ungültigem Index: \texttt{ArrayIndexOutOfBoundsException}
-		\item Letztes Element: \texttt{array[array.length - 1]}
+		\item Die Nummerierung beginnt bei 0, nicht bei 1!
+		\item Die Nummer muss zwischen 0 und \texttt{array.length - 1} liegen
+		\item Wenn die Nummer zu groß oder zu klein ist, stürzt das Programm ab
+		\item Das letzte Fach erreichst du mit \texttt{array[array.length - 1]}
 	\end{itemize}
 \end{achtung}
 
@@ -894,7 +894,7 @@ int wert = matrix[0][1];                  // wert = 2 (1. Zeile, 2. Spalte)
 \addcontentsline{toc}{subsection}{array[index] = wert - Element schreiben}
 
 \subsubsection*{Was ist array[index] = wert?}\\
-Mit der Zuweisung kann man den Wert eines Elements an einer bestimmten Position im Array ändern.
+So kannst du einen Wert in ein bestimmtes Fach des Arrays legen (oder den alten Wert überschreiben).
 
 \subsubsection*{Eigenschaften:}
 \begin{itemize}
@@ -967,10 +967,10 @@ matrix[1][1] = 4;
 
 \begin{achtung}
 	\begin{itemize}
-		\item Index muss zwischen 0 und \texttt{array.length - 1} liegen
-		\item Bei ungültigem Index: \texttt{ArrayIndexOutOfBoundsException}
-		\item Der Wert muss zum Datentyp des Arrays passen
-		\item Überschreibt den vorherigen Wert an dieser Position komplett
+		\item Die Nummer muss zwischen 0 und \texttt{array.length - 1} liegen
+		\item Wenn die Nummer ungültig ist, stürzt das Programm ab
+		\item Der Wert muss zum Typ des Arrays passen (Zahl für int-Array, Text für String-Array usw.)
+		\item Der alte Wert an dieser Stelle geht verloren - er wird komplett ersetzt
 	\end{itemize}
 \end{achtung}
 

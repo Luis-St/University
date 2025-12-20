@@ -12,15 +12,15 @@
 \addcontentsline{toc}{section}{If-Bedingungen}
 
 \subsection*{Warum braucht man If-Bedingungen?}\\
-If-Bedingungen ermöglichen es, Code nur unter bestimmten Voraussetzungen auszuführen.
-Sie sind notwendig, wenn das Programm Entscheidungen treffen soll: \("\)Wenn eine Bedingung erfüllt ist, dann führe diese Anweisungen aus.\("\)
+Mit If-Bedingungen kann dein Programm Entscheidungen treffen.
+Zum Beispiel: "Wenn das Alter größer als 18 ist, dann zeige 'volljährig' an."
 
-\subsubsection*{Typische Anwendungsfälle:}
+\subsubsection*{Wann brauchst du If?}
 \begin{itemize}
-	\item Prüfen, ob ein Wert einen bestimmten Zustand hat
-	\item Vergleichen von Werten
-	\item Reagieren auf Benutzereingaben
-	\item Fehlerbehandlung (z.B. Index-Prüfung)
+	\item Wenn du prüfen willst, ob eine Zahl größer, kleiner oder gleich einem Wert ist
+	\item Wenn du zwei Werte vergleichen willst
+	\item Wenn du auf Benutzereingaben reagieren willst
+	\item Wenn du Fehler vermeiden willst (z.B. prüfen, ob ein Array-Index gültig ist)
 \end{itemize}
 
 % ============================================================
@@ -244,12 +244,12 @@ if (zahl > 0) {
 \addcontentsline{toc}{section}{For-Schleifen}
 
 \subsection*{Warum braucht man For-Schleifen?}\\
-For-Schleifen ermöglichen es, Code mehrfach auszuführen. Sie sind besonders nützlich, wenn man:
+Mit For-Schleifen kannst du Code mehrmals ausführen lassen. Das ist nützlich, wenn du:
 \begin{itemize}
-	\item Alle Elemente eines Arrays durchlaufen möchte
-	\item Alle Zeichen eines Strings prüfen will
-	\item Eine Aufgabe eine bestimmte Anzahl wiederholen möchte
-	\item Mit Indizes arbeiten muss (z.B. zum Ändern von Array-Werten)
+	\item Durch alle Werte in einem Array gehen willst
+	\item Jeden Buchstaben in einem Text prüfen willst
+	\item Etwas eine bestimmte Anzahl wiederholen willst (z.B. 10-mal)
+	\item Array-Werte ändern willst (dafür brauchst du die Position/Index)
 \end{itemize}
 
 % ============================================================
@@ -265,7 +265,7 @@ for (Initialisierung; Bedingung; Inkrement) {
 }
 \end{lstlisting}
 
-\subsubsection*{Wichtig:} Alle drei Teile (Initialisierung, Bedingung, Inkrement) sind \textbf{optional} und können weggelassen werden!
+\subsubsection*{Wichtig:} Du kannst alle drei Teile (Start, Bedingung, Erhöhung) auch weglassen - das ist erlaubt, aber für Anfänger meist nicht nötig.
 
 \subsubsection*{Typisches Muster für Arrays:}
 \begin{lstlisting}
@@ -517,18 +517,18 @@ for (int i = 1; i <= 4; i++) {
 \addcontentsline{toc}{section}{While-Schleifen}
 
 \subsection*{Warum braucht man While-Schleifen?}\\
-While-Schleifen verwendet man, wenn:
+While-Schleifen benutzt du, wenn:
 \begin{itemize}
-	\item Die Anzahl der Wiederholungen im Voraus nicht bekannt ist
-	\item Die Schleife bis zum Eintreten einer bestimmten Bedingung laufen soll
-	\item Man \("\)so lange wie nötig\("\) wiederholen möchte
-	\item Man nach einem bestimmten Element sucht und abbrechen will, wenn es gefunden wurde
+	\item Du nicht weißt, wie oft du wiederholen musst
+	\item Die Schleife laufen soll, bis etwas Bestimmtes passiert
+	\item Du "so lange wie nötig" wiederholen willst
+	\item Du nach etwas suchst und aufhören willst, sobald du es gefunden hast
 \end{itemize}
 
 \subsubsection*{Unterschied zur For-Schleife:}
 \begin{itemize}
-	\item For-Schleife: \("\)Wiederhole genau n-mal\("\) oder \("\)Durchlaufe alle Elemente\("\)
-	\item While-Schleife: \("\)Wiederhole solange diese Bedingung wahr ist\("\)
+	\item For-Schleife: "Wiederhole genau 10-mal" oder "Gehe durch alle Array-Werte"
+	\item While-Schleife: "Wiederhole, solange die Bedingung wahr ist"
 \end{itemize}
 
 % ============================================================
