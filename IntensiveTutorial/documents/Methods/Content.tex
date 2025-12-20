@@ -586,6 +586,334 @@ float[] gewichte = readFloatArray("Gewichte");
 \newpage
 
 
+\section*{Bildverarbeitung}
+\addcontentsline{toc}{section}{Bildverarbeitung}
+
+Die \texttt{Picture}-Klasse ermöglicht das Laden, Anzeigen und Verarbeiten von Bildern.
+Bilder werden als \texttt{int[][]}-Arrays dargestellt, wobei jeder Integer einen Farbwert (RGB) repräsentiert.
+Die Klasse wird typischerweise mit statischem Import verwendet:
+
+\begin{lstlisting}
+import static prog.Picture.*;
+\end{lstlisting}
+
+% ============================================================
+\newpage
+
+
+\subsection*{show() - Bild anzeigen}
+\addcontentsline{toc}{subsection}{show() - Bild anzeigen}
+
+\subsubsection*{Was macht die Methode?}\\
+Zeigt ein Bild (als \texttt{int[][]}-Array) in einem Fenster an.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+show(bildArray);                    // Ohne Fenstertitel
+show(bildArray, "Fenstertitel");    // Mit Fenstertitel
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Bild aus Datei laden und anzeigen
+int[][] bild = loadFromFileSystem("pfad/zum/bild.jpg");
+show(bild);
+
+// Mit eigenem Fenstertitel
+int[][] foto = loadFromFileSystem("foto.png");
+show(foto, "Mein Urlaubsfoto");
+
+// Mehrere Bilder anzeigen
+int[][] bild1 = loadResource("bild1.jpg");
+int[][] bild2 = loadResource("bild2.jpg");
+show(bild1, "Original");
+show(bild2, "Bearbeitet");
+
+// Selbst erstelltes Bild anzeigen
+int[][] neuBild = new int[100][100];
+for (int y = 0; y < neuBild.length; y++) {
+    for (int x = 0; x < neuBild[0].length; x++) {
+        neuBild[y][x] = color(255, 0, 0);  // Rot
+    }
+}
+show(neuBild, "Rotes Quadrat");
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Format: \texttt{int[Höhe][Breite]} - erste Dimension ist die Höhe (y), zweite ist die Breite (x)
+		\item Jeder int-Wert repräsentiert einen RGB-Farbwert
+		\item Fenster bleibt offen, bis es manuell geschlossen wird
+		\item Ohne Titel: Standardtitel wird verwendet
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{loadFromFileSystem() - Bild von Festplatte laden}
+\addcontentsline{toc}{subsection}{loadFromFileSystem() - Bild von Festplatte laden}
+
+\subsubsection*{Was macht die Methode?}\\
+Lädt ein Bild von der Festplatte und gibt es als \texttt{int[][]}-Array zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int[][] bild = loadFromFileSystem("pfad/zur/datei.jpg");
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Absoluter Pfad
+int[][] bild1 = loadFromFileSystem("/home/user/bilder/foto.jpg");
+show(bild1);
+
+// Relativer Pfad (relativ zum Projektverzeichnis)
+int[][] bild2 = loadFromFileSystem("bilder/landschaft.png");
+show(bild2, "Landschaft");
+
+// Bild laden und Informationen ausgeben
+int[][] foto = loadFromFileSystem("foto.jpg");
+int hoehe = foto.length;
+int breite = foto[0].length;
+System.out.println("Bildgroesse: " + breite + " x " + hoehe);
+
+// Bild laden und verarbeiten
+int[][] original = loadFromFileSystem("bild.jpg");
+int[][] bearbeitet = new int[original.length][original[0].length];
+// ... Bildverarbeitung ...
+show(original, "Original");
+show(bearbeitet, "Bearbeitet");
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Unterstützt gängige Formate: JPG, PNG, BMP, GIF
+		\item Pfad kann absolut oder relativ sein
+		\item Bei ungültigem Pfad: Fehler (Datei nicht gefunden)
+		\item Für Bilder im Projekt: \texttt{loadResource()} verwenden
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{loadResource() - Bild aus Projekt laden}
+\addcontentsline{toc}{subsection}{loadResource() - Bild aus Projekt laden}
+
+\subsubsection*{Was macht die Methode?}\\
+Lädt ein Bild aus dem Projekt-Package und gibt es als \texttt{int[][]}-Array zurück.
+In einfachen Projekten liegt die Bilddatei direkt im gleichen Package wie die Klasse.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int[][] bild = loadResource("dateiname.jpg");
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Bild direkt aus dem Package laden
+int[][] logo = loadResource("logo.png");
+show(logo, "Logo");
+
+// Mehrere Bilder laden
+int[][] bild1 = loadResource("bild1.jpg");
+int[][] bild2 = loadResource("bild2.jpg");
+show(bild1, "Bild 1");
+show(bild2, "Bild 2");
+
+// Bild laden und Groesse pruefen
+int[][] foto = loadResource("foto.png");
+if (foto.length > 0 && foto[0].length > 0) {
+    System.out.println("Bild erfolgreich geladen");
+    show(foto);
+}
+
+// Typische Verwendung in einfachen Projekten
+// Dateistruktur:
+// src/
+//   prog/
+//     Main.java
+//     bild.jpg  <- Bild liegt direkt neben der Klasse
+
+// Variante 1: Relativ
+int[][] bild = loadResource("bild.jpg");
+show(bild);
+
+// Variante 2: Absolut vom Classpath-Root
+int[][] bild2 = loadResource("/prog/bild.jpg");
+show(bild2);
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Nur für Bilder \textbf{im Projekt-Package} verwenden
+		\item Bilddatei muss im gleichen Verzeichnis wie die Klasse liegen
+		\item Nur Dateiname angeben, \textbf{kein} Pfad
+		\item Für Bilder außerhalb: \texttt{loadFromFileSystem()} verwenden
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{color() - Farbwert erstellen}
+\addcontentsline{toc}{subsection}{color() - Farbwert erstellen}
+
+\subsubsection*{Was macht die Methode?}\\
+Erstellt einen RGB-Farbwert aus Rot-, Grün- und Blau-Anteilen.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int farbwert = color(rot, gruen, blau);  // Werte: 0-255
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Grundfarben
+int rot = color(255, 0, 0);
+int gruen = color(0, 255, 0);
+int blau = color(0, 0, 255);
+
+// Mischfarben
+int gelb = color(255, 255, 0);      // Rot + Gruen
+int magenta = color(255, 0, 255);   // Rot + Blau
+int cyan = color(0, 255, 255);      // Gruen + Blau
+
+// Graustufen
+int schwarz = color(0, 0, 0);
+int weiss = color(255, 255, 255);
+int grau = color(128, 128, 128);
+
+// Bild mit Farbe fuellen
+int[][] bild = new int[100][200];
+int orange = color(255, 165, 0);
+for (int y = 0; y < bild.length; y++) {
+    for (int x = 0; x < bild[0].length; x++) {
+        bild[y][x] = orange;
+    }
+}
+show(bild, "Orange");
+
+// Farbverlauf erstellen
+int[][] verlauf = new int[256][100];
+for (int y = 0; y < verlauf.length; y++) {
+    int farbwert = color(y, 0, 255 - y);  // Von Blau zu Rot
+    for (int x = 0; x < verlauf[0].length; x++) {
+        verlauf[y][x] = farbwert;
+    }
+}
+show(verlauf, "Farbverlauf");
+
+// Pixel-Farbe setzen
+int[][] foto = loadResource("foto.jpg");
+foto[50][100] = color(255, 0, 0);  // Roten Punkt setzen
+show(foto);
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Wertebereich: 0 bis 255 für jeden Farbkanal
+		\item 0 = keine Farbe, 255 = maximale Intensität
+		\item RGB-Format: Rot, Grün, Blau
+		\item Rückgabewert ist ein int, der alle drei Farbkanäle enthält
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{red(), green(), blue() - Farbkanäle extrahieren}
+\addcontentsline{toc}{subsection}{red(), green(), blue() - Farbkanäle extrahieren}
+
+\subsubsection*{Was machen die Methoden?}\\
+Extrahieren den Rot-, Grün- oder Blau-Anteil aus einem Farbwert.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int rotWert = red(farbwert);      // Rot-Anteil (0-255)
+int gruenWert = green(farbwert);  // Gruen-Anteil (0-255)
+int blauWert = blue(farbwert);    // Blau-Anteil (0-255)
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Farbkanäle eines Farbwerts extrahieren
+int orange = color(255, 165, 0);
+int r = red(orange);      // r = 255
+int g = green(orange);    // g = 165
+int b = blue(orange);     // b = 0
+System.out.println("RGB: " + r + ", " + g + ", " + b);
+
+// Pixel-Farbe analysieren
+int[][] bild = loadResource("foto.jpg");
+int pixel = bild[50][100];  // Pixel an Position (100, 50)
+System.out.println("Rot: " + red(pixel));
+System.out.println("Gruen: " + green(pixel));
+System.out.println("Blau: " + blue(pixel));
+
+// Bild in Graustufen umwandeln
+int[][] original = loadResource("bild.jpg");
+int[][] graustufen = new int[original.length][original[0].length];
+for (int y = 0; y < original.length; y++) {
+    for (int x = 0; x < original[0].length; x++) {
+        int pixel = original[y][x];
+        int r = red(pixel);
+        int g = green(pixel);
+        int b = blue(pixel);
+        int grau = (r + g + b) / 3;  // Durchschnitt
+        graustufen[y][x] = color(grau, grau, grau);
+    }
+}
+show(original, "Original");
+show(graustufen, "Graustufen");
+
+// Nur Rot-Kanal behalten
+int[][] nurRot = new int[original.length][original[0].length];
+for (int y = 0; y < original.length; y++) {
+    for (int x = 0; x < original[0].length; x++) {
+        int r = red(original[y][x]);
+        nurRot[y][x] = color(r, 0, 0);
+    }
+}
+show(nurRot, "Nur Rot-Kanal");
+
+// Farbkanäle vertauschen (Rot <-> Blau)
+int[][] vertauscht = new int[original.length][original[0].length];
+for (int y = 0; y < original.length; y++) {
+    for (int x = 0; x < original[0].length; x++) {
+        int pixel = original[y][x];
+        int r = red(pixel);
+        int g = green(pixel);
+        int b = blue(pixel);
+        vertauscht[y][x] = color(b, g, r);  // Blau und Rot tauschen
+    }
+}
+show(vertauscht, "Vertauschte Kanäle");
+
+// Helligkeit eines Pixels berechnen
+int pixel = bild[0][0];
+int helligkeit = (red(pixel) + green(pixel) + blue(pixel)) / 3;
+System.out.println("Helligkeit: " + helligkeit);
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Rückgabewert: immer 0 bis 255
+		\item Nützlich für Bildverarbeitung und Filter
+		\item Kombiniert mit \texttt{color()} zum Ändern einzelner Kanäle
+		\item Typische Anwendung: Graustufen-Konvertierung, Farbfilter
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
 \section*{Häufige Fehler bei Strings}
 \addcontentsline{toc}{section}{Häufige Fehler bei Strings}
 
