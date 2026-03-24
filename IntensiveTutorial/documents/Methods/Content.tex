@@ -1,0 +1,1174 @@
+\begingroup
+\let\cleardoublepage\relax
+
+
+\chapter*{Grundlegende Methoden in Java}
+\label{ch:grundlegende-methoden-in-java}
+\addcontentsline{toc}{chapter}{Grundlegende Methoden in Java}
+\endgroup
+
+
+\section*{String-Methoden}
+\addcontentsline{toc}{section}{String-Methoden}
+
+\subsection*{length() - Länge eines Strings}
+
+\subsubsection*{Was macht die Methode?}\\
+Gibt die Anzahl der Zeichen im String zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int laenge = text.length();
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+String name = "Anna";
+int laenge = name.length();  // laenge = 4
+
+String wort = "Hallo Welt";
+int laenge2 = wort.length();  // laenge2 = 10 (Leerzeichen zaehlt mit!)
+
+String leer = "";
+int laenge3 = leer.length();  // laenge3 = 0
+
+String satz = "Java";
+for (int i = 0; i < satz.length(); i++) {
+    // Schleife laeuft 4 mal (von 0 bis 3)
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item \texttt{length()} zählt alle Zeichen: Der Text "Hi" hat die Länge 2
+		\item Leerzeichen und Sonderzeichen zählen mit
+		\item Bei Strings: \texttt{.length()} mit Klammern
+		\item Bei Arrays: \texttt{.length} ohne Klammern - das ist ein wichtiger Unterschied!
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{charAt(int index) - Zeichen an Position}
+
+\subsubsection*{Was macht die Methode?}\\
+Gibt dir das Zeichen an einer bestimmten Stelle im Text zurück. Wichtig: Die Zählung beginnt bei 0!
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+char zeichen = text.charAt(index);
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+String wort = "Hallo";
+char erstes = wort.charAt(0);   // erstes = 'H'
+char zweites = wort.charAt(1);  // zweites = 'a'
+char letztes = wort.charAt(4);  // letztes = 'o'
+
+// Alle Zeichen durchlaufen
+String text = "Java";
+for (int i = 0; i < text.length(); i++) {
+    char c = text.charAt(i);
+    System.out.println(c);  // Gibt aus: J, a, v, a
+}
+
+// Pruefung einzelner Zeichen
+String eingabe = "A1B2";
+if (eingabe.charAt(0) == 'A') {
+    System.out.println("Beginnt mit A");
+}
+
+// Zeichen vergleichen
+String code = "12345";
+if (code.charAt(2) == '3') {
+    System.out.println("An Position 2 steht eine 3");
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Die Nummerierung beginnt bei 0
+		\item Die Nummer muss zwischen 0 und \texttt{text.length() - 1} liegen
+		\item Wenn die Nummer zu groß oder zu klein ist, stürzt das Programm ab
+		\item Du bekommst ein einzelnes Zeichen (char) zurück, keinen Text (String)
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\section*{Ausgabe auf der Konsole}
+\addcontentsline{toc}{section}{Ausgabe auf der Konsole}
+
+Mit \texttt{System.out.println()} und \texttt{System.out.print()} kannst du Text und Zahlen auf der Konsole ausgeben.
+
+
+\subsection*{println() - Ausgabe mit Zeilenumbruch}
+\addcontentsline{toc}{subsection}{println() - Ausgabe mit Zeilenumbruch}
+
+\subsubsection*{Was macht die Methode?}\\
+Gibt Text, Zahlen oder andere Werte auf der Konsole aus und springt danach in die nächste Zeile.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+System.out.println(wert);
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Text ausgeben
+System.out.println("Hallo Welt!");
+// Ausgabe: Hallo Welt!
+
+// Zahlen ausgeben
+System.out.println(42);
+// Ausgabe: 42
+
+System.out.println(3.14);
+// Ausgabe: 3.14
+
+// Variablen ausgeben
+String name = "Anna";
+System.out.println(name);
+// Ausgabe: Anna
+
+int alter = 25;
+System.out.println(alter);
+// Ausgabe: 25
+
+// Text und Variablen kombinieren
+System.out.println("Ich bin " + alter + " Jahre alt");
+// Ausgabe: Ich bin 25 Jahre alt
+
+System.out.println("Hallo " + name + "!");
+// Ausgabe: Hallo Anna!
+
+// Mehrere Ausgaben hintereinander
+System.out.println("Erste Zeile");
+System.out.println("Zweite Zeile");
+System.out.println("Dritte Zeile");
+// Ausgabe:
+// Erste Zeile
+// Zweite Zeile
+// Dritte Zeile
+
+// Berechnungen direkt ausgeben
+System.out.println(5 + 3);
+// Ausgabe: 8
+
+System.out.println("Ergebnis: " + (10 * 2));
+// Ausgabe: Ergebnis: 20
+
+// Leere Zeile ausgeben
+System.out.println();
+// Ausgabe: (eine leere Zeile)
+
+// Boolean-Werte ausgeben
+boolean istWahr = true;
+System.out.println(istWahr);
+// Ausgabe: true
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Nach der Ausgabe springt der Cursor automatisch in die nächste Zeile
+		\item Du kannst Text, Zahlen, Variablen und sogar Berechnungen ausgeben
+		\item Zum Verbinden von Text und Variablen benutzt du das Plus-Zeichen (+)
+		\item Ohne Wert macht \texttt{println()} einfach eine neue Zeile
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{print() - Ausgabe ohne Zeilenumbruch}
+\addcontentsline{toc}{subsection}{print() - Ausgabe ohne Zeilenumbruch}
+
+\subsubsection*{Was macht die Methode?}\\
+Gibt Text, Zahlen oder andere Werte auf der Konsole aus, bleibt aber in der gleichen Zeile.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+System.out.print(wert);
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Text ausgeben ohne Zeilenumbruch
+System.out.print("Hallo ");
+System.out.print("Welt!");
+// Ausgabe: Hallo Welt!
+
+// Zahlen ausgeben
+System.out.print(1);
+System.out.print(2);
+System.out.print(3);
+// Ausgabe: 123
+
+// Mit Leerzeichen trennen
+System.out.print("Eins ");
+System.out.print("Zwei ");
+System.out.print("Drei");
+// Ausgabe: Eins Zwei Drei
+
+// Zähler in einer Zeile
+for (int i = 1; i <= 5; i++) {
+    System.out.print(i + " ");
+}
+// Ausgabe: 1 2 3 4 5
+
+// Sterne in einer Reihe ausgeben
+for (int i = 0; i < 10; i++) {
+    System.out.print("*");
+}
+// Ausgabe: **********
+
+// Kombination mit println()
+System.out.print("Name: ");
+System.out.println("Anna");
+System.out.print("Alter: ");
+System.out.println(25);
+// Ausgabe:
+// Name: Anna
+// Alter: 25
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Der Cursor bleibt in der gleichen Zeile - es gibt keinen Zeilenumbruch
+		\item Nützlich, wenn du mehrere Dinge in eine Zeile schreiben willst
+		\item Oft wird \texttt{print()} mit \texttt{println()} kombiniert
+		\item Denk daran, Leerzeichen einzufügen, wenn du Wörter trennen willst
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{Der Unterschied: print() vs. println()}
+
+\subsubsection*{Direkter Vergleich:}
+\begin{lstlisting}
+// Mit println() - jedes Mal eine neue Zeile
+System.out.println("A");
+System.out.println("B");
+System.out.println("C");
+// Ausgabe:
+// A
+// B
+// C
+
+// Mit print() - alles in einer Zeile
+System.out.print("A");
+System.out.print("B");
+System.out.print("C");
+// Ausgabe:
+// ABC
+
+// Gemischt - Kombination aus beiden
+System.out.print("Vorname: ");
+System.out.println("Max");
+System.out.print("Nachname: ");
+System.out.println("Mustermann");
+// Ausgabe:
+// Vorname: Max
+// Nachname: Mustermann
+\end{lstlisting}
+
+\subsubsection*{Wann benutzt du was?}
+
+\begin{itemize}
+	\item \textbf{println()}: Wenn jede Ausgabe in einer eigenen Zeile stehen soll
+	\item \textbf{print()}: Wenn du mehrere Dinge in einer Zeile ausgeben willst
+	\item \textbf{Kombination}: print() für die Beschriftung, println() für den Wert
+\end{itemize}
+
+\subsubsection*{Praktisches Beispiel:}
+\begin{lstlisting}
+// Quadratzahlen ausgeben
+System.out.println("Quadratzahlen von 1 bis 5:");
+for (int i = 1; i <= 5; i++) {
+    System.out.print(i + "² = ");
+    System.out.println(i * i);
+}
+// Ausgabe:
+// Quadratzahlen von 1 bis 5:
+// 1² = 1
+// 2² = 4
+// 3² = 9
+// 4² = 16
+// 5² = 25
+
+// Muster ausgeben
+for (int zeile = 1; zeile <= 3; zeile++) {
+    for (int spalte = 1; spalte <= 5; spalte++) {
+        System.out.print("* ");
+    }
+    System.out.println();  // Neue Zeile nach jeder Reihe
+}
+// Ausgabe:
+// * * * * *
+// * * * * *
+// * * * * *
+\end{lstlisting}
+
+% ============================================================
+\newpage
+
+
+\section*{ConsoleReader - Eingaben von der Konsole}
+\addcontentsline{toc}{section}{ConsoleReader - Eingaben von der Konsole}
+
+Der \texttt{ConsoleReader} ist ein Werkzeug, mit dem du Eingaben vom Benutzer einlesen kannst.
+Um ihn zu benutzen, schreibst du am Anfang deines Programms:
+
+\begin{lstlisting}
+import static prog.ConsoleReader.*;
+\end{lstlisting}
+
+Alle Eingabe-Methoden gibt es in zwei Varianten:
+\begin{itemize}
+	\item Ohne Text: Wartet einfach auf die Eingabe
+	\item Mit Text: Zeigt zuerst eine Aufforderung an (z.B. "Wie heißt du?")
+\end{itemize}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readString() - String einlesen}
+\addcontentsline{toc}{subsection}{readString() - String einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest eine Zeile Text von der Konsole ein und gibt sie als String zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+String text = readString();                // Ohne Prompt
+String text = readString("Eingabetext");   // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Einfache Eingabe
+String name = readString("Wie heisst du? ");
+System.out.println("Hallo " + name);
+
+// Mehrere Eingaben
+String vorname = readString("Vorname");
+String nachname = readString("Nachname");
+String vollername = vorname + " " + nachname;
+
+// Ohne Prompt
+System.out.println("Gib einen Text ein:");
+String eingabe = readString();
+
+// In Schleife verwenden
+String antwort;
+do {
+    antwort = readString("Weiter? (ja/nein)");
+} while (!antwort.equals("nein"));
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Liest alles, was der Benutzer eingibt, bis er Enter drückt
+		\item Du bekommst immer Text (String) zurück, auch wenn jemand "123" eingibt
+		\item Wenn du Zahlen brauchst, benutze \texttt{readInt()} oder \texttt{readDouble()}
+		\item Wenn der Benutzer nur Enter drückt, bekommst du einen leeren Text \texttt{""} zurück
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readInt() - Ganzzahl einlesen}
+\addcontentsline{toc}{subsection}{readInt() - Ganzzahl einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest eine Ganzzahl von der Konsole ein und gibt sie als \texttt{int} zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int zahl = readInt();                      // Ohne Prompt
+int zahl = readInt("Gib eine Zahl ein");   // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Alter einlesen
+int alter = readInt("Wie alt bist du? ");
+System.out.println("Du bist " + alter + " Jahre alt");
+
+// Berechnungen
+int a = readInt("Erste Zahl");
+int b = readInt("Zweite Zahl");
+int summe = a + b;
+System.out.println("Summe: " + summe);
+
+// Array-Groesse einlesen
+int anzahl = readInt("Wie viele Zahlen? ");
+int[] zahlen = new int[anzahl];
+for (int i = 0; i < zahlen.length; i++) {
+    zahlen[i] = readInt("Zahl " + (i + 1));
+}
+
+// Schleifensteuerung
+int wiederholungen = readInt("Wie oft wiederholen? ");
+for (int i = 0; i < wiederholungen; i++) {
+    System.out.println("Durchlauf " + (i + 1));
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Wenn jemand Text statt einer Zahl eingibt, stürzt das Programm ab
+		\item Funktioniert nur für ganze Zahlen von etwa -2 Milliarden bis +2 Milliarden
+		\item Für größere Zahlen: \texttt{readLong()} benutzen
+		\item Für Kommazahlen: \texttt{readDouble()} benutzen
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readDouble() - Kommazahl einlesen}
+\addcontentsline{toc}{subsection}{readDouble() - Kommazahl einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest eine Kommazahl von der Konsole ein und gibt sie als \texttt{double} zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+double zahl = readDouble();                    // Ohne Prompt
+double zahl = readDouble("Gib eine Zahl ein"); // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Preis einlesen
+double preis = readDouble("Preis in Euro");
+double mehrwertsteuer = preis * 0.19;
+double gesamtpreis = preis + mehrwertsteuer;
+System.out.println("Gesamt: " + gesamtpreis + " Euro");
+
+// Durchschnitt berechnen
+double note1 = readDouble("Note 1");
+double note2 = readDouble("Note 2");
+double note3 = readDouble("Note 3");
+double durchschnitt = (note1 + note2 + note3) / 3.0;
+System.out.println("Durchschnitt: " + durchschnitt);
+
+// Temperatur
+double celsius = readDouble("Temperatur in Celsius");
+double fahrenheit = celsius * 9.0 / 5.0 + 32.0;
+System.out.println(celsius + "°C = " + fahrenheit + "°F");
+
+// Auch Ganzzahlen moeglich
+double wert = readDouble("Zahl");  // Eingabe: 5
+// wert = 5.0
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Je nach Computer funktioniert Komma \texttt{,} oder Punkt \texttt{.} als Trennzeichen
+		\item Wenn jemand normalen Text eingibt, stürzt das Programm ab
+		\item Du kannst auch ganze Zahlen eingeben - sie werden automatisch zu Kommazahlen
+		\item Für die meisten Fälle ist \texttt{readDouble()} besser als \texttt{readFloat()}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readByte() - Sehr kleine Ganzzahl einlesen}
+\addcontentsline{toc}{subsection}{readByte() - Sehr kleine Ganzzahl einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest eine sehr kleine Ganzzahl von der Konsole ein und gibt sie als \texttt{byte} zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+byte zahl = readByte();                    // Ohne Prompt
+byte zahl = readByte("Gib eine Zahl ein"); // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Alter (wenn < 127)
+byte alter = readByte("Alter");
+
+// Prozent (0-100)
+byte prozent = readByte("Prozent (0-100)");
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Wertebereich: nur -128 bis 127
+		\item Bei zu großen Zahlen: Fehler
+		\item Meist wird \texttt{readInt()} bevorzugt
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readShort() - Kleine Ganzzahl einlesen}
+\addcontentsline{toc}{subsection}{readShort() - Kleine Ganzzahl einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest eine kleine Ganzzahl von der Konsole ein und gibt sie als \texttt{short} zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+short zahl = readShort();                    // Ohne Prompt
+short zahl = readShort("Gib eine Zahl ein"); // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Jahr
+short jahr = readShort("Geburtsjahr");
+
+// Distanz in Metern
+short meter = readShort("Distanz in Metern");
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Wertebereich: -32.768 bis 32.767
+		\item Bei zu großen Zahlen: Fehler
+		\item Meist wird \texttt{readInt()} bevorzugt
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readLong() - Sehr große Ganzzahl einlesen}
+\addcontentsline{toc}{subsection}{readLong() - Sehr große Ganzzahl einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest eine sehr große Ganzzahl von der Konsole ein und gibt sie als \texttt{long} zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+long zahl = readLong();                    // Ohne Prompt
+long zahl = readLong("Gib eine Zahl ein"); // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Sehr große Zahlen
+long weltbevoelkerung = readLong("Weltbevoelkerung");
+
+// Millisekunden
+long millis = readLong("Millisekunden");
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Für sehr große Zahlen (größer als ca. 2 Milliarden)
+		\item Wertebereich: ca. -9,2 $\times$ 10$^{18}$ bis 9,2 $\times$ 10$^{18}$
+		\item Für normale Zahlen: \texttt{readInt()} verwenden
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readFloat() - Einfache Kommazahl einlesen}
+\addcontentsline{toc}{subsection}{readFloat() - Einfache Kommazahl einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest eine Kommazahl mit einfacher Genauigkeit von der Konsole ein und gibt sie als \texttt{float} zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+float zahl = readFloat();                    // Ohne Prompt
+float zahl = readFloat("Gib eine Zahl ein"); // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Gewicht
+float gewicht = readFloat("Gewicht in kg");
+
+// Groesse
+float groesse = readFloat("Groesse in m");
+float bmi = gewicht / (groesse * groesse);
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Weniger genau als \texttt{double} (ca. 6-7 Dezimalstellen)
+		\item Meist wird \texttt{readDouble()} bevorzugt
+		\item Dezimaltrennzeichen: Komma oder Punkt (je nach System)
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readIntArray() - Ganzzahl-Array einlesen}
+\addcontentsline{toc}{subsection}{readIntArray() - Ganzzahl-Array einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest mehrere Ganzzahlen auf einmal ein und gibt sie als Array zurück.
+Die Zahlen müssen mit Leerzeichen getrennt werden.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int[] zahlen = readIntArray();                    // Ohne Prompt
+int[] zahlen = readIntArray("Gib Zahlen ein");    // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Mehrere Zahlen auf einmal einlesen
+int[] noten = readIntArray("Noten (durch Leerzeichen getrennt)");
+// Eingabe: 1 2 3 2 1
+// noten = {1, 2, 3, 2, 1}
+
+// Durchschnitt berechnen
+int summe = 0;
+for (int note : noten) {
+    summe += note;
+}
+double durchschnitt = (double) summe / noten.length;
+System.out.println("Durchschnitt: " + durchschnitt);
+
+// Array direkt ausgeben
+int[] zahlen = readIntArray("Zahlen");
+System.out.println("Anzahl: " + zahlen.length);
+for (int i = 0; i < zahlen.length; i++) {
+    System.out.println("Zahl " + (i + 1) + ": " + zahlen[i]);
+}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Die Zahlen müssen mit Leerzeichen getrennt sein (z.B. "1 2 3")
+		\item Die Größe des Arrays passt sich automatisch an die Anzahl der Zahlen an
+		\item Wenn jemand Text eingibt, stürzt das Programm ab
+		\item Alle Zahlen müssen in einer Zeile stehen (Enter beendet die Eingabe)
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readDoubleArray() - Kommazahl-Array einlesen}
+\addcontentsline{toc}{subsection}{readDoubleArray() - Kommazahl-Array einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest mehrere Kommazahlen von der Konsole ein und gibt sie als \texttt{double[]}-Array zurück.
+Die Zahlen müssen durch Leerzeichen getrennt eingegeben werden.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+double[] zahlen = readDoubleArray();                    // Ohne Prompt
+double[] zahlen = readDoubleArray("Gib Zahlen ein");    // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Preise einlesen
+double[] preise = readDoubleArray("Preise");
+// Eingabe: 9.99 14.50 7.25
+// preise = {9.99, 14.50, 7.25}
+
+// Gesamtpreis berechnen
+double gesamt = 0.0;
+for (double preis : preise) {
+    gesamt += preis;
+}
+System.out.println("Gesamt: " + gesamt + " Euro");
+
+// Temperaturwerte
+double[] temps = readDoubleArray("Temperaturen");
+double min = temps[0];
+double max = temps[0];
+for (double temp : temps) {
+    if (temp < min) min = temp;
+    if (temp > max) max = temp;
+}
+System.out.println("Min: " + min + ", Max: " + max);
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Zahlen müssen durch \textbf{Leerzeichen} getrennt werden
+		\item Dezimaltrennzeichen: Komma oder Punkt (je nach System)
+		\item Array-Größe ergibt sich automatisch aus der Anzahl der Eingaben
+		\item Bei ungültiger Eingabe: Programm bricht ab
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{readStringArray() - String-Array einlesen}
+\addcontentsline{toc}{subsection}{readStringArray() - String-Array einlesen}
+
+\subsubsection*{Was macht die Methode?}\\
+Liest mehrere Wörter von der Konsole ein und gibt sie als \texttt{String[]}-Array zurück.
+Die Wörter müssen durch Leerzeichen getrennt eingegeben werden.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+String[] woerter = readStringArray();                    // Ohne Prompt
+String[] woerter = readStringArray("Gib Woerter ein");   // Mit Prompt
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Namen einlesen
+String[] namen = readStringArray("Namen");
+// Eingabe: Anna Bob Clara
+// namen = {"Anna", "Bob", "Clara"}
+
+// Alle Namen ausgeben
+System.out.println("Teilnehmer:");
+for (String name : namen) {
+    System.out.println("- " + name);
+}
+
+// Woerter zaehlen
+String[] woerter = readStringArray("Satz");
+System.out.println("Anzahl Woerter: " + woerter.length);
+
+// Laengstes Wort finden
+String[] text = readStringArray("Text");
+String laengstes = text[0];
+for (String wort : text) {
+    if (wort.length() > laengstes.length()) {
+        laengstes = wort;
+    }
+}
+System.out.println("Laengstes Wort: " + laengstes);
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Die Wörter müssen mit Leerzeichen getrennt sein
+		\item Wenn du ganze Sätze einlesen willst, benutze lieber \texttt{readString()}
+		\item Die Größe des Arrays passt sich automatisch an die Anzahl der Wörter an
+		\item Für Sätze: \texttt{readString()} benutzen und dann mit \texttt{.split(" ")} aufteilen
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{Weitere Array-Methoden}
+\addcontentsline{toc}{subsection}{Weitere Array-Methoden}
+
+Der ConsoleReader bietet auch Methoden für andere Datentypen:
+
+\begin{itemize}
+	\item \texttt{readByteArray()} - Liest \texttt{byte[]}-Array ein
+	\item \texttt{readShortArray()} - Liest \texttt{short[]}-Array ein
+	\item \texttt{readLongArray()} - Liest \texttt{long[]}-Array ein
+	\item \texttt{readFloatArray()} - Liest \texttt{float[]}-Array ein
+\end{itemize}
+
+Diese funktionieren analog zu \texttt{readIntArray()} und \texttt{readDoubleArray()}.
+
+\subsubsection*{Beispiel:}
+\begin{lstlisting}
+// Byte-Array
+byte[] bytes = readByteArray("Bytes");
+
+// Long-Array fuer grosse Zahlen
+long[] ids = readLongArray("IDs");
+
+// Float-Array
+float[] gewichte = readFloatArray("Gewichte");
+\end{lstlisting}
+
+% ============================================================
+\newpage
+
+
+\section*{Bildverarbeitung}
+\addcontentsline{toc}{section}{Bildverarbeitung}
+
+Die \texttt{Picture}-Klasse ist ein Werkzeug zum Arbeiten mit Bildern.
+Bilder werden als zweidimensionale Arrays gespeichert, wobei jeder Wert eine Farbe darstellt.
+Um sie zu benutzen, schreibst du am Anfang:
+
+\begin{lstlisting}
+import static prog.Picture.*;
+\end{lstlisting}
+
+% ============================================================
+\newpage
+
+
+\subsection*{show() - Bild anzeigen}
+\addcontentsline{toc}{subsection}{show() - Bild anzeigen}
+
+\subsubsection*{Was macht die Methode?}\\
+Zeigt ein Bild (als \texttt{int[][]}-Array) in einem Fenster an.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+show(bildArray);                    // Ohne Fenstertitel
+show(bildArray, "Fenstertitel");    // Mit Fenstertitel
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Bild aus Datei laden und anzeigen
+int[][] bild = loadFromFileSystem("pfad/zum/bild.jpg");
+show(bild);
+
+// Mit eigenem Fenstertitel
+int[][] foto = loadFromFileSystem("foto.png");
+show(foto, "Mein Urlaubsfoto");
+
+// Mehrere Bilder anzeigen
+int[][] bild1 = loadResource("bild1.jpg");
+int[][] bild2 = loadResource("bild2.jpg");
+show(bild1, "Original");
+show(bild2, "Bearbeitet");
+
+// Selbst erstelltes Bild anzeigen
+int[][] neuBild = new int[100][100];
+for (int y = 0; y < neuBild.length; y++) {
+    for (int x = 0; x < neuBild[0].length; x++) {
+        neuBild[y][x] = color(255, 0, 0);  // Rot
+    }
+}
+show(neuBild, "Rotes Quadrat");
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Das Array hat das Format \texttt{int[Höhe][Breite]} - erst Höhe, dann Breite
+		\item Jede Zahl im Array stellt eine Farbe dar
+		\item Das Fenster bleibt offen, bis du es schließt
+		\item Wenn du keinen Titel angibst, wird ein Standardtitel verwendet
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{loadFromFileSystem() - Bild von Festplatte laden}
+\addcontentsline{toc}{subsection}{loadFromFileSystem() - Bild von Festplatte laden}
+
+\subsubsection*{Was macht die Methode?}\\
+Lädt ein Bild von der Festplatte und gibt es als \texttt{int[][]}-Array zurück.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int[][] bild = loadFromFileSystem("pfad/zur/datei.jpg");
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Absoluter Pfad
+int[][] bild1 = loadFromFileSystem("/home/user/bilder/foto.jpg");
+show(bild1);
+
+// Relativer Pfad (relativ zum Projektverzeichnis)
+int[][] bild2 = loadFromFileSystem("bilder/landschaft.png");
+show(bild2, "Landschaft");
+
+// Bild laden und Informationen ausgeben
+int[][] foto = loadFromFileSystem("foto.jpg");
+int hoehe = foto.length;
+int breite = foto[0].length;
+System.out.println("Bildgroesse: " + breite + " x " + hoehe);
+
+// Bild laden und verarbeiten
+int[][] original = loadFromFileSystem("bild.jpg");
+int[][] bearbeitet = new int[original.length][original[0].length];
+// ... Bildverarbeitung ...
+show(original, "Original");
+show(bearbeitet, "Bearbeitet");
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Funktioniert mit den gängigen Bildformaten: JPG, PNG, BMP, GIF
+		\item Du kannst den vollständigen Pfad oder einen relativen Pfad angeben
+		\item Wenn die Datei nicht existiert, stürzt das Programm ab
+		\item Für Bilder, die zu deinem Programm gehören: benutze \texttt{loadResource()}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{loadResource() - Bild aus Projekt laden}
+\addcontentsline{toc}{subsection}{loadResource() - Bild aus Projekt laden}
+
+\subsubsection*{Was macht die Methode?}\\
+Lädt ein Bild, das zu deinem Projekt gehört, und gibt es als Array zurück.
+Das Bild muss im selben Ordner liegen wie dein Programm.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int[][] bild = loadResource("dateiname.jpg");
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Bild direkt aus dem Package laden
+int[][] logo = loadResource("logo.png");
+show(logo, "Logo");
+
+// Mehrere Bilder laden
+int[][] bild1 = loadResource("bild1.jpg");
+int[][] bild2 = loadResource("bild2.jpg");
+show(bild1, "Bild 1");
+show(bild2, "Bild 2");
+
+// Bild laden und Groesse pruefen
+int[][] foto = loadResource("foto.png");
+if (foto.length > 0 && foto[0].length > 0) {
+    System.out.println("Bild erfolgreich geladen");
+    show(foto);
+}
+
+// Typische Verwendung in einfachen Projekten
+// Dateistruktur:
+// src/
+//   prog/
+//     Main.java
+//     bild.jpg  <- Bild liegt direkt neben der Klasse
+
+// Variante 1: Relativ
+int[][] bild = loadResource("bild.jpg");
+show(bild);
+
+// Variante 2: Absolut vom Classpath-Root
+int[][] bild2 = loadResource("/prog/bild.jpg");
+show(bild2);
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Nur für Bilder benutzen, die zu deinem Projekt gehören
+		\item Das Bild muss im selben Ordner liegen wie dein Programm
+		\item Gib nur den Dateinamen an, keinen Pfad
+		\item Für Bilder von woanders auf deinem Computer: benutze \texttt{loadFromFileSystem()}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{color() - Farbwert erstellen}
+\addcontentsline{toc}{subsection}{color() - Farbwert erstellen}
+
+\subsubsection*{Was macht die Methode?}\\
+Erstellt einen RGB-Farbwert aus Rot-, Grün- und Blau-Anteilen.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int farbwert = color(rot, gruen, blau);  // Werte: 0-255
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Grundfarben
+int rot = color(255, 0, 0);
+int gruen = color(0, 255, 0);
+int blau = color(0, 0, 255);
+
+// Mischfarben
+int gelb = color(255, 255, 0);      // Rot + Gruen
+int magenta = color(255, 0, 255);   // Rot + Blau
+int cyan = color(0, 255, 255);      // Gruen + Blau
+
+// Graustufen
+int schwarz = color(0, 0, 0);
+int weiss = color(255, 255, 255);
+int grau = color(128, 128, 128);
+
+// Bild mit Farbe fuellen
+int[][] bild = new int[100][200];
+int orange = color(255, 165, 0);
+for (int y = 0; y < bild.length; y++) {
+    for (int x = 0; x < bild[0].length; x++) {
+        bild[y][x] = orange;
+    }
+}
+show(bild, "Orange");
+
+// Farbverlauf erstellen
+int[][] verlauf = new int[256][100];
+for (int y = 0; y < verlauf.length; y++) {
+    int farbwert = color(y, 0, 255 - y);  // Von Blau zu Rot
+    for (int x = 0; x < verlauf[0].length; x++) {
+        verlauf[y][x] = farbwert;
+    }
+}
+show(verlauf, "Farbverlauf");
+
+// Pixel-Farbe setzen
+int[][] foto = loadResource("foto.jpg");
+foto[50][100] = color(255, 0, 0);  // Roten Punkt setzen
+show(foto);
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Jede Farbe (Rot, Grün, Blau) kann einen Wert von 0 bis 255 haben
+		\item 0 bedeutet "gar nichts von dieser Farbe", 255 bedeutet "maximale Helligkeit"
+		\item RGB steht für: Rot, Grün, Blau
+		\item Die Methode gibt eine einzige Zahl zurück, die alle drei Farben enthält
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{red(), green(), blue() - Farbkanäle extrahieren}
+\addcontentsline{toc}{subsection}{red(), green(), blue() - Farbkanäle extrahieren}
+
+\subsubsection*{Was machen die Methoden?}\\
+Holen den Rot-, Grün- oder Blau-Anteil aus einer Farbe heraus.
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int rotWert = red(farbwert);      // Rot-Anteil (0-255)
+int gruenWert = green(farbwert);  // Gruen-Anteil (0-255)
+int blauWert = blue(farbwert);    // Blau-Anteil (0-255)
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Farbkanäle eines Farbwerts extrahieren
+int orange = color(255, 165, 0);
+int r = red(orange);      // r = 255
+int g = green(orange);    // g = 165
+int b = blue(orange);     // b = 0
+System.out.println("RGB: " + r + ", " + g + ", " + b);
+
+// Pixel-Farbe analysieren
+int[][] bild = loadResource("foto.jpg");
+int pixel = bild[50][100];  // Pixel an Position (100, 50)
+System.out.println("Rot: " + red(pixel));
+System.out.println("Gruen: " + green(pixel));
+System.out.println("Blau: " + blue(pixel));
+
+// Bild in Graustufen umwandeln
+int[][] original = loadResource("bild.jpg");
+int[][] graustufen = new int[original.length][original[0].length];
+for (int y = 0; y < original.length; y++) {
+    for (int x = 0; x < original[0].length; x++) {
+        int pixel = original[y][x];
+        int r = red(pixel);
+        int g = green(pixel);
+        int b = blue(pixel);
+        int grau = (r + g + b) / 3;  // Durchschnitt
+        graustufen[y][x] = color(grau, grau, grau);
+    }
+}
+show(original, "Original");
+show(graustufen, "Graustufen");
+
+// Nur Rot-Kanal behalten
+int[][] nurRot = new int[original.length][original[0].length];
+for (int y = 0; y < original.length; y++) {
+    for (int x = 0; x < original[0].length; x++) {
+        int r = red(original[y][x]);
+        nurRot[y][x] = color(r, 0, 0);
+    }
+}
+show(nurRot, "Nur Rot-Kanal");
+
+// Farbkanäle vertauschen (Rot <-> Blau)
+int[][] vertauscht = new int[original.length][original[0].length];
+for (int y = 0; y < original.length; y++) {
+    for (int x = 0; x < original[0].length; x++) {
+        int pixel = original[y][x];
+        int r = red(pixel);
+        int g = green(pixel);
+        int b = blue(pixel);
+        vertauscht[y][x] = color(b, g, r);  // Blau und Rot tauschen
+    }
+}
+show(vertauscht, "Vertauschte Kanäle");
+
+// Helligkeit eines Pixels berechnen
+int pixel = bild[0][0];
+int helligkeit = (red(pixel) + green(pixel) + blue(pixel)) / 3;
+System.out.println("Helligkeit: " + helligkeit);
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Du bekommst immer eine Zahl zwischen 0 und 255 zurück
+		\item Sehr nützlich, wenn du Bilder bearbeiten willst
+		\item Zusammen mit \texttt{color()} kannst du einzelne Farbanteile ändern
+		\item Häufige Anwendung: Bilder in Graustufen umwandeln oder Farbfilter erstellen
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\section*{Häufige Fehler bei Strings}
+\addcontentsline{toc}{section}{Häufige Fehler bei Strings}
+
+\subsection*{String.length ohne Klammern}
+
+\begin{lstlisting}
+// FALSCH
+String text = "Hallo";
+int laenge = text.length;  // Fehler: Strings brauchen ()
+
+// RICHTIG
+int laenge = text.length();    // String MIT Klammern
+\end{lstlisting}
+
+\subsection*{Index-Grenzen bei charAt}
+
+\begin{lstlisting}
+String wort = "Test";  // length = 4, Indizes: 0, 1, 2, 3
+char c = wort.charAt(4);  // Fehler! Index 4 existiert nicht
+
+// RICHTIG
+char letztes = wort.charAt(wort.length() - 1);  // Index 3
+char erstes = wort.charAt(0);                   // Index 0
+\end{lstlisting}
+
+\subsection*{char vs. String}
+
+\begin{lstlisting}
+String text = "A";
+char buchstabe = 'A';
+
+// FALSCH
+if (text.charAt(0) == "A") { }  // Vergleicht char mit String
+
+// RICHTIG
+if (text.charAt(0) == 'A') { }  // char mit char vergleichen
+\end{lstlisting}

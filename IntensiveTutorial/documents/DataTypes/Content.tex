@@ -1,0 +1,1097 @@
+\begingroup
+\let\cleardoublepage\relax
+
+
+\chapter*{Java Datentypen}
+\label{ch:java-datentypen}
+\addcontentsline{toc}{chapter}{Java Datentypen}
+\endgroup
+
+
+\section*{Primitive Datentypen}
+\addcontentsline{toc}{section}{Primitive Datentypen}
+
+Java arbeitet mit verschiedenen Arten von Daten. Die einfachsten davon heißen "primitive Datentypen".
+Diese speichern direkte Werte wie Zahlen oder Ja/Nein-Antworten.
+
+% ============================================================
+\newpage
+
+
+\subsection*{int - Ganzzahlen}
+\addcontentsline{toc}{subsection}{int - Ganzzahlen}
+
+\subsubsection*{Was ist int?}\\
+Der Datentyp \texttt{int} speichert ganze Zahlen - also Zahlen ohne Komma (wie 5, -10, oder 1000).
+
+\subsubsection*{Wertebereich:}
+\begin{itemize}
+	\item Von: -2.147.483.648
+	\item Bis: 2.147.483.647
+	\item Speichergröße: 32 Bit (4 Bytes)
+\end{itemize}
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int variablenName = wert;
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Deklaration und Initialisierung
+int alter = 25;
+int temperatur = -5;
+int punkte = 0;
+
+// Ohne Initialisierung
+int zahl;
+zahl = 42;
+
+// Berechnungen
+int summe = 10 + 20;          // summe = 30
+int differenz = 50 - 15;      // differenz = 35
+int produkt = 6 * 7;          // produkt = 42
+int quotient = 20 / 4;        // quotient = 5
+int rest = 17 % 5;            // rest = 2
+
+// Mit Variablen rechnen
+int a = 10;
+int b = 3;
+int ergebnis = a + b;         // ergebnis = 13
+
+// Inkrement und Dekrement
+int zaehler = 5;
+zaehler++;                    // zaehler = 6
+zaehler--;                    // zaehler = 5
+
+// Zusammengesetzte Operatoren
+int wert = 10;
+wert += 5;                    // wert = 15 (entspricht: wert = wert + 5)
+wert -= 3;                    // wert = 12
+wert *= 2;                    // wert = 24
+wert /= 4;                    // wert = 6
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Wenn du eine int-Zahl durch eine int-Zahl teilst, bekommst du wieder eine int-Zahl: \texttt{5 / 2 = 2} (nicht 2.5! Die Nachkommastellen werden einfach abgeschnitten)
+		\item Wenn die Zahl zu groß oder zu klein wird, springt sie auf die andere Seite um (das nennt man Überlauf)
+		\item In einem Array ist der Anfangswert immer \texttt{0}
+		\item Mit int kannst du keine Kommazahlen speichern
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{double - Fließkommazahlen}
+\addcontentsline{toc}{subsection}{double - Fließkommazahlen}
+
+\subsubsection*{Was ist double?}\\
+Der Datentyp \texttt{double} speichert Kommazahlen - also Zahlen mit Nachkommastellen (wie 3.14, -5.5, oder 0.001).
+
+\subsubsection*{Wertebereich:}
+\begin{itemize}
+	\item Sehr große und sehr kleine Zahlen mit ca. 15 Dezimalstellen Genauigkeit
+	\item Von: $\pm$4.9 $\times$ 10$^{-324}$
+	\item Bis: $\pm$1.7 $\times$ 10$^{308}$
+	\item Speichergröße: 64 Bit (8 Bytes)
+\end{itemize}
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+double variablenName = wert;
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Deklaration und Initialisierung
+double pi = 3.14159;
+double temperatur = -5.5;
+double gewicht = 75.8;
+double ergebnis = 0.0;
+
+// Berechnungen
+double summe = 10.5 + 20.3;        // summe = 30.8
+double produkt = 2.5 * 4.0;        // produkt = 10.0
+double quotient = 7.0 / 2.0;       // quotient = 3.5
+
+// Wichtig: Division mit Nachkommastellen
+double a = 5.0;
+double b = 2.0;
+double teil = a / b;               // teil = 2.5
+
+// int zu double konvertieren
+int ganzzahl = 5;
+double kommazahl = ganzzahl / 2.0; // kommazahl = 2.5
+// ODER
+double kommazahl2 = (double) ganzzahl / 2; // kommazahl2 = 2.5
+
+// Wissenschaftliche Notation
+double klein = 1.5e-4;             // = 0.00015
+double gross = 3.2e8;              // = 320000000.0
+
+// Mathematische Funktionen
+double wurzel = Math.sqrt(16.0);   // wurzel = 4.0
+double potenz = Math.pow(2, 3);    // potenz = 8.0
+double absolut = Math.abs(-5.5);   // absolut = 5.5
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item In Java schreibst du einen Punkt statt Komma: \texttt{3.14} ist richtig, \texttt{3,14} ist falsch
+		\item Computer können nicht immer exakt rechnen: manchmal kommt bei \texttt{0.1 + 0.2} nicht genau \texttt{0.3} heraus
+		\item Wichtig: \texttt{5 / 2} ergibt \texttt{2}, aber \texttt{5.0 / 2.0} ergibt \texttt{2.5} - mindestens eine Zahl muss eine Kommazahl sein
+		\item In einem Array ist der Anfangswert immer \texttt{0.0}
+		\item Für Geld solltest du andere Datentypen verwenden (z.B. \texttt{BigDecimal}), weil Rundungsfehler problematisch sein können
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{boolean - Wahrheitswerte}
+\addcontentsline{toc}{subsection}{boolean - Wahrheitswerte}
+
+\subsubsection*{Was ist boolean?}\\
+Der Datentyp \texttt{boolean} speichert Wahrheitswerte: entweder \texttt{true} (wahr) oder \texttt{false} (falsch).
+
+\subsubsection*{Wertebereich:}
+\begin{itemize}
+	\item Nur zwei mögliche Werte: \texttt{true} oder \texttt{false}
+	\item Speichergröße: 1 Bit (theoretisch), praktisch abhängig von JVM
+\end{itemize}
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+boolean variablenName = true/false;
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Deklaration und Initialisierung
+boolean istWahr = true;
+boolean istFalsch = false;
+boolean hatBestanden = true;
+
+// Vergleichsoperatoren ergeben boolean
+int alter = 18;
+boolean istErwachsen = (alter >= 18);      // true
+boolean istKind = (alter < 12);            // false
+boolean istGenau18 = (alter == 18);        // true
+boolean istNicht18 = (alter != 18);        // false
+
+// Logische Operatoren
+boolean a = true;
+boolean b = false;
+
+boolean und = a && b;                      // false (beide muessen true sein)
+boolean oder = a || b;                     // true (mindestens einer true)
+boolean nicht = !a;                        // false (Negation)
+
+// In Bedingungen
+int punkte = 85;
+boolean bestanden = punkte >= 50;
+if (bestanden) {
+    System.out.println("Bestanden!");
+}
+
+// Kombinierte Bedingungen
+int temperatur = 25;
+boolean angenehm = temperatur >= 18 && temperatur <= 28;
+
+// Boolean in Schleifen
+boolean weitermachen = true;
+while (weitermachen) {
+    // Code
+    weitermachen = false;  // Schleife beenden
+}
+
+// Vergleich mit Strings
+String name = "Max";
+boolean istMax = name.equals("Max");       // true
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Es gibt nur zwei Werte: \texttt{true} (wahr) oder \texttt{false} (falsch) - keine Zahlen!
+		\item Alles klein schreiben: \texttt{true} und \texttt{false}, nicht \texttt{True} oder \texttt{False}
+		\item In einem Array ist der Anfangswert immer \texttt{false}
+		\item Zum Vergleichen: Bei Zahlen \texttt{==}, bei Text \texttt{.equals()}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{char - Einzelnes Zeichen}
+\addcontentsline{toc}{subsection}{char - Einzelnes Zeichen}
+
+\subsubsection*{Was ist char?}\\
+Der Datentyp \texttt{char} speichert genau ein einzelnes Zeichen (wie 'A', '5' oder '!').
+
+\subsubsection*{Wertebereich:}
+\begin{itemize}
+	\item Alle Unicode-Zeichen (Buchstaben, Ziffern, Sonderzeichen)
+	\item Von: 0 bis 65.535 (als Zahlenwert)
+	\item Speichergröße: 16 Bit (2 Bytes)
+\end{itemize}
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+char variablenName = 'Zeichen';  // EINFACHE Anfuehrungszeichen!
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Deklaration und Initialisierung
+char buchstabe = 'A';
+char ziffer = '5';
+char sonderzeichen = '!';
+char leerzeichen = ' ';
+
+// Mit Unicode-Werten
+char euro = '\u20AC';                      // €-Symbol
+char herzchen = '\u2764';                  // ❤
+
+// Escape-Sequenzen
+char neuzeile = '\n';                      // Zeilenumbruch
+char tab = '\t';                           // Tabulator
+char backslash = '\\';                     // \
+char anfuehrung = '\'';                    // '
+
+// Zeichen vergleichen
+char note = 'A';
+if (note == 'A') {
+    System.out.println("Sehr gut!");
+}
+
+// Zeichen in Berechnungen (ASCII/Unicode-Werte)
+char a = 'A';                              // Unicode-Wert: 65
+char b = 'B';                              // Unicode-Wert: 66
+int differenz = b - a;                     // differenz = 1
+
+// Kleinbuchstabe zu Großbuchstabe
+char klein = 'a';                          // Unicode-Wert: 97
+char gross = (char) (klein - 32);          // gross = 'A' (Wert: 65)
+
+// Prüfen ob Buchstabe
+char zeichen = 'M';
+boolean istBuchstabe = (zeichen >= 'A' && zeichen <= 'Z') ||
+                       (zeichen >= 'a' && zeichen <= 'z');
+
+// Prüfen ob Ziffer
+char z = '7';
+boolean istZiffer = (z >= '0' && z <= '9');
+
+// char aus String extrahieren
+String text = "Hallo";
+char erstes = text.charAt(0);              // erstes = 'H'
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Immer einfache Anführungszeichen verwenden: \texttt{'A'} ist richtig, \texttt{"A"} ist falsch
+		\item Nur genau ein Zeichen erlaubt: \texttt{'A'} funktioniert, \texttt{'AB'} nicht
+		\item \texttt{char} ist etwas anderes als \texttt{String} - ein char ist nur ein einzelnes Zeichen
+		\item In einem Array ist der Anfangswert das "Null-Zeichen" (ein unsichtbares Zeichen)
+		\item Jedes Zeichen hat intern eine Nummer - deshalb kannst du mit char auch rechnen
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{byte - Sehr kleine Ganzzahlen}
+\addcontentsline{toc}{subsection}{byte - Sehr kleine Ganzzahlen}
+
+\subsubsection*{Was ist byte?}\\
+Der Datentyp \texttt{byte} speichert sehr kleine ganze Zahlen.
+Wird selten benutzt, meist nur wenn man Speicherplatz sparen muss.
+
+\subsubsection*{Wertebereich:}
+\begin{itemize}
+	\item Von: -128
+	\item Bis: 127
+	\item Speichergröße: 8 Bit (1 Byte)
+\end{itemize}
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+byte variablenName = wert;
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Deklaration und Initialisierung
+byte alter = 25;
+byte temperatur = -15;
+byte prozent = 100;
+
+// Häufig bei Datei-Operationen
+byte[] daten = new byte[1024];
+
+// Konvertierung von int zu byte
+int gross = 100;
+byte klein = (byte) gross;
+
+// Vorsicht bei Überschreitung
+byte max = 127;
+byte ueberlauf = (byte) (max + 1);         // ueberlauf = -128 (Overflow!)
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Sehr kleiner Wertebereich: nur -128 bis 127
+		\item Wenn die Zahl zu groß wird, springt sie um (Überlauf)
+		\item Wird meistens nur für spezielle Dinge verwendet
+		\item In einem Array ist der Anfangswert immer \texttt{0}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{short - Kleine Ganzzahlen}
+\addcontentsline{toc}{subsection}{short - Kleine Ganzzahlen}
+
+\subsubsection*{Was ist short?}\\
+Der Datentyp \texttt{short} speichert kleine ganze Zahlen.
+Ein Mittelweg zwischen \texttt{byte} und \texttt{int}.
+
+\subsubsection*{Wertebereich:}
+\begin{itemize}
+	\item Von: -32.768
+	\item Bis: 32.767
+	\item Speichergröße: 16 Bit (2 Bytes)
+\end{itemize}
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+short variablenName = wert;
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Deklaration und Initialisierung
+short jahr = 2024;
+short distanz = 5000;
+
+// Konvertierung
+int gross = 1000;
+short klein = (short) gross;
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Wird selten verwendet, meist wird direkt \texttt{int} genommen
+		\item Wertebereich: -32.768 bis 32.767
+		\item Standard-Wert bei Arrays: \texttt{0}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{long - Sehr große Ganzzahlen}
+\addcontentsline{toc}{subsection}{long - Sehr große Ganzzahlen}
+
+\subsubsection*{Was ist long?}\\
+Der Datentyp \texttt{long} speichert sehr große ganze Zahlen - noch größer als int.
+
+\subsubsection*{Wertebereich:}
+\begin{itemize}
+	\item Von: -9.223.372.036.854.775.808
+	\item Bis: 9.223.372.036.854.775.807
+	\item Speichergröße: 64 Bit (8 Bytes)
+\end{itemize}
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+long variablenName = wert;
+long grosseZahl = wertL;  // L am Ende fuer long-Literal
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Deklaration und Initialisierung
+long weltbevoelkerung = 8000000000L;       // L am Ende!
+long millisekunden = System.currentTimeMillis();
+
+// Ohne L wird es als int interpretiert (Fehler bei großen Zahlen)
+// long falsch = 8000000000;               // FEHLER!
+long richtig = 8000000000L;                // Korrekt
+
+// Berechnungen
+long summe = 1000000000L + 2000000000L;
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Bei großen Zahlen musst du ein \texttt{L} ans Ende schreiben: \texttt{1000000000L}
+		\item Ohne \texttt{L} denkt Java, es ist eine int-Zahl, und das kann schiefgehen
+		\item In einem Array ist der Anfangswert immer \texttt{0L}
+		\item Benutze long, wenn deine Zahlen größer als etwa 2 Milliarden werden können
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{float - Einfache Fließkommazahlen}
+\addcontentsline{toc}{subsection}{float - Einfache Fließkommazahlen}
+
+\subsubsection*{Was ist float?}\\
+Der Datentyp \texttt{float} speichert Fließkommazahlen mit einfacher Genauigkeit.
+Weniger genau als \texttt{double}.
+
+\subsubsection*{Wertebereich:}
+\begin{itemize}
+	\item Ca. 6-7 Dezimalstellen Genauigkeit
+	\item Von: $\pm$1.4 $\times$ 10$^{-45}$
+	\item Bis: $\pm$3.4 $\times$ 10$^{38}$
+	\item Speichergröße: 32 Bit (4 Bytes)
+\end{itemize}
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+float variablenName = wertF;  // F am Ende fuer float-Literal
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Deklaration und Initialisierung
+float pi = 3.14F;                          // F am Ende!
+float temperatur = 36.5F;
+float gewicht = 75.8F;
+
+// Ohne F wird es als double interpretiert
+// float falsch = 3.14;                    // Warnung/Fehler
+float richtig = 3.14F;                     // Korrekt
+
+// Berechnungen
+float summe = 10.5F + 20.3F;
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item \texttt{F} oder \texttt{f} am Ende anhängen: \texttt{3.14F}
+		\item Weniger genau als \texttt{double}
+		\item In der Praxis wird meist \texttt{double} bevorzugt
+		\item Standard-Wert bei Arrays: \texttt{0.0F}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\section*{String - Zeichenketten}
+\addcontentsline{toc}{section}{String - Zeichenketten}
+
+\subsection*{Was ist ein String?}
+
+\subsubsection*{Beschreibung}\\
+Ein \texttt{String} speichert Text - also mehrere Zeichen zusammen (wie "Hallo" oder "Max Mustermann").
+String ist etwas Besonderes: Er gehört nicht zu den primitiven Datentypen.
+
+\subsubsection*{Eigenschaften:}
+\begin{itemize}
+	\item Wenn du einen String einmal erstellt hast, kannst du ihn nicht mehr ändern - nur einen neuen erstellen
+	\item Strings schreibst du mit doppelten Anführungszeichen: \texttt{"Text"}
+	\item Ein String kann so lang sein wie du willst
+\end{itemize}
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+String variablenName = "Text";
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Deklaration und Initialisierung
+String name = "Max Mustermann";
+String begruessung = "Hallo Welt!";
+String leer = "";                          // Leerer String
+String mitZahl = "Ich bin 25 Jahre alt";
+
+// String-Konkatenation (Verkettung)
+String vorname = "Max";
+String nachname = "Mustermann";
+String vollername = vorname + " " + nachname;  // "Max Mustermann"
+
+// Mit Zahlen verketten
+int alter = 25;
+String text = "Ich bin " + alter + " Jahre alt";
+
+// String-Methoden
+String wort = "Hallo";
+int laenge = wort.length();                // 5
+char erstes = wort.charAt(0);              // 'H'
+String gross = wort.toUpperCase();         // "HALLO"
+String klein = wort.toLowerCase();         // "hallo"
+
+// Strings vergleichen
+String a = "Hallo";
+String b = "Hallo";
+boolean gleich = a.equals(b);              // true
+boolean gleichIgnoreCase = a.equalsIgnoreCase("HALLO");  // true
+
+// WICHTIG: Nicht mit == vergleichen!
+String s1 = "Test";
+String s2 = new String("Test");
+boolean falsch = (s1 == s2);               // false (vergleicht Referenzen)
+boolean richtig = s1.equals(s2);           // true (vergleicht Inhalt)
+
+// Teilstrings
+String text2 = "Hallo Welt";
+String teil = text2.substring(0, 5);       // "Hallo"
+String ab = text2.substring(6);            // "Welt"
+
+// Suchen in Strings
+String satz = "Java ist toll";
+boolean enthaelt = satz.contains("ist");   // true
+int position = satz.indexOf("ist");        // 5
+boolean beginnt = satz.startsWith("Java"); // true
+boolean endet = satz.endsWith("toll");     // true
+
+// Ersetzen
+String original = "Hallo Welt";
+String neu = original.replace("Welt", "Java");  // "Hallo Java"
+
+// Leerzeichen entfernen
+String mitLeer = "  Text  ";
+String ohneLeer = mitLeer.trim();          // "Text"
+
+// String in Array umwandeln
+String liste = "Apfel,Birne,Orange";
+String[] fruechte = liste.split(",");      // ["Apfel", "Birne", "Orange"]
+
+// Zahlen zu String
+int zahl = 42;
+String zahlString = String.valueOf(zahl);  // "42"
+// ODER
+String zahlString2 = "" + zahl;            // "42"
+
+// String zu Zahl
+String nummerText = "123";
+int nummer = Integer.parseInt(nummerText); // 123
+double komma = Double.parseDouble("3.14"); // 3.14
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Doppelte Anführungszeichen verwenden: \texttt{"Text"} ist richtig, \texttt{'Text'} ist falsch
+		\item Zum Vergleichen von Strings immer \texttt{.equals()} benutzen, nicht \texttt{==}
+		\item String schreibst du immer mit großem S am Anfang
+		\item Wenn du einen String ändern willst, bekommst du eigentlich einen neuen String zurück
+		\item \texttt{null} bedeutet "gar kein Text", \texttt{""} ist "leerer Text" - das ist ein Unterschied
+		\item In einem Array ist der Anfangswert immer \texttt{null}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\section*{Typkonvertierung}
+\addcontentsline{toc}{section}{Typkonvertierung}
+
+\subsection*{Implizite Konvertierung (Automatisch)}
+
+\subsubsection*{Beschreibung}\\
+Java wandelt automatisch kleinere Zahlen in größere um. Zum Beispiel wird eine int-Zahl automatisch zu double, wenn nötig.
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// int zu double (automatisch)
+int ganzzahl = 5;
+double kommazahl = ganzzahl;               // kommazahl = 5.0
+
+// byte zu int (automatisch)
+byte klein = 100;
+int gross = klein;                         // gross = 100
+
+// char zu int (automatisch)
+char buchstabe = 'A';
+int code = buchstabe;                      // code = 65 (Unicode-Wert)
+
+// In Berechnungen
+int a = 5;
+double b = 2.5;
+double ergebnis = a + b;                   // ergebnis = 7.5
+\end{lstlisting}
+
+\subsection*{Explizite Konvertierung (Type Cast)}
+
+\subsubsection*{Beschreibung}\\
+Wenn du eine größere Zahl in eine kleinere umwandeln willst, musst du Java das ausdrücklich sagen.
+Dabei können Informationen verloren gehen!
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+zielTyp variable = (zielTyp) quellVariable;
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// double zu int (Nachkommastellen gehen verloren!)
+double kommazahl = 3.7;
+int ganzzahl = (int) kommazahl;            // ganzzahl = 3 (nicht 4!)
+
+// long zu int
+long gross = 1000L;
+int klein = (int) gross;
+
+// int zu byte (Vorsicht bei großen Zahlen!)
+int zahl = 200;
+byte kleinByte = (byte) zahl;              // Overflow!
+
+// Division mit Cast
+int a = 5;
+int b = 2;
+double ergebnis = (double) a / b;          // ergebnis = 2.5
+
+// Runden statt Abschneiden
+double wert = 3.7;
+int gerundet = (int) Math.round(wert);     // gerundet = 4
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Wenn du double zu int umwandelst, werden die Nachkommastellen einfach weggeschnitten, nicht gerundet! (3.9 wird zu 3, nicht zu 4)
+		\item Wenn die Zahl zu groß ist, können seltsame Werte herauskommen
+		\item Zum Runden benutze \texttt{Math.round()}
+		\item Automatisch: klein zu groß (z.B. int zu double)
+		\item Mit Klammern: groß zu klein (z.B. double zu int)
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\section*{Übersicht: Primitive Datentypen}
+\addcontentsline{toc}{section}{Übersicht: Primitive Datentypen}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\textbf{Typ} & \textbf{Größe} & \textbf{Wertebereich} & \textbf{Standard} \\
+		\hline
+		byte & 8 Bit & -128 bis 127 & 0 \\
+		\hline
+		short & 16 Bit & -32.768 bis 32.767 & 0 \\
+		\hline
+		int & 32 Bit & -2.147.483.648 bis 2.147.483.647 & 0 \\
+		\hline
+		long & 64 Bit & ca. -9,2 $\times$ 10$^{18}$ bis 9,2 $\times$ 10$^{18}$ & 0L \\
+		\hline
+		float & 32 Bit & ca. $\pm$3,4 $\times$ 10$^{38}$ & 0.0F \\
+		\hline
+		double & 64 Bit & ca. $\pm$1,7 $\times$ 10$^{308}$ & 0.0 \\
+		\hline
+		char & 16 Bit & 0 bis 65.535 (Unicode) & \('\)\textbackslash u0000' \\
+		\hline
+		boolean & 1 Bit & true oder false & false \\
+		\hline
+	\end{tabular}
+	\caption{Übersicht der primitiven Datentypen in Java}
+\end{table}
+
+
+\section*{Arrays}
+\addcontentsline{toc}{section}{Arrays}
+
+\subsection*{Was ist ein Array?}
+
+\subsubsection*{Beschreibung}\\
+Ein Array ist wie eine Liste mit nummerierten Fächern. Jedes Fach kann einen Wert speichern.
+Wichtig: Alle Werte müssen vom gleichen Typ sein (z.B. nur Zahlen oder nur Text). Die Anzahl der Fächer ist fest.
+
+\subsubsection*{Eigenschaften:}
+\begin{itemize}
+	\item Die Größe ist fest: Wenn du ein Array mit 5 Plätzen erstellst, bleiben es 5 Plätze
+	\item Die Nummerierung beginnt bei 0: Das erste Fach hat die Nummer 0, das letzte die Nummer \texttt{length - 1}
+	\item Alle Werte im Array müssen vom gleichen Typ sein
+	\item Neue Arrays sind automatisch mit Startwerten gefüllt (0 für Zahlen, false für boolean, null für Text)
+\end{itemize}
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+// Deklaration und Initialisierung mit Größe
+datentyp[] arrayName = new datentyp[groesse];
+
+// Deklaration und Initialisierung mit Werten
+datentyp[] arrayName = {wert1, wert2, wert3};
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Array mit fester Größe erstellen
+int[] zahlen = new int[5];        // 5 Plätze, alle 0
+String[] namen = new String[3];   // 3 Plätze, alle null
+boolean[] flags = new boolean[4]; // 4 Plätze, alle false
+
+// Array mit Werten erstellen
+int[] noten = {1, 2, 3, 2, 1};
+String[] wochentage = {"Mo", "Di", "Mi", "Do", "Fr"};
+double[] preise = {9.99, 14.50, 7.25};
+
+// Mehrdimensionale Arrays
+int[][] matrix = new int[3][3];   // 3x3 Matrix
+int[][] tabelle = {{1, 2}, {3, 4}, {5, 6}};
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Die Größe kannst du nach dem Erstellen nicht mehr ändern
+		\item Die Nummerierung beginnt bei 0, nicht bei 1!
+		\item Alle Werte müssen vom gleichen Typ sein
+		\item Wenn du ein Array noch nicht erstellt hast, ist es \texttt{null}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{array.length - Länge eines Arrays}
+\addcontentsline{toc}{subsection}{array.length - Länge eines Arrays}
+
+\subsubsection*{Was ist array.length?}\\
+Mit \texttt{length} kannst du herausfinden, wie viele Plätze das Array hat. Wichtig: Bei Arrays schreibst du \textbf{keine} Klammern dahinter!
+
+\subsubsection*{Eigenschaften:}
+\begin{itemize}
+	\item Ist ein Attribut, keine Methode: \textbf{ohne} Klammern \texttt{()}
+	\item Gibt die Größe zurück, mit der das Array erstellt wurde
+	\item Funktioniert auch bei leeren Arrays (nur Standard-Werte)
+\end{itemize}
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+int laenge = arrayName.length;  // OHNE Klammern!
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Länge verschiedener Arrays
+int[] zahlen = {10, 20, 30, 40, 50};
+int anzahl = zahlen.length;               // anzahl = 5
+
+String[] namen = new String[10];
+int groesse = namen.length;               // groesse = 10 (auch wenn leer!)
+
+// Leeres Array
+int[] leer = new int[0];
+int laenge = leer.length;                 // laenge = 0
+
+// In Schleife verwenden
+int[] werte = {1, 2, 3, 4};
+for (int i = 0; i < werte.length; i++) {
+    System.out.println(werte[i]);
+}
+
+// Letztes Element zugreifen
+int[] liste = {100, 200, 300};
+int letzter = liste[liste.length - 1];   // letzter = 300
+
+// Bei mehrdimensionalen Arrays
+int[][] matrix = new int[3][4];
+int zeilen = matrix.length;               // zeilen = 3
+int spalten = matrix[0].length;           // spalten = 4
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Bei Arrays: \texttt{.length} ohne Klammern
+		\item Bei Strings: \texttt{.length()} mit Klammern - das ist ein häufiger Fehler!
+		\item Gibt die Anzahl der Plätze zurück, nicht die Anzahl der gefüllten Plätze
+		\item Auch wenn alle Werte noch 0 oder null sind, hat das Array trotzdem seine feste Länge
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{array[index] - Element lesen}
+\addcontentsline{toc}{subsection}{array[index] - Element lesen}
+
+\subsubsection*{Was ist array[index]?}\\
+Mit eckigen Klammern \texttt{[]} kannst du auf ein bestimmtes Fach im Array zugreifen.
+Die Zahl in den Klammern ist die Nummer des Fachs (beginnt bei 0).
+
+\subsubsection*{Eigenschaften:}
+\begin{itemize}
+	\item Index beginnt bei 0: Erstes Element ist \texttt{array[0]}
+	\item Letztes Element ist \texttt{array[array.length - 1]}
+	\item Bei ungültigem Index: \texttt{ArrayIndexOutOfBoundsException}
+\end{itemize}
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+datentyp element = arrayName[index];
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Einzelne Elemente lesen
+int[] zahlen = {10, 20, 30, 40, 50};
+int erstes = zahlen[0];                   // erstes = 10
+int zweites = zahlen[1];                  // zweites = 20
+int letztes = zahlen[4];                  // letztes = 50
+
+// Alle Elemente durchlaufen
+String[] woerter = {"Hallo", "Welt", "Java"};
+for (int i = 0; i < woerter.length; i++) {
+    String wort = woerter[i];
+    System.out.println(wort);
+}
+
+// Bestimmte Position prüfen
+int[] noten = {1, 2, 3, 2, 1};
+if (noten[2] == 3) {
+    System.out.println("Dritte Note ist eine 3");
+}
+
+// Letztes Element
+int[] liste = {5, 10, 15, 20};
+int letzterWert = liste[liste.length - 1];  // letzterWert = 20
+
+// Element in Berechnung verwenden
+int[] preise = {100, 200, 150};
+int summe = preise[0] + preise[1] + preise[2];  // summe = 450
+
+// Mehrdimensionale Arrays
+int[][] matrix = {{1, 2, 3}, {4, 5, 6}};
+int wert = matrix[0][1];                  // wert = 2 (1. Zeile, 2. Spalte)
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Die Nummerierung beginnt bei 0, nicht bei 1!
+		\item Die Nummer muss zwischen 0 und \texttt{array.length - 1} liegen
+		\item Wenn die Nummer zu groß oder zu klein ist, stürzt das Programm ab
+		\item Das letzte Fach erreichst du mit \texttt{array[array.length - 1]}
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\subsection*{array[index] = wert - Element schreiben}
+\addcontentsline{toc}{subsection}{array[index] = wert - Element schreiben}
+
+\subsubsection*{Was ist array[index] = wert?}\\
+So kannst du einen Wert in ein bestimmtes Fach des Arrays legen (oder den alten Wert überschreiben).
+
+\subsubsection*{Eigenschaften:}
+\begin{itemize}
+	\item Überschreibt den vorherigen Wert an dieser Position
+	\item Der neue Wert muss zum Datentyp des Arrays passen
+	\item Index muss gültig sein (0 bis \texttt{length - 1})
+\end{itemize}
+
+\subsubsection*{Syntax:}
+\begin{lstlisting}
+arrayName[index] = neuerWert;
+\end{lstlisting}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+// Array befüllen
+int[] zahlen = new int[5];                // Array mit 5 Plätzen, alle 0
+zahlen[0] = 10;                           // Erstes Element auf 10 setzen
+zahlen[1] = 20;                           // Zweites Element auf 20 setzen
+zahlen[4] = 50;                           // Letztes Element auf 50 setzen
+// Ergebnis: {10, 20, 0, 0, 50}
+
+// Werte ändern
+String[] namen = {"Anna", "Bob", "Clara"};
+namen[1] = "Max";                         // "Bob" wird zu "Max"
+// Ergebnis: {"Anna", "Max", "Clara"}
+
+// In Schleife befüllen
+int[] quadrate = new int[5];
+for (int i = 0; i < quadrate.length; i++) {
+    quadrate[i] = i * i;
+}
+// Ergebnis: {0, 1, 4, 9, 16}
+
+// Wert erhöhen
+int[] punkte = {10, 20, 30};
+punkte[0] = punkte[0] + 5;                // Erstes Element um 5 erhöhen
+// ODER kürzer:
+punkte[0] += 5;
+// Ergebnis: {15, 20, 30}
+
+// Array "leeren" (auf Standard-Wert setzen)
+int[] werte = {1, 2, 3, 4, 5};
+for (int i = 0; i < werte.length; i++) {
+    werte[i] = 0;
+}
+// Ergebnis: {0, 0, 0, 0, 0}
+
+// Zwei Elemente tauschen
+int[] liste = {10, 20, 30};
+int temp = liste[0];                      // Zwischenspeichern
+liste[0] = liste[2];                      // 30 nach vorne
+liste[2] = temp;                          // 10 nach hinten
+// Ergebnis: {30, 20, 10}
+
+// Array aus Benutzereingabe füllen
+int[] zahlenListe = new int[3];
+for (int i = 0; i < zahlenListe.length; i++) {
+    // zahlenListe[i] = scanner.nextInt();
+}
+
+// Mehrdimensionale Arrays
+int[][] matrix = new int[2][2];
+matrix[0][0] = 1;
+matrix[0][1] = 2;
+matrix[1][0] = 3;
+matrix[1][1] = 4;
+// Ergebnis: {{1, 2}, {3, 4}}
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Die Nummer muss zwischen 0 und \texttt{array.length - 1} liegen
+		\item Wenn die Nummer ungültig ist, stürzt das Programm ab
+		\item Der Wert muss zum Typ des Arrays passen (Zahl für int-Array, Text für String-Array usw.)
+		\item Der alte Wert an dieser Stelle geht verloren - er wird komplett ersetzt
+	\end{itemize}
+\end{achtung}
+
+% ============================================================
+\newpage
+
+
+\section*{Häufige Fehler}
+\addcontentsline{toc}{section}{Häufige Fehler}
+
+\subsection*{String mit == vergleichen}
+
+\begin{lstlisting}
+// FALSCH
+String a = "Hallo";
+String b = "Hallo";
+if (a == b) { }  // Vergleicht Referenzen, nicht Inhalt!
+
+// RICHTIG
+if (a.equals(b)) { }  // Vergleicht Inhalt
+\end{lstlisting}
+
+\subsection*{Integer-Division}
+
+\begin{lstlisting}
+// FALSCH - ergibt 2, nicht 2.5
+int a = 5;
+int b = 2;
+double ergebnis = a / b;  // ergebnis = 2.0
+
+// RICHTIG
+double ergebnis = (double) a / b;  // ergebnis = 2.5
+// ODER
+double ergebnis = 5.0 / 2.0;  // ergebnis = 2.5
+\end{lstlisting}
+
+\subsection*{char vs. String verwechseln}
+
+\begin{lstlisting}
+// FALSCH
+char buchstabe = "A";  // Fehler: doppelte Anfuehrungszeichen
+String wort = 'Hallo';  // Fehler: einfache Anfuehrungszeichen
+
+// RICHTIG
+char buchstabe = 'A';   // einfache Anfuehrungszeichen
+String wort = "Hallo";  // doppelte Anfuehrungszeichen
+\end{lstlisting}
+
+\subsection*{L und F vergessen}
+
+\begin{lstlisting}
+// FALSCH
+long gross = 5000000000;  // Fehler: zu gross fuer int
+float zahl = 3.14;        // Warnung: double wird zu float
+
+// RICHTIG
+long gross = 5000000000L;  // L am Ende
+float zahl = 3.14F;        // F am Ende
+\end{lstlisting}
+
+\subsection*{Overflow nicht beachten}
+
+\begin{lstlisting}
+// Problem
+byte b = 127;
+b++;  // b = -128 (Overflow!)
+
+int i = 2147483647;
+i++;  // i = -2147483648 (Overflow!)
+\end{lstlisting}
+
+\subsection*{null vs. leerer String}
+
+\begin{lstlisting}
+String a = null;      // Keine Referenz (keine Methoden aufrufbar!)
+String b = "";        // Leerer String (Methoden aufrufbar)
+
+// a.length();        // FEHLER: NullPointerException
+int laenge = b.length();  // Funktioniert: laenge = 0
+\end{lstlisting}
+
+\subsection*{String vs. Array - length}
+
+\begin{lstlisting}
+// FALSCH
+String text = "Hallo";
+int laenge = text.length;  // Fehler: Strings brauchen ()
+
+int[] zahlen = {1, 2, 3};
+int anzahl = zahlen.length();  // Fehler: Arrays haben KEINE ()
+
+// RICHTIG
+int laenge = text.length();    // String MIT Klammern
+int anzahl = zahlen.length;    // Array OHNE Klammern
+\end{lstlisting}
+
+\subsection*{Array-Index-Grenzen}
+
+\begin{lstlisting}
+// FALSCH
+int[] zahlen = {10, 20, 30};  // length = 3, Indizes: 0, 1, 2
+int x = zahlen[3];            // Fehler! Index 3 existiert nicht
+int y = zahlen[-1];           // Fehler! Negative Indizes nicht erlaubt
+
+// RICHTIG
+int letzter = zahlen[zahlen.length - 1];  // Index 2
+int erster = zahlen[0];                   // Index 0
+\end{lstlisting}
+
+\subsection*{Array-Größe nach Erstellung ändern}
+
+\begin{lstlisting}
+// FALSCH
+int[] zahlen = new int[5];
+zahlen.length = 10;  // Fehler! length ist read-only
+
+// RICHTIG - neues Array erstellen und Werte kopieren
+int[] zahlen = new int[5];
+int[] neuesArray = new int[10];
+for (int i = 0; i < zahlen.length; i++) {
+    neuesArray[i] = zahlen[i];
+}
+zahlen = neuesArray;  // Referenz auf neues Array
+\end{lstlisting}

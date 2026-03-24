@@ -1,0 +1,403 @@
+\begingroup
+\let\cleardoublepage\relax
+
+
+\chapter*{Operatoren in Java}
+\label{ch:operatoren-in-java}
+\addcontentsline{toc}{chapter}{Operatoren in Java}
+\endgroup
+
+
+\section*{Arithmetische Operatoren}
+\addcontentsline{toc}{section}{Arithmetische Operatoren}
+
+\subsection*{Beschreibung:}\\
+Mit diesen Operatoren kannst du rechnen (plus, minus, mal, geteilt).
+
+\begin{center}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Ergebnis} \\
+		\hline
+		\texttt{+} & Addition & \texttt{5 + 3} & \texttt{8} \\
+		\hline
+		\texttt{-} & Subtraktion & \texttt{5 - 3} & \texttt{2} \\
+		\hline
+		\texttt{*} & Multiplikation & \texttt{5 * 3} & \texttt{15} \\
+		\hline
+		\texttt{/} & Division & \texttt{10 / 3} & \texttt{3} (bei int) \\
+		\hline
+		\texttt{\%} & Modulo (Rest) & \texttt{10 \% 3} & \texttt{1} \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+int a = 10;
+int b = 3;
+int summe = a + b;        // summe = 13
+int differenz = a - b;    // differenz = 7
+int produkt = a * b;      // produkt = 30
+int quotient = a / b;     // quotient = 3 (Ganzzahldivision!)
+int rest = a % b;         // rest = 1
+
+// Gerade oder ungerade pruefen
+int zahl = 7;
+if (zahl % 2 == 0) {
+    System.out.println("Gerade");
+} else {
+    System.out.println("Ungerade");
+}
+\end{lstlisting}
+
+\subsubsection*{Wichtig bei Division:}
+\begin{lstlisting}
+int x = 7 / 2;      // x = 3 (int-Division schneidet ab)
+double y = 7.0 / 2; // y = 3.5 (mit Kommazahl)
+\end{lstlisting}
+
+% ============================================================
+\newpage
+
+
+\section*{Vergleichsoperatoren}
+\addcontentsline{toc}{section}{Vergleichsoperatoren}
+
+\subsection*{Beschreibung:}\\
+Mit diesen Operatoren kannst du Werte vergleichen. Das Ergebnis ist immer \texttt{true} (wahr) oder \texttt{false} (falsch).
+
+\begin{center}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Ergebnis} \\
+		\hline
+		\texttt{==} & Gleich & \texttt{5 == 5} & \texttt{true} \\
+		\hline
+		\texttt{!=} & Ungleich & \texttt{5 != 3} & \texttt{true} \\
+		\hline
+		\texttt{>} & Größer & \texttt{5 > 3} & \texttt{true} \\
+		\hline
+		\texttt{<} & Kleiner & \texttt{5 < 3} & \texttt{false} \\
+		\hline
+		\texttt{>=} & Größer oder gleich & \texttt{5 >= 5} & \texttt{true} \\
+		\hline
+		\texttt{<=} & Kleiner oder gleich & \texttt{5 <= 3} & \texttt{false} \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+int a = 10;
+int b = 5;
+
+if (a > b) {
+    System.out.println("a ist groesser");
+}
+
+if (a == 10) {
+    System.out.println("a ist 10");
+}
+
+if (b != 0) {
+    int ergebnis = a / b;  // Division nur wenn b nicht 0 ist
+}
+
+// Array-Index pruefen
+int[] zahlen = {1, 2, 3};
+int index = 2;
+if (index >= 0 && index < zahlen.length) {
+    System.out.println(zahlen[index]);
+}
+\end{lstlisting}
+
+\subsubsection*{Wichtig bei Strings:}
+\begin{lstlisting}
+String text1 = "Hallo";
+String text2 = "Hallo";
+
+// FALSCH - vergleicht Objektreferenzen, nicht Inhalt!
+if (text1 == text2) { }
+
+// RICHTIG - vergleicht Inhalt
+if (text1.equals(text2)) { }
+\end{lstlisting}
+
+% ============================================================
+\newpage
+
+
+\section*{Logische Operatoren}
+\addcontentsline{toc}{section}{Logische Operatoren}
+
+\subsection*{Beschreibung:}\\
+Mit diesen Operatoren kannst du mehrere Bedingungen kombinieren (z.B. "wenn A UND B wahr sind").
+
+\begin{center}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Ergebnis} \\
+		\hline
+		\texttt{\&\&} & Und (AND) & \texttt{true \&\& false} & \texttt{false} \\
+		\hline
+		\texttt{||} & Oder (OR) & \texttt{true || false} & \texttt{true} \\
+		\hline
+		\texttt{!} & Nicht (NOT) & \texttt{!true} & \texttt{false} \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+int alter = 20;
+boolean hatFuehrerschein = true;
+
+// UND: Beide Bedingungen muessen wahr sein
+if (alter >= 18 && hatFuehrerschein) {
+    System.out.println("Darf Auto fahren");
+}
+
+// ODER: Mindestens eine Bedingung muss wahr sein
+int note = 1;
+if (note == 1 || note == 2) {
+    System.out.println("Gute Note!");
+}
+
+// NICHT: Kehrt Wahrheitswert um
+boolean gefunden = false;
+if (!gefunden) {
+    System.out.println("Noch nicht gefunden");
+}
+
+// Array-Grenzen pruefen
+int[] array = {1, 2, 3};
+int i = 1;
+if (i >= 0 && i < array.length) {
+    System.out.println(array[i]);
+}
+
+// Zeichen ist Buchstabe oder Ziffer
+char c = 'A';
+if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+    System.out.println("Ist ein Buchstabe");
+}
+\end{lstlisting}
+
+\subsubsection*{Wichtig - Kurzschluss-Auswertung:}
+\begin{lstlisting}
+// Bei && prueft Java die rechte Seite nicht mehr, wenn die linke schon false ist
+int[] zahlen = {1, 2, 3};
+int index = 5;
+if (index < zahlen.length && zahlen[index] > 0) {
+    // Kein Fehler! zahlen[index] wird gar nicht mehr ausgefuehrt,
+    // weil index < zahlen.length bereits false ist
+}
+\end{lstlisting}
+
+% ============================================================
+\newpage
+
+
+\section*{Zuweisungsoperatoren}
+\addcontentsline{toc}{section}{Zuweisungsoperatoren}
+
+\subsection*{Beschreibung:}\\
+Mit diesen Operatoren kannst du Werte in Variablen speichern oder ändern.
+
+\begin{center}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Entspricht} \\
+		\hline
+		\texttt{=} & Zuweisung & \texttt{a = 5} & - \\
+		\hline
+		\texttt{+=} & Addition und Zuweisung & \texttt{a += 3} & \texttt{a = a + 3} \\
+		\hline
+		\texttt{-=} & Subtraktion und Zuweisung & \texttt{a -= 3} & \texttt{a = a - 3} \\
+		\hline
+		\texttt{*=} & Multiplikation und Zuweisung & \texttt{a *= 3} & \texttt{a = a * 3} \\
+		\hline
+		\texttt{/=} & Division und Zuweisung & \texttt{a /= 3} & \texttt{a = a / 3} \\
+		\hline
+		\texttt{\%=} & Modulo und Zuweisung & \texttt{a \%= 3} & \texttt{a = a \% 3} \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+int x = 10;
+x += 5;   // x = 15 (entspricht: x = x + 5)
+x -= 3;   // x = 12 (entspricht: x = x - 3)
+x *= 2;   // x = 24 (entspricht: x = x * 2)
+x /= 4;   // x = 6  (entspricht: x = x / 4)
+x %= 4;   // x = 2  (entspricht: x = x % 4)
+
+// Summe aufaddieren
+int summe = 0;
+int[] zahlen = {5, 10, 15};
+for (int i = 0; i < zahlen.length; i++) {
+    summe += zahlen[i];  // Kuerzer als: summe = summe + zahlen[i]
+}
+
+// Zeichen zaehlen
+String text = "Hallo";
+int anzahl = 0;
+for (int i = 0; i < text.length(); i++) {
+    if (text.charAt(i) == 'l') {
+        anzahl++;  // Entspricht: anzahl = anzahl + 1
+    }
+}
+\end{lstlisting}
+
+% ============================================================
+\newpage
+
+
+\section*{Inkrement- und Dekrement-Operatoren}
+\addcontentsline{toc}{section}{Inkrement- und Dekrement-Operatoren}
+
+\subsection*{Beschreibung:}\\
+Mit diesen Operatoren kannst du eine Zahl um 1 erhöhen oder verringern.
+
+\begin{center}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		\textbf{Operator} & \textbf{Bedeutung} & \textbf{Beispiel} & \textbf{Ergebnis} \\
+		\hline
+		\texttt{++} & Inkrement (erhöhen um 1) & \texttt{i++} & \texttt{i = i + 1} \\
+		\hline
+		\texttt{--} & Dekrement (verringern um 1) & \texttt{i--} & \texttt{i = i - 1} \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+int i = 5;
+i++;        // i = 6 (entspricht: i = i + 1)
+i--;        // i = 5 (entspricht: i = i - 1)
+
+// In Schleifen
+for (int j = 0; j < 5; j++) {  // j wird nach jedem Durchlauf um 1 erhoeht
+    System.out.println(j);
+}
+
+// Countdown
+int countdown = 10;
+while (countdown > 0) {
+    System.out.println(countdown);
+    countdown--;
+}
+
+// Zaehler erhoehen
+int anzahl = 0;
+String text = "Hallo";
+for (int k = 0; k < text.length(); k++) {
+    if (text.charAt(k) == 'l') {
+        anzahl++;
+    }
+}
+\end{lstlisting}
+
+\subsubsection*{Unterschied: Vorher oder nachher erhöhen:}
+\begin{lstlisting}
+int a = 5;
+int b = a++;  // b = 5, dann a = 6 (++ nachher: erst den Wert nehmen, dann erhoehen)
+
+int c = 5;
+int d = ++c;  // c = 6, dann d = 6 (++ vorher: erst erhoehen, dann den Wert nehmen)
+\end{lstlisting}
+
+% ============================================================
+\newpage
+
+
+\section*{String-Konkatenation}
+\addcontentsline{toc}{section}{String-Konkatenation}
+
+\subsection*{Beschreibung:}\\
+Der \texttt{+} Operator kann auch Texte zusammenfügen (z.B. "Hallo" + " " + "Welt" ergibt "Hallo Welt").
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+String vorname = "Anna";
+String nachname = "Schmidt";
+String vollname = vorname + " " + nachname;  // "Anna Schmidt"
+
+// Mit Zahlen
+int alter = 25;
+String text = "Ich bin " + alter + " Jahre alt";  // "Ich bin 25 Jahre alt"
+
+// In Schleifen
+String wort = "Hallo";
+String umgekehrt = "";
+for (int i = wort.length() - 1; i >= 0; i--) {
+    umgekehrt = umgekehrt + wort.charAt(i);
+}
+// umgekehrt = "ollaH"
+
+// Array-Elemente verbinden
+int[] zahlen = {1, 2, 3, 4, 5};
+String ausgabe = "";
+for (int i = 0; i < zahlen.length; i++) {
+    ausgabe += zahlen[i];
+    if (i < zahlen.length - 1) {
+        ausgabe += ", ";
+    }
+}
+// ausgabe = "1, 2, 3, 4, 5"
+\end{lstlisting}
+
+% ============================================================
+\newpage
+
+
+\section*{Operatorrangfolge (Priorität)}
+\addcontentsline{toc}{section}{Operatorrangfolge (Priorität)}
+
+\subsection*{Beschreibung:}\\
+Wenn du mehrere Operatoren in einer Zeile hast, werden sie in einer bestimmten Reihenfolge ausgeführt (wie in Mathe: "Punkt vor Strich").
+
+\subsubsection*{Von höchster zu niedrigster Priorität:}
+
+\begin{enumerate}
+	\item \textbf{Klammern}: \texttt{( )}
+	\item \textbf{Inkrement/Dekrement}: \texttt{++}, \texttt{--}
+	\item \textbf{Negation}: \texttt{!}
+	\item \textbf{Multiplikation, Division, Modulo}: \texttt{*}, \texttt{/}, \texttt{\%}
+	\item \textbf{Addition, Subtraktion}: \texttt{+}, \texttt{-}
+	\item \textbf{Vergleichsoperatoren}: \texttt{<}, \texttt{>}, \texttt{<=}, \texttt{>=}
+	\item \textbf{Gleichheit}: \texttt{==}, \texttt{!=}
+	\item \textbf{Logisches UND}: \texttt{\&\&}
+	\item \textbf{Logisches ODER}: \texttt{||}
+	\item \textbf{Zuweisung}: \texttt{=}, \texttt{+=}, \texttt{-=}, etc.
+\end{enumerate}
+
+\subsubsection*{Beispiele:}
+\begin{lstlisting}
+int ergebnis = 5 + 3 * 2;      // ergebnis = 11 (nicht 16!)
+// * wird vor + ausgefuehrt: 5 + (3 * 2) = 5 + 6 = 11
+
+int x = (5 + 3) * 2;            // x = 16
+// Klammern aendern die Reihenfolge: (5 + 3) * 2 = 8 * 2 = 16
+
+boolean b = 5 > 3 && 2 < 4;     // b = true
+// Erst Vergleiche, dann &&: (5 > 3) && (2 < 4) = true && true = true
+
+int y = 10 + 5 * 2 - 3;         // y = 17
+// Reihenfolge: 5 * 2 = 10, dann 10 + 10 = 20, dann 20 - 3 = 17
+
+// Bei Unsicherheit: Klammern verwenden!
+int z = ((10 + 5) * 2) - 3;     // z = 27 (macht Absicht deutlich)
+\end{lstlisting}
+
+\begin{achtung}
+	\begin{itemize}
+		\item Wenn du dir unsicher bist, setze Klammern! Das macht den Code klarer.
+		\item "Punkt vor Strich": Mal und Geteilt kommen vor Plus und Minus
+		\item Vergleiche (z.B. \texttt{>}) werden vor logischen Operatoren (z.B. \texttt{\&\&}) ausgeführt
+		\item Klammern haben immer Vorrang - nutze sie, um die Reihenfolge festzulegen
+	\end{itemize}
+\end{achtung}
