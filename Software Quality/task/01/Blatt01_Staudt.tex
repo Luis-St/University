@@ -12,6 +12,9 @@
 
 \include{../../for_latex/preamble}
 
+\usepackage{tikz}
+\usetikzlibrary{mindmap}
+
 \begin{document}
 
 \begin{titlepage}
@@ -50,17 +53,39 @@ Sie umfasst nicht nur die Funktionalität, sondern auch Aspekte wie Zuverlässig
 
 
 \section*{2. Mindmap -- Softwarequalität}
-Da eine grafische Mindmap schwer in \LaTeX{} abzubilden ist, folgt eine strukturierte Übersicht der zentralen Aspekte:
 
-\begin{itemize}[leftmargin=1.5cm]
-    \item \textbf{Funktionalität} -- Macht die Software das Richtige?
-	\item \textbf{Zuverlässigkeit} -- Läuft sie stabil und fehlerfrei?
-	\item \textbf{Benutzbarkeit} -- Ist sie für den Nutzer bedienbar?
-	\item \textbf{Effizienz} -- Geht sie sparsam mit Ressourcen um?
-	\item \textbf{Wartbarkeit} -- Lässt sie sich leicht ändern und erweitern?
-	\item \textbf{Übertragbarkeit} -- Ist sie auf andere Systeme portierbar?
-	\item \textbf{Sicherheit} -- Ist sie geschützt vor Missbrauch und Angriffen?
-\end{itemize}
+\begin{center}
+\begin{tikzpicture}[
+	mindmap,
+	grow cyclic,
+	every node/.style={concept, circular drop shadow, minimum size=0pt, text width=2.2cm, font=\scriptsize\bfseries, align=center},
+	root concept/.append style={concept color=black!60, fill=black!60, text=white, font=\small\bfseries, minimum size=2.8cm, text width=2.8cm},
+	level 1/.append style={level distance=4.5cm, sibling angle=90, concept color=black!40, fill=black!40, text=white, text width=2.2cm},
+	level 2/.append style={level distance=3cm, sibling angle=50, concept color=black!20, fill=black!20, text=black, font=\tiny, text width=1.4cm},
+]
+\node[root concept]{Software\-qualität}
+	child { node {Funktionale Qualität}
+		child { node {Korrektheit} }
+		child { node {Vollständig\-keit} }
+		child { node {Sicherheit} }
+	}
+	child { node {Betriebs\-qualität}
+		child { node {Zuver\-lässigkeit} }
+		child { node {Effizienz} }
+		child { node {Benutz\-barkeit} }
+	}
+	child { node {Struktur\-qualität}
+		child { node {Wartbarkeit} }
+		child { node {Testbarkeit} }
+		child { node {Modularität} }
+	}
+	child { node {Transfer\-qualität}
+		child { node {Übertrag\-barkeit} }
+		child { node {Anpassbar\-keit} }
+		child { node {Kompatibi\-lität} }
+	};
+\end{tikzpicture}
+\end{center}
 
 
 \section*{3. Maßnahmen zur Qualitätssicherung}
