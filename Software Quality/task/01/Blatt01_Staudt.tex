@@ -1,0 +1,215 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half,           % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+	
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+	
+	\begin{center}
+		\vspace{3cm}
+		
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 1}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Qualität}
+		
+		\vspace{12cm}
+		
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\chapter*{Aufgabe 1 -- Softwarequalität}
+
+
+\section*{1. Was ist Softwarequalität?}
+Softwarequalität beschreibt, wie gut eine Software die an sie gestellten Anforderungen erfüllt -- sowohl die explizit definierten als auch die implizit erwarteten.
+Sie umfasst nicht nur die Funktionalität, sondern auch Aspekte wie Zuverlässigkeit, Wartbarkeit und Benutzbarkeit.
+
+
+\section*{2. Mindmap -- Softwarequalität}
+Da eine grafische Mindmap schwer in \LaTeX{} abzubilden ist, folgt eine strukturierte Übersicht der zentralen Aspekte:
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{Funktionalität} -- Macht die Software das Richtige?
+	\item \textbf{Zuverlässigkeit} -- Läuft sie stabil und fehlerfrei?
+	\item \textbf{Benutzbarkeit} -- Ist sie für den Nutzer bedienbar?
+	\item \textbf{Effizienz} -- Geht sie sparsam mit Ressourcen um?
+	\item \textbf{Wartbarkeit} -- Lässt sie sich leicht ändern und erweitern?
+	\item \textbf{Übertragbarkeit} -- Ist sie auf andere Systeme portierbar?
+	\item \textbf{Sicherheit} -- Ist sie geschützt vor Missbrauch und Angriffen?
+\end{itemize}
+
+
+\section*{3. Maßnahmen zur Qualitätssicherung}
+\begin{tabularx}{\textwidth}{@{} l l X @{}}
+    \toprule
+	\textbf{Kategorie} & \textbf{Maßnahmen} & \textbf{Beispiele} \\
+	\midrule
+	Konstruktiv & Fehler von vornherein vermeiden &
+	Coding-Standards, Design-Reviews, Einsatz geeigneter Frameworks \\[6pt]
+	Analytisch  & Fehler nachträglich aufdecken &
+	Testen, statische Codeanalyse, Code-Reviews \\
+	\bottomrule
+\end{tabularx}
+
+\medskip
+Der wesentliche Unterschied: Konstruktive Maßnahmen wirken \textbf{präventiv} -- sie verhindern, dass Fehler überhaupt entstehen.
+Analytische Maßnahmen wirken \textbf{detektiv} -- sie finden bereits vorhandene Fehler im Artefakt.
+
+
+\section*{4. Zuordnung des Testens}
+Testen ist eine \textbf{analytische} Qualitätssicherungsmaßnahme.
+Es deckt Fehlerzustände in bereits vorhandenem Code auf, verhindert deren Entstehung jedoch nicht direkt.
+
+
+\chapter*{Aufgabe 2 -- Testen und Sicherung der Softwarequalität}
+
+
+\section*{1. Beste Definition des Testens}
+\begin{quote}
+	Testen ist der Prozess, der Software-Artefakte und deren Verhalten evaluiert, um Qualität zu messen und Fehler zu finden.
+\end{quote}
+
+Diese Definition überzeugt, weil sie Testen als \textbf{Prozess} (kein einmaliges Ereignis) beschreibt,
+sowohl statische als auch dynamische Aspekte einschließt und das Ziel klar benennt: Qualität messen \emph{und} Fehler finden.
+
+
+\section*{2. Die 7 Grundsätze des Testens (ISTQB)}
+\begin{enumerate}
+	\item Testen zeigt die Anwesenheit von Fehlern, nicht deren Abwesenheit.
+	\item Vollständiges Testen ist nicht möglich.
+	\item Mit dem Testen frühzeitig beginnen.
+	\item Häufung von Fehlern (Fehler clustern sich).
+	\item Vorsicht vor dem Pestizid-Paradoxon.
+	\item Testen ist kontextabhängig.
+	\item Trugschluss: Keine Fehler bedeutet ein brauchbares System.
+\end{enumerate}
+
+
+\section*{3. ,,Vollständiges Testen ist nicht möglich''}
+Es ist schlicht nicht machbar, alle möglichen Eingabewerte, Zustandskombinationen und Ausführungspfade zu testen.
+Bereits ein einziges Textfeld für Zahlen von 0 bis 999 liefert 1.000 mögliche Eingaben -- kombiniert man mehrere Felder, explodiert der Testraum exponentiell (Kombinationsexplosion).
+Hinzu kommen Grenzwerte, ungültige Eingaben und Reihenfolgeabhängigkeiten.
+Tests sind daher immer \textbf{Stichproben}, priorisiert nach Risiko und Relevanz.
+
+
+\section*{4. ,,Keine Fehler bedeutet kein brauchbares System''}
+unbrauchbar, wenn sie die falschen Anforderungen umsetzt.
+Wurde ein System perfekt gebaut, aber an den echten Bedürfnissen der Nutzer vorbei entwickelt, nützt es niemandem.
+Qualität bedeutet Fehlerfreiheit und Erfüllung des eigentlichen Zwecks.
+
+
+\chapter*{Aufgabe 3 -- Denkweise und Kompetenzen eines Testers}
+
+
+\section*{1. Kompetenzen eines erfolgreichen Testers}
+\begin{tabularx}{\textwidth}{@{} l X @{}}
+    \toprule
+	\textbf{Kategorie} & \textbf{Beispiele} \\
+	\midrule
+	Fachliche Kompetenzen &
+	Kenntnis von Testmethoden (Black-/White-Box), Testautomatisierung,
+	Testframeworks, Domänenwissen \\[6pt]
+	Übergeordnete Fähigkeiten &
+	Analytisches Denken, strukturiertes Vorgehen, Kommunikationsfähigkeit,
+	Teamarbeit \\[6pt]
+	Persönliche Eigenschaften &
+	Skepsis bzw.\ kritische Grundhaltung, Genauigkeit, Geduld,
+	Hartnäckigkeit, Frustrationstoleranz \\
+	\bottomrule
+\end{tabularx}
+
+
+\section*{2. Wann ist ein Tester erfolgreich?}
+Ein Tester ist erfolgreich, wenn er relevante Fehler findet, bevor der Nutzer es tut, und gleichzeitig die Qualität des Produkts durch seine Arbeit objektiv belegen kann.
+Nicht die Menge der Tests zählt, sondern deren Wirksamkeit und Aussagekraft.
+
+\chapter*{Aufgabe 4 -- Grundlagen des Softwaretestens rekapitulieren}
+
+
+\section*{1. Fehlerwirkung, Fehlerzustand, Fehlhandlung}
+\begin{description}
+	\item[Fehlerwirkung (Failure)] Das sichtbare, falsche Verhalten des Systems zur
+	Laufzeit, z.\,B. ein Absturz oder ein falsches Berechnungsergebnis.
+	\item[Fehlerzustand (Defect / Bug)] Der konkrete fehlerhafte Code oder Zustand im
+	System, der zur Fehlerwirkung führt.
+	\item[Fehlhandlung (Error / Mistake)] Die menschliche Handlung, die den Fehlerzustand
+	erzeugt hat, z.\,B. ein Denkfehler des Entwicklers.
+\end{description}
+
+
+\section*{2. Fehlermaskierung}
+Ein Fehlerzustand wird durch einen anderen Fehlerzustand verdeckt -- beide Fehler heben sich zufällig gegenseitig auf, sodass nach außen kein Fehler sichtbar ist.
+Das ist besonders gefährlich, weil beide Fehler unentdeckt bleiben.
+
+
+\section*{3. Testen vs.\ Debugging}
+\begin{itemize}
+	\item \textbf{Testen:} Aufdecken, \emph{dass} ein Fehler existiert -- eine analytische
+	Qualitätssicherungsmaßnahme.
+	\item \textbf{Debugging:} Finden und Beheben der \emph{Ursache} des Fehlers -- eine
+	Entwicklertätigkeit.
+\end{itemize}
+
+
+\section*{4. Test als Stichprobe}
+Da vollständiges Testen unmöglich ist, ist jeder Test zwangsläufig eine Auswahl aus dem riesigen Raum aller möglichen Eingaben und Szenarien.
+Man wählt gezielt repräsentative Fälle aus, die mit möglichst hoher Wahrscheinlichkeit Fehler aufdecken.
+
+
+\section*{5. Wozu dient eine Testbasis?}
+Die Testbasis dient als Referenz dafür, was das System leisten soll.
+Aus ihr werden Testfälle abgeleitet -- sie definiert also den Sollzustand, gegen den getestet wird.
+
+
+\section*{6. Was kann als Testbasis verwendet werden?}
+Mögliche Quellen sind: Anforderungsdokumente, User Stories, Architekturdiagramme, Schnittstellenspezifikationen und der Quellcode selbst.
+
+
+\section*{7. Frühzeitiges Testen}
+Je später ein Fehler gefunden wird, desto teurer ist seine Behebung -- erfahrungsgemäß um den Faktor 10 bis 100 pro Entwicklungsphase.
+Frühzeitiges Testen reduziert Kosten, spart Zeit und verhindert Folgekosten durch eine falsch aufgebaute Architektur.
+
+
+\section*{8. Hauptmerkmale nach ISO 25010}
+Funktionalität, Zuverlässigkeit, Benutzbarkeit, Effizienz, Wartbarkeit, Übertragbarkeit, Kompatibilität, Sicherheit.
+
+
+\section*{9. Zuverlässigkeit}
+Die Fähigkeit eines Systems, unter definierten Bedingungen über einen bestimmten Zeitraum korrekt zu funktionieren -- d.\,h. ohne unerwartete Ausfälle oder fehlerhafte Ergebnisse.
+
+
+\section*{10. Entwickler soll nicht seine eigenen Programme testen}
+Entwickler sind \("\)betriebsblind\("\) -- sie testen unbewusst so, wie sie die Software gedacht haben, nicht so, wie Nutzer sie benutzen.
+Zudem haben sie ein psychologisches Interesse daran, keine Fehler zu finden.
+Ein unabhängiger Tester ist kritischer und unvoreingenommener und deckt daher mehr Fehler auf.
+
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
