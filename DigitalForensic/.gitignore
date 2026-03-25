@@ -1,0 +1,8 @@
+# Editor
+.vscode/
+.idea/
+out/
+*.iml
+
+# Images
+images/
