@@ -1,0 +1,60 @@
+\section*{Aufgabenstellung}
+Ermitteln Sie die Informationen zu den Betriebssystemen der beiden Images.
+(Wenn verfügbar mit Build Release, Service Pack, Installationsdatum etc.)
+
+\section*{Lösung}
+
+\subsection*{Linux Server Image}
+Das Linux Server Image ist verschlüsselt:
+
+\begin{lstlisting}[language=bash]
+luis@Alpha-17:~/Programming/GitHub/University/DigitalForensic$ fsstat -o 2048 images/20260328_server.E01
+Possible encryption detected (High entropy (7.96))
+\end{lstlisting}
+
+Die Infos musste ich mir daher über binwalk besorgen:
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# ewfinfo images/20260328_server.E01 | grep -iE 'operating|system|date|media'
+        Acquisition date:       Mon Mar 23 15:01:32 2026
+        System date:            Mon Mar 23 15:01:32 2026
+        Operating system used:  Linux
+Media information
+        Media type:             fixed disk
+        Media size:             4.0 GiB (4298928128 bytes)
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# strings /mnt/ewf_server/ewf1 | grep -oP 'Linux version \S+'
+Linux version 6.12.74+deb13+1-amd64
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# strings /mnt/ewf_server/ewf1 | grep -i 'PRETTY_NAME'
+PRETTY_NAME="Debian GNU/Linux 13 (trixie)"
+\end{lstlisting}
+
+Es handelt sich also um ein Debian GNU/Linux 13 (trixie) mit Linux Kernel Version 6.12.74+deb13+1-amd64.
+
+\subsection*{Windows Image}
+
+Bei dem Windows Image handelt es sich um ein Windows 10 Pro installation.
+Folgende Infos konnten aus der Registry extrahiert werden:
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# regripper -p winver -r /tmp/SOFTWARE
+Launching winver v.20200525
+winver v.20200525
+(Software) Get Windows version & build info
+
+ProductName               Windows 10 Pro
+ReleaseID                 2009
+BuildLab                  22621.ni_release.220506-1250
+BuildLabEx                22621.1.amd64fre.ni_release.220506-1250
+CompositionEditionID      Enterprise
+RegisteredOrganization
+RegisteredOwner           Windows-Benutzer
+InstallDate               2026-02-16 13:44:42Z
+InstallTime               2026-02-16 13:44:42Z
+\end{lstlisting}
+
+Die Reg Datei wurde wie folgt extrahiert:
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# fls -pr /dev/loop35p3 | grep 'SOFTWARE$'
+r/r 101808-128-4:       Windows/System32/config/SOFTWARE
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# icat /dev/loop35p3 101808-128-4 > /tmp/SOFTWARE
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# file /tmp/SOFTWARE
+/tmp/SOFTWARE: MS Windows registry file, NT/2000 or above
+\end{lstlisting}

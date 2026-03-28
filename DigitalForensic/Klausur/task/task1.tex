@@ -1,3 +1,51 @@
 \section*{Aufgabenstellung}
+Stellen Sie sicher, dass Sie alle Punkte in der Aufgabenstellung berücksichtigt haben (Upload Dateiname, Prüfsummenvergleich (md5) etc.
+Welche Sleuthkit und xmount Version kommt bei Ihnen zum Einsatz?
 
 \section*{Lösung}
+
+\subsection*{MD5 Checksumme}
+
+Berechnete Checksumme der Images mithilfe von md5sum:
+\begin{description}
+	\item[./images/klausur/20260328\_apl.E01] 064832e41e7a5c6de39cf78673cd7083
+	\item[./images/klausur/20260328\_apl.E02] a84c87d1e70707e15ee55693aacf189c
+	\item[./images/klausur/20260328\_apl.E03] d8ebfe3194db454f7802f5138d7eb396
+	\item[./images/klausur/20260328\_apl.E04] db2a7cde242f3a53c3cfa9a0b2bc8de9
+	\item[./images/klausur/20260328\_apl.E05] d31f769e0d8daebf7b55e4d083d4dab6
+	\item[./images/klausur/20260328\_apl.E06] 6ef5a2879cc4e08e0393bd9152f91378
+	\item[./images/klausur/20260328\_apl.E07] 8d3cd4639c9b8107fda96f2eec5b1c8f
+	\item[./images/klausur/20260328\_server.E01] bf18a6bdc9e56b1b30334800b254af15
+\end{description}
+
+\subsection*{Sleuthkit Version}
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic#   mmls -V
+The Sleuth Kit ver 4.12.1
+\end{lstlisting}
+
+\subsection*{xmount Version}
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# xmount --version
+xmount v0.7.6 Copyright (c) 2008-2018 by Gillen Daniel <gillen.dan@pinguin.lu>
+
+  compile timestamp: Apr  1 2024 08:38:03
+  gcc version: 13.2.0
+  loaded input libraries:
+    - libxmount_input_aff.so supporting "aff"
+    - libxmount_input_ewf.so supporting "ewf"
+    - libxmount_input_aewf.so supporting "aewf"
+    - libxmount_input_raw.so supporting "raw", "dd"
+    - libxmount_input_aaff.so supporting "aaff"
+  loaded morphing libraries:
+    - libxmount_morphing_combine.so supporting "combine"
+    - libxmount_morphing_raid.so supporting "raid0"
+    - libxmount_morphing_unallocated.so supporting "unallocated"
+\end{lstlisting}
+
+\subsection*{binwalk Version}
+Zusätzlich habe ich die binwalk Version überprüft, da diese für die Analyse der Images relevant sein könnte:
+\begin{lstlisting}[language=bash]
+luis@Alpha-17:~/Programming/GitHub/University/DigitalForensic$ pip show binwalk 2>/dev/null | grep -i version
+Version: 2.3.3
+\end{lstlisting}

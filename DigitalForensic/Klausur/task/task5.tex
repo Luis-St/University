@@ -1,0 +1,60 @@
+\section*{Aufgabenstellung}
+Analysieren Sie den Unterschied eines PNG Bildes auf dem User Desktop und der Version in der aktuellsten Volume Shadow Kopie.
+(Gibt es Unterschied? file! Befehl)
+
+\section*{Lösung}
+
+Das Bild auf dem Desktop wurde mit der Volume Shadow Kopie 3 verglichen.
+Hierbei handelt es sich um die aktuellste Kopie:
+
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# vshadowinfo /dev/loop35p3 | grep -E 'Store|Creation'
+Store: 1
+        Creation time           : Feb 23, 2026 13:05:20.966198700 UTC
+Store: 2
+        Creation time           : Feb 24, 2026 08:21:47.564736000 UTC
+Store: 3
+        Creation time           : Mar 23, 2026 06:54:23.036809000 UTC
+\end{lstlisting}
+
+Zuerst habe ich das Bild auf dem Desktop gesucht, und aus dem image extrahiert:
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# fls -pr /dev/loop35p3 | grep -i 'Users.*Desktop.*\.png$'
+r/r 111954-128-5:       Users/baraka/AppData/Local/Microsoft/OneDrive/26.035.0222.0002/Bundle/Assets/common/assets/images/desktop.png
+r/r 37795-128-1:        Users/baraka/Desktop/fakeshop_4saleobngymj3qa62k6gyy5cpvzjtf7otanskbyxnsgyql3oqgivd7id.png
+r/r 124689-128-4:       Users/baraka/Desktop/Tor Browser/Browser/browser/VisualElements/VisualElements_150.png
+r/r 124690-128-4:       Users/baraka/Desktop/Tor Browser/Browser/browser/VisualElements/VisualElements_70.png
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# icat /dev/loop35p3 37795-128-1 > /tmp/desktop_current.png
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# file /tmp/desktop_current.png
+/tmp/desktop_current.png: Unicode text, UTF-8 text, with no line terminators
+\end{lstlisting}
+
+In der aktuellen Version des Bildes auf dem Desktop handelt es sich um eine Textdatei und kein PNG Bild.
+Dies wurde durch ein cat Befehl bestätigt:
+
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# cat /tmp/desktop_current.png | head
+Dieses Bild wurde absichtlich zerstört. Sie finden das originale Bild in der aktuellsten Volume Shadow Kopie.
+\end{lstlisting}
+
+Dann habe ich das Bild aus dem aktuellsten Volume Shadow Kopie extrahiert:
+
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# fls -pr /tmp/vshadow/vss3 | grep -i 'Users.*Desktop.*\.png$'
+r/r 111023-128-5:       Users/baraka/AppData/Local/Microsoft/OneDrive/26.032.0217.0003/Bundle/Assets/common/assets/images/desktop.png
+r/r 37795-128-1:        Users/baraka/Desktop/fakeshop_4saleobngymj3qa62k6gyy5cpvzjtf7otanskbyxnsgyql3oqgivd7id.png
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# icat /tmp/vshadow/vss3 37795-128-1 > /tmp/desktop_vss.png
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# file /tmp/desktop_vss.png
+/tmp/desktop_vss.png: PNG image data, 1362 x 846, 8-bit/color RGB, non-interlaced
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# feh /tmp/desktop_vss.png
+libpng error: IDAT: CRC error
+\end{lstlisting}
+
+Extrahierte Bild aus der aktuellsten Volume Shadow Kopie:
+
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=0.75\linewidth]{img}
+    \caption{}
+    \label{fig:img}
+\end{figure}

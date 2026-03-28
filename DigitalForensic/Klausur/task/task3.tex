@@ -1,0 +1,155 @@
+\section*{Aufgabenstellung}
+Anlaysieren Sie Registry Einträge bezüglich USB Devices , LAN und oder WLAN Informationen.
+
+\section*{Lösung}
+
+Zuerst wurde die SYTEM Registry aus dem Image extrahiert:
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# fls -pr /dev/loop35p3 | grep 'SYSTEM'
+r/r 37802-128-4:        Windows/Prefetch/SYSTEMPROPERTIESPROTECTION.EX-81A2FDE2.pf
+r/r 109603-128-4:       Windows/Prefetch/SYSTEMSETTINGS.EXE-084BB8F9.pf
+r/r 105387-128-4:       Windows/Prefetch/SYSTEMSETTINGSBROKER.EXE-8BBE2894.pf
+r/r 101804-128-4:       Windows/System32/config/SYSTEM
+r/r 101802-128-5:       Windows/System32/config/SYSTEM.LOG1
+r/r 102064-128-5:       Windows/System32/config/SYSTEM.LOG2
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# icat /dev/loop35p3 101804-128-4 > /tmp/SYSTEM
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# file /tmp/SYSTEM
+/tmp/SYSTEM: MS Windows registry file, NT/2000 or above
+\end{lstlisting}
+
+\subsection*{USB Einträge}
+
+Im anschluss wurde nach USB Einträgen gesucht:
+
+\begin{lstlisting}[language=bash]
+regripper -p usbdevices -r /tmp/SYSTEM
+regripper -p usbstor -r /tmp/SYSTEM
+regripper -p devclass -r /tmp/SYSTEM
+regripper -p mountdev -r /tmp/SYSTEM
+\end{lstlisting}
+
+Es wurden folgende 4 USB Geräte gefunden:
+
+\subsubsection*{Gerät 1 – SanDisk 3.2Gen1}
+
+\begin{tabular}{ll}
+	\textbf{Hersteller / Modell}   & SanDisk 3.2Gen1 \\
+	\textbf{VID / PID}             & \texttt{VID\_0781} / \texttt{PID\_5581} \\
+	\textbf{Seriennummer}          & \texttt{010116ed7ac862...} (gekürzt) \\
+	\textbf{Laufwerksbuchstabe}    & \texttt{D:} \\
+	\textbf{Erste Installation}    & 2026-03-23 08:15:11Z \\
+	\textbf{Letztes Entfernen}     & 2026-03-23 08:15:54Z \\
+\end{tabular}
+
+\medskip
+\noindent
+Das Gerät war lediglich ca.\ 43~Sekunden angeschlossen (zwischen \emph{Last Arrival} und \emph{Last Removal}), was auf ein schnelles Kopieren oder ein gezieltes kurzes Anschließen (testen, etc) hindeuten kann.
+
+\subsubsection*{Gerät 2 – CnMemory USB Device}
+
+\begin{tabular}{ll}
+	\textbf{Hersteller / Modell}   & CnMemory \\
+	\textbf{VID / PID}             & \texttt{VID\_090C} / \texttt{PID\_1000} \\
+	\textbf{Seriennummer}          & \texttt{00040127001068} \\
+	\textbf{Laufwerksbuchstabe}    & keiner (nur Volume-GUID vorhanden) \\
+	\textbf{Erste Installation}    & 2026-03-23 07:52:45Z \\
+	\textbf{Letztes Entfernen}     & 2026-03-23 08:15:06Z \\
+\end{tabular}
+
+\medskip
+\noindent
+Dem Gerät wurde kein Laufwerksbuchstabe zugewiesen; es ist lediglich eine
+Volume-GUID eingetragen (\texttt{\{46308943-2685-11f1-a521-fa789cc76a14\}}).
+
+\subsubsection*{Gerät 3 – SMI USB DISK (Instanz A)}
+
+\begin{tabular}{ll}
+	\textbf{Hersteller / Modell}   & SMI USB DISK \\
+	\textbf{VID / PID}             & \texttt{VID\_090C} / \texttt{PID\_2000} \\
+	\textbf{Seriennummer}          & \texttt{03161671000618} \\
+	\textbf{Laufwerksbuchstabe}    & keiner (nur Volume-GUID vorhanden) \\
+	\textbf{Erste Installation}    & 2026-02-23 13:03:25Z \\
+	\textbf{Letztes Entfernen}     & nicht erfasst \\
+\end{tabular}
+
+\subsubsection*{Gerät 4 – SMI USB DISK (Instanz B)}
+
+\begin{tabular}{ll}
+	\textbf{Hersteller / Modell}   & SMI USB DISK \\
+	\textbf{VID / PID}             & \texttt{VID\_090C} / \texttt{PID\_1000} \\
+	\textbf{Seriennummer}          & \texttt{AA00000000013226} \\
+	\textbf{Laufwerksbuchstabe}    & keiner \\
+	\textbf{Erste Installation}    & 2026-02-16 13:42:54Z \\
+	\textbf{Letztes Entfernen}     & nicht erfasst \\
+\end{tabular}
+
+\subsection*{LAN / WLAN Einträge}
+
+Nun habe ich nach LAN und WLAN Einträgen gesucht:
+
+\begin{lstlisting}[language=bash]
+regripper -p nic2 -r /tmp/SYSTEM
+regripper -p networklist -r /tmp/SOFTWARE
+regripper -p ssid -r /tmp/SOFTWARE
+\end{lstlisting}
+
+ich habe hier die folgenden 3 Adapter gefunden:
+
+\subsection*{Adapter 1 – \texttt{\{20b88bfa-bfd2-41ba-9779-1ea2a01031d6\}}}
+
+\begin{tabular}{ll}
+	\textbf{GUID}            & \texttt{\{20b88bfa-bfd2-41ba-9779-1ea2a01031d6\}} \\
+	\textbf{LastWrite}       & 2026-02-16 13:42:56Z \\
+	\textbf{DHCP aktiviert}  & Ja \\
+	\textbf{IP-Adresse}      & nicht zugewiesen (kein DHCP-Lease) \\
+	\textbf{DNS-Server}      & nicht konfiguriert \\
+	\textbf{Domain}          & nicht konfiguriert \\
+\end{tabular}
+
+\medskip
+\noindent
+Der Adapter ist DHCP-fähig, hat jedoch keine IP-Adresse erhalten. Es liegt kein
+aktiver Lease vor, was darauf hindeutet, dass zum Zeitpunkt des letzten Schreibens
+keine Netzwerkverbindung bestand.
+
+\subsection*{Adapter 2 – \texttt{\{64ac53af-0b3d-11f1-a51a-806e6f6e6963\}}}
+
+\begin{tabular}{ll}
+	\textbf{GUID}            & \texttt{\{64ac53af-0b3d-11f1-a51a-806e6f6e6963\}} \\
+	\textbf{LastWrite}       & 2026-02-16 13:43:02Z \\
+	\textbf{Konfiguration}   & keine Subkeys vorhanden \\
+\end{tabular}
+
+\medskip
+\noindent
+Für diesen Adapter sind keinerlei TCP/IP-Parameter hinterlegt. Es handelt sich
+vermutlich um einen virtuellen oder nicht genutzten Adapter (z.\,B.\ ein
+Loopback- oder VPN-Adapter).
+
+\subsection*{Adapter 3 – \texttt{\{655f726f-6fea-44e7-a87e-2bea2176bcdb\}}}
+
+\begin{tabular}{ll}
+	\textbf{GUID}              & \texttt{\{655f726f-6fea-44e7-a87e-2bea2176bcdb\}} \\
+	\textbf{LastWrite}         & 2026-03-23 06:53:35Z \\
+	\textbf{DHCP aktiviert}    & Ja \\
+	\textbf{IP-Adresse}        & \texttt{192.168.2.91} \\
+	\textbf{Subnetzmaske}      & \texttt{255.255.255.0} (\texttt{/24}) \\
+	\textbf{DHCP-Server}       & \texttt{192.168.2.1} \\
+	\textbf{Standard-Gateway}  & \texttt{192.168.2.1} \\
+	\textbf{DNS-Server}        & \texttt{192.168.2.1} \\
+	\textbf{Domain}            & \texttt{fritz.box} \\
+	\textbf{Lease erhalten}    & 2026-03-23 06:53:35Z \\
+	\textbf{T1 (Renewal)}      & 2026-03-28 06:53:35Z \\
+	\textbf{T2 (Rebinding)}    & 2026-04-01 00:53:35Z \\
+	\textbf{Lease läuft ab}    & 2026-04-02 06:53:35Z \\
+	\textbf{Lease-Dauer}       & 864.000~Sekunden (10~Tage) \\
+\end{tabular}
+
+\medskip
+\noindent
+Dieser Adapter war zum Zeitpunkt der Untersuchung aktiv mit einem Heimnetzwerk
+verbunden. Die Domain \texttt{fritz.box} identifiziert den Router eindeutig als
+eine \textbf{AVM FRITZ!Box}. Gateway und DNS-Server sind identisch
+(\texttt{192.168.2.1}), was dem typischen Heimrouter-Setup entspricht.
+Die Lease-Dauer von 10~Tagen sowie der Renewal-Zeitpunkt (T1) am 2026-03-28
+deuten auf eine stabile, längerfristige Verbindung hin.

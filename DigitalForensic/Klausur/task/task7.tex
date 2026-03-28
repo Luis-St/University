@@ -1,0 +1,62 @@
+\section*{Aufgabenstellung}
+Gibt es Spuren im Serverimage bzgl.
+der Installation des Tor Dienstes?
+Gibt es einen Webauftritt?
+
+\section*{Lösung}
+Da das Image verschlüsselt ist (siehe Aufgabe 2), erfolgt die Analyse auf dem raw image.
+Hierfür wurde das Image zuerst mit ewfmount gemountet:
+
+\begin{lstlisting}[language=bash]
+mkdir -p /mnt/ewf_server
+ewfmount images/20260328_server.E01 /mnt/ewf_server
+\end{lstlisting}
+
+Mithilfe von strings konnte ich die folgenden Onion Domain und Fragmente des Apache Webservers finden:
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# strings /mnt/ewf_server/ewf1 | grep -i '\.onion' | sort -u
+Homepage: http://2xzrgzkwdqvcfw2ckas4n6iu4gcyk3mvfh6eq5zt5il3ohz2qbtvssyd.onion/
+Not resolving .onion address (RFC 7686)
+.onion
+.onion.
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# strings /mnt/ewf_server/ewf1 | grep -i 'apache\|nginx\|DocumentRoot' | sort -u | head -10
+                    $APACHE2CTL $METH > /dev/null 2>&1
+                $APACHE2CTL graceful > /dev/null 2>&1
+                $APACHE2CTL start
+        [ "$APACHE2_MAINTSCRIPT_NAME" ] || APACHE2_MAINTSCRIPT_NAME="${0##*.}"
+                                    [ "$APACHE2_MAINTSCRIPT_NAME" = 'postinst' ] || [ "$APACHE2_MAINTSCRIPT_NAME" = 'preinst' ] ; then
+  . $APACHE_ENVVARS
+      . $apache_reload
+    $apache_reload = "  service apache2$dir_suffix $reload\n";
+    $apache_reload = "  systemctl $reload $apache_service\n";
+    $apache_service .= $service_suffix
+\end{lstlisting}
+
+Die Installation von Tor konnte jedoch nicht direkt nachgewiesen werden:
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# strings /mnt/ewf_server/ewf1 | grep -i 'apt.*install.*tor' | head -10
+ _ZN3APT11CacheFilter19PackageIsNewInstallclERKN8pkgCache11PkgIteratorE@APTPKG_7.0 1.1~exp4
+ _ZN3APT12StateChanges7InstallERKN8pkgCache11VerIteratorE@APTPKG_7.0 1.1~exp15
+ _ZN3APT14CacheSetHelper22canNotFindInstalledVerER12pkgCacheFileRKN8pkgCache11PkgIteratorE@APTPKG_7.0 0.8.0
+ _ZN3APT25VersionContainerInterface15getInstalledVerER12pkgCacheFileRKN8pkgCache11PkgIteratorERNS_14CacheSetHelperE@APTPKG_7.0 0.8.16~exp9
+_ZN3APT11CacheFilter19PackageIsNewInstallclERKN8pkgCache11PkgIteratorE
+_ZN3APT14CacheSetHelper22canNotFindInstalledVerER12pkgCacheFileRKN8pkgCache11PkgIteratorE
+_ZN3APT25VersionContainerInterface15getInstalledVerER12pkgCacheFileRKN8pkgCache11PkgIteratorERNS_14CacheSetHelperE
+_ZN3APT12StateChanges7InstallERKN8pkgCache11VerIteratorE
+virtual bool APT::Internal::Patterns::PackageIsInstalled::operator()(const pkgCache::PkgIterator&)
+virtual bool APT::Internal::Patterns::PackageIsInstalled::operator()(const pkgCache::VerIterator&)
+\end{lstlisting}
+
+Nach der analyse des squashfs Containers aus Aufgabe 8 würde ich sagen der Linux Server definitiv für Darknet Aktivitäten genutzt wurde.
+Ein Web Server war aber vermutlich nicht installiert, da es keine Spuren von Apache oder Nginx gibt.
+
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# strings /tmp/swap.bin | grep -i '\.onion' | sort -u
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# strings /tmp/swap.bin | grep -i 'tor\|hidden_service' | sort -u | head -20
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# strings /tmp/swap.bin | grep -i 'apache\|nginx\|www' | sort -u | head -20
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# binwalk /mnt/ewf_server/ewf1 2>&1 | grep -i '.onion|tor|hidden_service|apache|nginx|www'
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic#
+\end{lstlisting}
+
+
+

@@ -1,0 +1,77 @@
+\section*{Aufgabenstellung}
+Wieviele Volume Shadow Kopien sind vorhanden?
+Sind alle lesbar (fls in VSS)?
+
+\section*{Lösung}
+Das Windows NTFS Dateisystem besitzt 3 Shadow Kopien:
+
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# vshadowinfo /dev/loop35p3
+vshadowinfo 20190323
+
+Volume Shadow Snapshot information:
+        Number of stores:       3
+
+Store: 1
+        Identifier              : 05564d2f-10a8-11f1-a51f-b0ab8788c71a
+        Shadow copy set ID      : 45a4831e-63a8-4841-aec0-a26cdddf3d90
+        Creation time           : Feb 23, 2026 13:05:20.966198700 UTC
+        Shadow copy ID          : a31e4aea-4dd9-4ec6-aaf0-dfa2c62c59f4
+        Volume size             : 118 GiB (127189123072 bytes)
+        Attribute flags         : 0x0042000d
+
+Store: 2
+        Identifier              : 502f99b2-1158-11f1-a520-b2c693f35e55
+        Shadow copy set ID      : 9ca27a02-5288-4608-a7f1-a69fac6e0a58
+        Creation time           : Feb 24, 2026 08:21:47.564736000 UTC
+        Shadow copy ID          : b04001ee-e2e8-4105-b153-7cbf06e1789b
+        Volume size             : 118 GiB (127189123072 bytes)
+        Attribute flags         : 0x00020010
+
+Store: 3
+        Identifier              : 502f9ad9-1158-11f1-a520-9467f22d4584
+        Shadow copy set ID      : bd28bf73-7e88-45e3-bda9-c0e3cc63a901
+        Creation time           : Mar 23, 2026 06:54:23.036809000 UTC
+        Shadow copy ID          : 26313d01-fbec-452f-973a-284cdad76c21
+        Volume size             : 118 GiB (127189123072 bytes)
+        Attribute flags         : 0x0042000d
+\end{lstlisting}
+
+Die drei Shadow Kopien wurden mit vshadowmount an /tmp/vshadow/ gemounted und mit fls auf lesbarkeit geprüft:
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# fls /tmp/vshadow/vss1 | head
+d/d 1979-144-6: ProgramData
+d/d 2124-144-5: Users
+r/r 4-128-1:    $AttrDef
+r/r 8-128-2:    $BadClus
+r/r 8-128-1:    $BadClus:$Bad
+r/r 6-128-4:    $Bitmap
+r/r 6-128-5:    $Bitmap:$SRAT
+r/r 7-128-1:    $Boot
+d/d 11-144-4:   $Extend
+r/r 2-128-1:    $LogFile
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# fls /tmp/vshadow/vss2 | head
+d/d 1979-144-6: ProgramData
+d/d 2124-144-5: Users
+r/r 4-128-1:    $AttrDef
+r/r 8-128-2:    $BadClus
+r/r 8-128-1:    $BadClus:$Bad
+r/r 6-128-4:    $Bitmap
+r/r 6-128-5:    $Bitmap:$SRAT
+r/r 7-128-1:    $Boot
+d/d 11-144-4:   $Extend
+r/r 2-128-1:    $LogFile
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# fls /tmp/vshadow/vss3 | head
+d/d 1979-144-6: ProgramData
+d/d 2124-144-5: Users
+r/r 4-128-1:    $AttrDef
+r/r 8-128-2:    $BadClus
+r/r 8-128-1:    $BadClus:$Bad
+r/r 6-128-4:    $Bitmap
+r/r 6-128-5:    $Bitmap:$SRAT
+r/r 7-128-1:    $Boot
+d/d 11-144-4:   $Extend
+r/r 2-128-1:    $LogFile
+\end{lstlisting}
+
+Aus der Ausgabe lässt sich schließen das alle drei Shadow Kopien lesbar sind, da die Verzeichnisstruktur und die Systemdateien angezeigt werden.

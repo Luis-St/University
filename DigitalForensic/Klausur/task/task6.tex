@@ -1,0 +1,39 @@
+\section*{Aufgabenstellung}
+Welche Kennworthinweise gibt es, um bei einer Virtualisierung des Windows Images das Passwort auszuhebeln?
+
+\section*{Lösung}
+
+Als erstes wurde die SAM Datei extrahiert, um die Informationen über die Benutzer zu erhalten.
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# fls -pr /dev/loop35p3 | grep 'SAM$'
+r/r 100981-128-4:       Windows/System32/config/SAM
+d/d 5066-144-1: Windows/System32/LogFiles/SAM
+d/d 6223-144-1: Windows/SysWOW64/LogFiles/SAM
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# icat /dev/loop35p3 100981-128-4 > /tmp/SAM
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# file /tmp/SAM
+/tmp/SAM: MS Windows registry file, NT/2000 or above
+\end{lstlisting}
+
+Mithilfe von regripper konnte ich die Informationen über die Benutzer extrahieren.
+Der nutzer \("\)baraka\("\) ist der einzige aktive Nutzer alle anderen Nutzer sind deaktiviert.
+
+\begin{lstlisting}[language=bash]
+User Information
+-------------------------
+Username        : baraka [1000]
+SID             : S-1-5-21-419137830-851868639-3742987133-1000
+Full Name       : baraka
+User Comment    :
+Account Type    :
+Account Created : Mon Feb 16 13:44:37 2026 Z
+Name            :
+Last Login Date : Mon Mar 23 10:33:52 2026 Z
+Pwd Reset Date  : Mon Feb 16 13:50:04 2026 Z
+Pwd Fail Date   : Mon Feb 23 11:06:51 2026 Z
+Login Count     : 10
+  --> Normal user account
+  --> Password not required
+\end{lstlisting}
+
+Alle anderen Nuter (Administrator, Gast, DefaultAccount, WDAGUtilityAccount, defaultuser0) sind deaktiviert und wurden aus der Ausgabe oben entfernt (da dies zu viel Platz eingenommen hätten).
+Da kein Passwort erforderlich ist, könnte man einfach mit einem leeren Passwort versuchen sich einzuloggen.

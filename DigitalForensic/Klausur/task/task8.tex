@@ -1,0 +1,51 @@
+\section*{Aufgabenstellung}
+Ermitteln Sie mit Binwalk den Inhalt eines squashfs Containers am Ende des Server Images.
+
+\section*{Lösung}
+
+Im ersten Schritt wurden die letzten 50MB des Images extrahiert, da hier der squashfs Container vermutet wird:
+Auf diesem extrahierten Image wurde dann mit Binwalk der Inhalt des squashfs Containers extrahiert:
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# dd if=/mnt/ewf_server/ewf1 of=/tmp/tail.bin bs=1M skip=$(($(stat -c%s /mnt/ewf_server/ewf1)/1048576 - 50))
+50+1 records in
+50+1 records out
+53243904 bytes (53 MB, 51 MiB) copied, 0.0928973 s, 573 MB/s
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# binwalk /tmp/tail.bin
+
+DECIMAL       HEXADECIMAL     DESCRIPTION
+--------------------------------------------------------------------------------
+49283072      0x2F00000       Squashfs filesystem, little endian, version 4.0, compression:gzip, size: 3960790 bytes, 3722 inodes, blocksize: 131072 bytes, created: 2026-03-23 12:36:31
+
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# dd if=/tmp/tail.bin of=/tmp/squashfs.img bs=1 skip=49283072
+3960832+0 records in
+3960832+0 records out
+3960832 bytes (4.0 MB, 3.8 MiB) copied, 5.8737 s, 674 kB/s
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# dd if=/tmp/tail.bin of=/tmp/squashfs.img bs=1 skip=49283072
+3960832+0 records in
+3960832+0 records out
+3960832 bytes (4.0 MB, 3.8 MiB) copied, 5.85739 s, 676 kB/s
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# file /tmp/squashfs.img
+/tmp/squashfs.img: Squashfs filesystem, little endian, version 4.0, zlib compressed, 3960790 bytes, 3722 inodes, blocksize: 131072 bytes, created: Mon Mar 23 12:36:31 2026
+\end{lstlisting}
+
+Auszüge aus dem extrahierten squashfs Container:
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# unsquashfs -l /tmp/squashfs.img
+squashfs-root/.editorconfig
+squashfs-root/.git
+squashfs-root/4n622tjddwejdqmb4qsd5zyjpwh7f6awnvdhostckei5tui6ohdla3id.onion
+squashfs-root/4n622tjddwejdqmb4qsd5zyjpwh7f6awnvdhostckei5tui6ohdla3id.onion/hostname
+squashfs-root/4n622tjddwejdqmb4qsd5zyjpwh7f6awnvdhostckei5tui6ohdla3id.onion/hs_ed25519_public_key
+squashfs-root/4n622tjddwejdqmb4qsd5zyjpwh7f6awnvdhostckei5tui6ohdla3id.onion/hs_ed25519_secret_key
+\end{lstlisting}
+
+Es handelt sich definitiv um ein git Repository, welches die Konfiguration eines Tor Hidden Services enthält.
+Es gibt 3316 Dateien mit der Endung .onion:
+
+\begin{lstlisting}[language=bash]
+root@Alpha-17:/home/luis/Programming/GitHub/University/DigitalForensic# unsquashfs -l /tmp/squashfs.img | grep -i '.onion' | wc -l
+3316
+\end{lstlisting}
+
+Es könnte sich um das Git Repository mkp224o handeln.
+Ein Tool das zur generierung von Tor Hidden Services genutzt wird.
