@@ -1,5 +1,6 @@
 # 4n6_old
 Password: linux
 
-# Randsome
+# Ransome
 Password: secret
+Zip-Password: infected
