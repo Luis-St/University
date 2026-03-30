@@ -1,0 +1,202 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half,           % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+\usepackage{longtable}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 2}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Qualität}
+
+		\vspace{12cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\chapter*{Aufgabe 1: Testen in Scrum}
+
+
+\section*{1. Wie wird das Testen im Scrum-Prozess durchgeführt?}
+
+Das Testen ist in Scrum keine separate Phase, sondern integraler Bestandteil jedes Sprints.
+Innerhalb jeder Iteration werden neue Funktionen entwickelt und unmittelbar getestet.
+Für jede Codekomponente müssen wiederverwendbare Tests vorhanden sein, die an jedem Inkrement als Regressionstests wiederholt werden können.
+Zusätzlich werden für jedes Inkrement neue Testfälle ergänzt, die die neu hinzugekommenen Funktionen abdecken.
+Die Anzahl der zu pflegenden Tests wächst somit von Iteration zu Iteration.
+
+Je kürzer die Iterationszyklen werden, desto wichtiger wird die \textbf{Testautomatisierung}, da mit anwachsender Produktfunktionalität immer mehr Testfälle abgearbeitet werden müssen, ohne dass das kurze Iterationsintervall gesprengt wird.
+Testautomatisierung ist das entscheidende Mittel, um dem Zielkonflikt zwischen Iterations-Timebox und gleichbleibend hoher Testabdeckung zu begegnen.
+
+Zusätzlich erfolgt die Anforderungsermittlung iterativ-inkrementell: Testbedingungen und Testfälle werden aus User Stories und Akzeptanzkriterien abgeleitet, häufig bereits vor der Codierung (z.\,B.\ bei BDD oder ATDD).
+
+
+\section*{2. Wie werden im Scrum Aufgaben und Rollen zwischen Entwicklern und Testern verteilt?}
+
+Scrum folgt dem \textbf{Whole-Team-Ansatz}: Aufgaben und Probleme werden bevorzugt in direkter Zusammenarbeit mehrerer oder aller Teammitglieder gelöst.
+Jedes Teammitglied bringt seine spezielle Ausbildung und individuellen Kompetenzen ein und ist bereit, seinen Fähigkeiten gemäß an jeder Aufgabe mitzuwirken.
+
+Konkret bedeutet das:
+\begin{itemize}
+	\item Fachbereichsvertreter können bei der Erstellung geeigneter Abnahmetests mitarbeiten.
+	\item Teammitglieder mit Entwicklungskompetenz können bei der Teststrategie mitarbeiten.
+	\item Programmierer, Tester und andere Teammitglieder unterstützen sich gegenseitig bei den Testaufgaben -- vom Entwurf der Tests bis zu deren Automatisierung und Durchführung.
+	\item Jedes Teammitglied ist für die resultierende Qualität des Produkts gleichermaßen verantwortlich.
+\end{itemize}
+
+\textbf{Ausnahme:} Bei sicherheitskritischer Software kann eine Trennung zwischen Programmierteam und Testteam erforderlich sein, wenn Regularien einen unabhängigen Test vorschreiben.
+
+
+\section*{3. Wie werden Tests und Testergebnisse in Scrum dokumentiert?}
+
+In agilen Vorgehensweisen wird Prozess- und Projektdokumentation bewusst \textbf{minimiert} (,,leichtgewichtiges'' Vorgehensmodell).
+Die wesentlichen Instrumente zur Dokumentation sind:
+\begin{itemize}
+	\item \textbf{Product Backlog und Sprint Backlog:} Priorisierung der umzusetzenden Anforderungen und der dazu zu erledigenden Aufgaben, inklusive Testaufgaben.
+	\item \textbf{Transparenz:} Inhalt und Fortschritt des aktuellen Sprints werden im Daily Scrum besprochen und auf einem für alle einsehbaren Taskboard dargestellt.
+	\item \textbf{Definition of Ready / Definition of Done:} Eingangs- und Endekriterien für Testaktivitäten, die sicherstellen, dass Tests vollständig durchgeführt werden.
+	\item \textbf{User Stories} mit Akzeptanzkriterien dienen als leichtgewichtige Testbasis.
+\end{itemize}
+
+
+\chapter*{Aufgabe 2: Verfolgbarkeit}
+
+
+\section*{1. Was heißt Verfolgbarkeit im Kontext des Testens und des Testprozesses?}
+
+Verfolgbarkeit (engl.\ Traceability) bezeichnet die Herstellung und Pflege von Beziehungen zwischen der \textbf{Testbasis} (z.\,B.\ Anforderungen), den \textbf{Testarbeitsergebnissen} und den \textbf{Testmitteln} (z.\,B.\ Testbedingungen, Risiken, Testfälle).
+Es geht darum, jedes Element der Testbasis mit den verschiedenen Ergebnissen der Testaktivitäten zu verknüpfen, sodass nachvollziehbar ist, welche Testbedingung welche Anforderung prüft und mit welchen Testfällen dies geschieht.
+
+Die Verfolgbarkeit ist wichtig für eine effektive Testüberwachung und Teststeuerung über den gesamten Testprozess hinweg.
+Mithilfe der Verfolgbarkeit lässt sich z.\,B.\ der Grad der erreichten Überdeckung bestimmen -- also ob alle Anforderungen mit mindestens einem Testfall geprüft worden sind.
+
+
+\section*{2. Für welche Zwecke wird Verfolgbarkeit verwendet?}
+
+Gute Verfolgbarkeit unterstützt folgende Zwecke:
+\begin{itemize}
+	\item \textbf{Bewertung der Testüberdeckung:} Bestimmung, ob alle Anforderungen durch Testfälle abgedeckt sind.
+	\item \textbf{Auswirkungsanalyse bei Änderungen:} Ermittlung, welche Änderungen der Anforderungen sich auf welche Testbedingungen, Testabläufe, Testfälle und Testelemente auswirken.
+	\item \textbf{Risikobewertung:} Ist eine Verfolgbarkeit der Testergebnisse zu den ermittelten Risiken vorhanden, kann der Umfang des Restrisikos besser beurteilt werden.
+	\item \textbf{Abstraktion für Nicht-Tester:} Testergebnisse können auf eine abstraktere Ebene ,,gehoben'' werden, sodass das Testen auch für Stakeholder nachvollziehbar wird.
+	Auch die Erfüllung von IT-Governance-Kriterien kann so nachgewiesen werden.
+	\item \textbf{Verständliche Berichte:} Testfortschritts- und Testabschlussberichte werden verständlicher, da zu jeder Anforderung der Status (bestanden, fehlgeschlagen, ausstehend) angegeben werden kann.
+	\item \textbf{Beurteilung für Stakeholder:} Technische Aspekte des Testens können so aufbereitet werden, dass die Beurteilung von Produktqualität, Prozessfähigkeit und Projektfortschritt anhand von Unternehmenszielen möglich wird.
+\end{itemize}
+
+
+\section*{3. Was heißt gute und schlechte Verfolgbarkeit?}
+
+\textbf{Gute Verfolgbarkeit} liegt vor, wenn eine eindeutige, bidirektionale Beziehung zwischen der Testbasis und allen Testarbeitsergebnissen besteht.
+Das bedeutet: Es ist klar, welche Testbedingung welche Anforderung prüft und umgekehrt.
+So lassen sich für jede interessierte Personengruppe verständliche Aussagen darüber treffen, wie intensiv und wie breit getestet wurde.
+
+\textbf{Schlechte Verfolgbarkeit} liegt vor, wenn diese Beziehungen fehlen oder unvollständig sind.
+Nur die durchgeführten Testfälle zu betrachten, gibt keine Auskunft darüber, wie intensiv und wie breit getestet wurde.
+Ohne Verfolgbarkeit können weder Auswirkungen von Änderungen systematisch ermittelt noch der Testfortschritt sinnvoll bewertet werden.
+
+
+\section*{4. Wie wird Verfolgbarkeit verwaltet?}
+
+Um die Vorteile der Verfolgbarkeit vollständig zu nutzen, bauen einige Unternehmen eigene \textbf{Managementsysteme} auf.
+Mithilfe dieser Systeme werden die Arbeitsergebnisse so organisiert, dass die benötigte Information zur Verfolgbarkeit geliefert wird.
+Darüber hinaus gibt es am Markt erhältliche \textbf{Testmanagementwerkzeuge}, die die Verfolgbarkeit umsetzen.
+
+In der Praxis wird die Verfolgbarkeit bereits in der Testplanung verankert: Im Testkonzept sind Informationen zur Verfolgbarkeit zwischen Testbasis und den anderen Arbeitsergebnissen aufzunehmen.
+In jeder weiteren Testaktivität (Analyse, Entwurf, Realisierung, Durchführung) ist die Verfolgbarkeit zu prüfen und zu aktualisieren.
+
+
+\chapter*{Aufgabe 3: Der Testprozess}
+
+{\small
+\begin{longtable}{| p{3cm} | p{3.8cm} | p{3.8cm} | p{3.4cm} |}
+	\toprule
+	\textbf{Testaktivität} & \textbf{Aufgaben} & \textbf{Vorgehensweise} & \textbf{Arbeitsergebnisse} \\
+	\midrule
+	\endfirsthead
+	\toprule
+	\textbf{Testaktivität} & \textbf{Aufgaben} & \textbf{Vorgehensweise} & \textbf{Arbeitsergebnisse} \\
+	\midrule
+	\endhead
+	\bottomrule
+	\endfoot
+
+	Testplanung &
+	Anfertigung des Testkonzepts; Festlegung von Testobjekten, Testzielen, Teststrategie; Definition von Eingangs- und Endekriterien; Risikoidentifikation; Ressourcen- und Zeitplanung &
+	Planung beginnt am Anfang des Projekts und wird über den gesamten Lebenszyklus hinweg regelmäßig überprüft und angepasst &
+	Testkonzept (inkl.\ Teststrategie, Risikoverzeichnis, Eingangs-/Endekriterien), Testzeitplan \\
+	\hline
+
+	Testüberwachung und -steuerung &
+	Fortwährende Beobachtung der Testaktivitäten im Vergleich zur Planung; Berichterstattung von Abweichungen; Durchführung korrektiver Maßnahmen &
+	Prüfung der Endekriterien (Überdeckungsgrade, Qualitätsnachweise, Risikoüberdeckung); Vergleich Soll/Ist &
+	Testfortschrittsberichte, Testabschlussberichte \\
+	\hline
+
+	Testanalyse &
+	Ermitteln, \emph{was} zu testen ist; Prüfung der Testbasis auf Testbarkeit; Identifikation von Testbedingungen; Priorisierung nach Risiko &
+	Untersuchung von Anforderungsspezifikationen, Entwurfsdokumenten, Code und Risikoberichten; Prüfung auf Mehrdeutigkeiten, Lücken und Inkonsistenzen &
+	Priorisierte Testbedingungen, Fehlerberichte zu Dokumenten, Verfolgbarkeit Testbasis $\leftrightarrow$ Testbedingungen \\
+	\hline
+
+	Testentwurf &
+	Festlegen, \emph{wie} getestet wird; Ableitung von Testfällen aus Testbedingungen; Priorisierung der Testfälle; Bereitstellung der Testinfrastruktur; Bestimmung von Überdeckungselementen &
+	Anwendung von Testverfahren (Black-Box, White-Box, erfahrungsbasiert); Spezifikation abstrakter und konkreter Testfälle &
+	Testfälle (abstrakt und konkret), Testinfrastruktur-Anforderungen, Überdeckungselemente \\
+	\hline
+
+	Testrealisierung &
+	Vervollständigung aller Testmittel; Konkretisierung der Testfälle; Festlegung des Testablaufs; Aufbau der Testumgebung &
+	Installation von Testrahmen; Übernahme der Testdaten in die Testumgebung; Gruppierung zu Testsuiten; Erstellung von Testskripten &
+	Konkrete Testfälle, Testsuiten, Testabläufe, Testskripte, einsatzbereite Testumgebung \\
+	\hline
+
+	Testdurchführung &
+	Ausführung der Testfälle; Protokollierung der Ergebnisse; Vergleich Ist-/Sollergebnisse; Dokumentation von Fehlerwirkungen; Fehlernachtests &
+	Prüfung auf Vollständigkeit; Smoke-Test; manuelle oder automatisierte Ausführung gemäß Testausführungsplan; Prüfung der Verfolgbarkeit &
+	Testprotokolle, Fehlerberichte, Messung der Überdeckungsgrade \\
+	\hline
+
+	Testabschluss &
+	Zusammentragen der Erfahrungen; Archivierung der Testmittel; Erstellung des Testabschlussberichts; Übergabe der Testmittel an die Wartung &
+	Sicherstellen, dass alle Testaktivitäten beendet und Fehlerberichte abgeschlossen sind; Analyse der Erfahrungen für zukünftige Projekte (Retrospektive) &
+	Testabschlussbericht, archivierte Testmittel, dokumentierte Lessons Learned \\
+
+\end{longtable}
+}
+
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
