@@ -1,0 +1,55 @@
+{
+  "monobit": {
+    "X": 9972,
+    "nist_pass": true,
+    "bsi_pass": true
+  },
+  "poker": {
+    "Y": 14.7968,
+    "nibble_counts": [
+      316,
+      310,
+      283,
+      340,
+      305,
+      329,
+      299,
+      314,
+      347,
+      327,
+      313,
+      321,
+      291,
+      291,
+      305,
+      309
+    ],
+    "nist_pass": true,
+    "bsi_pass": true
+  },
+  "runs": {
+    "zero_runs": {
+      "1": 2476,
+      "2": 1263,
+      "3": 631,
+      "4": 301,
+      "5": 163,
+      "6": 159
+    },
+    "one_runs": {
+      "1": 2534,
+      "2": 1207,
+      "3": 621,
+      "4": 329,
+      "5": 134,
+      "6": 168
+    },
+    "all_nist_pass": true,
+    "all_bsi_pass": true
+  },
+  "longrun": {
+    "max_run": 13,
+    "nist_pass": true,
+    "bsi_pass": true
+  }
+}
