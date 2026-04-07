@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.31)
+project(Hello)
+add_executable(Hello src/Hello.c)
+set(CMAKE_C_COMPILER "clang")
+set(CMAKE_C_FLAGS "-Wall -std=c99")

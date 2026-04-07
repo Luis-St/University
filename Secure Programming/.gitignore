@@ -1,0 +1,16 @@
+### Build / Compiled ###
+build/
+*.o
+*.out
+
+### LaTeX ###
+*.log
+*.aux
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+### rsync source (keep only usage.c) ###
+Task2/rsync/*
+!Task2/rsync/usage.c
