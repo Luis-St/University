@@ -1,0 +1,146 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half,           % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 3}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Grundlagen der IT-Sicherheit}
+
+		\vspace{12cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\chapter*{Aufgabe 1: Verschlüsselung mit Vigenère-Chiffre}
+
+Als Klartext wurde folgender Satz gewählt:
+
+\begin{verbatim}
+DIE VORLESUNG GRUNDLAGEN DER IT SICHERHEIT IST SEHR INTERESSANT
+\end{verbatim}
+
+Der vierstellige Schlüssel lautet: \texttt{HFUW}
+
+Das resultierende Chiffrat lautet:
+\begin{verbatim}
+KNY CTLHLXOJN ANBSXHHLYJ IYN NN ZNWDLWBAPY EZY OLML PSNAYJMOHSN
+\end{verbatim}
+
+
+\chapter*{Aufgabe 2: Brute-Force-Entschlüsselung}
+
+Die vorgegebene Java-Klasse wurde um eine Brute-Force-Methode erweitert, die alle $26^4 = 456\,976$ möglichen vierstelligen Schlüssel (AAAA bis ZZZZ) durchprobiert.
+Für jeden Schlüssel wird der Chiffretext entschlüsselt und mit \texttt{isProbablyReadable} geprüft, ob das Ergebnis ein deutscher Text sein könnte.
+Diese Methode prüft, ob mindestens 30\,\% der Wörter zu einer Liste häufiger deutscher Wörter gehören.
+Da die Heuristik nicht perfekt ist, müssen Ergebnisse gegebenenfalls manuell gefiltert werden.
+
+
+\chapter*{Aufgabe 3: Analyse des Schlüsselraums}
+
+\section*{1. Wie groß ist der Schlüsselraum bei einem vierstelligen Schlüssel (A-Z)?}
+
+Der Schlüssel besteht aus 4 Stellen, wobei jede Stelle einen von 26 Großbuchstaben annehmen kann.
+Die Anzahl möglicher Schlüssel berechnet sich als:
+\[
+26^4 = 456\,976
+\]
+Der Schlüsselraum umfasst also 456\,976 mögliche Schlüssel.
+
+\section*{2. Was wäre bei einem achtstelligen Schlüssel?}
+
+Bei 8 Stellen mit je 26 Möglichkeiten ergibt sich:
+\[
+26^8 = 208\,827\,064\,576 \approx 2{,}09 \cdot 10^{11}
+\]
+Das sind ca. 209 Milliarden mögliche Schlüssel, also etwa 457\,000-mal so viele wie bei 4 Stellen.
+
+\section*{3. Könnte man einen achtstelligen Schlüssel noch brechen?}
+
+Ja, ein achtstelliger Schlüssel mit rund 209 Milliarden Kombinationen könnte mit moderner Hardware noch gebrochen werden.
+Ein aktueller Rechner kann mehrere Millionen Entschlüsselungen pro Sekunde durchführen.
+Bei 10 Millionen Versuchen pro Sekunde würde der Brute-Force-Angriff ca. 5,8 Stunden dauern.
+Durch Parallelisierung auf mehreren Kernen oder GPUs ließe sich die Zeit weiter reduzieren.
+Der Schlüsselraum ist also größer, aber immer noch praktisch angreifbar.
+
+\section*{4. Wie groß wäre der Schlüsselraum bei \{a-z, A-Z\}?}
+
+Bei einem Alphabet aus 52 Zeichen (Klein- und Großbuchstaben) und 4 Stellen ergibt sich:
+\[
+52^4 = 7\,311\,616
+\]
+Das sind ca. 7,3 Millionen mögliche Schlüssel, also etwa 16-mal so viele wie bei 26 Zeichen.
+
+\section*{5. Mehr Stellen oder größeres Alphabet?}
+
+Die Anzahl möglicher Schlüssel berechnet sich allgemein als:
+\[
+n^l
+\]
+wobei $n$ die Alphabetgröße (Möglichkeiten pro Stelle) und $l$ die Schlüssellänge (Anzahl der Stellen) ist.
+
+Eine Erhöhung der Schlüssellänge wirkt sich exponentiell auf den Schlüsselraum aus, da $l$ im Exponenten steht.
+Eine Verdopplung der Alphabetgröße bewirkt dagegen nur eine geringe Vergrößerung ($n$ steht in der Basis).
+
+Beispiel: Bei $n=26$ und $l=4$ ergibt eine Verdopplung:
+\begin{itemize}
+	\item Doppeltes Alphabet ($n=52$, $l=4$): $52^4 = 7\,311\,616$ (Faktor 16)
+	\item Doppelte Länge ($n=26$, $l=8$): $26^8 = 208\,827\,064\,576$ (Faktor 456\,976)
+\end{itemize}
+
+Mehr Stellen verbessern die Sicherheit also deutlich stärker als ein größeres Alphabet.
+Der entscheidende Parameter ist die Schlüssellänge, da sie den Exponenten bestimmt.
+
+\section*{6. Warum ist eine EC-Karte dennoch sicher?}
+
+Eine EC-Karten-PIN hat nur $10^4 = 10\,000$ mögliche Kombinationen, was ein extrem kleiner Schlüsselraum ist.
+Dennoch ist das System aus folgenden Gründen sicher:
+
+\begin{itemize}
+	\item Nach drei falschen Eingaben wird die Karte gesperrt.
+	Ein Brute-Force-Angriff über die reguläre Eingabe ist damit unmöglich.
+	\item Die PIN wird nicht auf der Karte gespeichert, sondern bei der Bank verifiziert.
+	Der Chip auf der Karte gibt die PIN nicht preis.
+	\item Der Angreifer benötigt physischen Besitz der Karte (Zwei-Faktor-Prinzip: Wissen + Besitz).
+	Allein die Kenntnis der PIN reicht nicht aus.
+	\item Die Kommunikation zwischen Terminal und Bank ist verschlüsselt und manipulationssicher.
+	\item Online-Transaktionen erfordern zusätzlich eine TAN oder eine Zwei-Faktor-Authentifizierung.
+\end{itemize}
+
+Die Sicherheit der EC-Karte basiert also nicht auf der Größe des Schlüsselraums, sondern auf organisatorischen und technischen Schutzmaßnahmen, die einen Brute-Force-Angriff praktisch verhindern.
+
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
