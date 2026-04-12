@@ -1,0 +1,177 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half,           % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 3}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Qualität}
+
+		\vspace{12cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\chapter*{Aufgabe 1: Teststrategie}
+
+
+\section*{1. Ergänzung und Widerspruch}
+
+Die drei Strategien greifen auf unterschiedlichen Ebenen.
+Risikobasiertes Testen legt fest, \emph{was} mit welcher Intensität geprüft wird.
+Checklisten bringen Erfahrungswissen und normative Vorgaben ein.
+Wiederverwendung spart Aufwand durch bestehende Testfälle.
+
+Ein Widerspruch entsteht, weil wiederverwendete Tests oft nur bekannte Bereiche abdecken (Pestizid-Paradoxon) und damit nicht automatisch zu den aktuellen Risikoschwerpunkten passen.
+Auch Checklisten können veralten und einen Tunnelblick erzeugen.
+
+
+\section*{2. Mögliche Konflikte}
+
+\begin{itemize}
+	\item Wiederverwendete Tests treffen neue risikobehaftete Funktionen nicht.
+	\item Checklistenpunkte binden Ressourcen, obwohl sie im aktuellen Risikoprofil nicht relevant sind.
+	\item Risikobasiertes Testen erfordert neue Testfälle, die weder in Altbeständen noch in Standardchecklisten enthalten sind.
+\end{itemize}
+
+
+\section*{3. Eignung für ein sicherheitskritisches System}
+
+Im sicherheitskritischen Umfeld sollte das \textbf{risikobasierte Testen} priorisiert werden, da das Schadenspotenzial hoch ist.
+Checklisten sind als Ergänzung sinnvoll, weil normative Prüfkataloge (z.\,B.\ ISO 26262) existieren.
+Kritisch zu hinterfragen ist die Wiederverwendung: Alte Tests decken neue sicherheitsrelevante Szenarien nicht zwangsläufig ab und können eine Scheinabdeckung erzeugen.
+
+
+\chapter*{Aufgabe 2: Zuordnung von Testaktivitäten zu Teststufen}
+
+\begin{enumerate}
+	\item \textbf{Berechnung im Zahlungsmodul} $\rightarrow$ \textbf{Komponententest}.
+	      Eine einzelne Komponente wird isoliert gegen ihre interne Logik geprüft.
+	\item \textbf{Kommunikation Warenkorb~$\leftrightarrow$~Zahlungsmodul} $\rightarrow$ \textbf{Integrationstest}.
+	      Geprüft werden Schnittstellen, Datenübergaben und Protokolle zweier Komponenten.
+	\item \textbf{Gesamter Bestellprozess aus Benutzersicht} $\rightarrow$ \textbf{Systemtest}.
+	      Das integrierte System wird Ende-zu-Ende gegen die Anforderungen getestet.
+	\item \textbf{Validierung durch den Kunden} $\rightarrow$ \textbf{Abnahmetest}.
+	      Der Kunde prüft, ob das System seinen Geschäftsanforderungen entspricht.
+\end{enumerate}
+
+
+\chapter*{Aufgabe 3: Verzicht auf vorherige Teststufen}
+
+
+\section*{1. Auswirkungen}
+
+\textbf{Fehlerfindung.}
+Fehler werden spät entdeckt, wenn alle Komponenten integriert sind.
+Einfache Fehler in einzelnen Methoden bleiben lange verborgen, und Fehlerwirkungen können sich gegenseitig maskieren.
+
+\textbf{Testaufwand.}
+Der Aufwand wirkt zunächst geringer, steigt real aber durch aufwendige Fehlerisolation und viele Wiederholungszyklen.
+Späte Fehlerbehebungen sind zudem um den Faktor 10 bis 100 teurer.
+
+\textbf{Debugging.}
+Im Systemtest sind viele Komponenten gleichzeitig aktiv.
+Die Ursache eines Fehlers ist schwer zu lokalisieren und erfordert oft nachträgliche Isolationstests.
+
+
+\section*{2. Drei konkrete Probleme}
+
+\begin{enumerate}
+	\item Triviale Fehler werden erst spät sichtbar und ziehen erneute Integration und Regression nach sich.
+	\item Schnittstellenfehler lassen sich nicht sauber von Komponentenfehlern trennen.
+	\item Die strukturelle Überdeckung bleibt niedrig, da Sonderfälle und Grenzwerte im Systemtest kaum erreichbar sind.
+\end{enumerate}
+
+
+\section*{3. Begründung}
+
+Jede Teststufe ist auf bestimmte Fehlerarten spezialisiert.
+Fällt die untere Ebene weg, müssen alle Fehlerklassen im Systemtest gefunden werden -- eine Stufe, die dafür weder optimiert noch wirtschaftlich geeignet ist.
+Das widerspricht dem Grundsatz des frühzeitigen Testens.
+
+
+\chapter*{Aufgabe 4: Zuordnung typischer Fehler zu Teststufen}
+
+\begin{description}
+	\item[Fehler in einer einzelnen Methode] $\rightarrow$ \textbf{Komponententest}.
+	      Der Fehler liegt in einer Codeeinheit und kann dort isoliert, schnell und automatisiert reproduziert werden.
+	\item[Fehler an der Schnittstelle zweier Module] $\rightarrow$ \textbf{Integrationstest}.
+	      Das Fehlverhalten zeigt sich erst bei der Kommunikation zwischen Komponenten.
+	\item[Schlechte Systemperformance] $\rightarrow$ \textbf{Systemtest}.
+	      Performance ist eine nichtfunktionale Eigenschaft des Gesamtsystems unter realistischen Bedingungen.
+	\item[Missverständnis von Benutzeranforderungen] $\rightarrow$ \textbf{Abnahmetest}.
+	      Erst der Abgleich mit den Erwartungen der Fachbereiche deckt solche Missverständnisse auf.
+\end{description}
+
+
+\chapter*{Aufgabe 5: Bewertung des Projektleitervorschlags}
+
+Vorschlag: ,,Wir sparen Zeit und führen nur Integrations- und Systemtests durch.''
+
+
+\section*{1. Kritische Bewertung}
+
+Der Vorschlag verzichtet auf Komponenten- und Abnahmetest.
+Ohne Komponententests fehlt die schnelle, automatisierbare Rückmeldung auf lokale Fehler.
+Ohne Abnahmetest fehlt die abschließende Validierung durch den Kunden.
+Die Zeitersparnis ist damit nur kurzfristig.
+
+
+\section*{2. Auswirkungen auf Qualität, Kosten und Risiko}
+
+\textbf{Qualität.}
+Lokale Fehler bleiben lange verborgen, die Endnutzerperspektive fehlt.
+
+\textbf{Kosten.}
+Kurzfristig niedriger, langfristig höher durch aufwendige späte Fehlerbehebung.
+
+\textbf{Risiko.}
+Das Projektrisiko steigt, da Fehler eher den Kunden erreichen und die Freigabe ohne saubere Validierung erfolgt.
+
+
+\section*{3. Empfehlung}
+
+Alle Teststufen beibehalten, aber wirtschaftlich ausbalancieren:
+\begin{itemize}
+	\item Komponententests automatisieren und in die CI-Pipeline integrieren.
+	\item Integrationstests auf kritische Schnittstellen fokussieren.
+	\item Systemtests risikobasiert priorisieren.
+	\item Abnahmetest zwingend beibehalten.
+\end{itemize}
+Zeitersparnis entsteht durch Automatisierung und Risikopriorisierung, nicht durch Weglassen von Teststufen.
+
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
