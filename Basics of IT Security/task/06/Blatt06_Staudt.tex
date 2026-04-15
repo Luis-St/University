@@ -1,0 +1,399 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half,           % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+% UTF-8 Umlaute in lstlisting erlauben
+\lstset{
+	extendedchars=true,
+	inputencoding=utf8,
+	literate=
+		{ä}{{\"a}}1
+		{ö}{{\"o}}1
+		{ü}{{\"u}}1
+		{ß}{{\ss}}1
+		{Ä}{{\"A}}1
+		{Ö}{{\"O}}1
+		{Ü}{{\"U}}1
+}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 6}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Grundlagen der IT-Sicherheit}
+
+		\vspace{12cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\chapter*{Aufgabe 1: Hashketten}
+
+\section*{a) Hashkette der Länge 4}
+
+Gewählte Hashfunktion: SHA-256.
+Passphrase $k = $ \texttt{LuisStaudt2026}.
+Die Hashkette wird iterativ gebildet: $P_i = SHA256(P_{i-1})$ mit $P_0 = k$.
+
+\begin{lstlisting}[language=bash]
+k   = LuisStaudt2026
+P_1 = fc0bdf2471b8dcaeb6100f9b95ce6532
+      935dafa4fb4f0ef3abb5c56483aebd71
+P_2 = b8359d246c00986878167c1e85bc566c
+      b55b25904d1ebcf5a826ca072297536a
+P_3 = f245e7df73577ecce17b149c4227329d
+      b0baf59459a63fc25b2cc2c9d3fb9deb
+P_4 = 19d17121ad7c32e1c3f5fa66f7ad4cdc
+      552c9e2fe735be427e7933da9bf7ba0b
+\end{lstlisting}
+
+\section*{b) Registrierung und erste Anmeldung}
+
+Beim Verfahren nach Lamport wird der höchste Hashwert $P_4$ initial beim Server registriert.
+Danach werden die Einmalpasswörter in umgekehrter Reihenfolge ($P_3, P_2, P_1$) zur Anmeldung verwendet.
+
+\textbf{Registrierung:}
+\begin{enumerate}
+	\item Client berechnet die Kette $P_1, P_2, P_3, P_4$ aus $k$.
+	\item Client sendet ausschließlich $P_4$ an den Server.
+	\item Server speichert $(\text{user}, P_4, i=4)$.
+\end{enumerate}
+
+\textbf{Erste Anmeldung:}
+\begin{enumerate}
+	\item Server fordert das Passwort zum Index $i-1 = 3$ an.
+	\item Client sendet $P_3$.
+	\item Server prüft $SHA256(P_3) \stackrel{?}{=} P_4$.
+	\item Ergebnis: stimmt überein $\Rightarrow$ Login erfolgreich.
+	\item Server ersetzt den gespeicherten Wert durch $P_3$ und erniedrigt den Index auf $i=3$.
+\end{enumerate}
+
+Wichtig: Aus $P_3$ lässt sich $P_4$ berechnen, aber nicht umgekehrt.
+Ein Angreifer, der $P_4$ kennt, kann daraus nicht den nächsten benötigten Wert $P_3$ ableiten.
+
+\section*{c) Eve fängt $P_{i+1}$ ab}
+
+Eve hat die Verbindung unter Kontrolle und fängt die Antwort $P_{i+1}$ ab, bevor sie Bob erreicht.
+
+\begin{itemize}
+	\item Eve kann sich gegenüber Bob anstelle von Alice anmelden, indem sie $P_{i+1}$ selbst weiterreicht.
+	\item Da Alice die Antwort bereits verschickt hat, ist $P_{i+1}$ das aktuell angeforderte Einmalpasswort.
+	\item Das Passwort bleibt nur für genau \emph{eine} Anmeldung gültig.
+	Sobald Bob $P_{i+1}$ akzeptiert, speichert er diesen Wert und fordert beim nächsten Mal $P_i$ an.
+	$P_{i+1}$ ist damit verbraucht und wertlos.
+	\item Gültigkeit also: bis zur nächsten erfolgreichen Anmeldung mit diesem Passwort; danach nicht mehr nutzbar.
+\end{itemize}
+
+\section*{d) Wann fällt der Verlust auf?}
+
+Wenn Eve $P_{i+1}$ einmalig nutzt und die Übertragung von Alice zu Bob unterbunden hat, synchronisieren Alice und Bob ihren Index nicht mehr.
+Der Verlust fällt bei der nächsten regulären Anmeldung von Alice auf:
+
+\begin{itemize}
+	\item Bob hat den Index bereits auf $i-1$ erniedrigt (nach Eves Anmeldung) und erwartet jetzt $P_i$.
+	\item Alice rechnet davon aus, dass $P_{i+1}$ noch nicht angekommen ist, und versucht diesen Wert erneut oder den nächsten in ihrer Zählung.
+	\item Dadurch kommt es zu einem Index-Mismatch: Alice sendet einen Hash, dessen Prüfung bei Bob fehlschlägt.
+\end{itemize}
+
+Der Angriff wird also spätestens bemerkt, sobald Alice das nächste Mal einen Anmeldeversuch unternimmt.
+
+
+\chapter*{Aufgabe 2: Rechtemanagement unter Linux}
+
+Alle Befehle werden in \texttt{/tmp/test} ausgeführt.
+Die Benutzer alice, bob und eve sowie Testdateien werden wie in der Vorbereitung beschrieben angelegt.
+
+\section*{Vorbereitung}
+
+\begin{lstlisting}[language=bash]
+cd /tmp && mkdir test && cd test
+sudo useradd alice
+sudo useradd bob
+sudo useradd eve
+cat /etc/passwd | grep -E "alice|bob|eve"
+alice:x:1001:1001::/home/alice:/bin/sh
+bob:x:1002:1002::/home/bob:/bin/sh
+eve:x:1003:1003::/home/eve:/bin/sh
+
+echo "Geheimer Text von Alice"       > alice.txt
+echo "Geheimer Text von Bob"         > bob.txt
+echo "Alice und Bob teilen sich das" > alicebob.txt
+echo "Für alle sichtbar"             > world.txt
+\end{lstlisting}
+
+\section*{a) Interpretation von \texttt{ls -l}}
+
+\begin{lstlisting}[language=bash]
+drwxrwxr-x  2 luis luis  4096 Apr 15 23:23 ./
+-rw-rw-r--  1 luis luis    30 Apr 15 23:23 alicebob.txt
+-rw-rw-r--  1 luis luis    24 Apr 15 23:23 alice.txt
+-rw-rw-r--  1 luis luis    22 Apr 15 23:23 bob.txt
+-rw-rw-r--  1 luis luis    19 Apr 15 23:23 world.txt
+\end{lstlisting}
+
+Spaltenbedeutung: Rechtemaske $\vert$ Anzahl Hardlinks $\vert$ Besitzer $\vert$ Gruppe $\vert$ Größe $\vert$ Datum $\vert$ Name.
+
+Die Rechtemaske besteht aus einem Dateityp (\texttt{-} = Datei, \texttt{d} = Verzeichnis) und drei Gruppen zu je drei Bits für \emph{owner}, \emph{group} und \emph{others} mit jeweils \texttt{r} (lesen, 4), \texttt{w} (schreiben, 2) und \texttt{x} (ausführen, 1).
+
+Alle Testdateien gehören aktuell \texttt{luis:luis} mit der Maske \texttt{-rw-rw-r--} (664).
+Das heißt: Besitzer und Gruppe dürfen lesen und schreiben, alle anderen dürfen nur lesen.
+
+\section*{b) Besitzverhältnisse mit \texttt{chown} ändern}
+
+\begin{lstlisting}[language=bash]
+sudo chown alice:alice alice.txt
+sudo chown alice:alice alicebob.txt
+sudo chown bob:bob     bob.txt
+sudo chown bob:bob     world.txt
+ls -l
+-rw-rw-r-- 1 alice alice 30 Apr 15 23:23 alicebob.txt
+-rw-rw-r-- 1 alice alice 24 Apr 15 23:23 alice.txt
+-rw-rw-r-- 1 bob   bob   22 Apr 15 23:23 bob.txt
+-rw-rw-r-- 1 bob   bob   19 Apr 15 23:23 world.txt
+\end{lstlisting}
+
+\section*{c) Alice liest \texttt{bob.txt}?}
+
+\begin{lstlisting}[language=bash]
+sudo su alice
+$ whoami
+alice
+$ cat bob.txt
+Geheimer Text von Bob
+$ cat alice.txt
+Geheimer Text von Alice
+\end{lstlisting}
+
+Alice kann \texttt{bob.txt} lesen, obwohl die Datei Bob gehört.
+Grund: Die Rechtemaske \texttt{-rw-rw-r--} gibt allen anderen Benutzern (\emph{others}) Leserechte.
+Alice fällt für \texttt{bob.txt} unter \emph{others} und darf deshalb den Inhalt sehen.
+Erst mit strikteren Rechten (600) wird der Zugriff verweigert.
+
+\section*{d) Zugriff nur für den Besitzer (600)}
+
+\begin{lstlisting}[language=bash]
+sudo chmod 600 alice.txt bob.txt alicebob.txt world.txt
+ls -l
+-rw------- 1 alice alice 30 Apr 15 23:23 alicebob.txt
+-rw------- 1 alice alice 24 Apr 15 23:23 alice.txt
+-rw------- 1 bob   bob   22 Apr 15 23:23 bob.txt
+-rw------- 1 bob   bob   19 Apr 15 23:23 world.txt
+\end{lstlisting}
+
+Prüfung als Alice, Bob und Eve:
+
+\begin{lstlisting}[language=bash]
+sudo su alice
+$ cat alice.txt
+Geheimer Text von Alice
+$ cat bob.txt
+cat: bob.txt: Permission denied
+
+sudo su bob
+$ cat bob.txt
+Geheimer Text von Bob
+$ cat alice.txt
+cat: alice.txt: Permission denied
+
+sudo su eve
+$ cat alice.txt
+cat: alice.txt: Permission denied
+$ cat bob.txt
+cat: bob.txt: Permission denied
+\end{lstlisting}
+
+Der Zugriff wird jetzt bei allen fremden Benutzern korrekt verweigert.
+
+\section*{e) \texttt{alicebob.txt} gemeinsam für Alice und Bob}
+
+Eine gemeinsame Gruppe \texttt{aliceundbob} wird angelegt, Alice und Bob werden Mitglieder.
+Die Datei erhält diese Gruppe als Gruppenbesitzer und die Maske \texttt{660}.
+
+\begin{lstlisting}[language=bash]
+sudo groupadd aliceundbob
+sudo usermod -a -G aliceundbob alice
+sudo usermod -a -G aliceundbob bob
+sudo chown alice:aliceundbob alicebob.txt
+sudo chmod 660 alicebob.txt
+ls -l
+-rw-rw---- 1 alice aliceundbob 30 Apr 15 23:23 alicebob.txt
+-rw------- 1 alice alice       24 Apr 15 23:23 alice.txt
+-rw------- 1 bob   bob         22 Apr 15 23:23 bob.txt
+-rw------- 1 bob   bob         19 Apr 15 23:23 world.txt
+\end{lstlisting}
+
+Prüfung (Login-Shell \texttt{su -}, damit die neue Gruppenzugehörigkeit aktiv ist):
+
+\begin{lstlisting}[language=bash]
+sudo su - alice -c "cat /tmp/test/alicebob.txt; echo 'NEU-Alice' >> /tmp/test/alicebob.txt && echo OK-write"
+Alice und Bob teilen sich das
+OK-write
+
+sudo su - bob   -c "cat /tmp/test/alicebob.txt; echo 'NEU-Bob'   >> /tmp/test/alicebob.txt && echo OK-write"
+Alice und Bob teilen sich das
+NEU-Alice
+OK-write
+
+sudo su - eve   -c "cat /tmp/test/alicebob.txt"
+cat: /tmp/test/alicebob.txt: Permission denied
+\end{lstlisting}
+
+Alice und Bob dürfen lesen und schreiben, Eve nicht.
+
+\section*{f) \texttt{world.txt} für alle}
+
+\begin{lstlisting}[language=bash]
+sudo chmod 666 world.txt
+ls -l
+-rw-rw---- 1 alice aliceundbob 48 Apr 15 23:29 alicebob.txt
+-rw------- 1 alice alice       24 Apr 15 23:23 alice.txt
+-rw------- 1 bob   bob         22 Apr 15 23:23 bob.txt
+-rw-rw-rw- 1 bob   bob         19 Apr 15 23:23 world.txt
+
+sudo su - eve -c "cat /tmp/test/world.txt; echo 'EVE war hier' >> /tmp/test/world.txt && cat /tmp/test/world.txt"
+Für alle sichtbar
+Für alle sichtbar
+EVE war hier
+\end{lstlisting}
+
+Mit \texttt{666} dürfen Besitzer, Gruppe und alle anderen lesen und schreiben.
+Eve kann die Datei erfolgreich ändern.
+
+
+\chapter*{Aufgabe 3: SAML und Identitäts-Föderation}
+
+Gegenstand der Untersuchung ist die Anmeldung am Dienst \url{bwsyncandshare.kit.edu} im Inkognito-Modus.
+Die Analyse erfolgt anhand einer HAR-Mitschrift aus den Entwicklertools.
+
+\section*{a) Warum kann ich mich am KIT-Dienst mit HFU-Account anmelden?}
+
+bwSync\&Share wird vom KIT betrieben, ist aber Teil der landesweiten Föderation \emph{bwIDM}.
+Der Dienst nimmt nur die Rolle des Service Providers (SP) ein und lagert die Authentifizierung an einen Identity Provider (IdP) aus.
+Beim Login wählt der Nutzer seine Hochschule; der SAML-Standard sorgt dafür, dass der HFU-IdP (\url{idp2.hs-furtwangen.de}) die Identität bestätigt.
+Nach erfolgreicher Prüfung übermittelt der IdP eine signierte SAML-Assertion an den SP, der daraufhin eine lokale Sitzung eröffnet.
+
+Die eigentlichen Zugangsdaten verlassen dabei nie die HFU.
+Das KIT vertraut ausschließlich der Signatur des HFU-IdPs.
+
+\section*{b) Host-Kette beim Aufruf von bwSync\&Share}
+
+Im Inkognito-Fenster werden nacheinander folgende Hosts angesprochen (Reihenfolge aus HAR):
+
+\begin{enumerate}
+	\item \texttt{bwsyncandshare.kit.edu}: SP, erzeugt initialen \texttt{SAMLRequest} und leitet weiter.
+	\item \texttt{bwidm.scc.kit.edu}: Discovery-/Shibboleth-SP der bwIDM-Föderation, forwarded zum IdP der gewählten Hochschule.
+	\item \texttt{idp2.hs-furtwangen.de}: HFU-IdP, erzeugt eigenen \texttt{SAMLRequest}, verlangt Login.
+	\item \texttt{login.microsoftonline.com}: Azure AD der HFU, hier erfolgt die eigentliche Eingabe von Benutzername, Passwort und MFA.
+	\item Rückweg: Azure AD $\to$ HFU-IdP $\to$ bwIDM-SP $\to$ bwSync\&Share mit signierter SAML-Assertion.
+\end{enumerate}
+
+Auffällig: Der HFU-IdP delegiert die Anmeldung selbst an Microsoft Azure AD weiter.
+Shibboleth fungiert hier nur noch als SAML-Frontend, die Identitätsprüfung erfolgt im Microsoft-Tenant der HFU.
+
+\textbf{Übertragene Daten (Auszug):}
+
+Initialer SAML-Request vom SP (bwSync\&Share) an bwIDM:
+
+\begin{lstlisting}[language=XML]
+<samlp:AuthnRequest
+    ID="ONELOGIN_f207b0bd03a182e31c4af2883dc21bc687b5a15b"
+    Version="2.0" IssueInstant="2026-04-15T20:32:52Z"
+    Destination="https://bwidm.scc.kit.edu/saml/idp/redirect"
+    ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+    AssertionConsumerServiceURL="https://bwsyncandshare.kit.edu/apps/user_saml/saml/acs">
+  <saml:Issuer>
+    https://bwsyncandshare.kit.edu/apps/user_saml/saml/metadata
+  </saml:Issuer>
+  <samlp:NameIDPolicy
+    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+    AllowCreate="true" />
+</samlp:AuthnRequest>
+\end{lstlisting}
+
+Nach der Weiterleitung durch bwIDM folgt ein zweiter, getrennter SAML-Request an den HFU-IdP:
+
+\begin{lstlisting}[language=XML]
+<saml2p:AuthnRequest
+    AssertionConsumerServiceURL="https://bwidm.scc.kit.edu/Shibboleth.sso/SAML2/POST"
+    Destination="https://idp2.hs-furtwangen.de/idp/profile/SAML2/Redirect/SSO"
+    ID="b8cfd11c8-2f79-4607-88bb-7924feff9643"
+    IssueInstant="2026-04-15T20:33:10.344Z"
+    ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+    Version="2.0">
+  <saml2:Issuer>https://bwidm.scc.kit.edu/sp</saml2:Issuer>
+  <saml2p:NameIDPolicy AllowCreate="true"/>
+</saml2p:AuthnRequest>
+\end{lstlisting}
+
+Die Antwort des IdP ist eine verschlüsselte SAML-Assertion, die per Hidden-Form und automatischem POST an den \texttt{AssertionConsumerService} des SPs gesendet wird.
+
+\textbf{Wichtigste Cookies im Ablauf:}
+
+\begin{itemize}
+	\item \texttt{saml\_data} (bwSync\&Share): merkt sich den Zustand des ausgehenden SAML-Requests.
+	\item \texttt{JSESSIONID} (bwIDM, HFU-IdP): Session des jeweiligen Java-Servers während des Login-Flows.
+	\item \texttt{\_\_Host-shib\_idp\_session} (HFU-IdP): die zentrale SSO-Session beim IdP.
+	\item \texttt{nc\_session\_id} (bwSync\&Share): lokale Nextcloud-Session nach erfolgreichem Login.
+\end{itemize}
+
+\section*{c) Warum kein erneuter Login bei Felix?}
+
+Nach dem erfolgreichen Login bei bwSync\&Share hat der Browser das Cookie \texttt{\_\_Host-shib\_idp\_session} beim HFU-IdP gesetzt.
+Dieses Cookie bindet die aktive IdP-Sitzung an den Browser.
+
+Ruft der Nutzer anschließend Felix auf, beginnt die gleiche SAML-Kette: Felix sendet einen \texttt{SAMLRequest} an denselben IdP.
+Der IdP erkennt die laufende Sitzung anhand des Cookies und überspringt die Anmeldemaske komplett.
+Er erzeugt sofort eine neue SAML-Assertion für den neuen SP (Felix).
+Aus Nutzersicht entsteht so der Eindruck eines Single-Sign-On.
+
+Wichtig: Jeder SP hat seine eigene lokale Sitzung (z.\,B.\ \texttt{\_shibsession} bei Felix, \texttt{nc\_session\_id} bei bwSync\&Share).
+Die gemeinsame Komponente über Dienste hinweg ist ausschließlich die IdP-Session.
+
+\section*{d) Vergleich zu Kerberos}
+
+Sowohl Kerberos als auch SAML realisieren Single-Sign-On mittels eines vertrauten Dritten.
+Parallelen:
+
+\begin{itemize}
+	\item Kerberos KDC (Key Distribution Center, Authentication Server + TGS) entspricht dem SAML-IdP.
+	\item Kerberos-Dienst (z.\,B.\ Fileserver) entspricht dem SAML-SP.
+	\item Das \emph{Ticket-Granting-Ticket} (TGT), welches nach der initialen Passwortprüfung beim KDC ausgestellt wird, entspricht am ehesten dem Cookie \texttt{\_\_Host-shib\_idp\_session} beim IdP: Beide dienen als Nachweis einer aktiven Anmeldung und werden für weitere Authentifizierungen wiederverwendet.
+	\item Das pro Dienst ausgestellte \emph{Service-Ticket} entspricht der einzelnen SAML-Assertion, die der IdP für jeden einzelnen SP erzeugt.
+\end{itemize}
+
+Hauptunterschied: Kerberos arbeitet nur im lokalen Netz mit symmetrischer Kryptografie, SAML nutzt asymmetrische Signaturen über HTTP und ist deshalb auch Cross-Organisation einsetzbar.
+
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
