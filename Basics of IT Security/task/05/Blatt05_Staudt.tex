@@ -1,0 +1,187 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half,           % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 5}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Grundlagen der IT-Sicherheit}
+
+		\vspace{12cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\chapter*{Aufgabe 1: AS mit asymmetrischen Schlüsselpaaren}
+
+Das Authentifizierungssystem wird als 5-Tupel $AS = (I, C, Z, F, L)$ mit zusätzlicher Subjektmenge $S$ beschrieben.
+Anstelle eines gehashten Passwortes wird der öffentliche Schlüssel des Benutzers beim Server hinterlegt.
+Der private Schlüssel verbleibt ausschließlich beim Client.
+
+\section*{Mengen und Funktionen}
+
+\begin{itemize}
+	\item \textbf{I}: Raum der Benutzernamen (z.\,B. zar).
+	\item \textbf{S}: Menge der registrierten Benutzer, zu denen jeweils ein öffentlicher Schlüssel hinterlegt ist, z.\,B. $S = \{root, zar, \dots\}$.
+	\item \textbf{Z}: Zuordnungsfunktion $Z: I \to S$.
+	Prüft, ob der übergebene Benutzername registriert ist, und liefert das zugehörige Subjekt oder $\emptyset$ zurück.
+	\item \textbf{C}: Menge der gültigen Signaturen über einer vom Server erzeugten Challenge (Zufallswert + Zeitstempel).
+	Jede Signatur ist nur für genau eine Challenge gültig.
+	\item \textbf{F}: Enthält die Signaturfunktion $f$ des Clients.
+	$f(s, challenge)$ fragt beim Benutzer den privaten Schlüssel (bzw. dessen Freigabe per PIN) ab und gibt die Signatur $sig = sign(sk_s, challenge)$ zurück.
+	\item \textbf{L}: Enthält die Verifikationsfunktion $l: S \times C \to \{wahr, falsch\}$.
+	$l(s, sig) := Z(s) \neq \emptyset \land verify(pk_s, challenge, sig)$.
+\end{itemize}
+
+\section*{Ablauf}
+
+\textbf{Registrierung:}
+\begin{enumerate}
+	\item Der Benutzer erzeugt lokal ein Schlüsselpaar $(sk, pk)$.
+	\item Der private Schlüssel $sk$ bleibt beim Benutzer (z.\,B. geschützt durch eine PIN).
+	\item Der öffentliche Schlüssel $pk$ wird zusammen mit dem Benutzernamen an den Server übertragen und gespeichert.
+\end{enumerate}
+
+\textbf{Anmeldung:}
+\begin{enumerate}
+	\item Client sendet seinen Benutzernamen $i$ an den Server.
+	\item Server prüft $Z(i)$.
+	Ist der Benutzer unbekannt, wird der Vorgang abgebrochen.
+	\item Server erzeugt eine frische Challenge (Zufallswert + Zeitstempel) und sendet diese an den Client.
+	\item Client signiert die Challenge mit dem privaten Schlüssel: $sig = sign(sk, challenge)$.
+	\item Client sendet $sig$ an den Server.
+	\item Server prüft mit $l(s, sig) = verify(pk_s, challenge, sig)$.
+	\item Bei wahr ist die Authentifizierung erfolgreich.
+\end{enumerate}
+
+Vorteile gegenüber dem passwortbasierten Verfahren:
+Der Server speichert kein Geheimnis, sondern nur den öffentlichen Schlüssel.
+Ein Datenleck auf Serverseite kompromittiert keine Benutzeridentitäten.
+Das Passwort (hier der private Schlüssel) verlässt den Client nie.
+
+
+\chapter*{Aufgabe 3: Challenge-Response-Verfahren}
+
+\section*{a) Wieso sollte solch ein Verfahren genutzt werden?}
+
+Bei einem klassischen Passwortverfahren wird das Passwort (bzw. sein Hash) übertragen und kann mitgelesen oder wiederverwendet werden.
+Beim Challenge-Response-Verfahren verlässt das Passwort den Client nie.
+Übertragen wird nur der Hash aus Challenge und Passwort.
+Da die Challenge bei jeder Anmeldung wechselt, ist auch die Response jedes Mal anders.
+Ein Angreifer, der die Response mitliest, kann sie nicht für eine spätere Anmeldung wiederverwenden (Schutz gegen Replay).
+
+\section*{b) Was würde geschehen, wenn die gleiche Challenge mehrfach benutzt wird?}
+
+Wird dieselbe Challenge mehrfach verwendet, ergibt sich auch stets dieselbe Response.
+Ein Angreifer, der die Response einmal mitgehört hat, könnte sich damit erneut anmelden (Replay-Angriff).
+Zusätzlich vereinfacht sich ein Offline-Angriff, da der Angreifer beliebig viele Passwort-Kandidaten gegen dieselbe Challenge/Response-Kombination testen kann.
+Die Sicherheit des Verfahrens wird dadurch deutlich verringert.
+
+\section*{c) Wie kann man das verhindern?}
+
+\begin{itemize}
+	\item Die Challenge wird aus einem ausreichend großen Zufallswert (Nonce) gebildet, z.\,B. 128\,Bit.
+	Damit ist die Wahrscheinlichkeit einer Wiederholung praktisch null.
+	\item Zusätzlich wird ein Zeitstempel eingebunden, der nur für ein kurzes Zeitfenster gültig ist.
+	\item Der Server merkt sich bereits verwendete Challenges und lehnt eine wiederholte Nutzung ab.
+	\item Jede Challenge darf nur für genau eine Anmeldung gültig sein (Einmalgebrauch).
+\end{itemize}
+
+\section*{d) Beispielhafter Ablauf}
+
+Gewählt wird die Hashfunktion SHA256.
+Das geteilte Passwort lautet passwort123, die Challenge ist aaa.
+
+\begin{enumerate}
+	\item Server erzeugt Challenge $c = aaa$ und sendet sie an den Client.
+	\item Client bildet $r = SHA256(aaa + passwort123)$.
+	\item Client sendet $r$ an den Server.
+	\item Server bildet selbst $r' = SHA256(aaa + passwort123)$ und vergleicht $r = r'$.
+\end{enumerate}
+
+Konkrete Berechnung:
+
+\noindent $r = SHA256(aaapasswort123)$ \\
+\noindent $r = $ 21cca91578a7ca02a253eb00d1b3526999eddcbf85cb28a0a3ec2ed2edbec3b8
+
+Stimmen $r$ und $r'$ überein, ist die Anmeldung erfolgreich.
+
+
+\chapter*{Aufgabe 4: Implementierung Challenge-Response}
+
+\section*{Aufbau}
+
+Die Klasse ChallengeResponse enthält eine innere Klasse Server und eine innere Klasse Client.
+Der Server verwaltet zwei Benutzer (alice und bob) mit ihren Passwörtern.
+Als Hashfunktion kommt SHA256 zum Einsatz, die Challenge besteht aus einer 128-Bit-Zufallszahl und einem Zeitstempel.
+
+\section*{Ablauf im Programm}
+
+\begin{enumerate}
+	\item Client sendet Benutzernamen an den Server.
+	\item Server erzeugt eine frische Challenge und speichert sie zum Benutzer.
+	\item Client berechnet $response = SHA256(challenge \Vert passwort)$.
+	\item Server prüft die Response und markiert die Challenge als verbraucht.
+\end{enumerate}
+
+\section*{Schutz gegen Replay}
+
+Der Server speichert verwendete Challenges in einem HashSet.
+Eine zweite Anmeldung mit derselben Challenge und Response wird abgewiesen, auch wenn die Response technisch korrekt ist.
+Dies verhindert einen Replay-Angriff.
+
+\section*{Beispielausgabe}
+
+\begin{lstlisting}[language=bash]
+=== Erfolgreiche Anmeldung alice ===
+Server -> Client | Challenge: d7a9a0f3...-1776284899357
+Client -> Server | Response:  836e5f29...1ab9f321
+Ergebnis: Login erfolgreich
+
+=== Falsches Passwort alice ===
+Ergebnis: Login abgelehnt
+
+=== Replay-Angriff (Wiederverwendung Challenge) ===
+Erste Verwendung  -> akzeptiert
+Zweite Verwendung -> abgelehnt
+\end{lstlisting}
+
+\section*{Quellcode}
+
+\lstinputlisting[language=Java,caption={ChallengeResponse.java}]{src/ChallengeResponse.java}
+
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
