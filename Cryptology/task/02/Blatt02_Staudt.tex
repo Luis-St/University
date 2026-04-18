@@ -1,0 +1,357 @@
+\documentclass[
+    fontsize=12pt,          % default font size 12pt
+    paper=a4,               % DIN A4 page format
+    numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+    listof=totoc,           % add list of figures, tables, etc. to ToC
+    listof=entryprefix,     % add entry name to figures, tables, etc.
+    listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+    bibliography=totoc,     % add bibliography to ToC but without a chapter number
+    parskip=half,           % half line spacing between paragraphs
+    openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}
+\usepackage{pgfplotstable}
+
+\begin{document}
+
+    \begin{titlepage}
+        \pagestyle{empty}
+
+        % HFU Logo
+        \begin{flushright}
+            \begin{figure}[ht]
+                \flushright
+                \includegraphics[height=2cm]{../../for_latex/hfu}
+            \end{figure}
+        \end{flushright}
+
+        \begin{center}
+            \vspace{3cm}
+
+            {\fontsize{22}{22} \selectfont \textbf{Blatt 2}}\\[5mm]
+            {\fontsize{18}{18} \selectfont Kryptologie}
+
+            \vspace{12cm}
+
+            {\fontsize{14}{14} \selectfont Luis Staudt}
+        \end{center}
+    \end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+
+\chapter*{Geschwindigkeitsvergleich Block- vs.\ Stream-Cipher}
+
+
+\section*{Aufgabenstellung}
+
+Es sollen fünf Verschlüsselungsverfahren hinsichtlich ihrer Geschwindigkeit verglichen werden:
+\begin{itemize}
+    \item \textbf{ChaCha20} -- Stream-Cipher (256-Bit Schlüssel, 96-Bit Nonce)
+    \item \textbf{AES-256-CBC} -- Block-Cipher (256-Bit Schlüssel, 128-Bit IV, CBC-Mode)
+    \item \textbf{ARC4} -- Stream-Cipher (256-Bit Schlüssel)
+    \item \textbf{Blowfish-CBC} -- Block-Cipher (128-Bit Schlüssel, 64-Bit IV, CBC-Mode)
+    \item \textbf{Serpent-CBC} -- Block-Cipher (256-Bit Schlüssel, 128-Bit IV, CBC-Mode)
+\end{itemize}
+
+Dazu wird ein zufälliger Plaintext der Größe $2^n$ Bytes ($n = 10, \ldots, 26$, d.\,h.\ 1\,KB bis 64\,MB) mit jedem Verfahren verschlüsselt und die Verschlüsselungsdauer gemessen.
+Durch Mittelung über mehrere Wiederholungen wird die Streuung reduziert.
+
+
+\section*{Vorgehensweise}
+
+Die Implementierung erfolgt in Java unter Verwendung der Bouncy-Castle-Bibliothek (Version 1.80).
+Für jeden Plaintext und jedes Verfahren werden zunächst 3~Warmup-Durchläufe durchgeführt, damit der JIT-Compiler die relevanten Code-Pfade optimieren kann.
+Anschließend wird die Verschlüsselungsdauer über 10~Messungen gemittelt.
+
+Für jeden Durchlauf wird ein zufälliger 256-Bit Schlüssel sowie eine zufällige Nonce bzw.\ ein zufälliges IV erzeugt.
+Bei den Block-Ciphern (AES, Blowfish, Serpent) kommt der CBC-Mode mit PKCS7-Padding zum Einsatz.
+ChaCha20 und ARC4 werden als Stream-Cipher direkt ohne Padding verwendet.
+
+\begin{lstlisting}[language=Java, caption={Verschlüsselung mit einem Block-Cipher (CBC-Mode)}]
+static byte[] encryptBlockCipher(BlockCipher engine, byte[] key,
+        int ivSize, byte[] plaintext) throws Exception {
+    byte[] iv = new byte[ivSize];
+    RANDOM.nextBytes(iv);
+    PaddedBufferedBlockCipher cipher = new PaddedBufferedBlockCipher(
+        CBCBlockCipher.newInstance(engine), new PKCS7Padding());
+    CipherParameters params = new ParametersWithIV(
+        new KeyParameter(key), iv);
+    cipher.init(true, params);
+    byte[] output = new byte[cipher.getOutputSize(plaintext.length)];
+    int len = cipher.processBytes(plaintext, 0,
+        plaintext.length, output, 0);
+    cipher.doFinal(output, len);
+    return output;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java, caption={Verschlüsselung mit ChaCha20}]
+static byte[] encryptChaCha20(byte[] key, byte[] plaintext)
+        throws Exception {
+    byte[] nonce = new byte[12];
+    RANDOM.nextBytes(nonce);
+    StreamCipher cipher = new ChaCha7539Engine();
+    cipher.init(true,
+        new ParametersWithIV(new KeyParameter(key), nonce));
+    byte[] output = new byte[plaintext.length];
+    cipher.processBytes(plaintext, 0,
+        plaintext.length, output, 0);
+    return output;
+}
+\end{lstlisting}
+
+
+\section*{Ergebnisse}
+
+\subsection*{Einzelne Laufzeiten}
+
+Die folgende Tabelle zeigt die mittlere Verschlüsselungsdauer und den Durchsatz für eine Plaintextgröße von $2^{20} = 1$\,MB:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l r r}
+        \toprule
+        \textbf{Verfahren} & \textbf{Dauer (ms)} & \textbf{Durchsatz (MB/s)} \\
+        \midrule
+        ChaCha20     & 2{,}05  & 488{,}37 \\
+        AES-256-CBC  & 4{,}12  & 242{,}96 \\
+        ARC4         & 2{,}07  & 483{,}29 \\
+        Blowfish-CBC & 7{,}07  & 141{,}53 \\
+        Serpent-CBC  & 8{,}80  & 113{,}60 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Verschlüsselungsdauer und Durchsatz bei 1\,MB Plaintext}
+\end{table}
+
+
+\subsection*{Vergleichsdiagramm}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=\textwidth,
+            height=9cm,
+            ymode=log,
+            xlabel={Plaintextgr\"o\ss e},
+            ylabel={Verschl\"usselungsdauer (ms)},
+            title={Mittlere Verschl\"usselungsdauer bei steigender Plaintextgr\"o\ss e},
+            xtick=data,
+            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB},
+            x tick label style={rotate=45, anchor=east, font=\scriptsize},
+            legend style={at={(0.02,0.98)}, anchor=north west, font=\small},
+            grid=major,
+            grid style={gray!30},
+            cycle list name=color list,
+        ]
+        \addplot table[x expr=\coordindex, y index=2, col sep=comma] {results.csv};
+        \addlegendentry{ChaCha20}
+        \addplot table[x expr=\coordindex, y index=3, col sep=comma] {results.csv};
+        \addlegendentry{AES-256-CBC}
+        \addplot table[x expr=\coordindex, y index=4, col sep=comma] {results.csv};
+        \addlegendentry{ARC4}
+        \addplot table[x expr=\coordindex, y index=5, col sep=comma] {results.csv};
+        \addlegendentry{Blowfish-CBC}
+        \addplot table[x expr=\coordindex, y index=6, col sep=comma] {results.csv};
+        \addlegendentry{Serpent-CBC}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Logarithmische Darstellung der Verschlüsselungsdauer aller Verfahren}
+    \label{fig:comparison}
+\end{figure}
+
+
+\subsection*{Einzeldiagramme}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=\textwidth, height=6cm,
+            ybar, bar width=8pt,
+            xlabel={Plaintextgr\"o\ss e},
+            ylabel={Dauer (ms)},
+            title={ChaCha20},
+            xtick=data,
+            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB},
+            x tick label style={rotate=45, anchor=east, font=\tiny},
+            grid=major, grid style={gray!30},
+        ]
+        \addplot[fill=blue!60] table[x expr=\coordindex, y index=2, col sep=comma] {results.csv};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Verschlüsselungsdauer von ChaCha20}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=\textwidth, height=6cm,
+            ybar, bar width=8pt,
+            xlabel={Plaintextgr\"o\ss e},
+            ylabel={Dauer (ms)},
+            title={AES-256-CBC},
+            xtick=data,
+            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB},
+            x tick label style={rotate=45, anchor=east, font=\tiny},
+            grid=major, grid style={gray!30},
+        ]
+        \addplot[fill=orange!60] table[x expr=\coordindex, y index=3, col sep=comma] {results.csv};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Verschlüsselungsdauer von AES-256-CBC}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=\textwidth, height=6cm,
+            ybar, bar width=8pt,
+            xlabel={Plaintextgr\"o\ss e},
+            ylabel={Dauer (ms)},
+            title={ARC4},
+            xtick=data,
+            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB},
+            x tick label style={rotate=45, anchor=east, font=\tiny},
+            grid=major, grid style={gray!30},
+        ]
+        \addplot[fill=green!60] table[x expr=\coordindex, y index=4, col sep=comma] {results.csv};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Verschlüsselungsdauer von ARC4}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=\textwidth, height=6cm,
+            ybar, bar width=8pt,
+            xlabel={Plaintextgr\"o\ss e},
+            ylabel={Dauer (ms)},
+            title={Blowfish-CBC},
+            xtick=data,
+            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB},
+            x tick label style={rotate=45, anchor=east, font=\tiny},
+            grid=major, grid style={gray!30},
+        ]
+        \addplot[fill=red!60] table[x expr=\coordindex, y index=5, col sep=comma] {results.csv};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Verschlüsselungsdauer von Blowfish-CBC}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=\textwidth, height=6cm,
+            ybar, bar width=8pt,
+            xlabel={Plaintextgr\"o\ss e},
+            ylabel={Dauer (ms)},
+            title={Serpent-CBC},
+            xtick=data,
+            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB},
+            x tick label style={rotate=45, anchor=east, font=\tiny},
+            grid=major, grid style={gray!30},
+        ]
+        \addplot[fill=violet!60] table[x expr=\coordindex, y index=6, col sep=comma] {results.csv};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Verschlüsselungsdauer von Serpent-CBC}
+\end{figure}
+
+
+\subsection*{Durchsatzvergleich}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=\textwidth,
+            height=8cm,
+            xlabel={Plaintextgr\"o\ss e},
+            ylabel={Durchsatz (MB/s)},
+            title={Durchsatz der Verschl\"usselungsverfahren},
+            xtick=data,
+            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB},
+            x tick label style={rotate=45, anchor=east, font=\scriptsize},
+            legend style={at={(0.02,0.98)}, anchor=north west, font=\small},
+            grid=major, grid style={gray!30},
+        ]
+        \addplot table[x expr=\coordindex, y expr={\thisrowno{1}/1048576/(\thisrowno{2}/1000)}, col sep=comma] {results.csv};
+        \addlegendentry{ChaCha20}
+        \addplot table[x expr=\coordindex, y expr={\thisrowno{1}/1048576/(\thisrowno{3}/1000)}, col sep=comma] {results.csv};
+        \addlegendentry{AES-256-CBC}
+        \addplot table[x expr=\coordindex, y expr={\thisrowno{1}/1048576/(\thisrowno{4}/1000)}, col sep=comma] {results.csv};
+        \addlegendentry{ARC4}
+        \addplot table[x expr=\coordindex, y expr={\thisrowno{1}/1048576/(\thisrowno{5}/1000)}, col sep=comma] {results.csv};
+        \addlegendentry{Blowfish-CBC}
+        \addplot table[x expr=\coordindex, y expr={\thisrowno{1}/1048576/(\thisrowno{6}/1000)}, col sep=comma] {results.csv};
+        \addlegendentry{Serpent-CBC}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Durchsatz in MB/s bei steigender Plaintextgröße}
+    \label{fig:throughput}
+\end{figure}
+
+
+\section*{Beobachtungen}
+
+\subsection*{Einzelne Verfahren}
+
+\begin{itemize}
+    \item \textbf{ChaCha20:} Mit einem stabilen Durchsatz von ca.\ 490--510\,MB/s gehört ChaCha20 zu den schnellsten Verfahren. Die Laufzeit skaliert nahezu linear mit der Plaintextgröße. Bei kleinen Datenmengen ($< 16$\,KB) dominiert der Overhead der Initialisierung.
+
+    \item \textbf{AES-256-CBC:} AES erreicht einen Durchsatz von ca.\ 240--255\,MB/s. Im CBC-Mode ist AES nicht parallelisierbar (bei der Verschlüsselung), da jeder Block vom vorherigen Ciphertext-Block abhängt. Trotzdem ist die Leistung dank optimierter Bouncy-Castle-Implementierung solide.
+
+    \item \textbf{ARC4:} ARC4 zeigt mit ca.\ 480--520\,MB/s ähnliche Geschwindigkeit wie ChaCha20. Als einfacher Stream-Cipher hat ARC4 sehr wenig Overhead pro Byte, was die hohe Geschwindigkeit erklärt. ARC4 gilt allerdings als kryptographisch unsicher.
+
+    \item \textbf{Blowfish-CBC:} Blowfish erreicht ca.\ 135--142\,MB/s. Die geringere Geschwindigkeit gegenüber AES erklärt sich durch die kleinere Blockgröße von 64~Bit (doppelt so viele Blöcke pro Datenmenge) und die aufwendige Feistel-Struktur.
+
+    \item \textbf{Serpent-CBC:} Serpent ist mit ca.\ 115--125\,MB/s das langsamste Verfahren. Serpent verwendet 32~Runden (im Vergleich zu 14~Runden bei AES-256), was die höhere Sicherheitsmarge, aber auch die geringere Geschwindigkeit erklärt.
+\end{itemize}
+
+
+\subsection*{Vergleich}
+
+Die Stream-Cipher (ChaCha20, ARC4) sind deutlich schneller als die Block-Cipher im CBC-Mode.
+Dies liegt daran, dass Stream-Cipher den Plaintext byteweise mit dem Keystrom XOR-verknüpfen, ohne auf Block-Padding oder Block-Verkettung angewiesen zu sein.
+
+Im Vergleich zur Aufgabenstellung mit Python-Bibliotheken fällt auf, dass die Java/Bouncy-Castle-Implementierung durchgehend hohe Durchsatzwerte liefert.
+Insbesondere Serpent profitiert enorm: Während die Python-Implementierung (pyserpent) bei 1\,MB bereits 13{,}8~Sekunden benötigte (0{,}07\,MB/s), erreicht die Java-Implementierung ca.\ 113\,MB/s -- ein Faktor von über 1600.
+Dies zeigt den erheblichen Einfluss der Laufzeitumgebung und des JIT-Compilers auf die Benchmark-Ergebnisse.
+
+Alle Verfahren zeigen ab ca.\ $2^{15}$~Bytes (32\,KB) ein lineares Skalierungsverhalten, wobei der Durchsatz stabil bleibt.
+Bei kleineren Datenmengen dominiert der Initialisierungsoverhead, was zu unregelmäßigen Messwerten führt.
+
+
+\section*{Bewertung}
+
+Der Geschwindigkeitsvergleich zeigt eine klare Hierarchie:
+\begin{enumerate}
+    \item ChaCha20 und ARC4 ($\sim$500\,MB/s) -- Stream-Cipher mit minimalem Overhead
+    \item AES-256-CBC ($\sim$250\,MB/s) -- vielseitiger Block-Cipher, Industriestandard
+    \item Blowfish-CBC ($\sim$140\,MB/s) -- älterer Block-Cipher mit kleiner Blockgröße
+    \item Serpent-CBC ($\sim$120\,MB/s) -- hohe Sicherheitsmarge, aber geringerer Durchsatz
+\end{enumerate}
+
+Für die Praxis ist zu beachten, dass ARC4 trotz seiner Geschwindigkeit aufgrund bekannter Schwachstellen nicht mehr verwendet werden sollte.
+ChaCha20 bietet die beste Kombination aus Geschwindigkeit und Sicherheit und wird daher zunehmend in modernen Protokollen wie TLS~1.3 eingesetzt.
+AES bleibt aufgrund von Hardware-Beschleunigung (AES-NI) in der Praxis auf vielen Plattformen das schnellste Verfahren, wobei die hier verwendete reine Software-Implementierung von Bouncy Castle keine Hardware-Beschleunigung nutzt.
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
