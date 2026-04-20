@@ -25,7 +25,7 @@ function RecipeDetailPage() {
   const dispatch = useAppDispatch();
   const { recipe, loading } = useAppSelector((state) => state.recipeDetail);
   const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const { recipes: savedRecipes } = useAppSelector((state) => state.savedRecipes);
+  const { recipes: savedRecipes = [] } = useAppSelector((state) => state.savedRecipes);
   const [desiredPortion, setDesiredPortion] = useState(0);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ function RecipeDetailPage() {
   if (loading || !recipe) return <LoadingSpinner />;
 
   const avgRating = calculateAverageRating(recipe.rating);
-  const isSaved = savedRecipes.some((r) => r._id === recipe._id);
+  const isSaved = savedRecipes?.some((r) => r._id === recipe._id) ?? false;
 
   const handleSaveToggle = () => {
     if (isSaved) {
