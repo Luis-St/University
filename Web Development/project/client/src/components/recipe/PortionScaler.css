@@ -1,40 +1,40 @@
 .portion-scaler {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
 }
 
 .portion-scaler__label {
-  font-weight: 600;
-  font-size: 0.95rem;
+	font-weight: 600;
+	font-size: 0.95rem;
 }
 
 .portion-scaler__btn {
-  width: 32px;
-  height: 32px;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  background: #fff;
-  font-size: 1.1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s;
+	width: 32px;
+	height: 32px;
+	border: 1px solid #ccc;
+	border-radius: 50%;
+	background: #fff;
+	font-size: 1.1rem;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background 0.15s;
 }
 
 .portion-scaler__btn:hover:not(:disabled) {
-  background: #f5f5f5;
+	background: #f5f5f5;
 }
 
 .portion-scaler__btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+	opacity: 0.4;
+	cursor: not-allowed;
 }
 
 .portion-scaler__value {
-  font-size: 1.1rem;
-  font-weight: 700;
-  min-width: 24px;
-  text-align: center;
+	font-size: 1.1rem;
+	font-weight: 700;
+	min-width: 24px;
+	text-align: center;
 }

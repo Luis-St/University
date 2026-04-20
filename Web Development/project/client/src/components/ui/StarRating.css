@@ -1,30 +1,30 @@
 .star-rating {
-  display: flex;
-  align-items: center;
-  gap: 0.15rem;
+	display: flex;
+	align-items: center;
+	gap: 0.15rem;
 }
 
 .star-rating__star {
-  font-size: 1.4rem;
-  color: #ccc;
-  cursor: pointer;
-  transition: color 0.15s;
+	font-size: 1.4rem;
+	color: #ccc;
+	cursor: pointer;
+	transition: color 0.15s;
 }
 
 .star-rating__star--filled {
-  color: #f5a623;
+	color: #f5a623;
 }
 
 .star-rating--readonly .star-rating__star {
-  cursor: default;
+	cursor: default;
 }
 
 .star-rating__star:hover:not(.star-rating--readonly .star-rating__star) {
-  color: #f5a623;
+	color: #f5a623;
 }
 
 .star-rating__value {
-  margin-left: 0.4rem;
-  font-size: 0.85rem;
-  color: #666;
+	margin-left: 0.4rem;
+	font-size: 0.85rem;
+	color: #666;
 }

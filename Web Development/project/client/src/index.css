@@ -1,53 +1,53 @@
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
 }
 
 :root {
-  --color-primary: #e85d04;
-  --color-primary-dark: #d45203;
-  --color-danger: #dc3545;
-  --color-text: #333;
-  --color-text-light: #666;
-  --color-bg: #f8f9fa;
-  --color-white: #fff;
-  --color-border: #ddd;
-  --radius: 8px;
-  --radius-lg: 12px;
+	--color-primary: #e85d04;
+	--color-primary-dark: #d45203;
+	--color-danger: #dc3545;
+	--color-text: #333;
+	--color-text-light: #666;
+	--color-bg: #f8f9fa;
+	--color-white: #fff;
+	--color-border: #ddd;
+	--radius: 8px;
+	--radius-lg: 12px;
 }
 
 html {
-  font-size: 16px;
-  -webkit-text-size-adjust: 100%;
+	font-size: 16px;
+	-webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  color: var(--color-text);
-  background: var(--color-bg);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+	Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+	color: var(--color-text);
+	background: var(--color-bg);
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 a {
-  color: var(--color-primary);
-  text-decoration: none;
+	color: var(--color-primary);
+	text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline;
+	text-decoration: underline;
 }
 
 img {
-  max-width: 100%;
-  display: block;
+	max-width: 100%;
+	display: block;
 }
 
 button {
-  font-family: inherit;
+	font-family: inherit;
 }

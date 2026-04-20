@@ -8,15 +8,15 @@ import categoriesReducer from "./slices/categoriesSlice";
 import searchReducer from "./slices/searchSlice";
 
 export const store = configureStore({
-  reducer: {
-    auth: authReducer,
-    recipes: recipesReducer,
-    recipeDetail: recipeDetailReducer,
-    userRecipes: userRecipesReducer,
-    savedRecipes: savedRecipesReducer,
-    categories: categoriesReducer,
-    search: searchReducer,
-  },
+	reducer: {
+		auth: authReducer,
+		recipes: recipesReducer,
+		recipeDetail: recipeDetailReducer,
+		userRecipes: userRecipesReducer,
+		savedRecipes: savedRecipesReducer,
+		categories: categoriesReducer,
+		search: searchReducer,
+	},
 });
 
 export type RootState = ReturnType<typeof store.getState>;

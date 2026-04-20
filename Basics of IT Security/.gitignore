@@ -20,3 +20,6 @@
 out/
 *.bbl-SAVE-ERROR
 *.iml
+
+# project
+*.gpg

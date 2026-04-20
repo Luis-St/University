@@ -1,81 +1,81 @@
 .header {
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+	background: #fff;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+	position: sticky;
+	top: 0;
+	z-index: 100;
 }
 
 .header__container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0.75rem 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0.75rem 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
 }
 
 .header__logo {
-  font-size: 1.3rem;
-  font-weight: 800;
-  color: #e85d04;
-  text-decoration: none;
+	font-size: 1.3rem;
+	font-weight: 800;
+	color: #e85d04;
+	text-decoration: none;
 }
 
 .header__toggle {
-  display: block;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #333;
+	display: block;
+	background: none;
+	border: none;
+	font-size: 1.5rem;
+	cursor: pointer;
+	color: #333;
 }
 
 .header__nav {
-  display: none;
-  flex-direction: column;
-  gap: 0.25rem;
-  width: 100%;
-  padding-top: 0.75rem;
+	display: none;
+	flex-direction: column;
+	gap: 0.25rem;
+	width: 100%;
+	padding-top: 0.75rem;
 }
 
 .header__nav--open {
-  display: flex;
+	display: flex;
 }
 
 .header__link {
-  text-decoration: none;
-  color: #333;
-  padding: 0.5rem 0;
-  font-size: 0.95rem;
-  font-weight: 500;
-  border: none;
-  background: none;
-  cursor: pointer;
-  text-align: left;
-  font-family: inherit;
+	text-decoration: none;
+	color: #333;
+	padding: 0.5rem 0;
+	font-size: 0.95rem;
+	font-weight: 500;
+	border: none;
+	background: none;
+	cursor: pointer;
+	text-align: left;
+	font-family: inherit;
 }
 
 .header__link:hover {
-  color: #e85d04;
+	color: #e85d04;
 }
 
 .header__logout {
-  color: #dc3545;
+	color: #dc3545;
 }
 
 @media (min-width: 768px) {
-  .header__toggle {
-    display: none;
-  }
-
-  .header__nav {
-    display: flex;
-    flex-direction: row;
-    width: auto;
-    padding-top: 0;
-    gap: 1.25rem;
-    align-items: center;
-  }
+	.header__toggle {
+		display: none;
+	}
+	
+	.header__nav {
+		display: flex;
+		flex-direction: row;
+		width: auto;
+		padding-top: 0;
+		gap: 1.25rem;
+		align-items: center;
+	}
 }
