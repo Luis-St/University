@@ -1,0 +1,34 @@
+.nutrition-info h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.nutrition-info__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.nutrition-info__item {
+  display: flex;
+  flex-direction: column;
+  background: #fafafa;
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.nutrition-info__label {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.nutrition-info__value {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .nutrition-info__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

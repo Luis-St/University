@@ -1,0 +1,10 @@
+.saved-recipes-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.saved-recipes-page h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}

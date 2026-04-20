@@ -1,0 +1,32 @@
+.comment-list h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.comment-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.comment-list__item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.comment-list__user {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #e85d04;
+}
+
+.comment-list__text {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.comment-list__empty {
+  color: #888;
+  font-size: 0.9rem;
+}
