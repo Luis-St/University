@@ -9,5 +9,5 @@ export const searchRecipes = async (params: {
   if (params.tags) query.set("tags", params.tags);
   if (params.category) query.set("category", params.category);
   const response = await axiosInstance.get(`/cookbook/search?${query.toString()}`);
-  return response.data;
+  return response.data || [];
 };

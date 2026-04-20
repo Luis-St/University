@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { loginUser } from "../../api/loginUser";
 import { signupUser } from "../../api/signupUser";
 import { logoutUser } from "../../api/logoutUser";
-import { fetchSavedRecipes } from "../../api/fetchSavedRecipes";
+import { checkAuth } from "../../api/checkAuth";
 import type { LoginPayload, SignupPayload } from "../../types/AuthPayload";
 
 interface AuthState {
@@ -40,7 +40,7 @@ export const logoutThunk = createAsyncThunk("auth/logout", async () => {
 });
 
 export const checkAuthThunk = createAsyncThunk("auth/check", async () => {
-  const user = await fetchSavedRecipes();
+  const user = await checkAuth();
   return user.email;
 });
 
