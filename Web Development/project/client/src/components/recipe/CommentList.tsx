@@ -16,7 +16,7 @@ function CommentList({ comments }: CommentListProps) {
 			<ul>
 				{comments.map((c, index) => (
 					<li key={index} className="comment-list__item">
-						<span className="comment-list__user">Benutzer</span>
+						<span className="comment-list__user">{c.user}</span>
 						<p className="comment-list__text">{c.comment}</p>
 					</li>
 				))}
