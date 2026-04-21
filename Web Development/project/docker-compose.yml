@@ -14,6 +14,7 @@ services:
       - PORT=${SERVER_PORT}
       - MONGODB_URI=${MONGODB_URI}
       - CORS_ORIGIN=${CORS_ORIGIN}
+      - TOKEN_SECRET=${TOKEN_SECRET}
     depends_on:
       - mongo
     restart: unless-stopped
