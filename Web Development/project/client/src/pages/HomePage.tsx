@@ -16,18 +16,18 @@ function HomePage() {
 	const { isAuthenticated } = useAppSelector((state) => state.auth);
 	const { recipes: savedRecipes = [] } = useAppSelector((state) => state.savedRecipes);
 	const [selectedCategory, setSelectedCategory] = useState("");
-
+	
 	useEffect(() => {
 		dispatch(fetchAllRecipesThunk());
 		if (isAuthenticated) {
 			dispatch(fetchSavedRecipesThunk());
 		}
 	}, [dispatch, isAuthenticated]);
-
+	
 	const filtered = filterRecipesByCategory(recipes, selectedCategory);
-
+	
 	if (loading) return <LoadingSpinner/>;
-
+	
 	return (
 		<div className="home-page">
 			<h1>Alle Rezepte</h1>

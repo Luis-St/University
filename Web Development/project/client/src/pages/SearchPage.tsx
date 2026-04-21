@@ -16,7 +16,7 @@ function SearchPage() {
 	const { categories } = useAppSelector((state) => state.categories);
 	const { isAuthenticated } = useAppSelector((state) => state.auth);
 	const { recipes: savedRecipes = [] } = useAppSelector((state) => state.savedRecipes);
-
+	
 	useEffect(() => {
 		dispatch(fetchCategoriesThunk());
 		if (isAuthenticated) {
