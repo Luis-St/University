@@ -26,9 +26,9 @@ export const fetchSavedRecipesThunk = createAsyncThunk(
 
 export const saveRecipeThunk = createAsyncThunk(
 	"savedRecipes/save",
-	async (recipeId: string) => {
-		await saveRecipe(recipeId);
-		return recipeId;
+	async (recipe: Recipe) => {
+		await saveRecipe(recipe._id);
+		return recipe;
 	},
 );
 
@@ -57,6 +57,11 @@ const savedRecipesSlice = createSlice({
 			.addCase(fetchSavedRecipesThunk.rejected, (state, action) => {
 				state.loading = false;
 				state.error = action.error.message || "Fehler beim Laden";
+			})
+			.addCase(saveRecipeThunk.fulfilled, (state, action) => {
+				if (!state.recipes.some((r) => r._id === action.payload._id)) {
+					state.recipes.push(action.payload);
+				}
 			})
 			.addCase(unsaveRecipeThunk.fulfilled, (state, action) => {
 				state.recipes = state.recipes.filter((r) => r._id !== action.payload);

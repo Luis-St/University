@@ -55,7 +55,7 @@ function RecipeDetailPage() {
 		if (isSaved) {
 			dispatch(unsaveRecipeThunk(recipe._id));
 		} else {
-			dispatch(saveRecipeThunk(recipe._id));
+			dispatch(saveRecipeThunk(recipe));
 		}
 	};
 	
