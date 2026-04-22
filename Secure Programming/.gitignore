@@ -2,6 +2,16 @@
 build/
 *.o
 *.out
+Task5/task5
+Task6/task6_ab
+Task6/task6_identity
+Task6/task6_pointer
+Task7/abc_term
+Task7/abc_term_fixed
+Task7/ausgabe_vektor
+Task7/ausgabe_vektor_fixed
+Task7/findmax
+Task7/findmax_fixed
 
 ### LaTeX ###
 *.log
