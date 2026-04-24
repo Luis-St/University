@@ -61,7 +61,7 @@ Es sollen fünf Verschlüsselungsverfahren hinsichtlich ihrer Geschwindigkeit ve
     \item \textbf{Serpent-CBC} -- Block-Cipher (256-Bit Schlüssel, 128-Bit IV, CBC-Mode)
 \end{itemize}
 
-Dazu wird ein zufälliger Plaintext der Größe $2^n$ Bytes ($n = 10, \ldots, 26$, d.\,h.\ 1\,KB bis 64\,MB) mit jedem Verfahren verschlüsselt und die Verschlüsselungsdauer gemessen.
+Dazu wird ein zufälliger Plaintext der Größe $2^n$ Bytes ($n = 10, \ldots, 28$, d.\,h.\ 1\,KB bis 256\,MB) mit jedem Verfahren verschlüsselt und die Verschlüsselungsdauer gemessen.
 Durch Mittelung über mehrere Wiederholungen wird die Streuung reduziert.
 
 
@@ -145,7 +145,7 @@ Die folgende Tabelle zeigt die mittlere Verschlüsselungsdauer und den Durchsatz
             ylabel={Verschl\"usselungsdauer (ms)},
             title={Mittlere Verschl\"usselungsdauer bei steigender Plaintextgr\"o\ss e},
             xtick=data,
-            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB},
+            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB,128\,MB,256\,MB},
             x tick label style={rotate=45, anchor=east, font=\scriptsize},
             legend style={at={(0.02,0.98)}, anchor=north west, font=\small},
             grid=major,
@@ -181,7 +181,7 @@ Die folgende Tabelle zeigt die mittlere Verschlüsselungsdauer und den Durchsatz
             ylabel={Dauer (ms)},
             title={ChaCha20},
             xtick=data,
-            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB},
+            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB,128\,MB,256\,MB},
             x tick label style={rotate=45, anchor=east, font=\tiny},
             grid=major, grid style={gray!30},
         ]
@@ -201,7 +201,7 @@ Die folgende Tabelle zeigt die mittlere Verschlüsselungsdauer und den Durchsatz
             ylabel={Dauer (ms)},
             title={AES-256-CBC},
             xtick=data,
-            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB},
+            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB,128\,MB,256\,MB},
             x tick label style={rotate=45, anchor=east, font=\tiny},
             grid=major, grid style={gray!30},
         ]
@@ -221,7 +221,7 @@ Die folgende Tabelle zeigt die mittlere Verschlüsselungsdauer und den Durchsatz
             ylabel={Dauer (ms)},
             title={ARC4},
             xtick=data,
-            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB},
+            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB,128\,MB,256\,MB},
             x tick label style={rotate=45, anchor=east, font=\tiny},
             grid=major, grid style={gray!30},
         ]
@@ -241,7 +241,7 @@ Die folgende Tabelle zeigt die mittlere Verschlüsselungsdauer und den Durchsatz
             ylabel={Dauer (ms)},
             title={Blowfish-CBC},
             xtick=data,
-            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB},
+            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB,128\,MB,256\,MB},
             x tick label style={rotate=45, anchor=east, font=\tiny},
             grid=major, grid style={gray!30},
         ]
@@ -261,7 +261,7 @@ Die folgende Tabelle zeigt die mittlere Verschlüsselungsdauer und den Durchsatz
             ylabel={Dauer (ms)},
             title={Serpent-CBC},
             xtick=data,
-            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB},
+            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB,128\,MB,256\,MB},
             x tick label style={rotate=45, anchor=east, font=\tiny},
             grid=major, grid style={gray!30},
         ]
@@ -284,7 +284,7 @@ Die folgende Tabelle zeigt die mittlere Verschlüsselungsdauer und den Durchsatz
             ylabel={Durchsatz (MB/s)},
             title={Durchsatz der Verschl\"usselungsverfahren},
             xtick=data,
-            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB},
+            xticklabels={1\,KB,2\,KB,4\,KB,8\,KB,16\,KB,32\,KB,64\,KB,128\,KB,256\,KB,512\,KB,1\,MB,2\,MB,4\,MB,8\,MB,16\,MB,32\,MB,64\,MB,128\,MB,256\,MB},
             x tick label style={rotate=45, anchor=east, font=\scriptsize},
             legend style={at={(0.02,0.98)}, anchor=north west, font=\small},
             grid=major, grid style={gray!30},

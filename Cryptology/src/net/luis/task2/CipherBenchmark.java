@@ -20,7 +20,7 @@ public class CipherBenchmark {
 	static final int WARMUP_ITERATIONS = 3;
 	static final int MEASURE_ITERATIONS = 10;
 	static final int MIN_N = 10; // 1 KB
-	static final int MAX_N = 26; // 64 MB
+	static final int MAX_N = 28; // 256 MB
 	
 	static final SecureRandom RANDOM = new SecureRandom();
 	
