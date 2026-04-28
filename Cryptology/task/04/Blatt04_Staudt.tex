@@ -1,0 +1,212 @@
+\documentclass[
+    fontsize=12pt,          % default font size 12pt
+    paper=a4,               % DIN A4 page format
+    numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+    listof=totoc,           % add list of figures, tables, etc. to ToC
+    listof=entryprefix,     % add entry name to figures, tables, etc.
+    listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+    bibliography=totoc,     % add bibliography to ToC but without a chapter number
+    parskip=half,           % half line spacing between paragraphs
+    openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+\begin{document}
+
+    \begin{titlepage}
+        \pagestyle{empty}
+
+        % HFU Logo
+        \begin{flushright}
+            \begin{figure}[ht]
+                \flushright
+                \includegraphics[height=2cm]{../../for_latex/hfu}
+            \end{figure}
+        \end{flushright}
+
+        \begin{center}
+            \vspace{3cm}
+
+            {\fontsize{22}{22} \selectfont \textbf{Blatt 4}}\\[5mm]
+            {\fontsize{18}{18} \selectfont Kryptologie}
+
+            \vspace{12cm}
+
+            {\fontsize{14}{14} \selectfont Luis Staudt}
+        \end{center}
+    \end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+
+\chapter*{RSA knacken}
+
+
+\section*{Aufgabenstellung}
+
+Es soll ein mit AES-CBC verschlüsselter Ciphertext entschlüsselt werden.
+Der 128-Bit AES-Schlüssel wurde mit RSA verschlüsselt.
+Der öffentliche RSA-Schlüssel besteht aus einem 4096-Bit Modulus~$n$ (aus einem QR-Code) und $e = 65537$.
+Der RSA-Ciphertext steht in einem zweiten QR-Code.
+
+\begin{itemize}
+    \item AES-Ciphertext (Base64): \texttt{OCZaBxssu0HVEGnc10auq67OzKcEqQ1jtU7x+fq/L28=}
+    \item AES-Modus: CBC mit IV = 128-Bit-ALL-ZERO und 1-0-Padding
+\end{itemize}
+
+Es soll ermittelt werden, welche $p$-$q$-Konstellation die Faktorisierung des 4096-Bit Modulus ermöglicht.
+
+
+\section*{Vorgehensweise}
+
+\begin{enumerate}
+    \item \textbf{QR-Codes auslesen:} Extraktion der Bilder aus dem PDF mittels \texttt{pdfimages} und Dekodierung mit OpenCV (\texttt{QRCodeDetector}).
+    \item \textbf{Faktorisierung:} Faktorisierung von $n$ mittels Fermats Methode.
+    \item \textbf{RSA-Entschlüsselung:} Berechnung des privaten Schlüssels $d$ und Entschlüsselung des AES-Schlüssels.
+    \item \textbf{AES-Entschlüsselung:} Entschlüsselung des Ciphertexts mit AES-CBC und Entfernung des 1-0-Paddings.
+\end{enumerate}
+
+Die Implementierung erfolgt in Java unter Verwendung von \texttt{java.math.BigInteger} für die RSA-Arithmetik und der Bouncy-Castle-Bibliothek für AES-CBC.
+
+
+\section*{Ergebnisse}
+
+
+\subsection*{Faktorisierung}
+
+Die Fermats Faktorisierungsmethode beruht darauf, $n = a^2 - b^2 = (a+b)(a-b)$ zu schreiben.
+Man startet mit $a = \lceil\sqrt{n}\,\rceil$ und prüft, ob $a^2 - n$ ein perfektes Quadrat ist.
+
+\begin{lstlisting}[language=Java, caption={Fermat-Faktorisierung}]
+BigInteger a = n.sqrt().add(BigInteger.ONE);
+while (true) {
+    BigInteger bSq = a.multiply(a).subtract(n);
+    BigInteger[] sqrtResult = bSq.sqrtAndRemainder();
+    if (sqrtResult[1].equals(BigInteger.ZERO)) {
+        p = a.add(sqrtResult[0]);
+        q = a.subtract(sqrtResult[0]);
+        break;
+    }
+    a = a.add(BigInteger.ONE);
+}
+\end{lstlisting}
+
+Die Faktorisierung gelingt \textbf{in nur einer einzigen Iteration}:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l l}
+        \toprule
+        \textbf{Parameter} & \textbf{Wert} \\
+        \midrule
+        $n$ (Bitlänge)     & 4096 Bit \\
+        $p$ (Bitlänge)     & 2048 Bit \\
+        $q$ (Bitlänge)     & 2048 Bit \\
+        $|p - q|$ (Bitlänge) & 996 Bit \\
+        Iterationen        & 1 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Ergebnis der Faktorisierung}
+\end{table}
+
+\begin{align*}
+    p &= \texttt{24569000803103...213748974553} \quad \text{(617 Dezimalstellen)} \\
+    q &= \texttt{24569000803103...688297261363} \quad \text{(617 Dezimalstellen)}
+\end{align*}
+
+
+\subsection*{RSA-Entschlüsselung}
+
+Mit $\varphi(n) = (p-1)(q-1)$ und $d = e^{-1} \mod \varphi(n)$:
+\[
+    k = c^d \mod n
+\]
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l l}
+        \toprule
+        \textbf{Parameter} & \textbf{Wert} \\
+        \midrule
+        $d$ (Bitlänge)     & 4094 Bit \\
+        $k$ (AES-Schlüssel, hex) & \texttt{DEF0123456789ABCDEF0123456789ABC} \\
+        \bottomrule
+    \end{tabular}
+    \caption{RSA-Entschlüsselungsergebnis}
+\end{table}
+
+
+\subsection*{AES-Entschlüsselung}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l l}
+        \toprule
+        \textbf{Parameter} & \textbf{Wert} \\
+        \midrule
+        AES-Schlüssel      & \texttt{DEF0123456789ABCDEF0123456789ABC} \\
+        IV                 & \texttt{00000000000000000000000000000000} \\
+        Modus              & CBC, 1-0-Padding \\
+        \midrule
+        \textbf{Plaintext} & \textbf{\texttt{Decryption made easy}} \\
+        \bottomrule
+    \end{tabular}
+    \caption{AES-Entschlüsselungsergebnis}
+\end{table}
+
+
+\section*{Schwachstellenanalyse}
+
+
+\subsection*{Warum die Faktorisierung gelingt}
+
+Die Fermats Methode benötigt $\mathcal{O}\!\left(\frac{|p-q|}{\sqrt{n}}\right)$ Iterationen.
+In diesem Fall:
+\begin{itemize}
+    \item $|p - q|$ hat nur 996~Bit, obwohl beide Primzahlen jeweils 2048~Bit lang sind.
+    \item $\sqrt{n}$ hat 2048~Bit.
+    \item $\frac{|p-q|}{2\sqrt{n}} \approx 2^{996} / 2^{2049} = 2^{-1053} \ll 1$, daher genügt \textbf{eine einzige Iteration}.
+\end{itemize}
+
+Die Ursache ist, dass $p$ und $q$ extrem nahe beieinander liegen.
+Ihre oberen $\sim$1052~Bit sind identisch -- sie unterscheiden sich erst in den unteren 996~Bit.
+Damit ist $a = \lceil\sqrt{n}\rceil \approx \frac{p+q}{2}$ nahezu exakt, und $b^2 = a^2 - n = \left(\frac{p-q}{2}\right)^2$ ist sofort ein perfektes Quadrat.
+
+
+\subsection*{Grenzen der Konstellation}
+
+Fermats Methode ist genau dann effizient, wenn $|p - q|$ klein relativ zu $n^{1/4}$ ist:
+\begin{itemize}
+    \item Ist $|p - q| < n^{1/4} \approx 2^{1024}$, so gelingt die Faktorisierung in wenigen Iterationen.
+    \item Hier: $|p - q| \approx 2^{996} < 2^{1024} = n^{1/4}$ -- deutlich innerhalb der Grenze.
+    \item Selbst bei $|p - q| \approx 2^{1024}$ wäre Fermats Methode noch praktikabel.
+    \item Bei $|p - q| > 2^{1024}$ wächst die Iterationszahl exponentiell und die Methode wird unpraktikabel.
+\end{itemize}
+
+
+\subsection*{Gegenmaßnahmen}
+
+Um diese Schwachstelle zu vermeiden:
+\begin{itemize}
+    \item $p$ und $q$ müssen unabhängig und gleichverteilt aus dem Bereich $(2^{n/2-1},\; 2^{n/2})$ gewählt werden.
+    \item Es muss sichergestellt werden, dass $|p - q| > 2^{n/4}$ (bei 4096-Bit RSA: $|p - q| > 2^{1024}$).
+    \item Moderne Schlüsselgenerierungen (z.\,B.\ nach FIPS~186-4) prüfen explizit, dass $|p - q| > 2^{n/2 - 100}$, um Fermats Angriff auszuschließen.
+\end{itemize}
+
+
+\section*{Bewertung}
+
+Die Aufgabe demonstriert eindrücklich, dass die Sicherheit von RSA nicht allein von der Schlüssellänge abhängt.
+Obwohl ein 4096-Bit Modulus verwendet wird, genügt eine einzige Iteration der Fermat-Faktorisierung, um $n$ zu zerlegen.
+
+Die Schwachstelle liegt in der Wahl von $p$ und $q$: Diese Primzahlen liegen so nahe beieinander, dass $\lceil\sqrt{n}\rceil$ praktisch mit $\frac{p+q}{2}$ übereinstimmt.
+Dies zeigt, dass die zufällige und unabhängige Wahl der Primfaktoren eine notwendige Voraussetzung für die RSA-Sicherheit ist -- Größe allein reicht nicht aus.
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
