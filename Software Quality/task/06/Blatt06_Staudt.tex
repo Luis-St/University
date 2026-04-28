@@ -1,0 +1,346 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half,           % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+\usepackage{longtable}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 6}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Qualität}\\[3mm]
+		{\fontsize{14}{14} \selectfont Blackbox Testmethoden: Äquivalenzklassentests}\\
+		{\fontsize{14}{14} \selectfont und Grenzwertanalyse}
+
+		\vspace{10cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\chapter*{Aufgabe 1: Online-Bestellung -- Bestellmenge}
+
+Ein Onlineshop akzeptiert Bestellungen für Artikel in einer Menge zwischen 1 und 1000 Stück.
+Bestellungen unter 1 und über 1000 werden abgelehnt.
+
+\section*{Äquivalenzklassentest}
+
+\begin{longtable}{| p{0.5cm} | p{3.5cm} | p{3.8cm} | p{2.5cm} | p{2.8cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Alle Repräsentanten} & \textbf{Ausgewählter Repräsentant} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Alle Repräsentanten} & \textbf{Ausgewählter Repräsentant} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	1 & gültig: $1 \leq \text{Menge} \leq 1000$ & 1, 50, 500, 999, 1000 & 500 & Bestellung akzeptiert \\ \hline
+	2 & ungültig: Menge $< 1$ & $-10$, $-1$, 0 & 0 & Bestellung abgelehnt \\ \hline
+	3 & ungültig: Menge $> 1000$ & 1001, 2000, 9999 & 1500 & Bestellung abgelehnt \\ \hline
+\end{longtable}
+
+\section*{Grenzwertanalyse}
+
+\begin{longtable}{| p{0.5cm} | p{4.0cm} | p{4.5cm} | p{3.8cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Grenzwerte} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Grenzwerte} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	1 & ungültig: Menge $< 1$ & 0 & Bestellung abgelehnt \\ \hline
+	2 & gültig: $1 \leq \text{M} \leq 1000$ & 1 & Bestellung akzeptiert \\ \hline
+	3 & gültig: $1 \leq \text{M} \leq 1000$ & 1000 & Bestellung akzeptiert \\ \hline
+	4 & ungültig: Menge $> 1000$ & 1001 & Bestellung abgelehnt \\ \hline
+\end{longtable}
+
+
+\chapter*{Aufgabe 2: Kreditkartenverifizierung}
+
+Ein Zahlungssystem akzeptiert nur Kreditkarten mit einer 16-stelligen Nummer.
+Zahlen mit mehr oder weniger als 16 Ziffern werden abgelehnt.
+
+\section*{Äquivalenzklassentest}
+
+\begin{longtable}{| p{0.5cm} | p{3.5cm} | p{3.8cm} | p{2.5cm} | p{2.8cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Alle Repräsentanten} & \textbf{Ausgewählter Repräsentant} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Alle Repräsentanten} & \textbf{Ausgewählter Repräsentant} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	1 & gültig: Länge $= 16$ & 1234567890123456, 9999888877776666 & 1234567890123456 & Karte akzeptiert \\ \hline
+	2 & ungültig: Länge $< 16$ & 12345 (5), 123456789012345 (15) & 123456789012345 (15 Stellen) & Karte abgelehnt \\ \hline
+	3 & ungültig: Länge $> 16$ & 12345678901234567 (17), 123456789012345678 (18) & 12345678901234567 (17 Stellen) & Karte abgelehnt \\ \hline
+\end{longtable}
+
+\section*{Grenzwertanalyse}
+
+\begin{longtable}{| p{0.5cm} | p{4.0cm} | p{4.5cm} | p{3.8cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Grenzwerte} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Grenzwerte} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	1 & ungültig: Länge $< 16$ & 15 Stellen & Karte abgelehnt \\ \hline
+	2 & gültig: Länge $= 16$ & 16 Stellen & Karte akzeptiert \\ \hline
+	3 & ungültig: Länge $> 16$ & 17 Stellen & Karte abgelehnt \\ \hline
+\end{longtable}
+
+
+\chapter*{Aufgabe 3: Berechnung des Mehrwertsteuersatzes}
+
+Ein System berechnet den Mehrwertsteuersatz für Produkte: 7\,\% für Lebensmittel und 19\,\% für Nicht-Lebensmittelprodukte.
+
+\section*{Äquivalenzklassentest}
+
+\begin{longtable}{| p{0.5cm} | p{3.5cm} | p{3.8cm} | p{2.5cm} | p{2.8cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Alle Repräsentanten} & \textbf{Ausgewählter Repräsentant} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Alle Repräsentanten} & \textbf{Ausgewählter Repräsentant} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	1 & gültig: Lebensmittel & Brot, Milch, Äpfel, Reis & Brot & MwSt $= 7\,\%$ \\ \hline
+	2 & gültig: Nicht-Lebensmittel & Fernseher, Kleidung, Möbel, Bücher & Fernseher & MwSt $= 19\,\%$ \\ \hline
+\end{longtable}
+
+Da es sich um eine kategorische Unterscheidung handelt, ist eine Grenzwertanalyse hier nicht anwendbar.
+
+
+\chapter*{Aufgabe 4: Rabattierung im Auto-Konfigurator}
+
+Ein Auto-Konfigurator bietet Rabatte basierend auf der Anzahl der gewählten Sonderausstattungen.
+Die Rabattstaffel lautet:
+\begin{itemize}
+	\item 0--2 Sonderausstattungen: Kein Rabatt
+	\item 3--5 Sonderausstattungen: 5\,\% Rabatt
+	\item 6--8 Sonderausstattungen: 10\,\% Rabatt
+	\item 9 und mehr Sonderausstattungen: 15\,\% Rabatt
+\end{itemize}
+
+Die Preise der Sonderausstattungen liegen zwischen 500\,€ und 3000\,€ pro Ausstattung.
+
+\section*{Äquivalenzklassentest}
+
+\begin{longtable}{| p{0.5cm} | p{3.5cm} | p{3.8cm} | p{2.5cm} | p{2.8cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Alle Repräsentanten} & \textbf{Ausgewählter Repräsentant} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Alle Repräsentanten} & \textbf{Ausgewählter Repräsentant} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	1 & gültig: 0--2 Ausstattungen & 0, 1, 2 & 1 & Kein Rabatt (0\,\%) \\ \hline
+	2 & gültig: 3--5 Ausstattungen & 3, 4, 5 & 4 & 5\,\% Rabatt \\ \hline
+	3 & gültig: 6--8 Ausstattungen & 6, 7, 8 & 7 & 10\,\% Rabatt \\ \hline
+	4 & gültig: $\geq 9$ Ausstattungen & 9, 10, 12, 15 & 10 & 15\,\% Rabatt \\ \hline
+\end{longtable}
+
+\section*{Grenzwertanalyse}
+
+\begin{longtable}{| p{0.5cm} | p{4.0cm} | p{4.5cm} | p{3.8cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Grenzwerte} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Grenzwerte} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	1 & gültig: 0--2 & 0 Ausstattungen & Kein Rabatt \\ \hline
+	2 & gültig: 0--2 & 2 Ausstattungen & Kein Rabatt \\ \hline
+	3 & gültig: 3--5 & 3 Ausstattungen & 5\,\% Rabatt \\ \hline
+	4 & gültig: 3--5 & 5 Ausstattungen & 5\,\% Rabatt \\ \hline
+	5 & gültig: 6--8 & 6 Ausstattungen & 10\,\% Rabatt \\ \hline
+	6 & gültig: 6--8 & 8 Ausstattungen & 10\,\% Rabatt \\ \hline
+	7 & gültig: $\geq 9$ & 9 Ausstattungen & 15\,\% Rabatt \\ \hline
+\end{longtable}
+
+
+\chapter*{Aufgabe 5: Passwortvalidierung}
+
+Das System verlangt ein Passwort zwischen 8 und 16 Zeichen Länge.
+Das Passwort muss mindestens eine Zahl enthalten.
+
+\section*{Äquivalenzklassentest}
+
+\begin{longtable}{| p{0.5cm} | p{3.5cm} | p{3.8cm} | p{2.5cm} | p{2.8cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Alle Repräsentanten} & \textbf{Ausgewählter Repräsentant} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Alle Repräsentanten} & \textbf{Ausgewählter Repräsentant} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	\multicolumn{5}{|l|}{\textbf{Passwortlänge}} \\ \hline
+	1 & gültig: $8 \leq L \leq 16$ & Passw0rt (8), Sicher3heit (11), MeinPassw0rt1234 (16) & Passw0rt1a (10) & akzeptiert \\ \hline
+	2 & ungültig: $L < 8$ & Ab1 (3), Test1x (6) & Abc1def (7) & abgelehnt \\ \hline
+	3 & ungültig: $L > 16$ & Abcdefghijklmno1pq (18), SuperLangesPassw0rt! (20) & Abcdefghijklmno1pq (18) & abgelehnt \\ \hline
+	\multicolumn{5}{|l|}{\textbf{Vorhandensein von Ziffern}} \\ \hline
+	4 & gültig: $\geq 1$ Ziffer & Passw0rt, abc12345efg & Passw0rt1a & akzeptiert \\ \hline
+	5 & ungültig: keine Ziffer & abcdefgh, Passwort!, TestTest & abcdefghij & abgelehnt \\ \hline
+\end{longtable}
+
+\section*{Grenzwertanalyse}
+
+\begin{longtable}{| p{0.5cm} | p{4.0cm} | p{4.5cm} | p{3.8cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Grenzwerte} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Grenzwerte} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	1 & ungültig: $L < 8$ & 7 Zeichen: Abcde1f & abgelehnt \\ \hline
+	2 & gültig: $8 \leq L \leq 16$ & 8 Zeichen: Abcdef1g & akzeptiert \\ \hline
+	3 & gültig: $8 \leq L \leq 16$ & 16 Zeichen: Abcdefghijklmn1o & akzeptiert \\ \hline
+	4 & ungültig: $L > 16$ & 17 Zeichen: Abcdefghijklmno1p & abgelehnt \\ \hline
+\end{longtable}
+
+\section*{Testfälle}
+
+Kombination der Äquivalenzklassen (Länge $\times$ Ziffern):
+
+\begin{longtable}{| p{0.5cm} | p{3.0cm} | p{3.8cm} | p{2.5cm} | p{3.0cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Kombination} & \textbf{Testdatum} & \textbf{Länge / Ziffern} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Kombination} & \textbf{Testdatum} & \textbf{Länge / Ziffern} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	1 & ÄK1 $\cap$ ÄK4 & Passw0rt1a & 10 / ja & akzeptiert \\ \hline
+	2 & ÄK1 $\cap$ ÄK5 & abcdefghij & 10 / nein & abgelehnt \\ \hline
+	3 & ÄK2 $\cap$ ÄK4 & Abc1def & 7 / ja & abgelehnt \\ \hline
+	4 & ÄK2 $\cap$ ÄK5 & abcdefg & 7 / nein & abgelehnt \\ \hline
+	5 & ÄK3 $\cap$ ÄK4 & Abcdefghijklmno1pq & 18 / ja & abgelehnt \\ \hline
+	6 & ÄK3 $\cap$ ÄK5 & Abcdefghijklmnopqr & 18 / nein & abgelehnt \\ \hline
+\end{longtable}
+
+
+\chapter*{Aufgabe 6: Fahrzeugvermietungssystem}
+
+Ein Fahrzeugvermietungssystem prüft, ob ein Kunde berechtigt ist, eine bestimmte Fahrzeugklasse zu mieten.
+Es gelten folgende Bedingungen:
+
+\begin{enumerate}
+	\item Der Fahrer muss mindestens 21 Jahre alt sein.
+	\item Der Fahrer muss mindestens 2 Jahre im Besitz eines Führerscheins sein.
+	\item Fahrzeuge der Klasse Transporter dürfen erst ab einem Alter von 25 Jahren gemietet werden.
+	\item Fahrzeuge der Klasse SUV dürfen erst ab einem Alter von 30 Jahren gemietet werden.
+	\item Für Fahrzeuge der Klasse Standard gibt es keine zusätzlichen altersabhängigen Einschränkungen über die Mindestanforderung von 21 Jahren hinaus.
+\end{enumerate}
+
+\section*{Äquivalenzklassen}
+
+\textbf{Dimension Alter:}
+\begin{itemize}
+	\item ÄK-A1: Alter $< 21$ (ungültig für alle Klassen)
+	\item ÄK-A2: $21 \leq$ Alter $< 25$ (gültig nur für Standard)
+	\item ÄK-A3: $25 \leq$ Alter $< 30$ (gültig für Standard und Transporter)
+	\item ÄK-A4: Alter $\geq 30$ (gültig für alle Klassen)
+\end{itemize}
+
+\textbf{Dimension Führerscheinbesitz:}
+\begin{itemize}
+	\item ÄK-F1: Führerschein $< 2$ Jahre (ungültig)
+	\item ÄK-F2: Führerschein $\geq 2$ Jahre (gültig)
+\end{itemize}
+
+\textbf{Dimension Fahrzeugklasse:}
+\begin{itemize}
+	\item ÄK-K1: Standard (Mindestalter 21)
+	\item ÄK-K2: SUV (Mindestalter 30)
+	\item ÄK-K3: Transporter (Mindestalter 25)
+\end{itemize}
+
+\section*{Testfälle}
+
+\begin{longtable}{| p{0.5cm} | p{2.0cm} | p{1.2cm} | p{1.5cm} | p{2.8cm} | p{4.5cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Klasse} & \textbf{Alter} & \textbf{FS (J.)} & \textbf{Abgedeckte ÄK} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Klasse} & \textbf{Alter} & \textbf{FS (J.)} & \textbf{Abgedeckte ÄK} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	1 & Standard & 25 & 5 & A2, F2, K1 & berechtigt \\ \hline
+	2 & Standard & 19 & 3 & A1, F2, K1 & nicht berechtigt (Alter $<$ 21) \\ \hline
+	3 & Standard & 22 & 1 & A2, F1, K1 & nicht berechtigt (FS $<$ 2\,J.) \\ \hline
+	4 & SUV & 35 & 10 & A4, F2, K2 & berechtigt \\ \hline
+	5 & SUV & 27 & 5 & A3, F2, K2 & nicht berechtigt (Alter $<$ 30) \\ \hline
+	6 & SUV & 19 & 3 & A1, F2, K2 & nicht berechtigt (Alter $<$ 21) \\ \hline
+	7 & SUV & 32 & 1 & A4, F1, K2 & nicht berechtigt (FS $<$ 2\,J.) \\ \hline
+	8 & Transporter & 28 & 4 & A3, F2, K3 & berechtigt \\ \hline
+	9 & Transporter & 23 & 3 & A2, F2, K3 & nicht berechtigt (Alter $<$ 25) \\ \hline
+	10 & Transporter & 19 & 3 & A1, F2, K3 & nicht berechtigt (Alter $<$ 21) \\ \hline
+	11 & Transporter & 27 & 1 & A3, F1, K3 & nicht berechtigt (FS $<$ 2\,J.) \\ \hline
+\end{longtable}
+
+\section*{Grenzwertanalyse}
+
+\begin{longtable}{| p{0.5cm} | p{1.9cm} | p{1.1cm} | p{1.3cm} | p{3.0cm} | p{4.3cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Klasse} & \textbf{Alter} & \textbf{FS (J.)} & \textbf{Grenzwert} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Klasse} & \textbf{Alter} & \textbf{FS (J.)} & \textbf{Grenzwert} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	1 & Standard & 20 & 3 & Alter knapp unter 21 & nicht berechtigt \\ \hline
+	2 & Standard & 21 & 3 & Alter genau 21 & berechtigt \\ \hline
+	3 & Standard & 22 & 1 & FS knapp unter 2 & nicht berechtigt \\ \hline
+	4 & Standard & 22 & 2 & FS genau 2 & berechtigt \\ \hline
+	5 & Transporter & 24 & 3 & Alter knapp unter 25 & nicht berechtigt \\ \hline
+	6 & Transporter & 25 & 3 & Alter genau 25 & berechtigt \\ \hline
+	7 & SUV & 29 & 5 & Alter knapp unter 30 & nicht berechtigt \\ \hline
+	8 & SUV & 30 & 5 & Alter genau 30 & berechtigt \\ \hline
+\end{longtable}
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
