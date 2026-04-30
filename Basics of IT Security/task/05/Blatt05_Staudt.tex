@@ -1,13 +1,13 @@
 \documentclass[
-	fontsize=12pt,          % default font size 12pt
-	paper=a4,               % DIN A4 page format
-	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
-	listof=totoc,           % add list of figures, tables, etc. to ToC
-	listof=entryprefix,     % add entry name to figures, tables, etc.
-	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
-	bibliography=totoc,     % add bibliography to ToC but without a chapter number
-	parskip=half,           % half line spacing between paragraphs
-	openany                 % chapters can start on any page
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	listof=totoc,
+	listof=entryprefix,
+	listof=nochaptergap,
+	bibliography=totoc,
+	parskip=half,
+	openany
 ]{scrbook}
 
 \include{../../for_latex/preamble}
@@ -17,7 +17,6 @@
 \begin{titlepage}
 	\pagestyle{empty}
 
-	% HFU Logo
 	\begin{flushright}
 		\begin{figure}[ht]
 			\flushright
@@ -41,144 +40,183 @@
 % CONTENT STARTS HERE
 % ############################################################################
 
-\chapter*{Aufgabe 1: AS mit asymmetrischen Schlüsselpaaren}
+\chapter*{Aufgabe 1: Passwort-Hashing}
 
-Das Authentifizierungssystem wird als 5-Tupel $AS = (I, C, Z, F, L)$ mit zusätzlicher Subjektmenge $S$ beschrieben.
-Anstelle eines gehashten Passwortes wird der öffentliche Schlüssel des Benutzers beim Server hinterlegt.
-Der private Schlüssel verbleibt ausschließlich beim Client.
+\section*{a) Anzahl möglicher MD5-Hashwerte}
 
-\section*{Mengen und Funktionen}
+MD5 erzeugt einen 128-Bit-Hashwert.
+Damit gibt es $2^{128} \approx 3{,}4 \cdot 10^{38}$ mögliche Hashwerte.
 
-\begin{itemize}
-	\item \textbf{I}: Raum der Benutzernamen (z.\,B. zar).
-	\item \textbf{S}: Menge der registrierten Benutzer, zu denen jeweils ein öffentlicher Schlüssel hinterlegt ist, z.\,B. $S = \{root, zar, \dots\}$.
-	\item \textbf{Z}: Zuordnungsfunktion $Z: I \to S$.
-	Prüft, ob der übergebene Benutzername registriert ist, und liefert das zugehörige Subjekt oder $\emptyset$ zurück.
-	\item \textbf{C}: Menge der gültigen Signaturen über einer vom Server erzeugten Challenge (Zufallswert + Zeitstempel).
-	Jede Signatur ist nur für genau eine Challenge gültig.
-	\item \textbf{F}: Enthält die Signaturfunktion $f$ des Clients.
-	$f(s, challenge)$ fragt beim Benutzer den privaten Schlüssel (bzw. dessen Freigabe per PIN) ab und gibt die Signatur $sig = sign(sk_s, challenge)$ zurück.
-	\item \textbf{L}: Enthält die Verifikationsfunktion $l: S \times C \to \{wahr, falsch\}$.
-	$l(s, sig) := Z(s) \neq \emptyset \land verify(pk_s, challenge, sig)$.
-\end{itemize}
+\section*{b) Sicherheit des Verfahrens}
 
-\section*{Ablauf}
-
-\textbf{Registrierung:}
-\begin{enumerate}
-	\item Der Benutzer erzeugt lokal ein Schlüsselpaar $(sk, pk)$.
-	\item Der private Schlüssel $sk$ bleibt beim Benutzer (z.\,B. geschützt durch eine PIN).
-	\item Der öffentliche Schlüssel $pk$ wird zusammen mit dem Benutzernamen an den Server übertragen und gespeichert.
-\end{enumerate}
-
-\textbf{Anmeldung:}
-\begin{enumerate}
-	\item Client sendet seinen Benutzernamen $i$ an den Server.
-	\item Server prüft $Z(i)$.
-	Ist der Benutzer unbekannt, wird der Vorgang abgebrochen.
-	\item Server erzeugt eine frische Challenge (Zufallswert + Zeitstempel) und sendet diese an den Client.
-	\item Client signiert die Challenge mit dem privaten Schlüssel: $sig = sign(sk, challenge)$.
-	\item Client sendet $sig$ an den Server.
-	\item Server prüft mit $l(s, sig) = verify(pk_s, challenge, sig)$.
-	\item Bei wahr ist die Authentifizierung erfolgreich.
-\end{enumerate}
-
-Vorteile gegenüber dem passwortbasierten Verfahren:
-Der Server speichert kein Geheimnis, sondern nur den öffentlichen Schlüssel.
-Ein Datenleck auf Serverseite kompromittiert keine Benutzeridentitäten.
-Das Passwort (hier der private Schlüssel) verlässt den Client nie.
-
-
-\chapter*{Aufgabe 3: Challenge-Response-Verfahren}
-
-\section*{a) Wieso sollte solch ein Verfahren genutzt werden?}
-
-Bei einem klassischen Passwortverfahren wird das Passwort (bzw. sein Hash) übertragen und kann mitgelesen oder wiederverwendet werden.
-Beim Challenge-Response-Verfahren verlässt das Passwort den Client nie.
-Übertragen wird nur der Hash aus Challenge und Passwort.
-Da die Challenge bei jeder Anmeldung wechselt, ist auch die Response jedes Mal anders.
-Ein Angreifer, der die Response mitliest, kann sie nicht für eine spätere Anmeldung wiederverwenden (Schutz gegen Replay).
-
-\section*{b) Was würde geschehen, wenn die gleiche Challenge mehrfach benutzt wird?}
-
-Wird dieselbe Challenge mehrfach verwendet, ergibt sich auch stets dieselbe Response.
-Ein Angreifer, der die Response einmal mitgehört hat, könnte sich damit erneut anmelden (Replay-Angriff).
-Zusätzlich vereinfacht sich ein Offline-Angriff, da der Angreifer beliebig viele Passwort-Kandidaten gegen dieselbe Challenge/Response-Kombination testen kann.
-Die Sicherheit des Verfahrens wird dadurch deutlich verringert.
-
-\section*{c) Wie kann man das verhindern?}
+Das Verfahren ist \textbf{nicht sicher}.
+Gelangt ein Angreifer an die Datenbank mit Benutzernamen und Passwort-Hashes, kann er:
 
 \begin{itemize}
-	\item Die Challenge wird aus einem ausreichend großen Zufallswert (Nonce) gebildet, z.\,B. 128\,Bit.
-	Damit ist die Wahrscheinlichkeit einer Wiederholung praktisch null.
-	\item Zusätzlich wird ein Zeitstempel eingebunden, der nur für ein kurzes Zeitfenster gültig ist.
-	\item Der Server merkt sich bereits verwendete Challenges und lehnt eine wiederholte Nutzung ab.
-	\item Jede Challenge darf nur für genau eine Anmeldung gültig sein (Einmalgebrauch).
+	\item \textbf{Rainbow-Table-Angriff:} Vorberechnete Tabellen mit Hash-Passwort-Zuordnungen nutzen, um Passwörter in Sekunden nachzuschlagen.
+	\item \textbf{Brute-Force-Angriff:} Alle möglichen Passwortkombinationen durchprobieren.
+	      MD5 ist sehr schnell berechenbar, was Brute-Force begünstigt.
+	\item \textbf{Dictionary-Angriff:} Häufig verwendete Passwörter aus Wörterlisten hashen und vergleichen.
+	\item \textbf{Gleiche Passwörter erkennen:} Nutzer mit identischem Passwort haben denselben Hash, was dem Angreifer sofort auffällt.
 \end{itemize}
 
-\section*{d) Beispielhafter Ablauf}
+Das Passwort kann der Angreifer zwar nicht direkt aus dem Hash ableiten (Einwegfunktion), aber durch die genannten Methoden effizient ermitteln.
 
-Gewählt wird die Hashfunktion SHA256.
-Das geteilte Passwort lautet passwort123, die Challenge ist aaa.
+\section*{c) Verbesserungsvorschläge}
 
-\begin{enumerate}
-	\item Server erzeugt Challenge $c = aaa$ und sendet sie an den Client.
-	\item Client bildet $r = SHA256(aaa + passwort123)$.
-	\item Client sendet $r$ an den Server.
-	\item Server bildet selbst $r' = SHA256(aaa + passwort123)$ und vergleicht $r = r'$.
-\end{enumerate}
+\begin{itemize}
+	\item \textbf{Salt verwenden:} Jedem Passwort wird ein zufälliger Wert (Salt) hinzugefügt, bevor der Hash gebildet wird.
+	      Dadurch haben gleiche Passwörter unterschiedliche Hashes und Rainbow-Tables werden nutzlos.
+	\item \textbf{Langsame Hashfunktion nutzen:} Statt MD5 spezielle Passwort-Hashfunktionen wie \texttt{bcrypt}, \texttt{scrypt} oder \texttt{Argon2} verwenden.
+	      Diese sind bewusst rechenintensiv, um Brute-Force-Angriffe deutlich zu verlangsamen.
+	\item \textbf{Pepper hinzufügen:} Zusätzlich zum Salt einen serverseitigen geheimen Wert (Pepper) verwenden, der nicht in der Datenbank gespeichert wird.
+\end{itemize}
 
-Konkrete Berechnung:
+\section*{d) Unterschied zwischen Verschlüsselung und Hash}
 
-\noindent $r = SHA256(aaapasswort123)$ \\
-\noindent $r = $ 21cca91578a7ca02a253eb00d1b3526999eddcbf85cb28a0a3ec2ed2edbec3b8
+\begin{itemize}
+	\item \textbf{Verschlüsselung} ist \textbf{umkehrbar}: Mit dem passenden Schlüssel lässt sich der Klartext wiederherstellen.
+	      Ziel ist die Vertraulichkeit der Daten.
+	\item \textbf{Hash} ist eine \textbf{Einwegfunktion}: Aus dem Hashwert kann der ursprüngliche Eingabewert nicht rekonstruiert werden.
+	      Ziel ist die Integritätsprüfung oder der sichere Vergleich von Werten (z.\,B. Passwörter).
+\end{itemize}
 
-Stimmen $r$ und $r'$ überein, ist die Anmeldung erfolgreich.
 
+\chapter*{Aufgabe 2: MD5-Passwort knacken}
 
-\chapter*{Aufgabe 4: Implementierung Challenge-Response}
+\section*{Lösungsansatz}
 
-\section*{Aufbau}
-
-Die Klasse ChallengeResponse enthält eine innere Klasse Server und eine innere Klasse Client.
-Der Server verwaltet zwei Benutzer (alice und bob) mit ihren Passwörtern.
-Als Hashfunktion kommt SHA256 zum Einsatz, die Challenge besteht aus einer 128-Bit-Zufallszahl und einem Zeitstempel.
-
-\section*{Ablauf im Programm}
-
-\begin{enumerate}
-	\item Client sendet Benutzernamen an den Server.
-	\item Server erzeugt eine frische Challenge und speichert sie zum Benutzer.
-	\item Client berechnet $response = SHA256(challenge \Vert passwort)$.
-	\item Server prüft die Response und markiert die Challenge als verbraucht.
-\end{enumerate}
-
-\section*{Schutz gegen Replay}
-
-Der Server speichert verwendete Challenges in einem HashSet.
-Eine zweite Anmeldung mit derselben Challenge und Response wird abgewiesen, auch wenn die Response technisch korrekt ist.
-Dies verhindert einen Replay-Angriff.
-
-\section*{Beispielausgabe}
-
-\begin{lstlisting}[language=bash]
-=== Erfolgreiche Anmeldung alice ===
-Server -> Client | Challenge: d7a9a0f3...-1776284899357
-Client -> Server | Response:  836e5f29...1ab9f321
-Ergebnis: Login erfolgreich
-
-=== Falsches Passwort alice ===
-Ergebnis: Login abgelehnt
-
-=== Replay-Angriff (Wiederverwendung Challenge) ===
-Erste Verwendung  -> akzeptiert
-Zweite Verwendung -> abgelehnt
-\end{lstlisting}
+Das Programm \texttt{MD5BruteForce.java} probiert systematisch alle Kombinationen aus Großbuchstaben (A--Z) mit steigender Länge durch.
+Für jede Kombination wird der MD5-Hash berechnet und mit dem Ziel-Hash verglichen.
 
 \section*{Quellcode}
 
-\lstinputlisting[language=Java,caption={ChallengeResponse.java}]{src/ChallengeResponse.java}
+\lstinputlisting[language=Java, caption=MD5BruteForce.java]{src/MD5BruteForce.java}
 
+\section*{Ergebnisse}
+
+\subsection*{a) Laufzeit}
+
+Das Programm lief durchschnittlich \textbf{9087 ms} (Durchschnitt aus 10 Durchläufen, AMD Ryzen 7 7840HX, 32 GB RAM).
+
+\subsection*{b) Gesuchtes Passwort}
+
+Das Passwort lautet: \textbf{GRDIT}
+
+\subsection*{c) Weitere Lösungen}
+
+Theoretisch sind Kollisionen möglich, da die Menge aller möglichen Eingaben unendlich ist, aber nur $2^{128}$ verschiedene Hashwerte existieren.
+Für kurze Passwörter aus Großbuchstaben ist eine Kollision jedoch extrem unwahrscheinlich.
+Im getesteten Bereich (Länge 1--5) gibt es keine weitere Lösung.
+
+\subsection*{d) Beschleunigung der Suche}
+
+\begin{itemize}
+	\item \textbf{Multithreading:} Die Suche auf mehrere Kerne verteilen, z.\,B. jeder Thread bearbeitet einen Anfangsbuchstaben.
+	\item \textbf{Rainbow Tables:} Vorberechnete Hash-Tabellen verwenden, um die Suche auf einen Lookup zu reduzieren.
+	\item \textbf{GPU-Computing:} Grafikkarten können MD5-Hashes massiv parallel berechnen (z.\,B. mit Hashcat).
+	\item \textbf{Dictionary-Angriff:} Häufige Passwörter zuerst testen, bevor alle Kombinationen durchprobiert werden.
+\end{itemize}
+
+
+\chapter*{Aufgabe 3: Diffie-Hellman Schlüsselaustausch}
+
+\section*{Gewählte Parameter}
+
+\begin{itemize}
+	\item Primzahl: $p = 23$
+	\item Generator: $g = 5$
+	\item Geheimer Schlüssel von Alice: $a = 4$
+	\item Geheimer Schlüssel von Bob: $b = 3$
+\end{itemize}
+
+\section*{a) Rechenschritte}
+
+\textbf{Schritt 1:} Öffentliche Werte berechnen
+
+Alice berechnet:
+\[ A = g^a \mod p = 5^4 \mod 23 = 625 \mod 23 = 4 \]
+
+Bob berechnet:
+\[ B = g^b \mod p = 5^3 \mod 23 = 125 \mod 23 = 10 \]
+
+\textbf{Schritt 2:} Öffentliche Werte austauschen
+
+Alice sendet $A = 4$ an Bob.
+Bob sendet $B = 10$ an Alice.
+
+\textbf{Schritt 3:} Gemeinsamen Schlüssel berechnen
+
+Alice berechnet:
+\[ s = B^a \mod p = 10^4 \mod 23 = 10000 \mod 23 = 18 \]
+
+Bob berechnet:
+\[ s = A^b \mod p = 4^3 \mod 23 = 64 \mod 23 = 18 \]
+
+\section*{b) Gemeinsamer Sitzungsschlüssel}
+
+Beide Seiten berechnen denselben Schlüssel: $\mathbf{s = 18}$
+
+\section*{Quellcode}
+
+\lstinputlisting[language=Java, caption=DiffieHellman.java]{src/DiffieHellman.java}
+
+
+\chapter*{Aufgabe 4: RSA-Verschlüsselung}
+
+\section*{a) Schlüsselerzeugung}
+
+\textbf{Schritt 1:} Zwei Primzahlen wählen
+\[ p = 5, \quad q = 11 \]
+
+\textbf{Schritt 2:} $n$ berechnen
+\[ n = p \cdot q = 5 \cdot 11 = 55 \]
+
+\textbf{Schritt 3:} Eulersche Phi-Funktion berechnen
+\[ \varphi(n) = (p-1) \cdot (q-1) = 4 \cdot 10 = 40 \]
+
+\textbf{Schritt 4:} $e$ wählen mit $\gcd(e, \varphi(n)) = 1$
+\[ e = 3, \quad \gcd(3, 40) = 1 \checkmark \]
+
+\textbf{Schritt 5:} $d$ berechnen mit $e \cdot d \equiv 1 \mod \varphi(n)$
+\[ d = 27, \quad \text{da } 3 \cdot 27 = 81 = 2 \cdot 40 + 1 \equiv 1 \mod 40 \checkmark \]
+
+\textbf{Ergebnis:}
+\begin{itemize}
+	\item Öffentlicher Schlüssel: $(n, e) = (55, 3)$
+	\item Privater Schlüssel: $(n, d) = (55, 27)$
+\end{itemize}
+
+\section*{b) Verschlüsselung}
+
+Die Nachricht $m = 7$ wird mit dem öffentlichen Schlüssel verschlüsselt:
+\[ c = m^e \mod n = 7^3 \mod 55 = 343 \mod 55 = \mathbf{13} \]
+
+\section*{c) Entschlüsselung}
+
+Der Chiffretext $c = 13$ wird mit dem privaten Schlüssel entschlüsselt:
+\[ m = c^d \mod n = 13^{27} \mod 55 \]
+
+Berechnung mittels Square-and-Multiply:
+\begin{align*}
+	13^1    & = 13                                                   \\
+	13^2    & = 169 \mod 55 = 4                                      \\
+	13^4    & = 4^2 = 16                                             \\
+	13^8    & = 16^2 = 256 \mod 55 = 36                              \\
+	13^{16} & = 36^2 = 1296 \mod 55 = 31                             \\
+	13^{27} & = 13^{16} \cdot 13^{8} \cdot 13^{2} \cdot 13^{1}      \\
+	        & = 31 \cdot 36 \cdot 4 \cdot 13                         \\
+	        & = (31 \cdot 36) \cdot (4 \cdot 13)                     \\
+	        & = (1116 \mod 55) \cdot (52 \mod 55)                    \\
+	        & = 16 \cdot 52                                          \\
+	        & = 832 \mod 55 = \mathbf{7}
+\end{align*}
+
+Die Entschlüsselung ergibt korrekt die ursprüngliche Nachricht $m = 7$.
+
+\section*{Quellcode}
+
+\lstinputlisting[language=Java, caption=RSA.java]{src/RSA.java}
 
 % ############################################################################
 % CONTENT ENDS HERE
