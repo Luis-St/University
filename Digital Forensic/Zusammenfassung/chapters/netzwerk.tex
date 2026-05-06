@@ -1,0 +1,64 @@
+\section{Port Knocking}
+
+Technik um versteckte Dienste zu finden.
+Ports in bestimmter Reihenfolge ansprechen:
+
+\begin{lstlisting}[language=bash]
+# Einzelne Ports scannen
+nmap -p PORT target_ip
+
+# Port Knocking mit hping3
+hping3 -S target_ip -p PORT1
+hping3 -S target_ip -p PORT2
+hping3 -S target_ip -p PORT3
+\end{lstlisting}
+
+TCP-Flags in der Antwort:
+\begin{description}
+	\item[RA (Reset+ACK):] Port geschlossen
+	\item[SA (SYN+ACK):] Port offen
+\end{description}
+
+\section{Forensisches Image erstellen}
+
+Ablauf: leeres Image erstellen → partitionieren → formatieren → Daten kopieren → EWF erzeugen:
+
+\begin{lstlisting}[language=bash]
+# Leeres Image erstellen
+dd if=/dev/zero of=usb.img bs=1M count=512
+
+# Partitionieren
+fdisk usb.img
+# -> n (new), p (primary), Typ aendern: t, 07 (NTFS)
+
+# Loop Device und formatieren
+losetup --partscan --find --show usb.img
+mkfs.ntfs /dev/loop0p1
+
+# Mounten und Daten kopieren
+mount /dev/loop0p1 /mnt
+rsync -av source/ /mnt/
+
+# EWF-Image erstellen
+ewfacquire /dev/loop0
+# Case-Nummer, Examiner, Beschreibung angeben
+\end{lstlisting}
+
+\section{Netzwerkadapter-Analyse}
+
+Über Windows Registry:
+
+\begin{lstlisting}[language=bash]
+regripper -p nic2 -r /tmp/SYSTEM
+\end{lstlisting}
+
+Zeigt: Adapter-Name, DHCP-Server, IP-Adresse, Subnetzmaske, Gateway, DNS.
+Forensisch relevant: verbundene Netzwerke (z.B. Fritz.box → Heimnetzwerk).
+
+\section{FUSE-Treiber}
+
+Filesystem in Userspace — ermöglicht Zugriff auf verschiedene Dateisysteme:
+\begin{itemize}
+	\item \texttt{ntfs-3g} — NTFS lesen/schreiben
+	\item \texttt{xmount} — FUSE-basiert für Image-Konvertierung
+\end{itemize}

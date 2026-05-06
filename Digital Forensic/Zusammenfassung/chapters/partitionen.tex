@@ -1,0 +1,59 @@
+\section{MBR (Master Boot Record)}
+
+Erste 512 Bytes der Festplatte — enthält Bootloader und Partitionstabelle.
+
+\begin{itemize}
+	\item \textbf{446 Bytes:} Bootloader-Code
+	\item \textbf{4 × 16 Bytes:} Partitionseinträge (maximal 4 primäre Partitionen)
+	\item \textbf{2 Bytes:} Signatur \texttt{0x55AA} (Boot-Signatur am Ende)
+	\item Maximale Festplattengröße: 2 TB (bzw. 3,2 TB bei 512-Byte-Sektoren)
+\end{itemize}
+
+MBR im Hex-Editor ansehen:
+\begin{lstlisting}[language=bash]
+dd if=/dev/sda count=1 | xxd
+\end{lstlisting}
+
+\section{GPT (GUID Partition Table)}
+
+Nachfolger von MBR mit wesentlichen Verbesserungen.
+
+\begin{itemize}
+	\item Unterstützt mehr als 4 Partitionen (wichtig für mobile Geräte, z.B. Android)
+	\item Keine 2-TB-Grenze
+	\item Redundante Kopie der Partitionstabelle am Ende der Festplatte
+	\item Enthält Protective MBR für Abwärtskompatibilität
+\end{itemize}
+
+\section{mmls — Partitionstabelle interpretieren}
+
+\texttt{mmls} zeigt die Partitionstabelle eines Images.
+Die Ausgabe liefert den \textbf{Offset in Sektoren}, der für alle TSK-Tools als \texttt{-o} Parameter benötigt wird.
+
+\begin{lstlisting}[language=bash]
+mmls image.E01
+\end{lstlisting}
+
+Beispielausgabe:
+\begin{lstlisting}
+      Slot   Start        End          Length       Description
+000:  Meta   0000000000   0000000000   0000000001   Primary Table (#0)
+001:  ----   0000000001   0000002047   0000002047   Unallocated
+002:  000    0000002048   0000206847   0000204800   EFI system partition
+003:  001    0000206848   0248655871   0248449024   Basic data partition
+\end{lstlisting}
+
+\begin{description}
+	\item[Start] Offset in Sektoren — diesen Wert als \texttt{-o} bei TSK-Tools verwenden
+	\item[Length] Länge in Sektoren — \texttt{Length × 512} = Partitionsgröße in Bytes
+	\item[DOS] Partitionstabellen-Typ ist MBR
+	\item[GPT] Partitionstabellen-Typ ist GPT
+	\item[Meta] Metadaten-Einträge (Tabelle selbst)
+	\item[----] Unallocated Space zwischen Partitionen
+\end{description}
+
+Beispiel: Dateisystem der dritten Partition analysieren:
+\begin{lstlisting}[language=bash]
+fsstat -o 206848 image.E01
+fls -pr -o 206848 image.E01
+\end{lstlisting}

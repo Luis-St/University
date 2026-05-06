@@ -1,0 +1,61 @@
+\section{Linux-Dateisysteme}
+
+\begin{description}
+	\item[Ext2] Ohne Journal — einfach, aber bei Absturz anfällig für Inkonsistenzen.
+	\item[Ext3] Mit Journal — protokolliert Änderungen vor dem Schreiben.
+	\item[Ext4] Aktueller Standard.
+		Blockgruppen, Inodes, Extents.
+		Vollständig von TSK (Sleuth Kit) unterstützt.
+	\item[XFS] Experimentell in aktuellen Linux-Versionen (ab Kernel v13).
+\end{description}
+
+\section{Windows-Dateisysteme}
+
+\begin{description}
+	\item[NTFS] New Technology File System — Standard für Windows.
+		Master File Table (MFT) als zentrale Verwaltungsstruktur.
+		Unterstützt Alternate Data Streams (ADS), Prefetch-Dateien und Journaling.
+		Vollständig von TSK unterstützt.
+	\item[FAT32 / exFAT] Einfaches Dateisystem ohne Berechtigungen.
+		Häufig auf USB-Sticks und SD-Karten.
+\end{description}
+
+\section{Apple-Dateisysteme}
+
+\begin{description}
+	\item[APFS] Apple File System (ab macOS 10.13) — verschlüsselt, Copy-on-Write, Snapshots.
+	\item[HFS / HFS+] Hierarchical File System — ältere Mac-Systeme.
+\end{description}
+
+\section{Weitere Dateisysteme}
+
+\begin{description}
+	\item[YAFFS2] Yet Another Flash File System 2 — für alte Handys und IoT-Geräte.
+		Nicht logisch analysierbar (kein \texttt{mount} möglich), nur physisch mit \texttt{fls}.
+\begin{lstlisting}[language=bash]
+fls -pr nexus.nandump | grep '\.db$'
+icat nexus.nandump 524 > /tmp/CachedPosition.db
+sqlitebrowser /tmp/CachedPosition.db
+\end{lstlisting}
+	\item[UFS] Unix File System — von FreeBSD und OpenBSD genutzt.
+	\item[SquashFS] Komprimiertes, read-only Dateisystem.
+		Wird als Container für versteckte Daten genutzt.
+		Erkennung mit \texttt{binwalk}, Extraktion mit \texttt{unsquashfs}.
+\begin{lstlisting}[language=bash]
+binwalk image.dd         # SquashFS-Offset finden
+dd if=image.dd skip=OFFSET bs=1 count=SIZE of=/tmp/sq.img
+unsquashfs /tmp/sq.img   # Inhalt extrahieren
+\end{lstlisting}
+\end{description}
+
+\section{Wear Leveling \& WAL-Dateien}
+
+Flash-Speicher (SSDs, SD-Karten, Handys) verteilt Schreibvorgänge gleichmäßig über alle Zellen (\textbf{Wear Leveling}).
+
+\begin{itemize}
+	\item Konsequenz: Gelöschte Daten werden seltener überschrieben als bei HDDs
+	\item SQLite-Datenbanken nutzen \textbf{WAL-Dateien} (Write-Ahead Log, \texttt{.db-wal}) und \textbf{SHM-Dateien} (\texttt{.db-shm})
+	\item WAL kann aktuellere Daten enthalten als die \texttt{.db}-Datei selbst
+	\item Autopsy liest WAL-Dateien automatisch mit — bei manueller Analyse beide extrahieren
+	\item Relevant für WhatsApp (\texttt{wa.db-wal}, \texttt{msgstore.db-wal}) und andere Apps
+\end{itemize}

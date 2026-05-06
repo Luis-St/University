@@ -1,0 +1,72 @@
+\section{Tor Hidden Service}
+
+Konfiguration in \texttt{/etc/tor/torrc}:
+
+\begin{lstlisting}[language=bash]
+# torrc Konfiguration
+HiddenServiceDir /var/lib/tor/hidden_service/
+HiddenServicePort 80 127.0.0.1:80
+
+# Service starten
+systemctl restart tor
+
+# .onion-Adresse auslesen
+cat /var/lib/tor/hidden_service/hostname
+\end{lstlisting}
+
+\section{Tor-Artefakte suchen}
+
+Im forensischen Image nach Tor-Spuren suchen:
+
+\begin{lstlisting}[language=bash]
+# Tor-Dateien im Dateisystem
+fls -pr /dev/loopXpN | grep -i 'tor'
+
+# Prefetch: Wurde Tor ausgefuehrt?
+find /mnt -type f -iname "*.pf" | grep -i tor
+sccainfo /mnt/Windows/Prefetch/TOR.EXE-*.pf
+
+# Onion-URLs in Browser-History (Firefox-basiert)
+fls -pr /dev/loopXpN | grep -i 'places.sqlite' | grep -i tor
+icat /dev/loopXpN <INODE> > /tmp/tor_places.sqlite
+sqlite3 /tmp/tor_places.sqlite \
+  "SELECT url FROM moz_places WHERE url LIKE '%.onion%';"
+
+# Strings-Suche nach .onion-Adressen
+strings /dev/loopXpN | grep '\.onion'
+grep -r "\.onion" /mnt/Users/ 2>/dev/null
+\end{lstlisting}
+
+\section{SquashFS-Container}
+
+Versteckte Daten in komprimierten Containern am Ende eines Images:
+
+\begin{lstlisting}[language=bash]
+# Container finden
+binwalk image.dd
+# -> Squashfs filesystem at offset X
+
+# Container extrahieren
+dd if=image.dd bs=1 skip=OFFSET count=SIZE \
+  of=/tmp/container.squashfs
+
+# Entpacken
+unsquashfs /tmp/container.squashfs
+ls squashfs-root/
+\end{lstlisting}
+
+Beispiel: mkp224o (Tor Vanity Address Generator) — generiert \texttt{.onion}-Adressen mit bestimmten Präfixen.
+Git-Repos im Container können Aktivitäten dokumentieren.
+
+\section{Versteckte ZIP-Archive}
+
+In dd-Images eingebettete Archive finden:
+
+\begin{lstlisting}[language=bash]
+binwalk image.dd
+# -> Zip archive at offset X, size Y
+
+dd if=image.dd skip=OFFSET bs=1 count=SIZE \
+  of=/tmp/hidden.zip
+unzip /tmp/hidden.zip
+\end{lstlisting}

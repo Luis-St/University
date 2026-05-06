@@ -1,0 +1,125 @@
+\section{Image-Handling}
+
+{\small
+\begin{tabular}{@{}p{2.2cm} p{7.8cm} p{4.5cm}@{}}
+\toprule
+\textbf{Befehl} & \textbf{Syntax} & \textbf{Beschreibung} \\
+\midrule
+\texttt{ewfverify} & \texttt{ewfverify image.E01} & EWF-Prüfsummen verifizieren \\
+\texttt{ewfinfo} & \texttt{ewfinfo image.E01} & EWF-Metadaten anzeigen (Case, Datum, Examiner) \\
+\texttt{ewfmount} & \texttt{ewfmount image.E01 /mnt/ewf} & EWF als RAW-Device mounten \\
+\texttt{ewfacquire} & \texttt{ewfacquire /dev/sdX} & Forensisches EWF-Image erstellen \\
+\texttt{xmount} & \texttt{xmount --in ewf img.E0* --cache /tmp/x.ovl --out raw /ewf} & EWF→RAW konvertieren mit Overlay \\
+\texttt{losetup} & \texttt{losetup --partscan --find --show /ewf/img.dd} & Loop Device für Partitionszugriff \\
+\bottomrule
+\end{tabular}
+}
+
+\section{Sleuth Kit — 5 Kernbefehle}
+
+{\small
+\begin{tabular}{@{}p{2.2cm} p{7.8cm} p{4.5cm}@{}}
+\toprule
+\textbf{Befehl} & \textbf{Syntax} & \textbf{Beschreibung} \\
+\midrule
+\texttt{mmls} & \texttt{mmls image.E01} & Partitionstabelle anzeigen \\
+\texttt{fsstat} & \texttt{fsstat -o OFFSET image.E01} & Dateisystem-Infos (Typ, Blockgröße) \\
+\texttt{fls} & \texttt{fls -pr -o OFFSET image.E01} & Dateien auflisten (-p=Pfad, -r=rekursiv, -d=deleted) \\
+\texttt{icat} & \texttt{icat -o OFFSET image.E01 INODE > out} & Datei per Inode extrahieren \\
+\texttt{istat} & \texttt{istat -o OFFSET image.E01 INODE} & Inode-Metadaten (Timestamps, Größe, Blöcke) \\
+\bottomrule
+\end{tabular}
+}
+
+\section{Weitere TSK-Tools}
+
+{\small
+\begin{tabular}{@{}p{2.2cm} p{7.8cm} p{4.5cm}@{}}
+\toprule
+\textbf{Befehl} & \textbf{Syntax} & \textbf{Beschreibung} \\
+\midrule
+\texttt{tsk\_recover} & \texttt{tsk\_recover -o OFFSET image.E01 outdir/} & Gelöschte Dateien wiederherstellen \\
+\texttt{ifind} & \texttt{ifind -o OFFSET image.E01 -d BLOCK} & Inode zu Block finden \\
+\texttt{ffind} & \texttt{ffind -o OFFSET image.E01 INODE} & Dateiname zu Inode finden \\
+\bottomrule
+\end{tabular}
+}
+
+\section{Carving \& Binäranalyse}
+
+{\small
+\begin{tabular}{@{}p{2.2cm} p{7.8cm} p{4.5cm}@{}}
+\toprule
+\textbf{Befehl} & \textbf{Syntax} & \textbf{Beschreibung} \\
+\midrule
+\texttt{foremost} & \texttt{foremost -o output/ -i image.dd} & File Carving nach Header/Footer \\
+\texttt{scalpel} & \texttt{scalpel -o output/ image.dd} & File Carving (konfigurierbar) \\
+\texttt{binwalk} & \texttt{binwalk image.dd} & Eingebettete Dateien finden \\
+\texttt{binwalk -E} & \texttt{binwalk -E file} & Entropie-Analyse (hoch = verschlüsselt) \\
+\texttt{dd} & \texttt{dd if=src of=dst bs=1 skip=X count=Y} & Daten blockweise kopieren \\
+\texttt{strings} & \texttt{strings file | grep keyword} & Lesbare Zeichenketten suchen \\
+\texttt{file} & \texttt{file recovered.dat} & Dateityp identifizieren \\
+\texttt{xxd} & \texttt{xxd file | head} & Hex-Dump anzeigen \\
+\bottomrule
+\end{tabular}
+}
+
+\section{Registry \& Windows}
+
+{\small
+\begin{tabular}{@{}p{2.4cm} p{7.6cm} p{4.5cm}@{}}
+\toprule
+\textbf{Befehl} & \textbf{Syntax} & \textbf{Beschreibung} \\
+\midrule
+\texttt{regripper} & \texttt{regripper -p PLUGIN -r HIVE} & Registry-Hive mit Plugin analysieren \\
+\texttt{sccainfo} & \texttt{sccainfo file.pf} & Prefetch-Datei analysieren \\
+\texttt{chntpw} & \texttt{chntpw -i SAM} & Windows-Passwort zurücksetzen \\
+\texttt{dislocker} & \texttt{dislocker /dev/loopXpY -K key.vmk -- /mnt} & BitLocker-Volume entschlüsseln \\
+\texttt{vshadowinfo} & \texttt{vshadowinfo /dev/loopXpY} & Volume Shadow Copies auflisten \\
+\texttt{vshadowmount} & \texttt{vshadowmount /dev/loopXpY /mnt/vss} & Shadow Copies mounten \\
+\bottomrule
+\end{tabular}
+}
+
+\section{E-Mail \& Datenbanken}
+
+{\small
+\begin{tabular}{@{}p{2.4cm} p{7.6cm} p{4.5cm}@{}}
+\toprule
+\textbf{Befehl} & \textbf{Syntax} & \textbf{Beschreibung} \\
+\midrule
+\texttt{readpst} & \texttt{readpst -o outdir/ file.pst} & Outlook PST zu mbox konvertieren \\
+\texttt{pffexport} & \texttt{pffexport -t outdir/ file.pst} & PST detailliert exportieren \\
+\texttt{sqlite3} & \texttt{sqlite3 db.sqlite "SELECT ..."} & SQLite-Datenbank abfragen \\
+\texttt{sqlitebrowser} & \texttt{sqlitebrowser file.db} & SQLite GUI \\
+\bottomrule
+\end{tabular}
+}
+
+\section{Timeline}
+
+{\small
+\begin{tabular}{@{}p{2.8cm} p{7.2cm} p{4.5cm}@{}}
+\toprule
+\textbf{Befehl} & \textbf{Syntax} & \textbf{Beschreibung} \\
+\midrule
+\texttt{log2timeline.py} & \texttt{log2timeline.py out.plaso /mnt} & Plaso Super-Timeline erstellen \\
+\texttt{psort.py} & \texttt{psort.py -o l2tcsv -w out.csv file.plaso} & Plaso-Timeline als CSV exportieren \\
+\texttt{mactime} & \texttt{mactime -b body.txt > timeline.csv} & TSK Body File → Timeline \\
+\bottomrule
+\end{tabular}
+}
+
+\section{Metadaten \& Sonstiges}
+
+{\small
+\begin{tabular}{@{}p{2.2cm} p{7.8cm} p{4.5cm}@{}}
+\toprule
+\textbf{Befehl} & \textbf{Syntax} & \textbf{Beschreibung} \\
+\midrule
+\texttt{exiftool} & \texttt{exiftool -csv -GPSLatitude -GPSLongitude *.jpg} & EXIF/GPS-Daten auslesen \\
+\texttt{md5sum} & \texttt{md5sum file} & MD5-Prüfsumme berechnen \\
+\texttt{yara} & \texttt{yara rules.yar file} & YARA-Regel auf Datei anwenden \\
+\bottomrule
+\end{tabular}
+}

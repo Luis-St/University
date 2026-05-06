@@ -1,0 +1,91 @@
+\section{Überblick}
+
+Der Standard-Workflow für die forensische Image-Analyse folgt immer demselben Schema:
+Integrität prüfen → Image mounten → Partitionen analysieren → Dateien extrahieren → Aufräumen (LIFO).
+
+\subsection{1. Integrität prüfen}
+
+Vor jeder Analyse müssen die Prüfsummen des Images verifiziert werden.
+Der gespeicherte MD5-Hash muss mit dem berechneten übereinstimmen.
+
+\begin{lstlisting}[language=bash]
+ewfverify image.E01
+md5sum image.E01 image.E02 ...
+\end{lstlisting}
+
+\subsection{2. Image mounten}
+
+EWF-Image als virtuelles RAW-Device mit Overlay bereitstellen.
+Der Parameter \texttt{--cache} ist essenziell: alle Änderungen werden im Overlay gespeichert, das Original bleibt unverändert.
+
+\begin{lstlisting}[language=bash]
+mkdir -p /tmp/ewf
+xmount --in ewf image.E0* --cache /tmp/img.ovl --out raw /tmp/ewf
+\end{lstlisting}
+
+\subsection{3. Partitionstabelle analysieren}
+
+\begin{lstlisting}[language=bash]
+mmls /tmp/ewf/image.dd
+\end{lstlisting}
+
+Die Ausgabe zeigt das Partitionslayout.
+Der \textbf{Start}-Offset jeder Partition wird als \texttt{-o} Parameter für alle TSK-Tools benötigt.
+
+\subsection{4. Loop Device erstellen}
+
+\begin{lstlisting}[language=bash]
+losetup --partscan --find --show /tmp/ewf/image.dd
+\end{lstlisting}
+
+Erstellt \texttt{/dev/loopXpN} für jede Partition automatisch.
+Alternative für eine einzelne Partition:
+
+\begin{lstlisting}[language=bash]
+losetup -o $((OFFSET*512)) /dev/loop0 /tmp/ewf/image.dd
+\end{lstlisting}
+
+\subsection{5. Dateisystem analysieren}
+
+\begin{lstlisting}[language=bash]
+fsstat /dev/loopXpN | head
+fls -pr /dev/loopXpN
+fls -r -d /dev/loopXpN    # nur geloeschte Dateien
+\end{lstlisting}
+
+\begin{itemize}
+    \item \texttt{fsstat} — zeigt Dateisystemtyp, Version, Blockgröße
+    \item \texttt{fls -pr} — listet alle Dateien rekursiv mit vollem Pfad
+    \item Gelöschte Dateien sind mit \texttt{*} markiert
+\end{itemize}
+
+\subsection{6. Dateien extrahieren}
+
+\begin{lstlisting}[language=bash]
+fls -pr /dev/loopXpN | grep -i 'filename'
+icat /dev/loopXpN INODE > /tmp/recovered_file
+file /tmp/recovered_file
+\end{lstlisting}
+
+Nach jeder Extraktion \textbf{immer} mit \texttt{file} verifizieren.
+
+\subsection{7. Partition mounten (optional)}
+
+\begin{lstlisting}[language=bash]
+mount -o ro /dev/loopXpN /mnt
+# oder mit Offset:
+mount -o ro,loop,offset=$((OFFSET * 512)) /tmp/ewf/image.dd /mnt
+\end{lstlisting}
+
+Read-Only-Mount zum Browsen.
+Zeigt nur Allocated Space (logische Analyse).
+
+\subsection{8. Aufräumen (LIFO)}
+
+Umgekehrte Reihenfolge — zuletzt gemountet wird zuerst unmountet:
+
+\begin{lstlisting}[language=bash]
+umount /mnt
+losetup -D
+umount /tmp/ewf
+\end{lstlisting}

@@ -1,0 +1,70 @@
+\section{TSK mactime}
+
+Einfache Timeline aus Sleuth Kit Body File:
+
+\begin{lstlisting}[language=bash]
+# Body File erzeugen (alle Dateien mit Timestamps)
+fls -r -m "/" -o OFFSET image.E01 > body.txt
+
+# Timeline generieren
+mactime -b body.txt > timeline.csv
+\end{lstlisting}
+
+\begin{description}
+    \item[MAC-Timestamps] Modified, Accessed, Changed
+    \item[Body File Format] Enthält Inode, Permissions, UID, GID, Größe und alle Timestamps
+\end{description}
+
+\section{Plaso / log2timeline}
+
+Mächtigere Super-Timeline — analysiert viele Artefakttypen über reine Datei-Timestamps hinaus:
+
+\begin{lstlisting}[language=bash]
+# Timeline aus gemounteter Partition erstellen
+log2timeline.py /tmp/timeline.plaso /mnt
+
+# Nur bestimmte Parser verwenden (schneller)
+log2timeline.py --parsers "chrome_history,firefox_history" \
+    /tmp/browser.plaso /mnt
+
+# Als CSV exportieren
+psort.py -o l2tcsv -w /tmp/timeline.csv /tmp/timeline.plaso
+\end{lstlisting}
+
+Verfügbare Parser für Web-History:
+\begin{itemize}
+    \item \texttt{chrome\_history}, \texttt{firefox\_history}, \texttt{msedge\_history}
+    \item \texttt{ie\_webcache}, \texttt{safari\_history}, \texttt{opera\_history}
+\end{itemize}
+
+\section{Browser-History direkt per SQLite}
+
+Alternative: Datenbanken direkt extrahieren und abfragen.
+
+\subsection{Chrome}
+
+\begin{lstlisting}[language=bash]
+fls -pr /dev/loopXpN | grep -i 'History$' | grep -i chrome
+icat /dev/loopXpN <INODE> > /tmp/chrome_history.db
+sqlite3 /tmp/chrome_history.db \
+  "SELECT url, title, visit_count, last_visit_time
+   FROM urls ORDER BY last_visit_time DESC LIMIT 50;"
+\end{lstlisting}
+
+\subsection{Firefox}
+
+\begin{lstlisting}[language=bash]
+fls -pr /dev/loopXpN | grep -i 'places.sqlite'
+icat /dev/loopXpN <INODE> > /tmp/places.sqlite
+sqlite3 /tmp/places.sqlite \
+  "SELECT url, title, visit_count, last_visit_date
+   FROM moz_places ORDER BY last_visit_date DESC LIMIT 50;"
+\end{lstlisting}
+
+\subsection{Edge (ESE-Datenbank)}
+
+\begin{lstlisting}[language=bash]
+fls -pr /dev/loopXpN | grep -i 'WebCacheV01'
+icat /dev/loopXpN <INODE> > /tmp/WebCacheV01.dat
+esedbexport -t /tmp/edge_cache /tmp/WebCacheV01.dat
+\end{lstlisting}

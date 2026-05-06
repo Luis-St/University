@@ -1,0 +1,84 @@
+\section{Android-Images}
+
+Android nutzt GPT mit vielen Partitionen.
+Wichtigste Partition: USERDATA (enthält App-Daten, Fotos, Datenbanken).
+
+\begin{lstlisting}[language=bash]
+mmls android.E01
+# Falls Speicherzugriffsfehler:
+xmount --in ewf android.E01 \
+  --cache /tmp/phone.ovl --out raw /tmp/phone
+mmls /tmp/phone/android.dd
+
+losetup --partscan --find --show /tmp/phone/android.dd
+ll /dev/loop*
+\end{lstlisting}
+
+\section{SQLite-Datenbanken}
+
+Android speichert fast alles in SQLite: Kontakte, SMS, Anruflisten, Browser-History, GPS.
+
+\begin{lstlisting}[language=bash]
+# Alle Datenbanken finden
+fls -pr /dev/loopXpN | grep '\.db$'
+
+# Nur nicht-geloeschte Datenbanken
+fls -pr /dev/loopXpN | grep '\.db$' | grep -v '*'
+
+# Datenbank extrahieren und oeffnen
+icat /dev/loopXpN <INODE> > /tmp/database.db
+file /tmp/database.db
+sqlitebrowser /tmp/database.db
+# oder:
+sqlite3 /tmp/database.db ".tables"
+\end{lstlisting}
+
+Wichtig: WAL-Dateien (\texttt{.db-wal}) können aktuellere Daten enthalten als die Hauptdatenbank.
+Autopsy liest WAL automatisch mit.
+
+\section{EXIF/GPS-Daten}
+
+Fotos enthalten oft GPS-Koordinaten in EXIF-Metadaten:
+
+\begin{lstlisting}[language=bash]
+# Alle Bilder mit GPS-Daten auslesen
+exiftool -csv -GPSLatitude -GPSLongitude \
+  -GPSLatitudeRef -GPSLongitudeRef \
+  -DateTimeOriginal /tmp/photos/*.jpg > /tmp/gps_data.csv
+
+# Einzelbild pruefen
+exiftool photo.jpg | grep -E "GPS|Date|Time"
+\end{lstlisting}
+
+DMS zu Dezimalgrad umrechnen:
+$$48^\circ\;4'\;35.00''\;\text{N} = 48 + \frac{4}{60} + \frac{35}{3600} = 48.0764^\circ$$
+
+Fahrtroute rekonstruieren:
+\begin{enumerate}
+	\item GPS-Daten nach \texttt{DateTimeOriginal} sortieren
+	\item Koordinaten in Dezimalgrad umrechnen
+	\item Chronologisch in Karte einzeichnen
+\end{enumerate}
+
+Optional GPX-Track erzeugen:
+
+\begin{lstlisting}[language=bash]
+exiftool -p gpx.fmt /tmp/photos/*.jpg > /tmp/track.gpx
+\end{lstlisting}
+
+\section{YAFFS2 / Nexus Nandump}
+
+Alte Android-Geräte (z.B. Nexus) nutzen YAFFS2.
+Kein \texttt{mount} möglich, nur physische Analyse:
+
+\begin{lstlisting}[language=bash]
+# Dateisystem-Typ pruefen
+fsstat nexus.nandump    # -> YAFFS
+
+# Datenbanken suchen
+fls -pr nexus.nandump | grep '\.db$' | grep -v '*'
+
+# Geodaten extrahieren
+icat nexus.nandump <INODE> > /tmp/CachedPosition.db
+sqlitebrowser /tmp/CachedPosition.db
+\end{lstlisting}

@@ -1,0 +1,83 @@
+\section{Registry-Struktur}
+
+Die Windows Registry besteht aus zwei Hauptkategorien:
+
+\begin{description}
+    \item[HKLM (HKEY\_LOCAL\_MACHINE)] — Systemweite Einstellungen
+    \begin{itemize}
+        \item \textbf{SAM} — Benutzerkonten, Passwort-Hashes
+        \item \textbf{SYSTEM} — Hardwarekonfiguration, USB-Historie, Boot-Konfiguration
+        \item \textbf{SOFTWARE} — Installierte Software, OS-Version
+        \item Speicherort: \texttt{Windows/System32/config/}
+    \end{itemize}
+    \item[HKCU (HKEY\_CURRENT\_USER)] — Benutzerspezifische Einstellungen
+    \begin{itemize}
+        \item \textbf{NTUSER.DAT} — Benutzereinstellungen, zuletzt geöffnete Dokumente
+        \item Speicherort: \texttt{Users/<Benutzername>/NTUSER.DAT}
+    \end{itemize}
+\end{description}
+
+\section{Hives extrahieren}
+
+\begin{lstlisting}[language=bash]
+fls -pr /dev/loopXpN | grep 'SAM$'
+icat /dev/loopXpN <INODE_SAM> > /tmp/SAM
+
+fls -pr /dev/loopXpN | grep 'SYSTEM$'
+icat /dev/loopXpN <INODE_SYSTEM> > /tmp/SYSTEM
+
+fls -pr /dev/loopXpN | grep 'SOFTWARE$'
+icat /dev/loopXpN <INODE_SOFTWARE> > /tmp/SOFTWARE
+
+fls -pr /dev/loopXpN | grep 'NTUSER.DAT$'
+icat /dev/loopXpN <INODE_NTUSER> > /tmp/NTUSER.DAT
+\end{lstlisting}
+
+Nach jeder Extraktion mit \texttt{file /tmp/HIVE} verifizieren.
+
+\section{Regripper-Plugins}
+
+\begin{center}
+\begin{tabular}{lll}
+    \toprule
+    \textbf{Plugin} & \textbf{Hive} & \textbf{Information} \\
+    \midrule
+    winver & SOFTWARE & Windows-Version, Build-Nr., Install-Datum \\
+    usbdevices & SYSTEM & USB-Gerätenamen, VID/PID \\
+    usbstor & SYSTEM & USB-Timestamps (first/last), Seriennummern \\
+    usbstor2 & SYSTEM & Erweiterte USB-Timestamps \\
+    devclass & SYSTEM & Geräteklassen inkl. Hersteller \\
+    mountdev & SYSTEM & Laufwerksbuchstaben der USB-Geräte \\
+    nic2 & SYSTEM & Netzwerkadapter, DHCP-Server, IP-Adressen \\
+    run & SOFTWARE / NTUSER.DAT & Autostart-Einträge \\
+    recentdocs & NTUSER.DAT & Zuletzt geöffnete Dokumente \\
+    shellbags & NTUSER.DAT & Geöffnete Ordner (Explorer-Verlauf) \\
+    uninstall & SOFTWARE & Installierte/deinstallierte Programme \\
+    \bottomrule
+\end{tabular}
+\end{center}
+
+\begin{lstlisting}[language=bash]
+# Plugin suchen
+regripper -l | grep -B 1 USB
+
+# Plugin ausfuehren
+regripper -p winver -r SOFTWARE
+regripper -p usbdevices -r SYSTEM
+regripper -p usbstor -r SYSTEM
+regripper -p nic2 -r SYSTEM
+\end{lstlisting}
+
+\textbf{Hinweis:} Windows 11 meldet sich in der Registry weiterhin als ``Windows 10'' — Microsoft hat die Versionsnummer nicht mehr erhöht.
+
+\section{Windows-Login umgehen}
+
+\begin{description}
+    \item[Utility Manager Trick] \texttt{utilman.exe} durch \texttt{cmd.exe} ersetzen.
+    Beim Login-Screen den Utility Manager öffnen → Shell-Zugang.
+    \item[chntpw] Interaktives Passwort-Reset über die SAM-Datei:
+\end{description}
+
+\begin{lstlisting}[language=bash]
+chntpw -i /tmp/SAM
+\end{lstlisting}

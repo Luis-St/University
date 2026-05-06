@@ -1,0 +1,76 @@
+\section{Allocated vs. Unallocated Space}
+
+\begin{description}
+	\item[Allocated Space] Aktiv genutzter Speicher mit Referenz im Dateisystem.
+		Dateien sind über das Dateisystem direkt zugreifbar.
+	\item[Unallocated Space] Freigegebener Speicher — Daten physisch noch vorhanden, bis sie überschrieben werden.
+		Forensisch besonders wertvoll, da gelöschte Dateien hier oft noch rekonstruierbar sind.
+\end{description}
+
+\section{EWF-Format (E01)}
+
+Expert Witness Format — das Standard-Imageformat in der digitalen Forensik.
+
+\begin{itemize}
+	\item Komprimiertes forensisches Image mit integrierten Metadaten (Case-Nr., Examiner, Datum)
+	\item Integrierte Prüfsummen (MD5) zur Integritätssicherung
+	\item Enthält sowohl Allocated als auch Unallocated Space (bitgenaue Kopie)
+	\item Segmente werden bei 2 GB gesplittet (\texttt{.E01}–\texttt{.E07})
+	\item Metadaten einsehen mit \texttt{ewfinfo}, Integrität prüfen mit \texttt{ewfverify}
+\end{itemize}
+
+\section{RAW → EWF → xmount Kreislauf}
+
+\begin{enumerate}
+	\item Originaldisk (z.B. 8 TB) wird mit \texttt{ewfacquire} als komprimiertes EWF-Image gesichert (~4 TB)
+	\item \texttt{xmount} stellt das EWF als virtuelles RAW-Image (8 TB) bereit
+	\item Ein Overlay (\texttt{--cache}) speichert alle Änderungen — das Original bleibt unverändert
+\end{enumerate}
+
+\begin{lstlisting}[language=bash]
+ewfacquire /dev/sdX              # Disk -> EWF
+xmount --in ewf img.E0* --cache /tmp/img.ovl --out raw /ewf
+# /ewf/img.dd ist jetzt ein virtuelles RAW-Image
+\end{lstlisting}
+
+\section{Physische vs. logische Analyse}
+
+\begin{description}
+	\item[Physische Analyse] Zugriff auf alles (Allocated + Unallocated).
+		Über TSK-Tools wie \texttt{fls}, \texttt{icat}, \texttt{istat}.
+		Ermöglicht Zugriff auf gelöschte Dateien und Dateifragmente.
+	\item[Logische Analyse] Image wird als Dateisystem gemountet (\texttt{mount -o ro}).
+		Nur Allocated Space sichtbar — wie ein normales Dateisystem.
+		Einfacher zu navigieren, aber weniger Informationen.
+\end{description}
+
+\section{File Carving}
+
+Letzte Möglichkeit zur Datenrettung — Dateien werden anhand bekannter Header/Footer-Signaturen rekonstruiert, ohne Dateisystem-Metadaten.
+
+\begin{itemize}
+	\item Tools: \texttt{foremost}, \texttt{scalpel}
+	\item Verliert Dateinamen, Verzeichnisstruktur und Metadaten
+	\item Funktioniert auch bei beschädigten oder formatierten Dateisystemen
+	\item Nur sinnvoll, wenn \texttt{tsk\_recover} keine Ergebnisse liefert
+\end{itemize}
+
+\section{Chain of Custody \& Write Blocker}
+
+\begin{description}
+	\item[Chain of Custody] Lückenlose Dokumentation aller Aktionen an Beweismitteln.
+		Jede Analyse, jeder Zugriff muss protokolliert werden, um die Beweiskraft zu erhalten.
+	\item[Write Blocker] Hardware oder Software, die Schreibzugriffe auf Beweismittel verhindert.
+		EWF-Images sind inhärent read-only.
+		Bei \texttt{xmount} sorgt der Overlay-Cache dafür, dass das Original unverändert bleibt.
+\end{description}
+
+\section{Integrität}
+
+Immer als ersten Schritt die Integrität prüfen — vor und nach der Analyse.
+
+\begin{lstlisting}[language=bash]
+ewfverify image.E01              # Interne EWF-Pruefsummen pruefen
+md5sum image.E01 image.E02       # MD5-Hashes berechnen
+md5sum -c md5s.txt               # Gegen gespeicherte Hashes vergleichen
+\end{lstlisting}

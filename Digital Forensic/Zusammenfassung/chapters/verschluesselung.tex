@@ -1,0 +1,83 @@
+\section{BitLocker}
+
+Windows-Festplattenverschlüsselung.
+Zum Entschlüsseln wird der Volume Master Key (VMK) benötigt.
+
+\subsection{VMK aus SPI-Dump extrahieren}
+
+Hardware-Angriff über Logic-Analyzer-Daten:
+
+\begin{lstlisting}[language=bash]
+# YAFFS in Firmware suchen
+binwalk firmware.bin | grep -i yaffs
+
+# VMK mit ARNE-Tool extrahieren
+./arne -i digital.csv \
+  -k "1=SCLK,2=CS,3=MOSI,4=MISO" -o key.vmk
+xxd key.vmk
+\end{lstlisting}
+
+\subsection{BitLocker-Volume entschlüsseln}
+
+\begin{lstlisting}[language=bash]
+mkdir -p /tmp/bitlocker /tmp/windows
+
+# Mit VMK-Key entschluesseln
+dislocker /dev/loopXpN -K key.vmk -- /tmp/bitlocker
+
+# NTFS dirty flag beheben
+ntfsfix -d /tmp/bitlocker/dislocker-file
+
+# Entschluesselte Partition loopen
+losetup --partscan --find --show \
+  /tmp/bitlocker/dislocker-file
+\end{lstlisting}
+
+\section{dmsetup — Partitionen zusammenführen}
+
+Nach der Entschlüsselung müssen die Partitionen zu einem virtuellen Gesamtdisk zusammengeführt werden:
+
+\begin{lstlisting}[language=bash]
+# dmsetup.txt (Loop-Nummern anpassen):
+# 0 239616 linear /dev/loop37 0
+# 239616 248416256 linear /dev/loop38 0
+# 248655872 1411072 linear /dev/loop37 248655872
+
+cat dmsetup.txt | dmsetup create merged
+\end{lstlisting}
+
+\section{QEMU-Virtualisierung}
+
+Entschlüsseltes Image als VM starten:
+
+\begin{lstlisting}[language=bash]
+qemu-system-x86_64 -bios /usr/share/ovmf/OVMF.fd \
+  -cpu Skylake-Client-v3 -enable-kvm -usb \
+  -hda /dev/mapper/merged -smp 4 -m 4096
+\end{lstlisting}
+
+\section{VeraCrypt / TrueCrypt}
+
+Container erkennen durch hohe Entropie:
+
+\begin{lstlisting}[language=bash]
+binwalk -E verdaechtige_datei
+# Hohe Entropie (>7.5) = wahrscheinlich verschluesselt
+\end{lstlisting}
+
+Container öffnen (falls Passwort bekannt):
+
+\begin{lstlisting}[language=bash]
+veracrypt --text --mount container.vc /mnt/container \
+  --password="PASSWORT" --non-interactive
+\end{lstlisting}
+
+\section{Aufräumen (LIFO)}
+
+\begin{lstlisting}[language=bash]
+dmsetup remove merged
+losetup -d /dev/loop38
+umount /tmp/bitlocker
+losetup -d /dev/loop37
+umount /tmp/ewf
+\end{lstlisting}

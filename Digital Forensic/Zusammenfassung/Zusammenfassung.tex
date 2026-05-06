@@ -1,0 +1,93 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	listof=totoc,
+	listof=entryprefix,
+	listof=nochaptergap,
+	bibliography=totoc,
+	parskip=half,
+	openany
+]{scrbook}
+
+\input{./for_latex/preamble}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{./for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Digitale Forensik}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Zusammenfassung}
+
+		\vspace{12cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+{\let\cleardoublepage\relax \chapter{Grundlagen}}
+\input{./chapters/grundlagen}
+\newpage
+
+{\let\cleardoublepage\relax \chapter{Dateisysteme}}
+\input{./chapters/dateisysteme}
+\newpage
+
+{\let\cleardoublepage\relax \chapter{Partitionen \& Bootloader}}
+\input{./chapters/partitionen}
+\newpage
+
+{\let\cleardoublepage\relax \chapter{Befehlsreferenz}}
+\input{./chapters/tools}
+\newpage
+
+{\let\cleardoublepage\relax \chapter{Standard-Workflow}}
+\input{./chapters/workflow}
+\newpage
+
+{\let\cleardoublepage\relax \chapter{Windows Registry}}
+\input{./chapters/registry}
+\newpage
+
+{\let\cleardoublepage\relax \chapter{Volume Shadow Copies}}
+\input{./chapters/vss}
+\newpage
+
+{\let\cleardoublepage\relax \chapter{Timeline-Analyse}}
+\input{./chapters/timeline}
+\newpage
+
+{\let\cleardoublepage\relax \chapter{Verschlüsselung}}
+\input{./chapters/verschluesselung}
+\newpage
+
+{\let\cleardoublepage\relax \chapter{Malware-Analyse}}
+\input{./chapters/malware}
+\newpage
+
+{\let\cleardoublepage\relax \chapter{Netzwerk}}
+\input{./chapters/netzwerk}
+\newpage
+
+{\let\cleardoublepage\relax \chapter{Darknet \& Tor}}
+\input{./chapters/darknet}
+\newpage
+
+{\let\cleardoublepage\relax \chapter{Mobile Forensik}}
+\input{./chapters/mobile}
+
+\end{document}

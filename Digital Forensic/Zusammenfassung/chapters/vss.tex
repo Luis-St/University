@@ -1,0 +1,62 @@
+\section{Konzept}
+
+\begin{itemize}
+    \item Windows erstellt automatisch Schattenkopien vor Updates und Neustarts
+    \item Byte-für-Byte Kopie des Volumes zu einem bestimmten Zeitpunkt
+    \item \textbf{Windows 7:} Wiederherstellung per CD
+    \item \textbf{Windows 10:} Standardmäßig verfügbar
+    \item \textbf{Windows 11:} Standardmäßig deaktiviert
+    \item Forensisch wertvoll: gelöschte Dateien können in älteren Schattenkopien noch existieren
+\end{itemize}
+
+\section{Workflow}
+
+\begin{lstlisting}[language=bash]
+# Shadow Copies auflisten
+vshadowinfo /dev/loopXpN
+# Ausgabe: Anzahl Stores, Timestamps, GUIDs
+
+# Alle Stores mounten
+mkdir -p /tmp/vshadow
+vshadowmount /dev/loopXpN /tmp/vshadow
+ls /tmp/vshadow/
+# -> vss1, vss2, vss3, ... (jeder Store = ein Zeitpunkt)
+
+# Inhalte durchsuchen
+fls -pr /tmp/vshadow/vss1 | grep -i 'gesuchte_datei'
+
+# Datei aus Shadow Copy extrahieren
+icat /tmp/vshadow/vss3 <INODE> > /tmp/recovered_file
+\end{lstlisting}
+
+\section{Anwendungsfall: PST-Recovery}
+
+Gelöschte Outlook-PST-Dateien über Shadow Copies wiederherstellen:
+
+\begin{lstlisting}[language=bash]
+# PST in allen Shadow Copies suchen
+for i in /tmp/vshadow/vss*; do
+  echo "=== $i ==="
+  fls -pr "$i" | grep -i '\.pst'
+done
+
+# PST extrahieren
+icat /tmp/vshadow/vssN <INODE> > /tmp/recovered.pst
+
+# PST analysieren
+readpst -o /tmp/pst_out /tmp/recovered.pst
+cat /tmp/pst_out/*.mbox | less
+\end{lstlisting}
+
+Alternativer Viewer mit mehr Details:
+
+\begin{lstlisting}[language=bash]
+pffinfo /tmp/recovered.pst
+pffexport /tmp/recovered.pst
+\end{lstlisting}
+
+\section{Aufräumen}
+
+\begin{lstlisting}[language=bash]
+umount /tmp/vshadow
+\end{lstlisting}
