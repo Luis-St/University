@@ -1,0 +1,587 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half,           % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+\usepackage{longtable}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 7}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Qualität}\\[3mm]
+		{\fontsize{14}{14} \selectfont Entscheidungstabellen und}\\
+		{\fontsize{14}{14} \selectfont Zustandsbasierte Tests}
+
+		\vspace{10cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\chapter*{Aufgabe 1: Eröffnung von Girokonten}
+
+Ein Programm zur Eröffnung von Girokonten soll getestet werden.
+Folgende Regeln gelten:
+\begin{itemize}
+	\item Legitimation über einen Ausweis erforderlich
+	\item Bei Minderjährigen: zusätzlich Einwilligung der Eltern nötig
+	\item Dispo-Kreditrahmen nur bei erfolgreicher Schufa-Prüfung \textbf{und} Volljährigkeit
+\end{itemize}
+
+\section*{Entscheidungstabelle}
+
+\begin{longtable}{| p{4.5cm} | c | c | c | c | c |}
+	\hline
+	& \textbf{R1} & \textbf{R2} & \textbf{R3} & \textbf{R4} & \textbf{R5} \\ \hline
+	\endfirsthead
+	\hline
+	& \textbf{R1} & \textbf{R2} & \textbf{R3} & \textbf{R4} & \textbf{R5} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	\multicolumn{6}{|l|}{\textbf{Bedingungen}} \\ \hline
+	B1: Ausweis vorhanden & N & J & J & J & J \\ \hline
+	B2: Volljährig & -- & N & N & J & J \\ \hline
+	B3: Einwilligung Eltern & -- & N & J & -- & -- \\ \hline
+	B4: Schufa-Prüfung OK & -- & -- & -- & J & N \\ \hline
+	\multicolumn{6}{|l|}{\textbf{Aktionen}} \\ \hline
+	A1: Konto eröffnet & & & X & X & X \\ \hline
+	A2: Dispo eingeräumt & & & & X & \\ \hline
+	A3: Konto abgelehnt & X & X & & & \\ \hline
+\end{longtable}
+
+\section*{Testfälle}
+
+\begin{longtable}{| p{0.5cm} | p{1.5cm} | p{1.5cm} | p{2.0cm} | p{1.5cm} | p{4.5cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Ausweis} & \textbf{Alter} & \textbf{Einwilligung} & \textbf{Schufa} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Ausweis} & \textbf{Alter} & \textbf{Einwilligung} & \textbf{Schufa} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T1 & Nein & -- & -- & -- & Konto abgelehnt \\ \hline
+	T2 & Ja & 16 & Nein & -- & Konto abgelehnt \\ \hline
+	T3 & Ja & 16 & Ja & -- & Konto ohne Dispo \\ \hline
+	T4 & Ja & 25 & -- & OK & Konto mit Dispo \\ \hline
+	T5 & Ja & 25 & -- & Nicht OK & Konto ohne Dispo \\ \hline
+\end{longtable}
+
+
+\chapter*{Aufgabe 2: Heizungssteuerung}
+
+Ein Programm zur Heizungssteuerung schaltet die Heizung je nach Raumtemperatur und gewünschter Temperatur ein oder aus.
+Regeln:
+\begin{enumerate}
+	\item Raumtemp $< 18$°C und Wunschtemp $> 20$°C $\rightarrow$ Heizung einschalten
+	\item Raumtemp $18$--$20$°C $\rightarrow$ Heizung aus
+	\item Raumtemp $> 20$°C $\rightarrow$ Heizung aus
+	\item Raumtemp $< 18$°C (und Wunschtemp $\leq 20$°C) $\rightarrow$ Heizung voll
+\end{enumerate}
+
+\section*{Entscheidungstabelle}
+
+\begin{longtable}{| p{4.5cm} | c | c | c | c |}
+	\hline
+	& \textbf{R1} & \textbf{R2} & \textbf{R3} & \textbf{R4} \\ \hline
+	\endfirsthead
+	\hline
+	& \textbf{R1} & \textbf{R2} & \textbf{R3} & \textbf{R4} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	\multicolumn{5}{|l|}{\textbf{Bedingungen}} \\ \hline
+	B1: Raumtemp $< 18$°C & J & J & N & N \\ \hline
+	B2: Wunschtemp $> 20$°C & J & N & J & N \\ \hline
+	\multicolumn{5}{|l|}{\textbf{Aktionen}} \\ \hline
+	A1: Heizung einschalten & X & & & \\ \hline
+	A2: Heizung ausschalten & & & X & X \\ \hline
+	A3: Heizung voll & & X & & \\ \hline
+\end{longtable}
+
+R3 und R4 können zusammengefasst werden, da bei B1=N die Aktion unabhängig von B2 immer \glqq Heizung aus\grqq{} ist.
+
+\section*{Testfälle}
+
+\begin{longtable}{| p{0.5cm} | p{2.5cm} | p{2.5cm} | p{5.5cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Raumtemp} & \textbf{Wunschtemp} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Raumtemp} & \textbf{Wunschtemp} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T1 & 15°C & 22°C & Heizung einschalten \\ \hline
+	T2 & 15°C & 19°C & Heizung voll \\ \hline
+	T3 & 19°C & 22°C & Heizung ausschalten \\ \hline
+	T4 & 22°C & 18°C & Heizung ausschalten \\ \hline
+\end{longtable}
+
+
+\chapter*{Aufgabe 3: Veranstaltungsticketbuchung}
+
+Ein Programm zur Buchung von Veranstaltungstickets soll getestet werden.
+Regeln:
+\begin{enumerate}
+	\item Veranstaltung ausverkauft $\rightarrow$ keine Buchung möglich
+	\item Benutzer unter 18 $\rightarrow$ nur spezielle Tickets
+	\item Benutzer registriert $\rightarrow$ alle Plätze buchbar
+	\item Benutzer nicht registriert $\rightarrow$ nur obere Ränge
+\end{enumerate}
+
+\section*{Entscheidungstabelle}
+
+\begin{longtable}{| p{4.5cm} | c | c | c | c | c |}
+	\hline
+	& \textbf{R1} & \textbf{R2} & \textbf{R3} & \textbf{R4} & \textbf{R5} \\ \hline
+	\endfirsthead
+	\hline
+	& \textbf{R1} & \textbf{R2} & \textbf{R3} & \textbf{R4} & \textbf{R5} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	\multicolumn{6}{|l|}{\textbf{Bedingungen}} \\ \hline
+	B1: Ausverkauft & J & N & N & N & N \\ \hline
+	B2: Alter $\geq 18$ & -- & N & N & J & J \\ \hline
+	B3: Registriert & -- & J & N & J & N \\ \hline
+	\multicolumn{6}{|l|}{\textbf{Aktionen}} \\ \hline
+	A1: Keine Buchung möglich & X & & & & \\ \hline
+	A2: Nur spezielle Tickets & & X & X & & \\ \hline
+	A3: Alle Plätze buchbar & & X & & X & \\ \hline
+	A4: Nur obere Ränge & & & X & & X \\ \hline
+\end{longtable}
+
+\section*{Testfälle}
+
+\begin{longtable}{| p{0.5cm} | p{2.0cm} | p{1.2cm} | p{1.8cm} | p{5.5cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Ausverkauft} & \textbf{Alter} & \textbf{Registriert} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Ausverkauft} & \textbf{Alter} & \textbf{Registriert} & \textbf{Erwartetes Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T1 & Ja & -- & -- & Keine Buchung möglich \\ \hline
+	T2 & Nein & 15 & Ja & Spezielle Tickets, alle Plätze \\ \hline
+	T3 & Nein & 15 & Nein & Spezielle Tickets, obere Ränge \\ \hline
+	T4 & Nein & 25 & Ja & Alle Tickets, alle Plätze \\ \hline
+	T5 & Nein & 25 & Nein & Alle Tickets, obere Ränge \\ \hline
+\end{longtable}
+
+
+\chapter*{Aufgabe 4: Automatisierte Rabattanwendung}
+
+Ein Einkaufssystem wendet folgende Rabattregeln an:
+\begin{enumerate}
+	\item Bestellwert $> 100$\,€ $\rightarrow$ 10\,\% Rabatt
+	\item Bestellwert $> 200$\,€ $\rightarrow$ 15\,\% Rabatt (ersetzt Regel 1)
+	\item Mitgliedschaft $\rightarrow$ zusätzlich 5\,\% Rabatt
+	\item Mehr als 3 Bestellungen im letzten Monat $\rightarrow$ zusätzlich 5\,\% Rabatt
+\end{enumerate}
+
+\section*{Äquivalenzklassen für den Bestellwert}
+
+\begin{longtable}{| p{0.5cm} | p{5.0cm} | p{2.5cm} | p{3.5cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Repräsentant} & \textbf{Wertrabatt} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Repräsentant} & \textbf{Wertrabatt} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	1 & Bestellwert $\leq 100$\,€ & 50\,€ & 0\,\% \\ \hline
+	2 & $100$\,€ $<$ Bestellwert $\leq 200$\,€ & 150\,€ & 10\,\% \\ \hline
+	3 & Bestellwert $> 200$\,€ & 300\,€ & 15\,\% \\ \hline
+\end{longtable}
+
+\section*{Grenzwertanalyse}
+
+\begin{longtable}{| p{0.5cm} | p{4.0cm} | p{4.5cm} | p{3.0cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Grenzwert} & \textbf{Wertrabatt} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Äquivalenzklasse} & \textbf{Grenzwert} & \textbf{Wertrabatt} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	1 & Bestellwert $\leq 100$\,€ & 100\,€ & 0\,\% \\ \hline
+	2 & $100$\,€ $<$ Wert $\leq 200$\,€ & 101\,€ & 10\,\% \\ \hline
+	3 & $100$\,€ $<$ Wert $\leq 200$\,€ & 200\,€ & 10\,\% \\ \hline
+	4 & Bestellwert $> 200$\,€ & 201\,€ & 15\,\% \\ \hline
+\end{longtable}
+
+\section*{Entscheidungstabelle}
+
+Bedingungen:
+\begin{itemize}
+	\item B1: Bestellwert $> 200$\,€
+	\item B2: Bestellwert $> 100$\,€ (nur relevant wenn B1 = N)
+	\item B3: Mitgliedschaft vorhanden
+	\item B4: Mehr als 3 Bestellungen im letzten Monat
+\end{itemize}
+
+\begin{longtable}{| p{0.8cm} | c | c | c | c | p{2.5cm} |}
+	\hline
+	\textbf{Regel} & \textbf{B1: $>$200€} & \textbf{B2: $>$100€} & \textbf{B3: Mitglied} & \textbf{B4: $>$3 Best.} & \textbf{Gesamtrabatt} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Regel} & \textbf{B1: $>$200€} & \textbf{B2: $>$100€} & \textbf{B3: Mitglied} & \textbf{B4: $>$3 Best.} & \textbf{Gesamtrabatt} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	R1 & J & -- & J & J & 15+5+5 = 25\,\% \\ \hline
+	R2 & J & -- & J & N & 15+5 = 20\,\% \\ \hline
+	R3 & J & -- & N & J & 15+5 = 20\,\% \\ \hline
+	R4 & J & -- & N & N & 15\,\% \\ \hline
+	R5 & N & J & J & J & 10+5+5 = 20\,\% \\ \hline
+	R6 & N & J & J & N & 10+5 = 15\,\% \\ \hline
+	R7 & N & J & N & J & 10+5 = 15\,\% \\ \hline
+	R8 & N & J & N & N & 10\,\% \\ \hline
+	R9 & N & N & J & J & 5+5 = 10\,\% \\ \hline
+	R10 & N & N & J & N & 5\,\% \\ \hline
+	R11 & N & N & N & J & 5\,\% \\ \hline
+	R12 & N & N & N & N & 0\,\% \\ \hline
+\end{longtable}
+
+\section*{Testfälle}
+
+\begin{longtable}{| p{0.5cm} | p{1.8cm} | p{1.5cm} | p{1.5cm} | p{2.5cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Bestellwert} & \textbf{Mitglied} & \textbf{Best./Mon.} & \textbf{Erwarteter Rabatt} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Bestellwert} & \textbf{Mitglied} & \textbf{Best./Mon.} & \textbf{Erwarteter Rabatt} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T1 & 250\,€ & Ja & 5 & 25\,\% \\ \hline
+	T2 & 250\,€ & Ja & 2 & 20\,\% \\ \hline
+	T3 & 250\,€ & Nein & 5 & 20\,\% \\ \hline
+	T4 & 250\,€ & Nein & 2 & 15\,\% \\ \hline
+	T5 & 150\,€ & Ja & 5 & 20\,\% \\ \hline
+	T6 & 150\,€ & Ja & 2 & 15\,\% \\ \hline
+	T7 & 150\,€ & Nein & 5 & 15\,\% \\ \hline
+	T8 & 150\,€ & Nein & 2 & 10\,\% \\ \hline
+	T9 & 50\,€ & Ja & 5 & 10\,\% \\ \hline
+	T10 & 50\,€ & Ja & 2 & 5\,\% \\ \hline
+	T11 & 50\,€ & Nein & 5 & 5\,\% \\ \hline
+	T12 & 50\,€ & Nein & 2 & 0\,\% \\ \hline
+\end{longtable}
+
+
+\chapter*{Aufgabe 5: Kaffeemaschine testen}
+
+Ein Kaffeeautomat wird mit folgendem Zustandsdiagramm modelliert:
+
+Start $\rightarrow$ Leerlauf $\xrightarrow{\text{Taste}}$ Kaffee ausgewählt $\xrightarrow{\text{Taste}}$ Kaffee zubereiten $\xrightarrow{\text{Fertig}}$ Warten $\xrightarrow{\text{Becher entnommen}}$ Leerlauf
+
+\section*{Zustandsübergangstabelle}
+
+\begin{longtable}{| p{3.5cm} | p{3.5cm} | p{2.5cm} | p{3.0cm} |}
+	\hline
+	\textbf{Zustand} & \textbf{Taste} & \textbf{Fertig} & \textbf{Becher entn.} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Zustand} & \textbf{Taste} & \textbf{Fertig} & \textbf{Becher entn.} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	Leerlauf & Kaffee ausgewählt & -- & -- \\ \hline
+	Kaffee ausgewählt & Kaffee zubereiten & -- & -- \\ \hline
+	Kaffee zubereiten & -- & Warten & -- \\ \hline
+	Warten & -- & -- & Leerlauf \\ \hline
+\end{longtable}
+
+\section*{Einfacher Übergangsbaum}
+
+Der Automat hat einen linearen Zyklus ohne Verzweigungen.
+Jeder Zustand hat genau eine ausgehende Transition.
+
+\begin{itemize}
+	\item Leerlauf
+	\begin{itemize}
+		\item Taste $\rightarrow$ Kaffee ausgewählt
+		\begin{itemize}
+			\item Taste $\rightarrow$ Kaffee zubereiten
+			\begin{itemize}
+				\item Fertig $\rightarrow$ Warten
+				\begin{itemize}
+					\item Becher entnommen $\rightarrow$ Leerlauf$^*$
+				\end{itemize}
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+$^*$ = bereits besuchter Zustand
+
+\textbf{Testfall:}
+
+\begin{longtable}{| p{0.5cm} | p{8.0cm} | p{3.5cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Pfad} & \textbf{Überdeckung} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Pfad} & \textbf{Überdeckung} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T1 & Leerlauf $\xrightarrow{T}$ KA $\xrightarrow{T}$ KZ $\xrightarrow{F}$ W $\xrightarrow{BE}$ Leerlauf & Alle 4 Transitionen \\ \hline
+\end{longtable}
+
+\textbf{Testendekriterium:} Zustandsüberdeckung und Transitionsüberdeckung (0-switch coverage).
+Alle 4 Zustände und alle 4 Transitionen werden mit einem Testfall durchlaufen.
+
+\section*{Erweiterter Übergangsbaum}
+
+Der erweiterte Baum deckt alle Paare aufeinanderfolgender Transitionen ab.
+Da jeder Zustand nur eine ausgehende Transition hat, wird der Zyklus ein zweites Mal begonnen.
+
+\begin{itemize}
+	\item Leerlauf
+	\begin{itemize}
+		\item Taste $\rightarrow$ Kaffee ausgewählt
+		\begin{itemize}
+			\item Taste $\rightarrow$ Kaffee zubereiten
+			\begin{itemize}
+				\item Fertig $\rightarrow$ Warten
+				\begin{itemize}
+					\item Becher entnommen $\rightarrow$ Leerlauf
+					\begin{itemize}
+						\item Taste $\rightarrow$ Kaffee ausgewählt$^*$
+					\end{itemize}
+				\end{itemize}
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+\textbf{Zusätzlicher Testfall:}
+
+\begin{longtable}{| p{0.5cm} | p{8.0cm} | p{3.5cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Pfad} & \textbf{Neues Paar} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Pfad} & \textbf{Neues Paar} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T2 & Leerlauf $\xrightarrow{T}$ KA $\xrightarrow{T}$ KZ $\xrightarrow{F}$ W $\xrightarrow{BE}$ Leerlauf $\xrightarrow{T}$ KA & (BE $\rightarrow$ Taste) \\ \hline
+\end{longtable}
+
+\textbf{Testendekriterium:} 1-switch coverage.
+Bei 4 Transitionen im Zyklus gibt es 4 Transitionspaare.
+T1 deckt 3 Paare ab (T$\rightarrow$T, T$\rightarrow$F, F$\rightarrow$BE), T2 deckt das fehlende Paar (BE$\rightarrow$T) ab.
+
+
+\chapter*{Aufgabe 6: Menschenroboter und seine Stimmung}
+
+Ein Menschenroboter hat drei Stimmungslagen: Neutral, Fröhlich und Bockig.
+Ereignisse: unterhalten(), kussGeben(), verärgern().
+
+\section*{Zustandsübergangstabelle}
+
+\begin{longtable}{| p{2.5cm} | p{3.0cm} | p{3.0cm} | p{3.0cm} |}
+	\hline
+	\textbf{Zustand} & \textbf{unterhalten()} & \textbf{kussGeben()} & \textbf{verärgern()} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Zustand} & \textbf{unterhalten()} & \textbf{kussGeben()} & \textbf{verärgern()} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	Neutral & Neutral & Fröhlich & Bockig \\ \hline
+	Fröhlich & Fröhlich & Fröhlich & Bockig \\ \hline
+	Bockig & Bockig & Neutral & Bockig \\ \hline
+\end{longtable}
+
+\section*{Einfacher Übergangsbaum}
+
+Startzustand: Neutral.
+Expansion bis jeder Zustand mindestens einmal erreicht wurde ($^*$ = bereits besucht, Abbruch).
+
+\begin{itemize}
+	\item Neutral
+	\begin{itemize}
+		\item unterhalten() $\rightarrow$ Neutral$^*$
+		\item kussGeben() $\rightarrow$ Fröhlich
+		\begin{itemize}
+			\item unterhalten() $\rightarrow$ Fröhlich$^*$
+			\item kussGeben() $\rightarrow$ Fröhlich$^*$
+			\item verärgern() $\rightarrow$ Bockig
+			\begin{itemize}
+				\item unterhalten() $\rightarrow$ Bockig$^*$
+				\item kussGeben() $\rightarrow$ Neutral$^*$
+				\item verärgern() $\rightarrow$ Bockig$^*$
+			\end{itemize}
+		\end{itemize}
+		\item verärgern() $\rightarrow$ Bockig$^*$
+	\end{itemize}
+\end{itemize}
+
+\textbf{Testfälle (7 Pfade, Wurzel zu jedem Blatt):}
+
+Abkürzungen: N = Neutral, F = Fröhlich, B = Bockig, u = unterhalten(), k = kussGeben(), v = verärgern()
+
+\begin{longtable}{| p{0.5cm} | p{8.5cm} | p{3.0cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Pfad} & \textbf{Transitionen} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Pfad} & \textbf{Transitionen} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T1 & N $\xrightarrow{u}$ N & N$\rightarrow$N \\ \hline
+	T2 & N $\xrightarrow{k}$ F $\xrightarrow{u}$ F & N$\rightarrow$F, F$\rightarrow$F \\ \hline
+	T3 & N $\xrightarrow{k}$ F $\xrightarrow{k}$ F & N$\rightarrow$F, F$\rightarrow$F \\ \hline
+	T4 & N $\xrightarrow{k}$ F $\xrightarrow{v}$ B $\xrightarrow{u}$ B & N$\rightarrow$F, F$\rightarrow$B, B$\rightarrow$B \\ \hline
+	T5 & N $\xrightarrow{k}$ F $\xrightarrow{v}$ B $\xrightarrow{k}$ N & N$\rightarrow$F, F$\rightarrow$B, B$\rightarrow$N \\ \hline
+	T6 & N $\xrightarrow{k}$ F $\xrightarrow{v}$ B $\xrightarrow{v}$ B & N$\rightarrow$F, F$\rightarrow$B, B$\rightarrow$B \\ \hline
+	T7 & N $\xrightarrow{v}$ B & N$\rightarrow$B \\ \hline
+\end{longtable}
+
+\textbf{Testendekriterium:} Transitionsüberdeckung (0-switch coverage).
+Alle 9 Transitionen werden durch die 7 Testfälle abgedeckt.
+
+\section*{Erweiterter Übergangsbaum}
+
+Der erweiterte Baum expandiert jedes Blatt des einfachen Baums um eine weitere Ebene, um alle Paare aufeinanderfolgender Transitionen abzudecken.
+
+\begin{itemize}
+	\item Neutral
+	\begin{itemize}
+		\item u $\rightarrow$ Neutral
+		\begin{itemize}
+			\item u $\rightarrow$ N$^*$ \quad
+			\item k $\rightarrow$ F$^*$ \quad
+			\item v $\rightarrow$ B$^*$
+		\end{itemize}
+		\item k $\rightarrow$ Fröhlich
+		\begin{itemize}
+			\item u $\rightarrow$ Fröhlich
+			\begin{itemize}
+				\item u $\rightarrow$ F$^*$ \quad
+				\item k $\rightarrow$ F$^*$ \quad
+				\item v $\rightarrow$ B$^*$
+			\end{itemize}
+			\item k $\rightarrow$ Fröhlich
+			\begin{itemize}
+				\item u $\rightarrow$ F$^*$ \quad
+				\item k $\rightarrow$ F$^*$ \quad
+				\item v $\rightarrow$ B$^*$
+			\end{itemize}
+			\item v $\rightarrow$ Bockig
+			\begin{itemize}
+				\item u $\rightarrow$ Bockig
+				\begin{itemize}
+					\item u $\rightarrow$ B$^*$ \quad
+					\item k $\rightarrow$ N$^*$ \quad
+					\item v $\rightarrow$ B$^*$
+				\end{itemize}
+				\item k $\rightarrow$ Neutral
+				\begin{itemize}
+					\item u $\rightarrow$ N$^*$ \quad
+					\item k $\rightarrow$ F$^*$ \quad
+					\item v $\rightarrow$ B$^*$
+				\end{itemize}
+				\item v $\rightarrow$ Bockig
+				\begin{itemize}
+					\item u $\rightarrow$ B$^*$ \quad
+					\item k $\rightarrow$ N$^*$ \quad
+					\item v $\rightarrow$ B$^*$
+				\end{itemize}
+			\end{itemize}
+		\end{itemize}
+		\item v $\rightarrow$ Bockig
+		\begin{itemize}
+			\item u $\rightarrow$ B$^*$ \quad
+			\item k $\rightarrow$ N$^*$ \quad
+			\item v $\rightarrow$ B$^*$
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+\textbf{Zusätzliche Testfälle (21 Pfade):}
+
+\begin{longtable}{| p{0.7cm} | p{7.0cm} | p{4.3cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Pfad} & \textbf{Neues Transitionspaar} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Pfad} & \textbf{Neues Transitionspaar} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	\multicolumn{3}{|l|}{\textit{Erweiterung von T1 (Blatt: Neutral)}} \\ \hline
+	T8 & N $\xrightarrow{u}$ N $\xrightarrow{u}$ N & (N$\to$N,u)$\to$(N$\to$N,u) \\ \hline
+	T9 & N $\xrightarrow{u}$ N $\xrightarrow{k}$ F & (N$\to$N,u)$\to$(N$\to$F,k) \\ \hline
+	T10 & N $\xrightarrow{u}$ N $\xrightarrow{v}$ B & (N$\to$N,u)$\to$(N$\to$B,v) \\ \hline
+	\multicolumn{3}{|l|}{\textit{Erweiterung von T2 (Blatt: Fröhlich)}} \\ \hline
+	T11 & N $\xrightarrow{k}$ F $\xrightarrow{u}$ F $\xrightarrow{u}$ F & (F$\to$F,u)$\to$(F$\to$F,u) \\ \hline
+	T12 & N $\xrightarrow{k}$ F $\xrightarrow{u}$ F $\xrightarrow{k}$ F & (F$\to$F,u)$\to$(F$\to$F,k) \\ \hline
+	T13 & N $\xrightarrow{k}$ F $\xrightarrow{u}$ F $\xrightarrow{v}$ B & (F$\to$F,u)$\to$(F$\to$B,v) \\ \hline
+	\multicolumn{3}{|l|}{\textit{Erweiterung von T3 (Blatt: Fröhlich)}} \\ \hline
+	T14 & N $\xrightarrow{k}$ F $\xrightarrow{k}$ F $\xrightarrow{u}$ F & (F$\to$F,k)$\to$(F$\to$F,u) \\ \hline
+	T15 & N $\xrightarrow{k}$ F $\xrightarrow{k}$ F $\xrightarrow{k}$ F & (F$\to$F,k)$\to$(F$\to$F,k) \\ \hline
+	T16 & N $\xrightarrow{k}$ F $\xrightarrow{k}$ F $\xrightarrow{v}$ B & (F$\to$F,k)$\to$(F$\to$B,v) \\ \hline
+	\multicolumn{3}{|l|}{\textit{Erweiterung von T4 (Blatt: Bockig)}} \\ \hline
+	T17 & N $\xrightarrow{k}$ F $\xrightarrow{v}$ B $\xrightarrow{u}$ B $\xrightarrow{u}$ B & (B$\to$B,u)$\to$(B$\to$B,u) \\ \hline
+	T18 & N $\xrightarrow{k}$ F $\xrightarrow{v}$ B $\xrightarrow{u}$ B $\xrightarrow{k}$ N & (B$\to$B,u)$\to$(B$\to$N,k) \\ \hline
+	T19 & N $\xrightarrow{k}$ F $\xrightarrow{v}$ B $\xrightarrow{u}$ B $\xrightarrow{v}$ B & (B$\to$B,u)$\to$(B$\to$B,v) \\ \hline
+	\multicolumn{3}{|l|}{\textit{Erweiterung von T5 (Blatt: Neutral)}} \\ \hline
+	T20 & N $\xrightarrow{k}$ F $\xrightarrow{v}$ B $\xrightarrow{k}$ N $\xrightarrow{u}$ N & (B$\to$N,k)$\to$(N$\to$N,u) \\ \hline
+	T21 & N $\xrightarrow{k}$ F $\xrightarrow{v}$ B $\xrightarrow{k}$ N $\xrightarrow{k}$ F & (B$\to$N,k)$\to$(N$\to$F,k) \\ \hline
+	T22 & N $\xrightarrow{k}$ F $\xrightarrow{v}$ B $\xrightarrow{k}$ N $\xrightarrow{v}$ B & (B$\to$N,k)$\to$(N$\to$B,v) \\ \hline
+	\multicolumn{3}{|l|}{\textit{Erweiterung von T6 (Blatt: Bockig)}} \\ \hline
+	T23 & N $\xrightarrow{k}$ F $\xrightarrow{v}$ B $\xrightarrow{v}$ B $\xrightarrow{u}$ B & (B$\to$B,v)$\to$(B$\to$B,u) \\ \hline
+	T24 & N $\xrightarrow{k}$ F $\xrightarrow{v}$ B $\xrightarrow{v}$ B $\xrightarrow{k}$ N & (B$\to$B,v)$\to$(B$\to$N,k) \\ \hline
+	T25 & N $\xrightarrow{k}$ F $\xrightarrow{v}$ B $\xrightarrow{v}$ B $\xrightarrow{v}$ B & (B$\to$B,v)$\to$(B$\to$B,v) \\ \hline
+	\multicolumn{3}{|l|}{\textit{Erweiterung von T7 (Blatt: Bockig)}} \\ \hline
+	T26 & N $\xrightarrow{v}$ B $\xrightarrow{u}$ B & (N$\to$B,v)$\to$(B$\to$B,u) \\ \hline
+	T27 & N $\xrightarrow{v}$ B $\xrightarrow{k}$ N & (N$\to$B,v)$\to$(B$\to$N,k) \\ \hline
+	T28 & N $\xrightarrow{v}$ B $\xrightarrow{v}$ B & (N$\to$B,v)$\to$(B$\to$B,v) \\ \hline
+\end{longtable}
+
+\textbf{Testendekriterium:} 1-switch coverage.
+9 Transitionen $\times$ 3 mögliche Folgetransitionen = 27 Transitionspaare.
+Der einfache Baum deckt 6 Paare ab, der erweiterte Baum die restlichen 21 Paare.
+Insgesamt werden mit 28 Testfällen alle 27 Transitionspaare überdeckt.
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
