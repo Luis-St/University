@@ -1,37 +1,22 @@
 \documentclass[
-	fontsize=12pt,          % default font size 12pt
-	paper=a4,               % DIN A4 page format
-	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
-	listof=totoc,           % add list of figures, tables, etc. to ToC
-	listof=entryprefix,     % add entry name to figures, tables, etc.
-	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
-	bibliography=totoc,     % add bibliography to ToC but without a chapter number
-	parskip=half,           % half line spacing between paragraphs
-	openany                 % chapters can start on any page
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	listof=totoc,
+	listof=entryprefix,
+	listof=nochaptergap,
+	bibliography=totoc,
+	parskip=half,
+	openany
 ]{scrbook}
 
 \include{../../for_latex/preamble}
-
-% UTF-8 Umlaute in lstlisting erlauben
-\lstset{
-	extendedchars=true,
-	inputencoding=utf8,
-	literate=
-		{ä}{{\"a}}1
-		{ö}{{\"o}}1
-		{ü}{{\"u}}1
-		{ß}{{\ss}}1
-		{Ä}{{\"A}}1
-		{Ö}{{\"O}}1
-		{Ü}{{\"U}}1
-}
 
 \begin{document}
 
 \begin{titlepage}
 	\pagestyle{empty}
 
-	% HFU Logo
 	\begin{flushright}
 		\begin{figure}[ht]
 			\flushright
@@ -55,342 +40,177 @@
 % CONTENT STARTS HERE
 % ############################################################################
 
-\chapter*{Aufgabe 1: Hashketten}
+\chapter*{Aufgabe 1: Einmalpasswörter (TAN-Liste)}
 
-\section*{a) Hashkette der Länge 4}
+\section*{a) Sicherheit bei Mithören eines genutzten Passworts}
 
-Gewählte Hashfunktion: SHA-256.
-Passphrase $k = $ \texttt{LuisStaudt2026}.
-Die Hashkette wird iterativ gebildet: $P_i = SHA256(P_{i-1})$ mit $P_0 = k$.
+Jedes Einmalpasswort ist nach einmaliger Nutzung entwertet.
+Selbst wenn ein Angreifer ein bereits verwendetes Passwort mithört oder kopiert, kann er damit keine weitere Überweisung tätigen.
+Der Server akzeptiert jedes Passwort nur ein einziges Mal.
+Ein Replay-Angriff ist daher wirkungslos.
 
-\begin{lstlisting}[language=bash]
-k   = LuisStaudt2026
-P_1 = fc0bdf2471b8dcaeb6100f9b95ce6532
-      935dafa4fb4f0ef3abb5c56483aebd71
-P_2 = b8359d246c00986878167c1e85bc566c
-      b55b25904d1ebcf5a826ca072297536a
-P_3 = f245e7df73577ecce17b149c4227329d
-      b0baf59459a63fc25b2cc2c9d3fb9deb
-P_4 = 19d17121ad7c32e1c3f5fa66f7ad4cdc
-      552c9e2fe735be427e7933da9bf7ba0b
-\end{lstlisting}
+\section*{b) Sicherheit bei Abfangen von Datenpaketen}
 
-\section*{b) Registrierung und erste Anmeldung}
+Nein, das Verfahren wäre dann \textbf{nicht mehr sicher}.
+Wenn der Angreifer Datenpakete abfangen (und nicht nur mitlesen) kann, könnte er folgendes tun:
+\begin{itemize}
+	\item Das Datenpaket mit dem gültigen Einmalpasswort abfangen, sodass es den Server nie erreicht.
+	\item Das Einmalpasswort ist dann noch nicht entwertet, da der Server es nie erhalten hat.
+	\item Der Angreifer kann das abgefangene Passwort nun selbst verwenden, um eine eigene Überweisung durchzuführen (Man-in-the-Middle-Angriff).
+\end{itemize}
 
-Beim Verfahren nach Lamport wird der höchste Hashwert $P_4$ initial beim Server registriert.
-Danach werden die Einmalpasswörter in umgekehrter Reihenfolge ($P_3, P_2, P_1$) zur Anmeldung verwendet.
+\section*{c) Gegenmaßnahme}
 
-\textbf{Registrierung:}
+\begin{itemize}
+	\item \textbf{Transaktionsbindung:} Das Einmalpasswort wird an die konkreten Überweisungsdaten gebunden (Empfänger, Betrag, IBAN).
+	      Der Server prüft, ob das Passwort zu den eingereichten Transaktionsdaten passt.
+	      Selbst wenn der Angreifer das Passwort abfängt, kann er es nicht für eine andere Überweisung verwenden.
+	\item \textbf{Verschlüsselter Kanal (TLS):} Durch Ende-zu-Ende-Verschlüsselung wird das Abfangen und Manipulieren von Paketen verhindert.
+	\item \textbf{Zeitbegrenzung:} Das Einmalpasswort ist nur für wenige Minuten gültig, was das Zeitfenster für einen Angriff stark einschränkt.
+\end{itemize}
+
+\section*{d) Verifikation über Bankkarte (chipTAN)}
+
+\textbf{Funktionsweise:}
 \begin{enumerate}
-	\item Client berechnet die Kette $P_1, P_2, P_3, P_4$ aus $k$.
-	\item Client sendet ausschließlich $P_4$ an den Server.
-	\item Server speichert $(\text{user}, P_4, i=4)$.
+	\item Der Nutzer gibt eine Überweisung im Online-Banking ein.
+	\item Die Überweisungsdaten (Empfänger-IBAN, Betrag) werden an die EC-Karte übertragen, entweder optisch über einen Flickercode am Bildschirm oder durch manuelle Eingabe am TAN-Generator.
+	\item Die EC-Karte berechnet mit ihrem internen geheimen Schlüssel und den Überweisungsdaten ein Einmalpasswort (TAN).
+	\item Der Nutzer gibt die angezeigte TAN im Browser ein.
+	\item Der Server berechnet mit dem ihm bekannten Schlüssel dieselbe TAN und vergleicht.
 \end{enumerate}
 
-\textbf{Erste Anmeldung:}
-\begin{enumerate}
-	\item Server fordert das Passwort zum Index $i-1 = 3$ an.
-	\item Client sendet $P_3$.
-	\item Server prüft $SHA256(P_3) \stackrel{?}{=} P_4$.
-	\item Ergebnis: stimmt überein $\Rightarrow$ Login erfolgreich.
-	\item Server ersetzt den gespeicherten Wert durch $P_3$ und erniedrigt den Index auf $i=3$.
-\end{enumerate}
-
-Wichtig: Aus $P_3$ lässt sich $P_4$ berechnen, aber nicht umgekehrt.
-Ein Angreifer, der $P_4$ kennt, kann daraus nicht den nächsten benötigten Wert $P_3$ ableiten.
-
-\section*{c) Eve fängt $P_{i+1}$ ab}
-
-Eve hat die Verbindung unter Kontrolle und fängt die Antwort $P_{i+1}$ ab, bevor sie Bob erreicht.
-
+\textbf{Warum ist das sicher?}
 \begin{itemize}
-	\item Eve kann sich gegenüber Bob anstelle von Alice anmelden, indem sie $P_{i+1}$ selbst weiterreicht.
-	\item Da Alice die Antwort bereits verschickt hat, ist $P_{i+1}$ das aktuell angeforderte Einmalpasswort.
-	\item Das Passwort bleibt nur für genau \emph{eine} Anmeldung gültig.
-	Sobald Bob $P_{i+1}$ akzeptiert, speichert er diesen Wert und fordert beim nächsten Mal $P_i$ an.
-	$P_{i+1}$ ist damit verbraucht und wertlos.
-	\item Gültigkeit also: bis zur nächsten erfolgreichen Anmeldung mit diesem Passwort; danach nicht mehr nutzbar.
+	\item Die TAN ist an die konkreten Transaktionsdaten gebunden.
+	      Verändert ein Angreifer die Überweisung (z.\,B. anderen Empfänger), stimmt die TAN nicht mehr.
+	\item Der geheime Schlüssel verlässt nie die EC-Karte.
+	      Selbst bei kompromittiertem Computer kann der Angreifer den Schlüssel nicht extrahieren.
+	\item Der Nutzer sieht die Überweisungsdaten auf dem TAN-Generator und kann Manipulation erkennen, bevor er die TAN eingibt.
 \end{itemize}
 
-\section*{d) Wann fällt der Verlust auf?}
 
-Wenn Eve $P_{i+1}$ einmalig nutzt und die Übertragung von Alice zu Bob unterbunden hat, synchronisieren Alice und Bob ihren Index nicht mehr.
-Der Verlust fällt bei der nächsten regulären Anmeldung von Alice auf:
+\chapter*{Aufgabe 2: Challenge-Response-Verfahren}
 
+\section*{a) Warum Challenge-Response?}
+
+Das Verfahren wird genutzt, weil das Passwort \textbf{nie über das Netzwerk übertragen} wird.
+Stattdessen wird nur der Hashwert aus Challenge und Passwort gesendet.
+Ein Angreifer, der den Netzwerkverkehr mithört, sieht nur die Challenge und die Response, kann daraus aber nicht das Passwort rekonstruieren (Einwegeigenschaft des Hashes).
+Außerdem ist jede Response einzigartig, da jede Challenge ein anderer Zufallswert ist.
+Ein Replay-Angriff mit einer abgefangenen Response ist daher nutzlos.
+
+\section*{b) Mehrfache Nutzung derselben Challenge}
+
+Wenn dieselbe Challenge mehrfach verwendet wird, ist die Response bei gleichem Passwort jedes Mal identisch.
+Das verringert die Sicherheit erheblich:
 \begin{itemize}
-	\item Bob hat den Index bereits auf $i-1$ erniedrigt (nach Eves Anmeldung) und erwartet jetzt $P_i$.
-	\item Alice rechnet davon aus, dass $P_{i+1}$ noch nicht angekommen ist, und versucht diesen Wert erneut oder den nächsten in ihrer Zählung.
-	\item Dadurch kommt es zu einem Index-Mismatch: Alice sendet einen Hash, dessen Prüfung bei Bob fehlschlägt.
+	\item Ein Angreifer könnte eine korrekte Response aufzeichnen und bei der nächsten gleichen Challenge wiederverwenden (\textbf{Replay-Angriff}).
+	\item Der Angreifer muss das Passwort nicht kennen, sondern nur die gültige Response zur bekannten Challenge.
 \end{itemize}
 
-Der Angriff wird also spätestens bemerkt, sobald Alice das nächste Mal einen Anmeldeversuch unternimmt.
+\section*{c) Schutz vor Challenge-Wiederholung}
 
+\begin{itemize}
+	\item \textbf{Zufällige Challenges:} Jede Challenge wird kryptographisch zufällig generiert.
+	      Bei ausreichender Länge (z.\,B. 128 Bit) ist eine Wiederholung extrem unwahrscheinlich.
+	\item \textbf{Zeitstempel einbeziehen:} Die Challenge enthält einen Zeitstempel.
+	      Der Server akzeptiert nur Responses zu aktuellen Zeitstempeln und lehnt veraltete ab.
+	\item \textbf{Nonce-Speicher:} Der Server speichert bereits verwendete Challenges und lehnt jede erneut eingehende ab.
+\end{itemize}
 
-\chapter*{Aufgabe 2: Rechtemanagement unter Linux}
+\section*{d) Beispielhafter Ablauf}
 
-Alle Befehle werden in \texttt{/tmp/test} ausgeführt.
-Die Benutzer alice, bob und eve sowie Testdateien werden wie in der Vorbereitung beschrieben angelegt.
+\textbf{Parameter:}
+\begin{itemize}
+	\item Hashfunktion: SHA-256
+	\item Gemeinsames Geheimnis (Passwort): \texttt{passwort123}
+\end{itemize}
 
-\section*{Vorbereitung}
-
-\begin{lstlisting}[language=bash]
-cd /tmp && mkdir test && cd test
-sudo useradd alice
-sudo useradd bob
-sudo useradd eve
-cat /etc/passwd | grep -E "alice|bob|eve"
-alice:x:1001:1001::/home/alice:/bin/sh
-bob:x:1002:1002::/home/bob:/bin/sh
-eve:x:1003:1003::/home/eve:/bin/sh
-
-echo "Geheimer Text von Alice"       > alice.txt
-echo "Geheimer Text von Bob"         > bob.txt
-echo "Alice und Bob teilen sich das" > alicebob.txt
-echo "Für alle sichtbar"             > world.txt
-\end{lstlisting}
-
-\section*{a) Interpretation von \texttt{ls -l}}
-
-\begin{lstlisting}[language=bash]
-drwxrwxr-x  2 luis luis  4096 Apr 15 23:23 ./
--rw-rw-r--  1 luis luis    30 Apr 15 23:23 alicebob.txt
--rw-rw-r--  1 luis luis    24 Apr 15 23:23 alice.txt
--rw-rw-r--  1 luis luis    22 Apr 15 23:23 bob.txt
--rw-rw-r--  1 luis luis    19 Apr 15 23:23 world.txt
-\end{lstlisting}
-
-Spaltenbedeutung: Rechtemaske $\vert$ Anzahl Hardlinks $\vert$ Besitzer $\vert$ Gruppe $\vert$ Größe $\vert$ Datum $\vert$ Name.
-
-Die Rechtemaske besteht aus einem Dateityp (\texttt{-} = Datei, \texttt{d} = Verzeichnis) und drei Gruppen zu je drei Bits für \emph{owner}, \emph{group} und \emph{others} mit jeweils \texttt{r} (lesen, 4), \texttt{w} (schreiben, 2) und \texttt{x} (ausführen, 1).
-
-Alle Testdateien gehören aktuell \texttt{luis:luis} mit der Maske \texttt{-rw-rw-r--} (664).
-Das heißt: Besitzer und Gruppe dürfen lesen und schreiben, alle anderen dürfen nur lesen.
-
-\section*{b) Besitzverhältnisse mit \texttt{chown} ändern}
-
-\begin{lstlisting}[language=bash]
-sudo chown alice:alice alice.txt
-sudo chown alice:alice alicebob.txt
-sudo chown bob:bob     bob.txt
-sudo chown bob:bob     world.txt
-ls -l
--rw-rw-r-- 1 alice alice 30 Apr 15 23:23 alicebob.txt
--rw-rw-r-- 1 alice alice 24 Apr 15 23:23 alice.txt
--rw-rw-r-- 1 bob   bob   22 Apr 15 23:23 bob.txt
--rw-rw-r-- 1 bob   bob   19 Apr 15 23:23 world.txt
-\end{lstlisting}
-
-\section*{c) Alice liest \texttt{bob.txt}?}
-
-\begin{lstlisting}[language=bash]
-sudo su alice
-$ whoami
-alice
-$ cat bob.txt
-Geheimer Text von Bob
-$ cat alice.txt
-Geheimer Text von Alice
-\end{lstlisting}
-
-Alice kann \texttt{bob.txt} lesen, obwohl die Datei Bob gehört.
-Grund: Die Rechtemaske \texttt{-rw-rw-r--} gibt allen anderen Benutzern (\emph{others}) Leserechte.
-Alice fällt für \texttt{bob.txt} unter \emph{others} und darf deshalb den Inhalt sehen.
-Erst mit strikteren Rechten (600) wird der Zugriff verweigert.
-
-\section*{d) Zugriff nur für den Besitzer (600)}
-
-\begin{lstlisting}[language=bash]
-sudo chmod 600 alice.txt bob.txt alicebob.txt world.txt
-ls -l
--rw------- 1 alice alice 30 Apr 15 23:23 alicebob.txt
--rw------- 1 alice alice 24 Apr 15 23:23 alice.txt
--rw------- 1 bob   bob   22 Apr 15 23:23 bob.txt
--rw------- 1 bob   bob   19 Apr 15 23:23 world.txt
-\end{lstlisting}
-
-Prüfung als Alice, Bob und Eve:
-
-\begin{lstlisting}[language=bash]
-sudo su alice
-$ cat alice.txt
-Geheimer Text von Alice
-$ cat bob.txt
-cat: bob.txt: Permission denied
-
-sudo su bob
-$ cat bob.txt
-Geheimer Text von Bob
-$ cat alice.txt
-cat: alice.txt: Permission denied
-
-sudo su eve
-$ cat alice.txt
-cat: alice.txt: Permission denied
-$ cat bob.txt
-cat: bob.txt: Permission denied
-\end{lstlisting}
-
-Der Zugriff wird jetzt bei allen fremden Benutzern korrekt verweigert.
-
-\section*{e) \texttt{alicebob.txt} gemeinsam für Alice und Bob}
-
-Eine gemeinsame Gruppe \texttt{aliceundbob} wird angelegt, Alice und Bob werden Mitglieder.
-Die Datei erhält diese Gruppe als Gruppenbesitzer und die Maske \texttt{660}.
-
-\begin{lstlisting}[language=bash]
-sudo groupadd aliceundbob
-sudo usermod -a -G aliceundbob alice
-sudo usermod -a -G aliceundbob bob
-sudo chown alice:aliceundbob alicebob.txt
-sudo chmod 660 alicebob.txt
-ls -l
--rw-rw---- 1 alice aliceundbob 30 Apr 15 23:23 alicebob.txt
--rw------- 1 alice alice       24 Apr 15 23:23 alice.txt
--rw------- 1 bob   bob         22 Apr 15 23:23 bob.txt
--rw------- 1 bob   bob         19 Apr 15 23:23 world.txt
-\end{lstlisting}
-
-Prüfung (Login-Shell \texttt{su -}, damit die neue Gruppenzugehörigkeit aktiv ist):
-
-\begin{lstlisting}[language=bash]
-sudo su - alice -c "cat /tmp/test/alicebob.txt; echo 'NEU-Alice' >> /tmp/test/alicebob.txt && echo OK-write"
-Alice und Bob teilen sich das
-OK-write
-
-sudo su - bob   -c "cat /tmp/test/alicebob.txt; echo 'NEU-Bob'   >> /tmp/test/alicebob.txt && echo OK-write"
-Alice und Bob teilen sich das
-NEU-Alice
-OK-write
-
-sudo su - eve   -c "cat /tmp/test/alicebob.txt"
-cat: /tmp/test/alicebob.txt: Permission denied
-\end{lstlisting}
-
-Alice und Bob dürfen lesen und schreiben, Eve nicht.
-
-\section*{f) \texttt{world.txt} für alle}
-
-\begin{lstlisting}[language=bash]
-sudo chmod 666 world.txt
-ls -l
--rw-rw---- 1 alice aliceundbob 48 Apr 15 23:29 alicebob.txt
--rw------- 1 alice alice       24 Apr 15 23:23 alice.txt
--rw------- 1 bob   bob         22 Apr 15 23:23 bob.txt
--rw-rw-rw- 1 bob   bob         19 Apr 15 23:23 world.txt
-
-sudo su - eve -c "cat /tmp/test/world.txt; echo 'EVE war hier' >> /tmp/test/world.txt && cat /tmp/test/world.txt"
-Für alle sichtbar
-Für alle sichtbar
-EVE war hier
-\end{lstlisting}
-
-Mit \texttt{666} dürfen Besitzer, Gruppe und alle anderen lesen und schreiben.
-Eve kann die Datei erfolgreich ändern.
-
-
-\chapter*{Aufgabe 3: SAML und Identitäts-Föderation}
-
-Gegenstand der Untersuchung ist die Anmeldung am Dienst \url{bwsyncandshare.kit.edu} im Inkognito-Modus.
-Die Analyse erfolgt anhand einer HAR-Mitschrift aus den Entwicklertools.
-
-\section*{a) Warum kann ich mich am KIT-Dienst mit HFU-Account anmelden?}
-
-bwSync\&Share wird vom KIT betrieben, ist aber Teil der landesweiten Föderation \emph{bwIDM}.
-Der Dienst nimmt nur die Rolle des Service Providers (SP) ein und lagert die Authentifizierung an einen Identity Provider (IdP) aus.
-Beim Login wählt der Nutzer seine Hochschule; der SAML-Standard sorgt dafür, dass der HFU-IdP (\url{idp2.hs-furtwangen.de}) die Identität bestätigt.
-Nach erfolgreicher Prüfung übermittelt der IdP eine signierte SAML-Assertion an den SP, der daraufhin eine lokale Sitzung eröffnet.
-
-Die eigentlichen Zugangsdaten verlassen dabei nie die HFU.
-Das KIT vertraut ausschließlich der Signatur des HFU-IdPs.
-
-\section*{b) Host-Kette beim Aufruf von bwSync\&Share}
-
-Im Inkognito-Fenster werden nacheinander folgende Hosts angesprochen (Reihenfolge aus HAR):
+\textbf{Ablauf:}
 
 \begin{enumerate}
-	\item \texttt{bwsyncandshare.kit.edu}: SP, erzeugt initialen \texttt{SAMLRequest} und leitet weiter.
-	\item \texttt{bwidm.scc.kit.edu}: Discovery-/Shibboleth-SP der bwIDM-Föderation, forwarded zum IdP der gewählten Hochschule.
-	\item \texttt{idp2.hs-furtwangen.de}: HFU-IdP, erzeugt eigenen \texttt{SAMLRequest}, verlangt Login.
-	\item \texttt{login.microsoftonline.com}: Azure AD der HFU, hier erfolgt die eigentliche Eingabe von Benutzername, Passwort und MFA.
-	\item Rückweg: Azure AD $\to$ HFU-IdP $\to$ bwIDM-SP $\to$ bwSync\&Share mit signierter SAML-Assertion.
+	\item \textbf{Client} sendet Login-Anfrage an den Server.
+	\item \textbf{Server} generiert eine zufällige Challenge und sendet sie an den Client:
+	      \begin{lstlisting}[language=bash]
+Challenge = X7kP9mQ2
+	      \end{lstlisting}
+	\item \textbf{Client} berechnet die Response:
+	      \begin{lstlisting}[language=bash]
+Response = SHA-256("X7kP9mQ2" + "passwort123")
+         = SHA-256("X7kP9mQ2passwort123")
+         = D1A9107BFFC537598B50769DC0883506
+           D2F79F0E23BA4D3F22AF005C878DD1C4
+	      \end{lstlisting}
+	\item \textbf{Client} sendet die Response an den Server.
+	\item \textbf{Server} berechnet mit dem ihm bekannten Passwort denselben Hash und vergleicht.
+	      Da beide übereinstimmen, ist die Authentifizierung erfolgreich.
 \end{enumerate}
 
-Auffällig: Der HFU-IdP delegiert die Anmeldung selbst an Microsoft Azure AD weiter.
-Shibboleth fungiert hier nur noch als SAML-Frontend, die Identitätsprüfung erfolgt im Microsoft-Tenant der HFU.
+Das Passwort wurde dabei zu keinem Zeitpunkt über das Netzwerk übertragen.
 
-\textbf{Übertragene Daten (Auszug):}
 
-Initialer SAML-Request vom SP (bwSync\&Share) an bwIDM:
+\chapter*{Aufgabe 3: Challenge-Response-Authentifizierungssystem}
 
-\begin{lstlisting}[language=XML]
-<samlp:AuthnRequest
-    ID="ONELOGIN_f207b0bd03a182e31c4af2883dc21bc687b5a15b"
-    Version="2.0" IssueInstant="2026-04-15T20:32:52Z"
-    Destination="https://bwidm.scc.kit.edu/saml/idp/redirect"
-    ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-    AssertionConsumerServiceURL="https://bwsyncandshare.kit.edu/apps/user_saml/saml/acs">
-  <saml:Issuer>
-    https://bwsyncandshare.kit.edu/apps/user_saml/saml/metadata
-  </saml:Issuer>
-  <samlp:NameIDPolicy
-    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
-    AllowCreate="true" />
-</samlp:AuthnRequest>
-\end{lstlisting}
+\section*{Beschreibung}
 
-Nach der Weiterleitung durch bwIDM folgt ein zweiter, getrennter SAML-Request an den HFU-IdP:
+Das Programm \texttt{ChallengeResponse.java} implementiert ein Challenge-Response-Authentifizierungssystem mit zwei Benutzern (\texttt{alice} und \texttt{bob}).
+Es verwendet SHA-256 als Hashfunktion und 128-Bit-Zufallswerte als Challenges.
 
-\begin{lstlisting}[language=XML]
-<saml2p:AuthnRequest
-    AssertionConsumerServiceURL="https://bwidm.scc.kit.edu/Shibboleth.sso/SAML2/POST"
-    Destination="https://idp2.hs-furtwangen.de/idp/profile/SAML2/Redirect/SSO"
-    ID="b8cfd11c8-2f79-4607-88bb-7924feff9643"
-    IssueInstant="2026-04-15T20:33:10.344Z"
-    ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-    Version="2.0">
-  <saml2:Issuer>https://bwidm.scc.kit.edu/sp</saml2:Issuer>
-  <saml2p:NameIDPolicy AllowCreate="true"/>
-</saml2p:AuthnRequest>
-\end{lstlisting}
+\textbf{Ablauf:}
+\begin{enumerate}
+	\item Der Client sendet seinen Benutzernamen an den Server.
+	\item Der Server prüft, ob der Benutzer existiert, und generiert eine zufällige Challenge.
+	\item Der Client berechnet die Response als \texttt{SHA-256(Challenge + Passwort)} und sendet sie zurück.
+	\item Der Server berechnet die erwartete Response mit dem gespeicherten Passwort und vergleicht.
+\end{enumerate}
 
-Die Antwort des IdP ist eine verschlüsselte SAML-Assertion, die per Hidden-Form und automatischem POST an den \texttt{AssertionConsumerService} des SPs gesendet wird.
-
-\textbf{Wichtigste Cookies im Ablauf:}
-
+Das Programm demonstriert vier Szenarien:
 \begin{itemize}
-	\item \texttt{saml\_data} (bwSync\&Share): merkt sich den Zustand des ausgehenden SAML-Requests.
-	\item \texttt{JSESSIONID} (bwIDM, HFU-IdP): Session des jeweiligen Java-Servers während des Login-Flows.
-	\item \texttt{\_\_Host-shib\_idp\_session} (HFU-IdP): die zentrale SSO-Session beim IdP.
-	\item \texttt{nc\_session\_id} (bwSync\&Share): lokale Nextcloud-Session nach erfolgreichem Login.
+	\item Erfolgreicher Login von Alice
+	\item Erfolgreicher Login von Bob
+	\item Fehlgeschlagener Login (falsches Passwort)
+	\item Fehlgeschlagener Login (unbekannter Benutzer)
 \end{itemize}
 
-\section*{c) Warum kein erneuter Login bei Felix?}
+\section*{Quellcode}
 
-Nach dem erfolgreichen Login bei bwSync\&Share hat der Browser das Cookie \texttt{\_\_Host-shib\_idp\_session} beim HFU-IdP gesetzt.
-Dieses Cookie bindet die aktive IdP-Sitzung an den Browser.
+\lstinputlisting[language=Java, caption=ChallengeResponse.java]{src/ChallengeResponse.java}
 
-Ruft der Nutzer anschließend Felix auf, beginnt die gleiche SAML-Kette: Felix sendet einen \texttt{SAMLRequest} an denselben IdP.
-Der IdP erkennt die laufende Sitzung anhand des Cookies und überspringt die Anmeldemaske komplett.
-Er erzeugt sofort eine neue SAML-Assertion für den neuen SP (Felix).
-Aus Nutzersicht entsteht so der Eindruck eines Single-Sign-On.
+\section*{Programmausgabe}
 
-Wichtig: Jeder SP hat seine eigene lokale Sitzung (z.\,B.\ \texttt{\_shibsession} bei Felix, \texttt{nc\_session\_id} bei bwSync\&Share).
-Die gemeinsame Komponente über Dienste hinweg ist ausschließlich die IdP-Session.
+\begin{lstlisting}[language=bash, caption=Ausgabe des Programms]
+=== Challenge-Response Authentifizierung ===
 
-\section*{d) Vergleich zu Kerberos}
+--- Login-Versuch: alice ---
+1. Client sendet Benutzername: alice
+2. Server sendet Challenge: A63B5C32792ED9BEDFB658C11AF2C855
+3. Client berechnet Response: SHA-256(Challenge + Passwort)
+   Client sendet Response:   4C31CE638922C834...079039EE
+4. Server berechnet erwartet: 4C31CE638922C834...079039EE
+   => Authentifizierung ERFOLGREICH
 
-Sowohl Kerberos als auch SAML realisieren Single-Sign-On mittels eines vertrauten Dritten.
-Parallelen:
+--- Login-Versuch: bob ---
+1. Client sendet Benutzername: bob
+2. Server sendet Challenge: 9B1F0EA5880C85C3AF9F6809B0DBC3FE
+3. Client berechnet Response: SHA-256(Challenge + Passwort)
+   Client sendet Response:   E4EDAFDFA2F76760...4E7A410A
+4. Server berechnet erwartet: E4EDAFDFA2F76760...4E7A410A
+   => Authentifizierung ERFOLGREICH
 
-\begin{itemize}
-	\item Kerberos KDC (Key Distribution Center, Authentication Server + TGS) entspricht dem SAML-IdP.
-	\item Kerberos-Dienst (z.\,B.\ Fileserver) entspricht dem SAML-SP.
-	\item Das \emph{Ticket-Granting-Ticket} (TGT), welches nach der initialen Passwortprüfung beim KDC ausgestellt wird, entspricht am ehesten dem Cookie \texttt{\_\_Host-shib\_idp\_session} beim IdP: Beide dienen als Nachweis einer aktiven Anmeldung und werden für weitere Authentifizierungen wiederverwendet.
-	\item Das pro Dienst ausgestellte \emph{Service-Ticket} entspricht der einzelnen SAML-Assertion, die der IdP für jeden einzelnen SP erzeugt.
-\end{itemize}
+--- Login-Versuch: alice (falsches Passwort) ---
+1. Client sendet Benutzername: alice
+2. Server sendet Challenge: EEB72B2478BAE32F3496493D5C208823
+3. Client berechnet Response: SHA-256(Challenge + Passwort)
+   Client sendet Response:   01CB40BE53DD4766...359C6F73
+4. Server berechnet erwartet: FEBC072BD798A8AF...AFDFC9F6
+   => Authentifizierung FEHLGESCHLAGEN
 
-Hauptunterschied: Kerberos arbeitet nur im lokalen Netz mit symmetrischer Kryptografie, SAML nutzt asymmetrische Signaturen über HTTP und ist deshalb auch Cross-Organisation einsetzbar.
-
+--- Login-Versuch: eve (unbekannt) ---
+1. Client sendet Benutzername: eve
+   Server: Benutzer nicht gefunden.
+   => Authentifizierung FEHLGESCHLAGEN
+\end{lstlisting}
 
 % ############################################################################
 % CONTENT ENDS HERE
