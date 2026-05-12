@@ -1,0 +1,440 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half,           % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+\usepackage{longtable}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 8}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Qualität}\\[3mm]
+		{\fontsize{14}{14} \selectfont Kontrollflussgraphbasiertes Testen}
+
+		\vspace{10cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\chapter*{Aufgabe 1: Lohnsteuerberechnung}
+
+Für die Berechnung der Lohnsteuer gelten folgende Regeln:
+\begin{itemize}
+	\item Bruttolohn $< 1000$ $\rightarrow$ keine Lohnsteuer
+	\item Bruttolohn $1000$--$2500$ $\rightarrow$ 12\,\% Lohnsteuer
+	\item Bruttolohn $> 2500$ $\rightarrow$ 15\,\% Lohnsteuer
+\end{itemize}
+
+\section*{Pseudocode}
+
+\begin{lstlisting}[language={},numbers=left,xleftmargin=2em]
+FUNCTION BerechneLohnsteuer(Nettolohn)
+  IF (Nettolohn < 1000) THEN
+    Steuer = 0
+  ENDIF
+  IF (Nettolohn >= 1000 UND Nettolohn <= 2500) THEN
+    Steuer = Nettolohn * 0,12
+  ENDIF
+  IF (Nettolohn > 2500) THEN
+    Steuer = Nettolohn * 0,15
+  ENDIF
+  RETURN Steuer
+END FUNCTION
+\end{lstlisting}
+
+\section*{Kontrollflussgraph}
+
+\textbf{Knoten:}
+
+\begin{longtable}{| p{1.2cm} | p{10.5cm} |}
+	\hline
+	\textbf{Knoten} & \textbf{Anweisung} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Knoten} & \textbf{Anweisung} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	N1 & Eintritt (Funktionsstart) \\ \hline
+	N2 & IF (Nettolohn $< 1000$) \\ \hline
+	N3 & Steuer $= 0$ \\ \hline
+	N4 & IF (Nettolohn $\geq 1000$ UND Nettolohn $\leq 2500$) \\ \hline
+	N5 & Steuer $=$ Nettolohn $\cdot\, 0{,}12$ \\ \hline
+	N6 & IF (Nettolohn $> 2500$) \\ \hline
+	N7 & Steuer $=$ Nettolohn $\cdot\, 0{,}15$ \\ \hline
+	N8 & RETURN Steuer \\ \hline
+\end{longtable}
+
+\textbf{Kanten:}
+
+\begin{longtable}{| p{1.5cm} | p{1.5cm} | p{8.5cm} |}
+	\hline
+	\textbf{Von} & \textbf{Nach} & \textbf{Bedingung} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Von} & \textbf{Nach} & \textbf{Bedingung} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	N1 & N2 & Eintritt \\ \hline
+	N2 & N3 & Nettolohn $< 1000$ (wahr) \\ \hline
+	N2 & N4 & Nettolohn $\geq 1000$ (falsch) \\ \hline
+	N3 & N4 & nach Zuweisung \\ \hline
+	N4 & N5 & Nettolohn $\geq 1000 \wedge$ Nettolohn $\leq 2500$ (wahr) \\ \hline
+	N4 & N6 & Bedingung falsch \\ \hline
+	N5 & N6 & nach Zuweisung \\ \hline
+	N6 & N7 & Nettolohn $> 2500$ (wahr) \\ \hline
+	N6 & N8 & Nettolohn $\leq 2500$ (falsch) \\ \hline
+	N7 & N8 & nach Zuweisung \\ \hline
+\end{longtable}
+
+\textbf{Graphstruktur:}
+
+N1 $\rightarrow$ N2 $\xrightarrow{T}$ N3 $\rightarrow$ N4 $\xrightarrow{T}$ N5 $\rightarrow$ N6 $\xrightarrow{T}$ N7 $\rightarrow$ N8
+
+Zusätzlich: N2 $\xrightarrow{F}$ N4, \quad N4 $\xrightarrow{F}$ N6, \quad N6 $\xrightarrow{F}$ N8
+
+Der Graph besteht aus drei aufeinanderfolgenden IF-THEN-ENDIF-Blöcken ohne ELSE.
+
+\section*{100\,\% Anweisungsüberdeckung und Zweigüberdeckung}
+
+Es gibt 3 Pfade durch den Graphen, die jeweils genau einer Äquivalenzklasse entsprechen.
+Alle 3 Pfade zusammen decken alle Anweisungen und alle Zweige ab.
+
+\begin{longtable}{| p{0.5cm} | p{2.0cm} | p{5.5cm} | p{3.5cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Nettolohn} & \textbf{Pfad} & \textbf{Ergebnis} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Nettolohn} & \textbf{Pfad} & \textbf{Ergebnis} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T1 & 500 & N1$\to$N2$\to$N3$\to$N4$\to$N6$\to$N8 & Steuer $= 0$ \\ \hline
+	T2 & 1500 & N1$\to$N2$\to$N4$\to$N5$\to$N6$\to$N8 & Steuer $= 180$ \\ \hline
+	T3 & 3000 & N1$\to$N2$\to$N4$\to$N6$\to$N7$\to$N8 & Steuer $= 450$ \\ \hline
+\end{longtable}
+
+\textbf{Zweigabdeckung:}
+\begin{itemize}
+	\item N2$\to$N3 (T): T1 \quad N2$\to$N4 (F): T2, T3
+	\item N4$\to$N5 (T): T2 \quad N4$\to$N6 (F): T1, T3
+	\item N6$\to$N7 (T): T3 \quad N6$\to$N8 (F): T1, T2
+\end{itemize}
+
+Alle 6 Entscheidungszweige und alle 8 Knoten werden abgedeckt.
+
+\section*{100\,\% Einfache Bedingungsüberdeckung}
+
+Atomare Teilbedingungen:
+\begin{itemize}
+	\item N2: $C_1$ = (Nettolohn $< 1000$)
+	\item N4: $C_2$ = (Nettolohn $\geq 1000$), \quad $C_3$ = (Nettolohn $\leq 2500$)
+	\item N6: $C_4$ = (Nettolohn $> 2500$)
+\end{itemize}
+
+$C_1$ und $C_2$ sind Komplemente ($C_2 = \neg C_1$), ebenso $C_3$ und $C_4$ ($C_4 = \neg C_3$).
+Es genügen daher 2 Testfälle:
+
+\begin{longtable}{| p{0.5cm} | p{2.0cm} | p{1.5cm} | p{1.5cm} | p{1.5cm} | p{1.5cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Nettolohn} & $\mathbf{C_1}$ & $\mathbf{C_2}$ & $\mathbf{C_3}$ & $\mathbf{C_4}$ \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Nettolohn} & $\mathbf{C_1}$ & $\mathbf{C_2}$ & $\mathbf{C_3}$ & $\mathbf{C_4}$ \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T1 & 500 & T & F & T & F \\ \hline
+	T2 & 3000 & F & T & F & T \\ \hline
+\end{longtable}
+
+Jede atomare Teilbedingung nimmt mindestens einmal den Wert wahr (T) und falsch (F) an.
+
+\textbf{Hinweis:} Die einfache Bedingungsüberdeckung impliziert hier \textbf{nicht} die Zweigüberdeckung.
+Der Zweig N4$\to$N5 (wahr) wird nicht abgedeckt, da die zusammengesetzte Bedingung $C_2 \wedge C_3$ in beiden Testfällen falsch ist (F$\wedge$T bzw. T$\wedge$F).
+Für vollständige Zweigüberdeckung wäre zusätzlich T3 (z.\,B. Nettolohn $= 1500$) nötig.
+
+
+\chapter*{Aufgabe 2: Rabattberechnung}
+
+Die Funktion berechnet einen Rabatt basierend auf Warenkorbwert, Rabattcode und Gültigkeitsdatum.
+
+\section*{Pseudocode}
+
+\begin{lstlisting}[language={},numbers=left,xleftmargin=2em]
+FUNCTION berechneRabatt(warenkorbwert, rabattcode, gueltig_bis)
+  heute = aktuelles Datum
+  IF (warenkorbwert >= 50 UND rabattcode == "SOMMER20"
+      UND heute <= gueltig_bis) THEN
+    rabatt = 0.1
+  ELSE
+    rabatt = 0
+  ENDIF
+  RETURN rabatt
+END FUNCTION
+\end{lstlisting}
+
+\section*{Kontrollflussgraph}
+
+\textbf{Knoten:}
+
+\begin{longtable}{| p{1.2cm} | p{10.5cm} |}
+	\hline
+	\textbf{Knoten} & \textbf{Anweisung} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Knoten} & \textbf{Anweisung} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	N1 & Eintritt, heute $=$ aktuelles Datum \\ \hline
+	N2 & IF (warenkorbwert $\geq 50$ UND rabattcode $=$ \glqq SOMMER20\grqq{} UND heute $\leq$ gueltig\_bis) \\ \hline
+	N3 & rabatt $= 0{,}1$ (THEN-Zweig) \\ \hline
+	N4 & rabatt $= 0$ (ELSE-Zweig) \\ \hline
+	N5 & RETURN rabatt \\ \hline
+\end{longtable}
+
+\textbf{Kanten:}
+
+\begin{longtable}{| p{1.5cm} | p{1.5cm} | p{8.5cm} |}
+	\hline
+	\textbf{Von} & \textbf{Nach} & \textbf{Bedingung} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Von} & \textbf{Nach} & \textbf{Bedingung} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	N1 & N2 & Eintritt \\ \hline
+	N2 & N3 & Gesamtbedingung wahr (T) \\ \hline
+	N2 & N4 & Gesamtbedingung falsch (F) \\ \hline
+	N3 & N5 & nach Zuweisung \\ \hline
+	N4 & N5 & nach Zuweisung \\ \hline
+\end{longtable}
+
+\textbf{Graphstruktur:}
+Einfache IF-THEN-ELSE-Struktur mit einem Entscheidungsknoten (N2), zwei Zweigen (N3, N4) und einem Zusammenführungsknoten (N5).
+
+\section*{100\,\% Anweisungsüberdeckung und Zweigüberdeckung}
+
+Beide Kriterien erfordern, dass sowohl der THEN- als auch der ELSE-Zweig durchlaufen wird.
+Es werden 2 Testfälle benötigt.
+
+\begin{longtable}{| p{0.5cm} | p{1.2cm} | p{2.0cm} | p{2.0cm} | p{3.0cm} | p{1.5cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Wert} & \textbf{Code} & \textbf{gültig\_bis} & \textbf{Pfad} & \textbf{Rabatt} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Wert} & \textbf{Code} & \textbf{gültig\_bis} & \textbf{Pfad} & \textbf{Rabatt} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T1 & 100\,€ & SOMMER20 & 2026-12-31 & N1$\to$N2$\to$N3$\to$N5 & 10\,\% \\ \hline
+	T2 & 30\,€ & WINTER10 & 2025-01-01 & N1$\to$N2$\to$N4$\to$N5 & 0\,\% \\ \hline
+\end{longtable}
+
+\section*{100\,\% Einfache Bedingungsüberdeckung}
+
+Atomare Teilbedingungen der zusammengesetzten Bedingung in N2:
+\begin{itemize}
+	\item $C_1$ = (warenkorbwert $\geq 50$)
+	\item $C_2$ = (rabattcode $=$ \glqq SOMMER20\grqq{})
+	\item $C_3$ = (heute $\leq$ gueltig\_bis)
+\end{itemize}
+
+Jede Teilbedingung muss mindestens einmal wahr und einmal falsch sein.
+Es genügen 2 Testfälle:
+
+\begin{longtable}{| p{0.5cm} | p{1.3cm} | p{2.2cm} | p{2.0cm} | p{1.0cm} | p{1.0cm} | p{1.0cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Wert} & \textbf{Rabattcode} & \textbf{gültig\_bis} & $\mathbf{C_1}$ & $\mathbf{C_2}$ & $\mathbf{C_3}$ \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Wert} & \textbf{Rabattcode} & \textbf{gültig\_bis} & $\mathbf{C_1}$ & $\mathbf{C_2}$ & $\mathbf{C_3}$ \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T1 & 100 & SOMMER20 & 2026-12-31 & T & T & T \\ \hline
+	T2 & 30 & WINTER10 & 2025-01-01 & F & F & F \\ \hline
+\end{longtable}
+
+\section*{100\,\% Mehrfache Bedingungsüberdeckung}
+
+Alle $2^3 = 8$ Kombinationen der 3 atomaren Teilbedingungen müssen abgedeckt werden.
+
+\begin{longtable}{| p{0.5cm} | p{1.3cm} | p{2.2cm} | p{2.0cm} | p{0.7cm} | p{0.7cm} | p{0.7cm} | p{1.3cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Wert} & \textbf{Rabattcode} & \textbf{gültig\_bis} & $\mathbf{C_1}$ & $\mathbf{C_2}$ & $\mathbf{C_3}$ & \textbf{Rabatt} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Wert} & \textbf{Rabattcode} & \textbf{gültig\_bis} & $\mathbf{C_1}$ & $\mathbf{C_2}$ & $\mathbf{C_3}$ & \textbf{Rabatt} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T1 & 100 & SOMMER20 & 2026-12-31 & T & T & T & 10\,\% \\ \hline
+	T2 & 100 & SOMMER20 & 2025-01-01 & T & T & F & 0\,\% \\ \hline
+	T3 & 100 & WINTER10 & 2026-12-31 & T & F & T & 0\,\% \\ \hline
+	T4 & 100 & WINTER10 & 2025-01-01 & T & F & F & 0\,\% \\ \hline
+	T5 & 30 & SOMMER20 & 2026-12-31 & F & T & T & 0\,\% \\ \hline
+	T6 & 30 & SOMMER20 & 2025-01-01 & F & T & F & 0\,\% \\ \hline
+	T7 & 30 & WINTER10 & 2026-12-31 & F & F & T & 0\,\% \\ \hline
+	T8 & 30 & WINTER10 & 2025-01-01 & F & F & F & 0\,\% \\ \hline
+\end{longtable}
+
+Nur T1 ($C_1 \wedge C_2 \wedge C_3$ = wahr) führt zum THEN-Zweig (10\,\% Rabatt).
+Alle anderen Kombinationen ergeben keinen Rabatt (ELSE-Zweig).
+
+
+\chapter*{Aufgabe 3: Bubble-Sort}
+
+\section*{Pseudocode}
+
+\begin{lstlisting}[language={},numbers=left,xleftmargin=2em]
+FUNCTION BubbleSort(arr)
+  n = LENGTH(arr)
+  FOR i FROM 1 TO n-1 DO
+    FOR j FROM 1 TO n-i DO
+      IF arr[j] > arr[j+1] THEN
+        SWAP(arr[j], arr[j+1])
+      END IF
+    END FOR
+  END FOR
+END FUNCTION
+\end{lstlisting}
+
+\section*{Kontrollflussgraph}
+
+\textbf{Knoten:}
+
+\begin{longtable}{| p{1.2cm} | p{10.5cm} |}
+	\hline
+	\textbf{Knoten} & \textbf{Anweisung} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Knoten} & \textbf{Anweisung} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	N1 & n $=$ LENGTH(arr); i $= 1$ (Eintritt, Initialisierung) \\ \hline
+	N2 & i $\leq$ n$-$1\,? (äußere Schleifenbedingung) \\ \hline
+	N3 & j $= 1$ (innere Schleife Initialisierung) \\ \hline
+	N4 & j $\leq$ n$-$i\,? (innere Schleifenbedingung) \\ \hline
+	N5 & arr[j] $>$ arr[j$+$1]\,? (IF-Bedingung) \\ \hline
+	N6 & SWAP(arr[j], arr[j$+$1]) \\ \hline
+	N7 & j $=$ j $+ 1$ (inneres Inkrement) \\ \hline
+	N8 & i $=$ i $+ 1$ (äußeres Inkrement) \\ \hline
+	N9 & END FUNCTION (Austritt) \\ \hline
+\end{longtable}
+
+\textbf{Kanten:}
+
+\begin{longtable}{| p{1.5cm} | p{1.5cm} | p{8.5cm} |}
+	\hline
+	\textbf{Von} & \textbf{Nach} & \textbf{Bedingung} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Von} & \textbf{Nach} & \textbf{Bedingung} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	N1 & N2 & Eintritt \\ \hline
+	N2 & N3 & i $\leq$ n$-$1 (wahr, Schleife betreten) \\ \hline
+	N2 & N9 & i $>$ n$-$1 (falsch, Schleife beendet) \\ \hline
+	N3 & N4 & Initialisierung j \\ \hline
+	N4 & N5 & j $\leq$ n$-$i (wahr, innere Schleife betreten) \\ \hline
+	N4 & N8 & j $>$ n$-$i (falsch, innere Schleife beendet) \\ \hline
+	N5 & N6 & arr[j] $>$ arr[j$+$1] (wahr, tauschen) \\ \hline
+	N5 & N7 & arr[j] $\leq$ arr[j$+$1] (falsch, nicht tauschen) \\ \hline
+	N6 & N7 & nach SWAP \\ \hline
+	N7 & N4 & Rücksprung innere Schleife \\ \hline
+	N8 & N2 & Rücksprung äußere Schleife \\ \hline
+\end{longtable}
+
+\textbf{Graphstruktur:}
+Zwei verschachtelte Schleifen mit einer IF-Verzweigung im Kern.
+Rückkanten: N7$\to$N4 (innere Schleife) und N8$\to$N2 (äußere Schleife).
+
+\section*{100\,\% Anweisungsüberdeckung und Zweigüberdeckung}
+
+Für \textbf{Anweisungsüberdeckung} (C0) müssen alle Knoten besucht werden, insbesondere N6 (SWAP).
+
+Für \textbf{Zweigüberdeckung} (C1) müssen zusätzlich beide Zweige der IF-Bedingung abgedeckt werden (N5$\to$N6 und N5$\to$N7).
+Das Array muss sowohl einen Tausch als auch einen Nicht-Tausch auslösen.
+
+\begin{longtable}{| p{0.5cm} | p{2.5cm} | p{2.5cm} | p{5.5cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Eingabe} & \textbf{Ergebnis} & \textbf{Überdeckung} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Eingabe} & \textbf{Ergebnis} & \textbf{Überdeckung} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T1 & arr $= [3, 1, 2]$ & $[1, 2, 3]$ & 100\,\% Anweisungs- und Zweigüberdeckung \\ \hline
+\end{longtable}
+
+\textbf{Ein einziger Testfall genügt für beide Kriterien.}
+
+Ablauf für T1 mit arr $= [3, 1, 2]$, $n = 3$:
+
+\begin{longtable}{| p{0.5cm} | p{0.5cm} | p{3.0cm} | p{2.5cm} | p{2.0cm} | p{2.5cm} |}
+	\hline
+	\textbf{i} & \textbf{j} & \textbf{Vergleich} & \textbf{Ergebnis} & \textbf{Zweig} & \textbf{Array danach} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{i} & \textbf{j} & \textbf{Vergleich} & \textbf{Ergebnis} & \textbf{Zweig} & \textbf{Array danach} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	1 & 1 & $3 > 1$ & wahr & N5$\to$N6 & $[1, 3, 2]$ \\ \hline
+	1 & 2 & $3 > 2$ & wahr & N5$\to$N6 & $[1, 2, 3]$ \\ \hline
+	2 & 1 & $1 > 2$ & falsch & N5$\to$N7 & $[1, 2, 3]$ \\ \hline
+\end{longtable}
+
+\textbf{Abgedeckte Zweige:}
+\begin{itemize}
+	\item N2$\to$N3 (T): äußere Schleife betreten ($i = 1, 2$)
+	\item N2$\to$N9 (F): äußere Schleife beendet ($i = 3$)
+	\item N4$\to$N5 (T): innere Schleife betreten
+	\item N4$\to$N8 (F): innere Schleife beendet
+	\item N5$\to$N6 (T): SWAP ausgeführt ($i{=}1, j{=}1$ und $i{=}1, j{=}2$)
+	\item N5$\to$N7 (F): kein SWAP ($i{=}2, j{=}1$)
+	\item N7$\to$N4: Rückkante innere Schleife
+	\item N8$\to$N2: Rückkante äußere Schleife
+\end{itemize}
+
+Alle 11 Kanten und alle 9 Knoten werden abgedeckt.
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
