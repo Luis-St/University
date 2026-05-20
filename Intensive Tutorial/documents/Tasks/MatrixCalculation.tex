@@ -1,0 +1,211 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../for_latex/preamble}
+\title{\Huge\textbf{Matrizenrechnung}}
+\author{Luis Staudt}
+\date{}
+
+% Code-Highlighting für Java
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{keywordcolor}{rgb}{0.8,0.47,0.13}
+
+\lstdefinestyle{java}{
+	language=,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\bfseries\color{blue!70!black},
+	stringstyle=\color{red!60!black},
+	commentstyle=\itshape\color{gray},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	numbersep=8pt,
+	frame=single,
+	framerule=0.4pt,
+	rulecolor=\color{gray!50},
+	breaklines=true,
+	showstringspaces=false,
+	tabsize=4,
+	xleftmargin=1.5em,
+	framexleftmargin=1.5em,
+	aboveskip=0.8em,
+	belowskip=0.6em
+}
+\lstset{style=java}
+
+\newtcolorbox{hinweis}[1][Hinweis]{
+	colback=blue!5,
+	colframe=blue!40!black,
+	fonttitle=\bfseries,
+	title=#1,
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\newtcolorbox{beispiel}[1][Beispiel]{
+	colback=green!5,
+	colframe=green!40!black,
+	fonttitle=\bfseries,
+	title=#1,
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Intensivtutorium}\\[0.3em]
+	{\large Programmierung}\\[0.6em]
+	\begin{tabular}{r l @{\hspace{2cm}} r l}
+		\textbf{Semester:}      & Sommersemester 2026                    & \textbf{Tutor:}         & Luis Staudt \\
+		\textbf{Studiengänge:}  & MIB, OMB, PEB, MVB         & & \\
+	\end{tabular}\\[0.6em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{1em}
+
+% --- Seitenkopf und -fuß (ab Seite 2) ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Intensivtutorium -- Grundlagen der Programmierung}
+\rhead{\small SS 2026}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+
+% =============================================
+% Aufgabe 2 -- Matrixrechnung
+% =============================================
+
+\section*{Aufgabe 2 -- Matrixrechnung}
+
+Matrizen werden als zweidimensionale \texttt{int}-Arrays dargestellt. Eine Matrix mit $m$~Zeilen und $n$~Spalten entspricht \texttt{int[m][n]}. Der Zugriff \texttt{matrix[i][j]} liefert den Wert in Zeile~\texttt{i}, Spalte~\texttt{j}.
+
+\begin{hinweis}[Mathematischer Hintergrund]
+	\begin{itemize}[nosep]
+  \item \textbf{Addition:}\; Zwei Matrizen gleicher Größe werden elementweise addiert: $C_{ij} = A_{ij} + B_{ij}$
+  \item \textbf{Transponieren:}\; Zeilen und Spalten werden vertauscht: $B_{ij} = A_{ji}$.\\ Aus einer $m \times n$-Matrix wird eine $n \times m$-Matrix.
+  \item \textbf{Multiplikation:}\; Für $A$ ($m \times n$) und $B$ ($n \times p$) gilt:\; $C_{ij} = \sum_{k=0}^{n-1} A_{ik} \cdot B_{kj}$.\\ Das Ergebnis $C$ hat die Größe $m \times p$.
+	\end{itemize}
+\end{hinweis}
+
+\medskip
+Das folgende Diagramm veranschaulicht, wie ein einzelnes Element bei der \textbf{Matrixmultiplikation} berechnet wird -- die markierte Zeile aus $A$ wird elementweise mit der markierten Spalte aus $B$ multipliziert und die Produkte aufsummiert:
+
+\begin{center}
+	\begin{tikzpicture}[
+		cell/.style={draw, minimum size=0.7cm, font=\small, anchor=center},
+		highlight/.style={cell, fill=blue!15},
+		result/.style={cell, fill=orange!20},
+		label/.style={font=\bfseries},
+	]
+		% Matrix A
+		\node[label] at (0.7, 1.1) {$A$};
+		\node[highlight] (a00) at (0.35, 0.35)  {1};
+		\node[highlight] (a01) at (1.05, 0.35)  {2};
+		\node[cell]      (a10) at (0.35, -0.35) {3};
+		\node[cell]      (a11) at (1.05, -0.35) {4};
+		
+		% Multiplikationszeichen
+		\node[font=\Large] at (1.9, 0) {$\cdot$};
+		
+		% Matrix B
+		\node[label] at (3.25, 1.1) {$B$};
+		\node[highlight] (b00) at (2.75, 0.35)  {5};
+		\node[cell]      (b01) at (3.45, 0.35)  {6};
+		\node[highlight] (b10) at (2.75, -0.35) {7};
+		\node[cell]      (b11) at (3.45, -0.35) {8};
+		
+		% Gleichheitszeichen
+		\node[font=\Large] at (4.2, 0) {$=$};
+		
+		% Matrix C
+		\node[label] at (5.55, 1.1) {$C$};
+		\node[result] (c00) at (5.05, 0.35)  {19};
+		\node[cell]   (c01) at (5.75, 0.35)  {22};
+		\node[cell]   (c10) at (5.05, -0.35) {43};
+		\node[cell]   (c11) at (5.75, -0.35) {50};
+		
+		% Erklärung
+		\node[anchor=west, font=\footnotesize, text width=6cm] at (6.5, 0)
+			{$C_{0,0} = 1 \cdot 5 + 2 \cdot 7 = 19$};
+		
+		% Pfeile
+		\draw[-{Stealth}, blue!60, thick, shorten >=2pt, shorten <=2pt]
+		(a01.east) to[out=0, in=180] (c00.west);
+		\draw[-{Stealth}, blue!60, thick, shorten >=2pt, shorten <=2pt]
+		(b10.south) to[out=-90, in=-90] (c00.south);
+	\end{tikzpicture}
+\end{center}
+
+\bigskip
+Implementiere die folgenden Methoden:
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+
+\item \textbf{Matrix ausgeben} -- Gibt die Matrix zeilenweise formatiert auf der Konsole aus. Jeder Wert soll rechtsbündig mit fester Breite ausgegeben werden, damit die Spalten sauber untereinander stehen.
+
+\begin{lstlisting}
+static void ausgeben(int[][] matrix)
+\end{lstlisting}
+
+\begin{beispiel}
+	\begin{verbatim}
+  1   2   3
+  4   5   6
+	\end{verbatim}
+\end{beispiel}
+
+\item \textbf{Matrixaddition} -- Addiert zwei Matrizen gleicher Größe elementweise und gibt die Ergebnismatrix zurück.
+
+\begin{lstlisting}
+static int[][] addieren(int[][] a, int[][] b)
+\end{lstlisting}
+
+\item \textbf{Transponieren} -- Erzeugt die transponierte Matrix und gibt sie zurück.
+
+\begin{lstlisting}
+static int[][] transponieren(int[][] matrix)
+\end{lstlisting}
+
+\item \textbf{Matrixmultiplikation} -- Multipliziert zwei Matrizen und gibt das Ergebnis zurück.
+
+\begin{lstlisting}
+static int[][] multiplizieren(int[][] a, int[][] b)
+\end{lstlisting}
+
+\begin{hinweis}
+	Bei der Multiplikation muss die Spaltenanzahl von \texttt{a} mit der Zeilenanzahl von \texttt{b} übereinstimmen. Du kannst davon ausgehen, dass die übergebenen Matrizen immer gültige Dimensionen haben.
+\end{hinweis}
+
+\item \textbf{Einheitsmatrix erzeugen} -- Erzeugt eine $n \times n$-Einheitsmatrix (1 auf der Diagonale, sonst 0).
+
+\begin{lstlisting}
+static int[][] einheitsmatrix(int n)
+\end{lstlisting}
+
+\item \textbf{Test in \texttt{main}} -- Schreibe eine \texttt{main}-Methode, die folgende Matrizen anlegt und die Methoden testet:
+
+\[
+	A = \begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}, \qquad
+	B = \begin{pmatrix} 5 & 6 \\ 7 & 8 \end{pmatrix}
+\]
+
+Berechne $A + B$, $A^T$, $A \cdot B$ und $E_2 \cdot A$ (wobei $E_2$ die $2\times2$-Einheitsmatrix ist) und gib alle Ergebnisse mit \texttt{ausgeben()} aus.
+
+\end{enumerate}
+
+\end{document}

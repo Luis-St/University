@@ -1,0 +1,217 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../for_latex/preamble}
+\title{\Huge\textbf{Kinoreservierung}}
+\author{Luis Staudt}
+\date{}
+
+% Code-Highlighting für Java
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{keywordcolor}{rgb}{0.8,0.47,0.13}
+
+\lstdefinestyle{java}{
+	language=,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\bfseries\color{blue!70!black},
+	stringstyle=\color{red!60!black},
+	commentstyle=\itshape\color{gray},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	numbersep=8pt,
+	frame=single,
+	framerule=0.4pt,
+	rulecolor=\color{gray!50},
+	breaklines=true,
+	showstringspaces=false,
+	tabsize=4,
+	xleftmargin=1.5em,
+	framexleftmargin=1.5em,
+	aboveskip=0.8em,
+	belowskip=0.6em
+}
+\lstset{style=java}
+
+\newtcolorbox{hinweis}[1][Hinweis]{
+	colback=blue!5,
+	colframe=blue!40!black,
+	fonttitle=\bfseries,
+	title=#1,
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\newtcolorbox{beispiel}[1][Beispiel]{
+	colback=green!5,
+	colframe=green!40!black,
+	fonttitle=\bfseries,
+	title=#1,
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Intensivtutorium}\\[0.3em]
+	{\large Programmierung}\\[0.6em]
+	\begin{tabular}{r l @{\hspace{2cm}} r l}
+		\textbf{Semester:}      & Sommersemester 2026                    & \textbf{Tutor:}         & Luis Staudt \\
+		\textbf{Studiengänge:}  & MIB, OMB, PEB, MVB         & & \\
+	\end{tabular}\\[0.6em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{1em}
+
+% --- Seitenkopf und -fuß (ab Seite 2) ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Intensivtutorium -- Grundlagen der Programmierung}
+\rhead{\small SS 2026}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+
+% =============================================
+% Aufgabe 1 -- Kinoreservierung
+% =============================================
+
+\section*{Aufgabe 1 -- Kinoreservierung}
+
+Ein kleines Kino verwaltet seine Sitzplätze mit einem zweidimensionalen Array. Jeder Eintrag steht für einen Sitzplatz: \texttt{true} bedeutet \emph{belegt}, \texttt{false} bedeutet \emph{frei}.
+
+\begin{lstlisting}
+boolean[][] kino = new boolean[reihen][plaetze];
+\end{lstlisting}
+
+Der Saal hat \texttt{reihen} Reihen mit jeweils \texttt{plaetze} Sitzen. Zu Beginn sind alle Plätze frei.
+
+\begin{center}
+	\begin{tikzpicture}[
+		frei/.style={draw, minimum size=0.55cm, fill=green!15, font=\footnotesize\ttfamily},
+		belegt/.style={draw, minimum size=0.55cm, fill=red!25, font=\footnotesize\ttfamily},
+	]
+		% Reihe 0
+		\node[anchor=east, font=\footnotesize] at (-0.2, 0) {Reihe 0:};
+		\foreach \p/\s in {0/frei,1/frei,2/belegt,3/frei,4/frei,5/frei,6/frei,7/frei} {
+			\node[\s] at (\p*0.65, 0) {\ifx\s\belegt X\else O\fi};
+		}
+		% helper macro workaround
+		\node[belegt] at (2*0.65, 0) {X};
+		
+		% Reihe 1
+		\node[anchor=east, font=\footnotesize] at (-0.2, -0.75) {Reihe 1:};
+		\foreach \p in {0,...,7} {
+			\node[frei] at (\p*0.65, -0.75) {O};
+		}
+		
+		% Reihe 2
+		\node[anchor=east, font=\footnotesize] at (-0.2, -1.5) {Reihe 2:};
+		\node[frei]   at (0*0.65, -1.5) {O};
+		\node[belegt] at (1*0.65, -1.5) {X};
+		\node[belegt] at (2*0.65, -1.5) {X};
+		\node[belegt] at (3*0.65, -1.5) {X};
+		\foreach \p in {4,...,7} {
+			\node[frei] at (\p*0.65, -1.5) {O};
+		}
+		
+		% Reihe 3
+		\node[anchor=east, font=\footnotesize] at (-0.2, -2.25) {Reihe 3:};
+		\foreach \p in {0,...,7} {
+			\node[frei] at (\p*0.65, -2.25) {O};
+		}
+		
+		% Reihe 4
+		\node[anchor=east, font=\footnotesize] at (-0.2, -3.0) {Reihe 4:};
+		\foreach \p in {0,...,4} {
+			\node[frei] at (\p*0.65, -3.0) {O};
+		}
+		\node[belegt] at (5*0.65, -3.0) {X};
+		\node[belegt] at (6*0.65, -3.0) {X};
+		\node[frei]   at (7*0.65, -3.0) {O};
+		
+		% Spaltenindizes
+		\foreach \p in {0,...,7} {
+			\node[font=\tiny\color{gray}] at (\p*0.65, 0.55) {\p};
+		}
+		
+		% Legende
+		\node[frei, anchor=west] at (6.2, -0.5) {O};
+		\node[anchor=west, font=\footnotesize] at (6.85, -0.5) {= frei};
+		\node[belegt, anchor=west] at (6.2, -1.15) {X};
+		\node[anchor=west, font=\footnotesize] at (6.85, -1.15) {= belegt};
+		
+		% Index-Hinweis
+		\draw[-{Stealth}, gray, thick] (-0.5, 0.55) -- (-0.5, -3.0)
+		node[midway, left, font=\tiny\color{gray}] {r};
+		\draw[-{Stealth}, gray, thick] (-0.15, 0.85) -- (7*0.65+0.25, 0.85)
+		node[midway, above, font=\tiny\color{gray}] {p};
+	\end{tikzpicture}
+\end{center}
+
+\begin{hinweis}
+	Der Index \texttt{kino[r][p]} steht für Reihe~\texttt{r}, Platz~\texttt{p} (jeweils ab~0).
+\end{hinweis}
+
+\bigskip
+Implementiere die folgenden Methoden:
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+
+\item \textbf{Saal anzeigen} -- Gibt den Saal zeilenweise auf der Konsole aus. Verwende \texttt{X} für belegte und \texttt{O} für freie Plätze. Vor jeder Zeile soll die Reihennummer stehen.
+
+\begin{lstlisting}
+static void anzeigen(boolean[][] kino)
+\end{lstlisting}
+
+\item \textbf{Platz reservieren} -- Reserviert den Platz in Reihe~\texttt{r}, Position~\texttt{p}. Ist der Platz bereits belegt oder sind die Indizes ungültig, soll eine Fehlermeldung auf der Konsole ausgegeben und \texttt{false} zurückgegeben werden. Bei erfolgreicher Reservierung wird \texttt{true} zurückgegeben.
+
+\begin{lstlisting}
+static boolean reservieren(boolean[][] kino, int r, int p)
+\end{lstlisting}
+
+\item \textbf{Freie Plätze zählen} -- Gibt die Gesamtanzahl aller freien Plätze im Kino zurück.
+
+\begin{lstlisting}
+static int freiePlaetze(boolean[][] kino)
+\end{lstlisting}
+
+\item \textbf{Reihe komplett frei?} -- Prüft, ob in der angegebenen Reihe \emph{alle} Plätze frei sind.
+
+\begin{lstlisting}
+static boolean reiheFrei(boolean[][] kino, int reihe)
+\end{lstlisting}
+
+\item \textbf{Gruppenreservierung} -- Eine Gruppe von \texttt{anzahl} Personen möchte nebeneinander in \emph{derselben Reihe} sitzen. Die Methode sucht den ersten zusammenhängenden freien Bereich, der groß genug ist, reserviert die Plätze und gibt die Reihe zurück. Wird kein passender Bereich gefunden, wird \texttt{-1} zurückgegeben.
+
+\begin{lstlisting}
+static int gruppenReservierung(boolean[][] kino, int anzahl)
+\end{lstlisting}
+
+\begin{hinweis}
+	Für Teilaufgabe e) muss in jeder Reihe nach einem zusammenhängenden Block aus \texttt{anzahl} freien Plätzen gesucht werden. Überlege dir, wie du die Länge des aktuellen freien Bereichs beim Durchlaufen mitzählen kannst.
+\end{hinweis}
+
+\item \textbf{Belegungsgrad} -- Berechnet den prozentualen Anteil der belegten Plätze und gibt ihn als \texttt{double} zurück (z.\,B.\ 42.5 für 42{,}5\,\%).
+
+\begin{lstlisting}
+static double belegungsgrad(boolean[][] kino)
+\end{lstlisting}
+
+\end{enumerate}
+
+\end{document}

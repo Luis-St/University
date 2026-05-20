@@ -1,0 +1,262 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../for_latex/preamble}
+\title{\Huge\textbf{Flugbahn zeichnen}}
+\author{Luis Staudt}
+\date{}
+
+% Code-Highlighting für Java
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{keywordcolor}{rgb}{0.8,0.47,0.13}
+
+\lstdefinestyle{java}{
+	language=,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\bfseries\color{blue!70!black},
+	stringstyle=\color{red!60!black},
+	commentstyle=\itshape\color{gray},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	numbersep=8pt,
+	frame=single,
+	framerule=0.4pt,
+	rulecolor=\color{gray!50},
+	breaklines=true,
+	showstringspaces=false,
+	tabsize=4,
+	xleftmargin=1.5em,
+	framexleftmargin=1.5em,
+	aboveskip=0.8em,
+	belowskip=0.6em
+}
+\lstset{style=java}
+
+\newtcolorbox{hinweis}[1][Hinweis]{
+	colback=blue!5,
+	colframe=blue!40!black,
+	fonttitle=\bfseries,
+	title=#1,
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\newtcolorbox{beispiel}[1][Beispiel]{
+	colback=green!5,
+	colframe=green!40!black,
+	fonttitle=\bfseries,
+	title=#1,
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Intensivtutorium}\\[0.3em]
+	{\large Programmierung}\\[0.6em]
+	\begin{tabular}{r l @{\hspace{2cm}} r l}
+		\textbf{Semester:}      & Sommersemester 2026                    & \textbf{Tutor:}         & Luis Staudt \\
+		\textbf{Studiengänge:}  & MIB, OMB, PEB, MVB         & & \\
+	\end{tabular}\\[0.6em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{1em}
+
+% --- Seitenkopf und -fuß (ab Seite 2) ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Intensivtutorium -- Grundlagen der Programmierung}
+\rhead{\small SS 2026}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+
+% =============================================
+% Aufgabe 3 -- Flugbahn zeichnen
+% =============================================
+
+\section*{Aufgabe 3 -- Flugbahn zeichnen}
+
+Bei einem schiefen Wurf wird ein Objekt mit der Startgeschwindigkeit $v_0$ unter dem Winkel $\alpha$ abgeworfen. Wir vernachlässigen den Luftwiderstand. Die Position zum Zeitpunkt $t$ berechnet sich wie folgt:
+
+\[
+	x(t) = v_0 \cdot \cos(\alpha) \cdot t
+	\qquad\qquad
+	y(t) = v_0 \cdot \sin(\alpha) \cdot t \;-\; \frac{1}{2}\,g\,t^2
+\]
+
+mit der Erdbeschleunigung $g = 9{,}81\;\text{m/s}^2$.
+
+\begin{center}
+	\begin{tikzpicture}[>=Stealth, scale=0.9]
+		% Achsen
+		\draw[->, thick] (-0.3, 0) -- (9, 0) node[right] {$x$};
+		\draw[->, thick] (0, -0.3) -- (0, 3.5) node[above] {$y$};
+		
+		% Flugbahn (Parabel)
+		\draw[blue!70!black, very thick, domain=0:8.4, samples=80]
+		plot (\x, {3.2*\x/4.2 - 0.5*3.2*\x*\x/(4.2*4.2)});
+		
+		% Startvektor
+		\draw[->, red!70!black, very thick] (0,0) -- (1.5, 1.5)
+		node[midway, above left] {$v_0$};
+		
+		% Winkel
+		\draw[red!70!black, thick] (0.8, 0) arc[start angle=0, end angle=45, radius=0.8]
+		node[midway, right, font=\small] {$\alpha$};
+		
+		% Beschriftungen
+		\draw[<->, gray] (0, -0.6) -- (8.4, -0.6)
+		node[midway, below, font=\small] {Flugweite};
+		\draw[<->, gray] (-0.6, 0) -- (-0.6, 1.6)
+		node[midway, left, font=\small, align=center] {max.\\Höhe};
+		\draw[dashed, gray] (0, 1.6) -- (4.2, 1.6);
+		\draw[dashed, gray] (4.2, 0) -- (4.2, 1.6);
+		
+		% Aufprallpunkt
+		\fill (8.4, 0) circle (2pt);
+		\fill (0, 0) circle (2pt);
+	\end{tikzpicture}
+\end{center}
+
+\medskip
+Die Flugbahn soll als Kurve in ein \texttt{int[][]}-Raster gezeichnet werden -- ähnlich wie bei der Bildverarbeitung. Jede Zelle des Rasters entspricht einem ``Pixel''. Ein Wert von \texttt{0} steht für den Hintergrund, ein Wert von \texttt{1} für die Flugbahn.
+
+\begin{hinweis}[Koordinatensystem]
+	Das Array \texttt{int[hoehe][breite]} stellt das Zeichenfeld dar. \textbf{Zeile~0 ist oben}, Zeile~\texttt{hoehe-1} ist unten (wie bei Bildern). Die y-Achse ist also im Vergleich zum physikalischen Koordinatensystem \emph{invertiert}:
+	\[
+		\texttt{zeile} = (\texttt{hoehe} - 1) - y_{\text{skaliert}}
+	\]
+\end{hinweis}
+
+\begin{center}
+	\begin{tikzpicture}[>=Stealth, scale=0.55]
+		% --- Linkes Diagramm: Physik ---
+		\node[font=\bfseries\small] at (3, 6.8) {Physik};
+		\draw[->, thick] (-0.3, 0) -- (6.5, 0) node[right, font=\small] {$x$};
+		\draw[->, thick] (0, -0.3) -- (0, 6.5) node[above, font=\small] {$y$};
+		\node[font=\tiny, gray] at (-0.4, 0) {0};
+		\node[font=\tiny, gray] at (-0.4, 5.5) {max};
+		\draw[blue!70!black, very thick, domain=0:6, samples=60]
+		plot (\x, {5.5*\x/3.0 - 5.5*\x*\x/(3.0*6.0)});
+		\draw[->, green!50!black, thick] (0, 0.2) -- (0, 2)
+		node[midway, left, font=\tiny] {$y$ steigt};
+		
+		% Pfeil
+		\draw[->, very thick, gray] (7.5, 3) -- (9.5, 3)
+		node[midway, above, font=\small] {Umrechnung};
+		
+		% --- Rechtes Diagramm: Array ---
+		\node[font=\bfseries\small] at (14, 6.8) {Array \texttt{int[h][b]}};
+		\draw[->, thick] (10.7, 6) -- (17.5, 6) node[right, font=\small] {spalte};
+		\draw[->, thick] (11, 6.3) -- (11, -0.3) node[below, font=\small] {zeile};
+		\node[font=\tiny, gray] at (10.4, 6) {0};
+		\node[font=\tiny, gray] at (10.1, 0.5) {h\,$-$\,1};
+		
+		% Raster (leicht angedeutet)
+		\foreach \r in {0,...,10} {
+			\draw[gray!20] (11, 0.5+\r*0.5) -- (17, 0.5+\r*0.5);
+		}
+		\foreach \c in {0,...,12} {
+			\draw[gray!20] (11+\c*0.5, 0.5) -- (11+\c*0.5, 5.5);
+		}
+		
+		% Flugbahn invertiert
+		\draw[blue!70!black, very thick, domain=0:6, samples=60]
+		plot ({11+\x}, {5.5 - 5.5*\x/3.0 + 5.5*\x*\x/(3.0*6.0) + 0.5});
+		\draw[->, red!50!black, thick] (11, 5.8) -- (11, 4)
+		node[midway, left, font=\tiny] {zeile steigt};
+	\end{tikzpicture}
+\end{center}
+
+\begin{hinweis}[Hilfsfunktionen]
+	In Java lassen sich Winkelfunktionen über \texttt{Math.cos()}, \texttt{Math.sin()} und die Umrechnung von Grad in Bogenmaß über \texttt{Math.toRadians()} nutzen.
+\end{hinweis}
+
+\bigskip
+Implementiere die folgenden Methoden:
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+
+\item \textbf{Position berechnen} -- Berechnet die Position $(x, y)$ zum Zeitpunkt~$t$ und gibt sie als \texttt{double[]} mit zwei Einträgen zurück.
+
+\begin{lstlisting}
+static double[] position(double v0, double alpha, double t)
+\end{lstlisting}
+
+\item \textbf{Maximale Flugweite und Höhe bestimmen} -- Berechnet durch schrittweises Erhöhen von $t$ (in Schritten von \texttt{dt}) die maximale Höhe und die Flugweite (x-Position beim Aufprall, also wenn $y \leq 0$). Gibt beides als \texttt{double[]\{flugweite, maxHoehe\}} zurück.
+
+\begin{lstlisting}
+static double[] flugdaten(double v0, double alpha, double dt)
+\end{lstlisting}
+
+\item \textbf{Flugbahn ins Raster zeichnen} -- Erzeugt ein \texttt{int[hoehe][breite]}-Array und zeichnet die Flugbahn als Kurve ein. Die physikalischen Koordinaten müssen dafür auf die Rastergröße skaliert werden. Nutze die Ergebnisse aus \texttt{flugdaten()}, um die Skalierungsfaktoren zu bestimmen:
+
+\[
+	\texttt{spalte} = \texttt{(int)}\left(\frac{x}{\text{flugweite}} \cdot (\texttt{breite} - 1)\right)
+	\qquad
+	\texttt{zeile} = (\texttt{hoehe} - 1) - \texttt{(int)}\left(\frac{y}{\text{maxHoehe}} \cdot (\texttt{hoehe} - 1)\right)
+\]
+
+\begin{lstlisting}
+static int[][] zeichneFlugbahn(double v0, double alpha,
+                                double dt, int breite, int hoehe)
+\end{lstlisting}
+
+\item \textbf{Raster ausgeben} -- Gibt das Raster auf der Konsole aus. Verwende ein Leerzeichen für \texttt{0} und ein \texttt{*} für \texttt{1}.
+
+\begin{lstlisting}
+static void rasterAusgeben(int[][] raster)
+\end{lstlisting}
+
+\begin{beispiel}[Mögliche Ausgabe ($v_0 = 20$, $\alpha = 45°$, Raster $60 \times 20$)]
+\begin{verbatim}
+                  * * *
+              * *       * *
+            *               *
+          *                   *
+        *                       *
+       *                         *
+     *                             *
+    *                               *
+   *                                 *
+
+  *                                   *
+
+ *                                     *
+
+*                                       *
+\end{verbatim}
+\end{beispiel}
+
+\item \textbf{Mehrere Winkel vergleichen} -- Zeichne die Flugbahnen für die Winkel $30°$, $45°$ und $60°$ in \emph{dasselbe} Raster. Verwende unterschiedliche Werte (\texttt{1}, \texttt{2}, \texttt{3}) für die verschiedenen Kurven und passe die Ausgabe entsprechend an (z.\,B.\ verschiedene Zeichen).
+
+\begin{lstlisting}
+static int[][] vergleicheWinkel(double v0, double dt,
+                                 int breite, int hoehe)
+\end{lstlisting}
+
+\begin{hinweis}
+	Für die gemeinsame Darstellung muss ein einheitlicher Skalierungsfaktor verwendet werden. Bestimme dazu zuerst die maximale Flugweite und die maximale Höhe über \emph{alle} Winkel hinweg und verwende diese als Bezugsgröße für die Skalierung.
+\end{hinweis}
+
+\item \textbf{Test in \texttt{main}} -- Teste die Methoden mit $v_0 = 20$\,m/s, $\text{dt} = 0{,}01$\,s und einem Raster der Größe $60 \times 20$. Gib die Flugbahn für $45°$ und anschließend den Vergleich der drei Winkel aus.
+
+\end{enumerate}
+
+\end{document}
