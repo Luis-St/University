@@ -1,0 +1,544 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half,           % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+\usepackage{longtable}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 9}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Qualität}\\[3mm]
+		{\fontsize{14}{14} \selectfont Unit-Testing mit JUnit}
+
+		\vspace{10cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\chapter*{Aufgabe 1: Unit-Test für TemperatureConverter}
+
+Die Klasse \texttt{TemperatureConverter} besitzt zwei reine (zustandslose)
+Methoden zur Umrechnung zwischen Celsius und Fahrenheit. Da keine Verzweigungen
+oder Zustände existieren, genügen für jede Methode einige repräsentative
+Eingabewerte (typische Werte, Gefrier-/Siedepunkt, negative Werte, Hin- und
+Rückrechnung).
+
+\section*{Getestete Klasse}
+
+\begin{lstlisting}[language=Java]
+public class TemperatureConverter {
+
+    // Konvertiert Celsius in Fahrenheit
+    public double celsiusToFahrenheit(double celsius) {
+        return (celsius * 9 / 5) + 32;
+    }
+
+    // Konvertiert Fahrenheit in Celsius
+    public double fahrenheitToCelsius(double fahrenheit) {
+        return (fahrenheit - 32) * 5 / 9;
+    }
+}
+\end{lstlisting}
+
+\section*{Testfälle}
+
+\begin{longtable}{| p{1.0cm} | p{4.5cm} | p{2.5cm} | p{3.0cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Methode / Eingabe} & \textbf{Erwartung} & \textbf{Zweck} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Methode / Eingabe} & \textbf{Erwartung} & \textbf{Zweck} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T1 & celsiusToFahrenheit(0) & 32,0 & Gefrierpunkt \\ \hline
+	T2 & celsiusToFahrenheit(100) & 212,0 & Siedepunkt \\ \hline
+	T3 & celsiusToFahrenheit($-40$) & $-40$,0 & Schnittpunkt der Skalen \\ \hline
+	T4 & fahrenheitToCelsius(32) & 0,0 & Gefrierpunkt \\ \hline
+	T5 & fahrenheitToCelsius(212) & 100,0 & Siedepunkt \\ \hline
+	T6 & fahrenheitToCelsius($-40$) & $-40$,0 & Schnittpunkt der Skalen \\ \hline
+	T7 & Hin- und Rückrechnung & Ausgangswert & Konsistenz \\ \hline
+\end{longtable}
+
+\textbf{Hinweis:} Da Gleitkommazahlen verglichen werden, wird die
+Überladung \texttt{assertEquals(expected, actual, delta)} mit einer kleinen
+Toleranz ($\delta = 0{,}0001$) verwendet.
+
+\section*{Testklasse}
+
+\begin{lstlisting}[language=Java]
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TemperatureConverterTest {
+
+    private final TemperatureConverter converter = new TemperatureConverter();
+    private static final double DELTA = 0.0001;
+
+    @Test
+    void celsiusToFahrenheit_Gefrierpunkt() {
+        assertEquals(32.0, converter.celsiusToFahrenheit(0), DELTA);
+    }
+
+    @Test
+    void celsiusToFahrenheit_Siedepunkt() {
+        assertEquals(212.0, converter.celsiusToFahrenheit(100), DELTA);
+    }
+
+    @Test
+    void celsiusToFahrenheit_negativ() {
+        assertEquals(-40.0, converter.celsiusToFahrenheit(-40), DELTA);
+    }
+
+    @Test
+    void fahrenheitToCelsius_Gefrierpunkt() {
+        assertEquals(0.0, converter.fahrenheitToCelsius(32), DELTA);
+    }
+
+    @Test
+    void fahrenheitToCelsius_Siedepunkt() {
+        assertEquals(100.0, converter.fahrenheitToCelsius(212), DELTA);
+    }
+
+    @Test
+    void fahrenheitToCelsius_negativ() {
+        assertEquals(-40.0, converter.fahrenheitToCelsius(-40), DELTA);
+    }
+
+    @Test
+    void hinUndRueckrechnungIstKonsistent() {
+        double celsius = 37.5;
+        double fahrenheit = converter.celsiusToFahrenheit(celsius);
+        assertEquals(celsius, converter.fahrenheitToCelsius(fahrenheit), DELTA);
+    }
+}
+\end{lstlisting}
+
+
+\chapter*{Aufgabe 2: Unit-Test für BankAccount}
+
+Die Klasse \texttt{BankAccount} verwaltet einen Kontostand mit den Operationen
+\texttt{deposit} (Einzahlen) und \texttt{withdraw} (Abheben). Beide Methoden
+enthalten Validierungen, die bei ungültigen Beträgen eine
+\texttt{IllegalArgumentException} werfen. Getestet werden daher sowohl die
+gültigen (Happy-Path) als auch die ungültigen Pfade (Ausnahmen).
+
+\section*{Getestete Klasse}
+
+\begin{lstlisting}[language=Java]
+public class BankAccount {
+    private double balance;
+
+    public BankAccount() {
+        this.balance = 0.0;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void deposit(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Deposit amount must be positive");
+        }
+        balance += amount;
+    }
+
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Withdrawal amount must be positive");
+        }
+        if (amount > balance) {
+            throw new IllegalArgumentException("Insufficient funds");
+        }
+        balance -= amount;
+    }
+}
+\end{lstlisting}
+
+\section*{Testfälle}
+
+\begin{longtable}{| p{1.0cm} | p{5.0cm} | p{6.0cm} |}
+	\hline
+	\textbf{Nr.} & \textbf{Szenario} & \textbf{Erwartetes Verhalten} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Nr.} & \textbf{Szenario} & \textbf{Erwartetes Verhalten} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	T1 & Neues Konto & Kontostand $= 0{,}0$ \\ \hline
+	T2 & deposit(100) & Kontostand $= 100{,}0$ \\ \hline
+	T3 & deposit(0) bzw. deposit($-50$) & IllegalArgumentException \\ \hline
+	T4 & deposit(100), withdraw(40) & Kontostand $= 60{,}0$ \\ \hline
+	T5 & withdraw(0) bzw. withdraw($-10$) & IllegalArgumentException \\ \hline
+	T6 & withdraw(50) bei Kontostand 0 & IllegalArgumentException (Insufficient funds) \\ \hline
+	T7 & withdraw genau in Höhe des Kontostands & Kontostand $= 0{,}0$ (Grenzfall) \\ \hline
+\end{longtable}
+
+\section*{Testklasse}
+
+\begin{lstlisting}[language=Java]
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class BankAccountTest {
+
+    private BankAccount account;
+    private static final double DELTA = 0.0001;
+
+    @BeforeEach
+    void setUp() {
+        account = new BankAccount();
+    }
+
+    @Test
+    void neuesKontoHatGuthabenNull() {
+        assertEquals(0.0, account.getBalance(), DELTA);
+    }
+
+    @Test
+    void depositErhoehtGuthaben() {
+        account.deposit(100);
+        assertEquals(100.0, account.getBalance(), DELTA);
+    }
+
+    @Test
+    void depositMitNichtPositivemBetragWirftException() {
+        assertThrows(IllegalArgumentException.class, () -> account.deposit(0));
+        assertThrows(IllegalArgumentException.class, () -> account.deposit(-50));
+    }
+
+    @Test
+    void withdrawVerringertGuthaben() {
+        account.deposit(100);
+        account.withdraw(40);
+        assertEquals(60.0, account.getBalance(), DELTA);
+    }
+
+    @Test
+    void withdrawMitNichtPositivemBetragWirftException() {
+        assertThrows(IllegalArgumentException.class, () -> account.withdraw(0));
+        assertThrows(IllegalArgumentException.class, () -> account.withdraw(-10));
+    }
+
+    @Test
+    void withdrawUeberGuthabenWirftException() {
+        Exception ex = assertThrows(IllegalArgumentException.class, () -> account.withdraw(50));
+        assertEquals("Insufficient funds", ex.getMessage());
+    }
+
+    @Test
+    void withdrawGesamtesGuthabenErlaubt() {
+        account.deposit(50);
+        account.withdraw(50);
+        assertEquals(0.0, account.getBalance(), DELTA);
+    }
+}
+\end{lstlisting}
+
+
+\chapter*{Aufgabe 3: ShoppingCart}
+
+Es wird eine Klasse \texttt{ShoppingCart} implementiert, die das Hinzufügen und
+Entfernen von Artikeln (Name + Preis) sowie die Berechnung des Gesamtpreises
+ermöglicht. Anschließend wird die Funktionalität mit JUnit getestet.
+
+\section*{Klasse Item}
+
+\begin{lstlisting}[language=Java]
+public class Item {
+    private final String name;
+    private final double price;
+
+    public Item(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public String getName()  { return name; }
+    public double getPrice() { return price; }
+}
+\end{lstlisting}
+
+\section*{Klasse ShoppingCart}
+
+\begin{lstlisting}[language=Java]
+import java.util.ArrayList;
+import java.util.List;
+
+public class ShoppingCart {
+    private final List<Item> items = new ArrayList<>();
+
+    // Artikel mit Namen und Preis hinzufuegen
+    public void addItem(String name, double price) {
+        items.add(new Item(name, price));
+    }
+
+    // Ersten Artikel mit dem angegebenen Namen entfernen
+    public boolean removeItem(String name) {
+        return items.removeIf(item -> item.getName().equals(name));
+    }
+
+    // Gesamtpreis aller Artikel berechnen
+    public double getTotalPrice() {
+        double total = 0.0;
+        for (Item item : items) {
+            total += item.getPrice();
+        }
+        return total;
+    }
+
+    public int getItemCount() {
+        return items.size();
+    }
+}
+\end{lstlisting}
+
+\section*{Testklasse}
+
+\begin{lstlisting}[language=Java]
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ShoppingCartTest {
+
+    private ShoppingCart cart;
+    private static final double DELTA = 0.0001;
+
+    @BeforeEach
+    void setUp() {
+        cart = new ShoppingCart();
+    }
+
+    @Test
+    void neuerWarenkorbIstLeer() {
+        assertEquals(0, cart.getItemCount());
+        assertEquals(0.0, cart.getTotalPrice(), DELTA);
+    }
+
+    @Test
+    void addItemFuegtArtikelHinzu() {
+        cart.addItem("Apfel", 0.50);
+        assertEquals(1, cart.getItemCount());
+        assertEquals(0.50, cart.getTotalPrice(), DELTA);
+    }
+
+    @Test
+    void getTotalPriceSummiertAlleArtikel() {
+        cart.addItem("Apfel", 0.50);
+        cart.addItem("Brot", 2.20);
+        cart.addItem("Milch", 1.30);
+        assertEquals(4.00, cart.getTotalPrice(), DELTA);
+    }
+
+    @Test
+    void removeItemEntferntArtikel() {
+        cart.addItem("Apfel", 0.50);
+        cart.addItem("Brot", 2.20);
+        boolean removed = cart.removeItem("Apfel");
+        assertTrue(removed);
+        assertEquals(1, cart.getItemCount());
+        assertEquals(2.20, cart.getTotalPrice(), DELTA);
+    }
+
+    @Test
+    void removeItemMitUnbekanntemNamenAendertNichts() {
+        cart.addItem("Apfel", 0.50);
+        boolean removed = cart.removeItem("Banane");
+        assertFalse(removed);
+        assertEquals(1, cart.getItemCount());
+    }
+}
+\end{lstlisting}
+
+
+\chapter*{Aufgabe 4: Erweiterter ShoppingCart mit Stub}
+
+Der Preis eines Artikels wird nun nicht mehr direkt übergeben, sondern von der
+Klasse \texttt{ArtikelPreis} bezogen (z.\,B. aus einer Datenbank). Um den
+\texttt{ShoppingCart} unabhängig von einer realen Datenbankverbindung testen zu
+können, wird in der Testklasse ein \textbf{Stub} für \texttt{ArtikelPreis}
+erstellt. Der Stub liefert fest verdrahtete Preise und ersetzt so die echte
+Datenquelle.
+
+\section*{Klasse ArtikelPreis (Produktivcode mit Datenbank)}
+
+\begin{lstlisting}[language=Java]
+import java.util.HashMap;
+import java.util.Map;
+
+public class ArtikelPreis {
+    // simuliert eine lokale Datenbank/Tabelle
+    private final Map<String, Double> preise = new HashMap<>();
+
+    public ArtikelPreis() {
+        preise.put("Apfel", 0.50);
+        preise.put("Brot", 2.20);
+        preise.put("Milch", 1.30);
+    }
+
+    // Preis fuer einen gegebenen Artikel abfragen
+    public double getPreis(String artikelName) {
+        Double preis = preise.get(artikelName);
+        if (preis == null) {
+            throw new IllegalArgumentException("Unbekannter Artikel: " + artikelName);
+        }
+        return preis;
+    }
+}
+\end{lstlisting}
+
+Damit der \texttt{ShoppingCart} im Test gegen einen Stub austauschbar ist, wird
+eine gemeinsame Schnittstelle eingeführt und über den Konstruktor injiziert
+(\emph{Dependency Injection}).
+
+\begin{lstlisting}[language=Java]
+public interface IArtikelPreis {
+    double getPreis(String artikelName);
+}
+\end{lstlisting}
+
+(Die Klasse \texttt{ArtikelPreis} implementiert \texttt{IArtikelPreis}, also
+\texttt{public class ArtikelPreis implements IArtikelPreis}.)
+
+\section*{Klasse ShoppingCart (erweitert)}
+
+\begin{lstlisting}[language=Java]
+import java.util.ArrayList;
+import java.util.List;
+
+public class ShoppingCart {
+    private final List<Item> items = new ArrayList<>();
+    private final IArtikelPreis artikelPreis;
+
+    public ShoppingCart(IArtikelPreis artikelPreis) {
+        this.artikelPreis = artikelPreis;
+    }
+
+    // Preis wird ueber ArtikelPreis bezogen
+    public void addItem(String name) {
+        double price = artikelPreis.getPreis(name);
+        items.add(new Item(name, price));
+    }
+
+    public boolean removeItem(String name) {
+        return items.removeIf(item -> item.getName().equals(name));
+    }
+
+    public double getTotalPrice() {
+        double total = 0.0;
+        for (Item item : items) {
+            total += item.getPrice();
+        }
+        return total;
+    }
+
+    public int getItemCount() {
+        return items.size();
+    }
+}
+\end{lstlisting}
+
+\section*{Testklasse mit Stub}
+
+Der Stub implementiert dieselbe Schnittstelle, liefert aber feste Preise ohne
+Datenbankzugriff. So lässt sich der \texttt{ShoppingCart} isoliert testen.
+
+\begin{lstlisting}[language=Java]
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class ShoppingCartStubTest {
+
+    private static final double DELTA = 0.0001;
+
+    // Stub-Klasse: ersetzt die reale Datenbankanbindung
+    static class ArtikelPreisStub implements IArtikelPreis {
+        @Override
+        public double getPreis(String artikelName) {
+            switch (artikelName) {
+                case "Apfel": return 1.00;
+                case "Brot":  return 3.00;
+                default: throw new IllegalArgumentException("Unbekannt: " + artikelName);
+            }
+        }
+    }
+
+    private ShoppingCart cart;
+
+    @BeforeEach
+    void setUp() {
+        cart = new ShoppingCart(new ArtikelPreisStub());
+    }
+
+    @Test
+    void addItemBeziehtPreisVomStub() {
+        cart.addItem("Apfel");
+        assertEquals(1.00, cart.getTotalPrice(), DELTA);
+    }
+
+    @Test
+    void getTotalPriceMitMehrerenArtikeln() {
+        cart.addItem("Apfel");
+        cart.addItem("Brot");
+        assertEquals(4.00, cart.getTotalPrice(), DELTA);
+    }
+
+    @Test
+    void removeItemEntferntArtikel() {
+        cart.addItem("Apfel");
+        cart.addItem("Brot");
+        cart.removeItem("Apfel");
+        assertEquals(3.00, cart.getTotalPrice(), DELTA);
+        assertEquals(1, cart.getItemCount());
+    }
+
+    @Test
+    void unbekannterArtikelWirftException() {
+        assertThrows(IllegalArgumentException.class, () -> cart.addItem("Banane"));
+    }
+}
+\end{lstlisting}
+
+\textbf{Vorteil des Stubs:} Der Test ist schnell, deterministisch und
+unabhängig von der Verfügbarkeit oder dem Inhalt der realen Datenbank. Es wird
+ausschließlich die Logik des \texttt{ShoppingCart} geprüft, nicht die der
+Datenquelle.
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
