@@ -1,0 +1,18 @@
+g("ABC", 0, 3)
+Schleifendurchlauf 1 (i=0):
+> A
+  f("ABC", 1, 2)
+  > B
+    f("ABC", 2, 1) -> Keine Ausgabe, Bedinung der Schleife nicht erfüllt
+  > B
+> A
+
+Schleifendurchlauf 2 (i=1):
+> B
+  f("ABC", 2, 2) -> Keine Ausgabe
+> B
+
+Schleifendurchlauf 3 (i=2):
+> C
+  f("ABC", 3, 2) -> Keine Ausgabe
+> C

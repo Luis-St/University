@@ -1,0 +1,75 @@
+1. Start nach Zeile 28, vor Zeile 29
+(p)  katze = A[a="Katze"]
+(q)  hund = A[a="Hund"]
+(r)  maus = A[a="Maus"]
+
+2. nach Zeile 30 vor Zeile 31
+(p)  katze = A[a="Katze",nachfolger=A[a="Hund",nachfolger=A[a="Maus"]]]
+(q)  hund = A[a="Hund",nachfolger=A[a="Maus"]]
+(r)  maus = A[a="Maus",nachfolger=]
+
+3. Zeile 31:
+***
+1: Katze
+2: Hund
+3: Maus
+
+4. Zeile 32:
+***
+1: Hund
+2: Maus
+
+5. Zeile 33:
+s = q
+
+6. Zeile 34:
+(p)  katze = A[a="Katze",nachfolger=A[a="Pferd",nachfolger=A[a="Maus"]]]
+(q/s)  hund = A[a="Pferd",nachfolger=A[a="Maus"]]
+(r)  maus = A[a="Maus",nachfolger=]
+
+7. Zeile 35:
+***
+1: Pferd
+2: Maus
+
+8. Zeile 36
+***
+1: Katze
+2: Pferd
+3: Maus
+
+9. Zeile 37
+(p)  katze = A[a="Katze",nachfolger=A[a="Pferd"]]
+(q/s)  hund = A[a="Pferd"]
+(r)  maus = A[a="Maus",nachfolger=]
+
+10. Zeile 38
+***
+1: Katze
+2: Pferd
+
+11. Zeile 39
+(p)  katze = A[a="Katze",nachfolger=A[a="Pferd"]]
+(q/s)  hund = A[a="Pferd"]
+
+12. Zeile 40
+***
+1: Katze
+2: Pferd
+
+13. Zeile 41
+(p)  katze = A[a="Katze",nachfolger=A[a="Pferd",nachfolger=q]]
+(q/s)  hund = A[a="Pferd",nachfolger=q]
+
+14. Zeile 42
+***
+1: Katze
+2: Pferd
+3: Pferd
+Unendliche Wiederholdung
+
+p von Zeile 26 bis Programm Ende
+q von Zeile 27 bis Programm Ende
+r von Zeile 28 bis 29
+
+

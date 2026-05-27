@@ -1,0 +1,43 @@
+1. While Schleif wiederholt den Code solange bis p kleiner als 3 ist
+2. Prüfung auf dem Element in dem Array x an stelle p
+   Wir prüfen ob das Element größer ist als 0
+   Wenn das der Fall ist,
+   Vom aktuellen Element wird 1 abgezogen
+3. Ausgabe aller Elemente mit angehängtem Komma (2, 2, 2, )
+4. Ausgabe von der Wertes von p -> (2, 2, 2, 0)
+5. p erhält einen neuen Wert, p plus den Wert des Elements
+   im Array an erster stelle (bzw index 0)
+6. Wenn p größer länge des Arrays ist dann wird p wieder 0
+
+Schleifendurchlauf 1:
+{2,2,2} p=0
+{1,2,2}
+>"1, 2, 2, 0"
+p=0+1=1
+
+Schleifendurchlauf 2:
+{1,2,2} p=1
+{1,1,2}
+>"1, 1, 2, 1"
+p=1+1=2
+
+Schleifendurchlauf 3:
+{1,1,2} p=2
+{1,1,1}
+>"1, 1, 1, 2"
+p=2+1=3
+p=0
+
+Schleifendurchlauf 4:
+{1,1,1} p=0
+{0,1,1}
+>"0, 1, 1, 0"
+p=0+0=0
+
+Schleifendurchlauf 5:
+{0,1,1} p=0
+>"0, 1, 1, 0"
+p=0+0=0
+
+Schleifendurchlauf 6:
+

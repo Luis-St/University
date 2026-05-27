@@ -1,0 +1,73 @@
+Überlegungen:
+1. Start in Zeile 15
+2. Schleife von 0 bis 4 läuft Zeile 16 -> Aufruf von f mit i
+3. Klassenmethod in Zeile 5, kein Rückgabewert, einen Parameter n vom Typ int
+4. In Zeile 6 wird geprüft ob der Parameter n kleiner oder gleich 0 ist
+   -> Zwei mögliche Wege/Pfade
+   1. (n kleiner oder gleich 0) Ausgabe eines minus "-"
+   2. (n größer 0)
+      Rekursiver Aufruf von der Klassenmethode f mit n - 2
+      Ausgabe von n
+      Rekursiver Aufruf von der Klassenmethode f mit n - 1
+
+Ausgaben:
+```
+-
+-1-
+-2-1-
+-1-3-2-1-
+-2-1-4-1-3-2-1-
+```
+
+Aufruf von f mit:
+f(0)  -> Ausgabe -
+f(-1) -> Ausgabe -
+f(1)  -> Ausgabe -1-
+f(2)  -> Ausgabe -2-1-
+f(3)  -> Ausgabe -1-3-2-1-
+
+Aufruf der Klassenmethod mit i=0
+Aufruf von f(0)
+1. Bedinung wird geprüft
+2. Bedinung ist Wahr (true)
+3. Ausgabe in Zeile 7
+
+Aufruf der Klassenmethod mit i=1
+Aufruf von f(1)
+1. Bedinung wird geprüft
+2. Nein -> else
+3. Zeile 9 Aufruf von f mit (1 - 2) -> f(-1)
+   -> Ausgabe von -
+4. Zeile 10 Ausgabe von n (1)
+5. Zeile 11 Aufruf von f mit (1 - 1) -> f(0)
+   -> Augabe von -
+
+Aufruf der Klassenmethod mit i=2
+Aufruf von f(2)
+1. Bedinung wird geprüft
+2. Nein -> else
+3. Zeile 9 Aufruf von f mit (2 - 2) -> f(0)
+   -> Ausgabe von -
+4. Zeile 10 Ausgabe von n (2)
+5. Zeile 11 Aufruf von f mit (2 - 1) -> f(1)
+   -> Ausgabe von -1-
+
+Aufruf der Klassenmethod mit i=3
+Aufruf von f(3)
+1. Bedinung wird geprüft
+2. Nein -> else
+3. Zeile 9 Aufruf von f mit (3 - 2) -> f(1)
+   -> Ausgabe von -1-
+4. Zeile 10 Ausgabe von n (3)
+5. Zeile 11 Aufruf von f mit (3 - 1) -> f(2)
+   -> Ausgabe von -2-1-
+
+Aufruf der Klassenmethod f mit i=4
+Aufruf von f(4)
+1. Bedinung wird geprüft
+2. Nein -> else
+3. Zeile 9 Aufruf von f mit (4 - 2) -> f(2)
+   -> Ausgabe von -2-1-
+4. Zeile 10 Ausgabe von n (4)
+5. Zeile 11 Aufruf von f mit (4 - 1) -> f(3)
+   -> Ausgabe von -1-3-2-1-

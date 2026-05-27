@@ -1,0 +1,76 @@
+p=A[a="Katze",n=null]
+q=A[a="Hund",n=null]
+r=A[a="Maus",n=null]
+
+Zeile 30:
+p=A[a="Katze",n=q] // q verweist auf den "Hund"
+q=A[a="Hund",n=null]
+r=A[a="Maus",n=null]
+
+Zeile 31:
+p=A[a="Katze",n=q] // q verweist auf den "Hund"
+q=A[a="Hund",n=r] // r verweist auf die "Maus"
+r=A[a="Maus",n=null]
+
+Zeile 32 (Ausgabe):
+***
+1: Katze
+2: Hund
+3: Maus
+Teile 33 (Ausgabe):
+***
+1: Hund
+2: Maus
+
+Zeile 34:
+p=A[a="Katze",n=q] // q verweist auf den "Hund"
+s=q=A[a="Hund",n=r] // r verweist auf die "Maus"
+r=A[a="Maus",n=null]
+
+Zeile 35:
+p=A[a="Katze",n=q] // q verweist auf den "Pferd"
+s=q=A[a="Pferd",n=r] // r verweist auf die "Maus"
+r=A[a="Maus",n=null]
+
+Zeile 36 (Ausgabe):
+***
+1: Pferd
+2: Maus
+
+Zeile 37 (Ausgabe):
+***
+1: Katze
+2: Pferd
+3: Maus
+
+Zeile 38:
+p=A[a="Katze",n=q] // q verweist auf den "Pferd"
+s=q=A[a="Pferd",n=null]
+r=A[a="Maus",n=null]
+
+Zeile 39 (Ausgabe):
+***
+1: Katze
+2: Pferd
+
+Zeile 40:
+p=A[a="Katze",n=q] // q verweist auf den "Pferd"
+s=q=A[a="Pferd",n=null]
+r=null
+
+Zeile 41 (Ausgabe):
+***
+1: Katze
+2: Pferd
+
+Zeile 42:
+p=A[a="Katze",n=q] // q verweist auf den "Pferd"
+s=q=A[a="Pferd",n=s] // s verweist auf den "Pferd"
+
+Zeile 43 (Ausgabe):
+***
+1: Katze
+2: Pferd
+3: Pferd
+4: Pferd
+// Unendliche ausgabe von Pferd
