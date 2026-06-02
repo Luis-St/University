@@ -1,0 +1,204 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tcolorbox}
+\usepackage{tabularx}
+
+\include{../../../for_latex/preamble}
+\title{\Huge\textbf{Längster Stab (Tutor)}}
+\author{Luis Staudt}
+\date{}
+
+% Code-Highlighting für Java
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{keywordcolor}{rgb}{0.8,0.47,0.13}
+
+\lstdefinestyle{java}{
+	language=,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\bfseries\color{blue!70!black},
+	stringstyle=\color{red!60!black},
+	commentstyle=\itshape\color{gray},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	numbersep=8pt,
+	frame=single,
+	framerule=0.4pt,
+	rulecolor=\color{gray!50},
+	breaklines=true,
+	showstringspaces=false,
+	tabsize=4,
+	xleftmargin=1.5em,
+	framexleftmargin=1.5em,
+	aboveskip=0.8em,
+	belowskip=0.6em
+}
+\lstset{style=java}
+
+\newtcolorbox{hinweis}[1][Hinweis]{
+	colback=blue!5,
+	colframe=blue!40!black,
+	fonttitle=\bfseries,
+	title={#1},
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\newtcolorbox{beispiel}[1][Beispiel]{
+	colback=green!5,
+	colframe=green!40!black,
+	fonttitle=\bfseries,
+	title={#1},
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\newtcolorbox{loesung}[1][Musterlösung]{
+	colback=orange!5,
+	colframe=orange!55!black,
+	fonttitle=\bfseries,
+	title={#1},
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Intensivtutorium}\\[0.3em]
+	{\large Programmierung \quad\textbar\quad Tutorexemplar mit Musterlösung}\\[0.6em]
+	\begin{tabular}{r l @{\hspace{2cm}} r l}
+		\textbf{Semester:}      & Sommersemester 2026                    & \textbf{Tutor:}         & Luis Staudt \\
+		\textbf{Studiengänge:}  & PEB \& MVB         & & \\
+	\end{tabular}\\[0.6em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{1em}
+
+% --- Seitenkopf und -fuß (ab Seite 2) ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Intensivtutorium, Tutorexemplar}
+\rhead{\small SS 2026}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+
+% =============================================
+% Aufgabe 4: Längster Stab (Tutor)
+% =============================================
+
+\section*{Aufgabe 4: Längster Stab \;\normalsize(Tutorexemplar)}
+
+\begin{hinweis}[Lernziel der Aufgabe]
+	Diese Aufgabe ist im Stil der \emph{Zusatzaufgaben} zum Fachwerk-Praktikum gestaltet. Der eigentliche Lernkern ist nicht das Schreiben von neuem Code, sondern:
+	\begin{itemize}[nosep]
+		\item \textbf{Lesen und Debuggen fremden, fehlerhaften Codes},
+		\item \textbf{Nachschlagen in einer API-Dokumentation} (\texttt{fachwerk\_API.md}),
+		\item das saubere Umsetzen einer \textbf{Maximum-Suche} kombiniert mit dem \textbf{Satz des Pythagoras}.
+	\end{itemize}
+\end{hinweis}
+
+\subsection*{Aufgabenstellung (Kurzfassung)}
+
+Für das vom Anwender gewählte Fachwerk (0 bis 4) soll die Stabnummer des \textbf{längsten Stabes} und dessen Länge ausgegeben werden. Die Stablänge folgt aus den Koordinaten von Anfangs- und Endknoten:
+\[
+	l = \sqrt{(x_e - x_a)^2 + (y_e - y_a)^2}
+\]
+Ein Aufruf von \texttt{berechneGroessen()} ist \textbf{nicht} nötig (reine Geometrie).
+
+\subsection*{Eingebaute Fehler im Vorlagencode}
+
+Der ausgegebene Vorlagencode enthält \textbf{acht} bewusst platzierte Fehler über die typischen Fehlerklassen der Zusatzaufgaben:
+
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{@{}c >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+	\toprule
+	\textbf{\#} & \textbf{Fehler im Vorlagencode} & \textbf{Korrektur} & \textbf{Fehlerklasse} \\
+	\midrule
+	1 & \texttt{gibAnzahllStaebe()} & \texttt{gibAnzahlStaebe()} & Tippfehler (Methodenname) \\
+	2 & \texttt{double a}, \texttt{double e} & \texttt{int a}, \texttt{int e} & Falscher Typ (Index als \texttt{double}) \\
+	3 & \texttt{dy = \dots gibX() \dots gibY()} & beide \texttt{gibY()} & Falsche Methode (X statt Y) \\
+	4 & \texttt{dx*dx + dy + dy} & \texttt{dx*dx + dy*dy} & Logikfehler (\texttt{+} statt \texttt{*}) \\
+	5 & fehlendes \texttt{;} nach \texttt{Math.sqrt(\dots)} & Semikolon ergänzen & Syntaxfehler \\
+	6 & fehlendes \texttt{;} nach \texttt{nr = i} & Semikolon ergänzen & Syntaxfehler \\
+	7 & \texttt{System.out.pritnln} & \texttt{println} & Tippfehler \\
+	8 & \texttt{Nr} in der Ausgabe & \texttt{nr} & Falsche Variable (Groß/Klein) \\
+	\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{hinweis}[Häufige Stolpersteine bei der Besprechung]
+	\begin{itemize}[nosep]
+		\item Fehler~2 fällt oft erst beim Kompilieren auf: \texttt{gibKnoten(int)} akzeptiert keinen \texttt{double}. Hier lohnt der Blick in die API.
+		\item Fehler~3 und~4 sind \emph{logische} Fehler. Das Programm kompiliert (nach Behebung der Syntaxfehler) und läuft, liefert aber falsche Längen. Gut geeignet, um auf das \emph{Testen} mit bekannten Werten hinzuweisen.
+		\item Es genügt, $l^2$ zu vergleichen; das Ziehen der Wurzel ist für die reine Maximum-Suche nicht nötig. Für die \emph{Ausgabe} der Länge wird sie aber gebraucht.
+	\end{itemize}
+\end{hinweis}
+
+\subsection*{Musterlösung}
+
+\begin{loesung}[Korrigierter Quelltext]
+\begin{lstlisting}
+public class Fachwerkaufgabe {
+    public static void main(String[] args) {
+        Fachwerk fw = null;
+        System.out.println("Welches Fachwerk wollen Sie rechnen (0-4)?");
+        int wahl = Tastatureingabe.leseInt();
+        fw = new Fachwerk(wahl);
+
+        double max = 0;
+        int nr = 0;
+
+        for (int i = 0; i < fw.gibAnzahlStaebe(); i++) {
+            int a = fw.gibStab(i).gibKnotenNrA();
+            int e = fw.gibStab(i).gibKnotenNrE();
+            double dx = fw.gibKnoten(e).gibX() - fw.gibKnoten(a).gibX();
+            double dy = fw.gibKnoten(e).gibY() - fw.gibKnoten(a).gibY();
+            double laenge = Math.sqrt(dx * dx + dy * dy);
+            if (laenge > max) {
+                max = laenge;
+                nr = i;
+            }
+        }
+        System.out.println("Laengster Stab: Stab " + nr + " mit Laenge " + max);
+    }
+}
+\end{lstlisting}
+\end{loesung}
+
+Eine lauffähige Variante im Package \texttt{prog} liegt unter \texttt{src/prog/LongestBar.java}.
+
+\begin{beispiel}[Mögliche Ausgabe (Fachwerk~2)]
+\begin{verbatim}
+Welches Fachwerk wollen Sie rechnen (0-4)?
+2
+Laengster Stab: Stab 7 mit Laenge 4.272001872...
+\end{verbatim}
+\emph{Hinweis:} Die konkrete Stabnummer und Länge hängen vom gewählten Fachwerk
+(0 bis 4) ab und sollten beim Korrigieren am tatsächlichen Fachwerk geprüft werden.
+\end{beispiel}
+
+\subsection*{Mögliche Erweiterungen (für schnelle Gruppen)}
+
+\begin{itemize}[nosep]
+	\item Zusätzlich den \textbf{kürzesten} Stab ausgeben (Initialisierung von \texttt{min} mit dem ersten Stab oder \texttt{Double.MAX\_VALUE}).
+	\item Die \textbf{Gesamtlänge} aller Stäbe (Materialbedarf) aufsummieren.
+	\item Den \textbf{Mittelpunkt} des längsten Stabes mit ausgeben (Brücke zu Zusatzaufgabe~3).
+\end{itemize}
+
+\end{document}

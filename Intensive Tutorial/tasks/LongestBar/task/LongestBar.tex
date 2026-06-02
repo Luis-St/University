@@ -1,0 +1,197 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../../for_latex/preamble}
+\title{\Huge\textbf{Längster Stab}}
+\author{Luis Staudt}
+\date{}
+
+% Code-Highlighting für Java
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{keywordcolor}{rgb}{0.8,0.47,0.13}
+
+\lstdefinestyle{java}{
+	language=,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\bfseries\color{blue!70!black},
+	stringstyle=\color{red!60!black},
+	commentstyle=\itshape\color{gray},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	numbersep=8pt,
+	frame=single,
+	framerule=0.4pt,
+	rulecolor=\color{gray!50},
+	breaklines=true,
+	showstringspaces=false,
+	tabsize=4,
+	xleftmargin=1.5em,
+	framexleftmargin=1.5em,
+	aboveskip=0.8em,
+	belowskip=0.6em
+}
+\lstset{style=java}
+
+\newtcolorbox{hinweis}[1][Hinweis]{
+	colback=blue!5,
+	colframe=blue!40!black,
+	fonttitle=\bfseries,
+	title={#1},
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\newtcolorbox{beispiel}[1][Beispiel]{
+	colback=green!5,
+	colframe=green!40!black,
+	fonttitle=\bfseries,
+	title={#1},
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Intensivtutorium}\\[0.3em]
+	{\large Programmierung}\\[0.6em]
+	\begin{tabular}{r l @{\hspace{2cm}} r l}
+		\textbf{Semester:}      & Sommersemester 2026                    & \textbf{Tutor:}         & Luis Staudt \\
+		\textbf{Studiengänge:}  & PEB \& MVB         & & \\
+	\end{tabular}\\[0.6em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{1em}
+
+% --- Seitenkopf und -fuß (ab Seite 2) ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Intensivtutorium, Grundlagen der Programmierung}
+\rhead{\small SS 2026}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+
+% =============================================
+% Aufgabe 4: Längster Stab
+% =============================================
+
+\section*{Aufgabe 4: Längster Stab}
+
+Gegeben ist die aus Vorlesung und Übung bekannte Datei \texttt{fachwerk.jar}, die die Funktionalität zur Berechnung von Fachwerken zur Verfügung stellt.
+Für eine konstruktive Aufgabe, etwa die Auswahl geeigneter Halbzeuglängen, möchten Sie für ein gewähltes Fachwerk herausfinden, welcher Stab der \textbf{längste} ist.
+Die Länge eines Stabes ergibt sich aus den Koordinaten seines Anfangs- und Endknotens über den Satz des Pythagoras:
+
+\[
+	l = \sqrt{(x_e - x_a)^2 + (y_e - y_a)^2}
+\]
+
+\begin{center}
+	\begin{tikzpicture}[>=Stealth, scale=1.0,
+		knoten/.style={circle, fill=black, inner sep=1.6pt},
+		stab/.style={thick, gray!70!black},
+		laengster/.style={very thick, red!75!black}]
+
+		% Knotenkoordinaten
+		\coordinate (A) at (0, 0);
+		\coordinate (B) at (3, 0);
+		\coordinate (C) at (7, 0);
+		\coordinate (D) at (1.5, 2.2);
+		\coordinate (E) at (5, 2.5);
+
+		% Stäbe
+		\draw[stab]      (A) -- (B);
+		\draw[laengster] (B) -- (C);   % längster Stab
+		\draw[stab]      (A) -- (D);
+		\draw[stab]      (D) -- (B);
+		\draw[stab]      (D) -- (E);
+		\draw[stab]      (E) -- (B);
+		\draw[stab]      (E) -- (C);
+
+		% Knoten
+		\foreach \p in {A,B,C,D,E} \node[knoten] at (\p) {};
+		\node[below left,  font=\footnotesize] at (A) {Knoten 0};
+		\node[below,       font=\footnotesize] at (B) {Knoten 1};
+		\node[below right, font=\footnotesize] at (C) {Knoten 2};
+		\node[above left,  font=\footnotesize] at (D) {Knoten 3};
+		\node[above,       font=\footnotesize] at (E) {Knoten 4};
+
+		% Beschriftung längster Stab
+		\node[below, font=\footnotesize\color{red!75!black}, yshift=-2pt]
+			at ($(B)!0.5!(C)$) {längster Stab};
+	\end{tikzpicture}
+\end{center}
+
+\medskip
+Erweitern Sie den unten abgebildeten Quelltext zu einem vollständigen, lauffähigen Programm.
+Die \textbf{Stabnummer} (Nummerierung wie im Programm, beginnend bei~0) des längsten Stabes sowie der \textbf{Wert} seiner Länge sollen dem Anwender auf dem Bildschirm ausgegeben werden.
+
+\begin{hinweis}[Benötigte Methoden aus \texttt{fachwerk.jar}]
+	\begin{itemize}[nosep]
+		\item \texttt{int gibAnzahlStaebe()}: Anzahl der Stäbe im Fachwerk.
+		\item \texttt{Fachwerkstab gibStab(int i)}: der Stab mit Index~\texttt{i}.
+		\item \texttt{int gibKnotenNrA()} / \texttt{int gibKnotenNrE()}: Index des Anfangs- bzw.\ Endknotens eines Stabes.
+		\item \texttt{Knoten gibKnoten(int i)}: der Knoten mit Index~\texttt{i}.
+		\item \texttt{double gibX()} / \texttt{double gibY()}: Koordinaten eines Knotens.
+	\end{itemize}
+\end{hinweis}
+
+\begin{hinweis}[Wichtig]
+	Es geht hier nur um die \emph{Geometrie} des Fachwerks (die Knotenkoordinaten).
+	Ein Aufruf von \texttt{berechneGroessen()} ist daher \textbf{nicht} erforderlich.
+\end{hinweis}
+
+\bigskip
+\textbf{Der abgebildete Quelltext ist als Vorlage gedacht und enthält noch mehrere Fehler} (Tipp\-fehler, falsche Typen, falsche Methodenaufrufe, fehlende Semikolons und einen Logikfehler).
+Finden und korrigieren Sie diese, sodass das Programm korrekt kompiliert und das gewünschte Ergebnis liefert.
+
+\begin{lstlisting}
+public class Fachwerkaufgabe {
+    public static void main(String[] args) {
+        Fachwerk fw = null;
+        System.out.println("Welches Fachwerk wollen Sie rechnen (0-4)?");
+        int wahl = Tastatureingabe.leseInt();
+        fw = new Fachwerk(wahl);
+
+        double max = 0;
+        int nr = 0;
+
+        for (int i = 0; i < fw.gibAnzahllStaebe(); i++) {
+            double a = fw.gibStab(i).gibKnotenNrA();
+            double e = fw.gibStab(i).gibKnotenNrE();
+            double dx = fw.gibKnoten(e).gibX() - fw.gibKnoten(a).gibX();
+            double dy = fw.gibKnoten(e).gibX() - fw.gibKnoten(a).gibY();
+            double laenge = Math.sqrt(dx * dx + dy + dy)
+            if (laenge > max) {
+                max = laenge;
+                nr = i
+            }
+        }
+        System.out.pritnln("Laengster Stab: Stab " + Nr + " mit Laenge " + max);
+    }
+}
+\end{lstlisting}
+
+\begin{beispiel}[Mögliche Ausgabe (Fachwerk~2)]
+\begin{verbatim}
+Welches Fachwerk wollen Sie rechnen (0-4)?
+2
+Laengster Stab: Stab 7 mit Laenge 4.272001872...
+\end{verbatim}
+\end{beispiel}
+
+\end{document}
