@@ -85,15 +85,18 @@
 	bottom=2cm
 ]{geometry}
 
-% Page header
-\usepackage[
-	headsepline,        % seperator line beneath page header on normal pages
-	plainheadsepline    % seperator line beneath page header on pages like ToC
-]{scrlayer-scrpage}
-\clearpairofpagestyles                  % clear default settings
-\addtokomafont{pagehead}{\normalfont}   % use normal font for page header
-\ohead*{\thepage}                       % page number
-\ihead*{\leftmark}                      % chapter name
+% Page header (fancyhdr-based -- see \usepackage{fancyhdr} above).
+% NOTE: fancyhdr and scrlayer-scrpage define the same \?head/\?foot commands
+% and clash ("Command \chead already defined") on recent TeX distributions.
+% Each task/document sets its own \pagestyle{fancy} (tasks) or \pagestyle{empty}
+% (documents), so we only need a sane fancyhdr-based default here.
+\setlength{\headheight}{14.5pt}         % avoid fancyhdr \headheight warning
+\pagestyle{fancy}
+\fancyhf{}                              % clear default settings
+\fancyhead[LE,RO]{\thepage}            % page number on the outer edge
+\fancyhead[RE,LO]{\leftmark}           % chapter name on the inner edge
+\renewcommand{\headrulewidth}{0.4pt}   % separator line beneath the page header
+\renewcommand{\footrulewidth}{0pt}
 
 
 % ##################################################
@@ -201,9 +204,6 @@
 % ##################################################
 % Theoreme
 % ##################################################
-
-% Umgebung fuer Beispiele
-\newtheorem{beispiel}{Beispiel}
 
 % Umgebung fuer These
 \newtheorem{these}{These}

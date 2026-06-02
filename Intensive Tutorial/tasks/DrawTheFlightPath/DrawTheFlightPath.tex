@@ -48,7 +48,7 @@
 	colback=blue!5,
 	colframe=blue!40!black,
 	fonttitle=\bfseries,
-	title=#1,
+	title={#1},
 	boxrule=0.5pt,
 	arc=2pt
 }
@@ -57,7 +57,7 @@
 	colback=green!5,
 	colframe=green!40!black,
 	fonttitle=\bfseries,
-	title=#1,
+	title={#1},
 	boxrule=0.5pt,
 	arc=2pt
 }
@@ -224,7 +224,7 @@ static int[][] zeichneFlugbahn(double v0, double alpha,
 static void rasterAusgeben(int[][] raster)
 \end{lstlisting}
 
-\begin{beispiel}[Mögliche Ausgabe ($v_0 = 20$, $\alpha = 45°$, Raster $60 \times 20$)]
+\begin{beispiel}[{Mögliche Ausgabe ($v_0 = 20$, $\alpha = 45^\circ$, Raster $60 \times 20$)}]
 \begin{verbatim}
                   * * *
               * *       * *
@@ -244,7 +244,7 @@ static void rasterAusgeben(int[][] raster)
 \end{verbatim}
 \end{beispiel}
 
-\item \textbf{Mehrere Winkel vergleichen} -- Zeichne die Flugbahnen für die Winkel $30°$, $45°$ und $60°$ in \emph{dasselbe} Raster. Verwende unterschiedliche Werte (\texttt{1}, \texttt{2}, \texttt{3}) für die verschiedenen Kurven und passe die Ausgabe entsprechend an (z.\,B.\ verschiedene Zeichen).
+\item \textbf{Mehrere Winkel vergleichen} -- Zeichne die Flugbahnen für die Winkel $30^\circ$, $45^\circ$ und $60^\circ$ in \emph{dasselbe} Raster. Verwende unterschiedliche Werte (\texttt{1}, \texttt{2}, \texttt{3}) für die verschiedenen Kurven und passe die Ausgabe entsprechend an (z.\,B.\ verschiedene Zeichen).
 
 \begin{lstlisting}
 static int[][] vergleicheWinkel(double v0, double dt,
@@ -255,7 +255,7 @@ static int[][] vergleicheWinkel(double v0, double dt,
 	Für die gemeinsame Darstellung muss ein einheitlicher Skalierungsfaktor verwendet werden. Bestimme dazu zuerst die maximale Flugweite und die maximale Höhe über \emph{alle} Winkel hinweg und verwende diese als Bezugsgröße für die Skalierung.
 \end{hinweis}
 
-\item \textbf{Test in \texttt{main}} -- Teste die Methoden mit $v_0 = 20$\,m/s, $\text{dt} = 0{,}01$\,s und einem Raster der Größe $60 \times 20$. Gib die Flugbahn für $45°$ und anschließend den Vergleich der drei Winkel aus.
+\item \textbf{Test in \texttt{main}} -- Teste die Methoden mit $v_0 = 20$\,m/s, $\text{dt} = 0{,}01$\,s und einem Raster der Größe $60 \times 20$. Gib die Flugbahn für $45^\circ$ und anschließend den Vergleich der drei Winkel aus.
 
 \end{enumerate}
 
