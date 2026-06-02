@@ -1,0 +1,19 @@
+g("ABC")
+f("ABC", 0, 3)
+  Schleifendurchlauf 1 (i=0):
+    > A
+    f("ABC", 1, 2)
+       Schleifendurchlauf 1 (i=1):
+         > B
+         f("ABC", 2, 1)
+         > B
+    > A
+
+
+   Schleifendurchlauf 2:
+
+
+
+   Schleifendurchlauf 3:
+
+
