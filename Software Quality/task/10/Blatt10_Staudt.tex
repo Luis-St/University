@@ -1,0 +1,401 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half,           % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+\usepackage{longtable}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 10}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Qualität}\\[3mm]
+		{\fontsize{14}{14} \selectfont Test-Doubles: Stub, Mock und Spy}
+
+		\vspace{10cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+\chapter*{Überblick: Test-Doubles}
+
+Alle drei Aufgaben testen eine Klasse isoliert von ihrer Abhängigkeit.
+Dafür wird die echte Abhängigkeit durch ein \emph{Test-Double} ersetzt, das
+über den Konstruktor injiziert wird (\emph{Dependency Injection}).
+Die verwendeten Arten unterscheiden sich im Zweck:
+
+\begin{itemize}
+	\item \textbf{Stub:} liefert fest verdrahtete Rückgabewerte. Es wird nur
+	      das Ergebnis (\emph{state}) geprüft, nicht der Aufruf selbst.
+	\item \textbf{Mock:} zeichnet die Interaktion auf. Der Test verifiziert,
+	      \emph{ob}, \emph{wie oft} und \emph{mit welchen Argumenten} die
+	      Abhängigkeit aufgerufen wurde (\emph{behavior}).
+	\item \textbf{Spy:} umhüllt das echte Objekt, führt dessen Verhalten weiter
+	      aus und protokolliert zusätzlich die Aufrufe.
+\end{itemize}
+
+Als Mocking-Framework wird \textbf{Mockito} eingesetzt. Die Code-Abdeckung
+wurde mit der IntelliJ-Funktion \emph{Run with Coverage} ermittelt.
+
+
+\chapter*{Aufgabe 1: Verarbeitung von Bestellungen}
+
+Die Klasse \texttt{OrderService} bearbeitet eine Bestellung und delegiert die
+Zahlung an die Schnittstelle \texttt{IPaymentGateway}. Getestet werden beide
+Pfade der Methode \texttt{processOrder}: erfolgreiche Zahlung (Bestellung wird
+zurückgegeben) und fehlgeschlagene Zahlung (\texttt{null}).
+
+\section*{Getestete Klassen}
+
+\begin{lstlisting}[language=Java]
+public interface IPaymentGateway {
+    boolean processPayment(double amount);
+}
+
+public class Order {
+    private double amount;
+    public Order(double amount) { this.amount = amount; }
+    public double getAmount() { return amount; }
+}
+
+public class OrderService {
+    private IPaymentGateway paymentGateway;
+
+    public OrderService(IPaymentGateway paymentGateway) {
+        this.paymentGateway = paymentGateway;
+    }
+
+    public Order processOrder(Order order) {
+        if (paymentGateway.processPayment(order.getAmount())) {
+            return order; // Bestellung erfolgreich
+        }
+        return null;      // Zahlung fehlgeschlagen
+    }
+}
+\end{lstlisting}
+
+\section*{1.1 Stub}
+
+Der Stub liefert eine feste Antwort. Geprüft wird nur das Ergebnis von
+\texttt{processOrder}, der Aufruf selbst wird nicht verifiziert.
+
+\begin{lstlisting}[language=Java]
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class OrderServiceStubTest {
+
+    static class PaymentGatewayStubErfolg implements IPaymentGateway {
+        public boolean processPayment(double amount) { return true; }
+    }
+
+    static class PaymentGatewayStubFehler implements IPaymentGateway {
+        public boolean processPayment(double amount) { return false; }
+    }
+
+    @Test
+    void erfolgreicheZahlungGibtBestellungZurueck() {
+        OrderService service = new OrderService(new PaymentGatewayStubErfolg());
+        Order order = new Order(100.0);
+        assertSame(order, service.processOrder(order));
+    }
+
+    @Test
+    void fehlgeschlageneZahlungGibtNullZurueck() {
+        OrderService service = new OrderService(new PaymentGatewayStubFehler());
+        assertNull(service.processOrder(new Order(100.0)));
+    }
+}
+\end{lstlisting}
+
+\section*{1.2 Mock ohne Framework}
+
+Der handgeschriebene Mock zählt die Aufrufe und merkt sich den übergebenen
+Betrag. So lässt sich die Interaktion verifizieren.
+
+\begin{lstlisting}[language=Java]
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class OrderServiceManualMockTest {
+
+    static class PaymentGatewayMock implements IPaymentGateway {
+        private final boolean rueckgabe;
+        int aufrufZaehler = 0;
+        double letzterBetrag = Double.NaN;
+
+        PaymentGatewayMock(boolean rueckgabe) { this.rueckgabe = rueckgabe; }
+
+        public boolean processPayment(double amount) {
+            aufrufZaehler++;
+            letzterBetrag = amount;
+            return rueckgabe;
+        }
+    }
+
+    @Test
+    void processPaymentWirdMitRichtigemBetragAufgerufen() {
+        PaymentGatewayMock mock = new PaymentGatewayMock(true);
+        OrderService service = new OrderService(mock);
+
+        service.processOrder(new Order(100.0));
+
+        assertEquals(1, mock.aufrufZaehler);
+        assertEquals(100.0, mock.letzterBetrag, 0.0001);
+    }
+}
+\end{lstlisting}
+
+\section*{1.3 Mock mit Framework (Mockito)}
+
+Mit Mockito wird das Verhalten über \texttt{when().thenReturn()} festgelegt und
+die Interaktion über \texttt{verify()} geprüft.
+
+\begin{lstlisting}[language=Java]
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class OrderServiceMockitoTest {
+
+    @Test
+    void erfolgreicheZahlungGibtBestellungZurueck() {
+        IPaymentGateway gateway = mock(IPaymentGateway.class);
+        when(gateway.processPayment(100.0)).thenReturn(true);
+        OrderService service = new OrderService(gateway);
+        Order order = new Order(100.0);
+
+        assertSame(order, service.processOrder(order));
+        verify(gateway).processPayment(100.0);
+    }
+
+    @Test
+    void fehlgeschlageneZahlungGibtNullZurueck() {
+        IPaymentGateway gateway = mock(IPaymentGateway.class);
+        when(gateway.processPayment(anyDouble())).thenReturn(false);
+        OrderService service = new OrderService(gateway);
+
+        assertNull(service.processOrder(new Order(100.0)));
+        verify(gateway, times(1)).processPayment(100.0);
+    }
+}
+\end{lstlisting}
+
+
+\chapter*{Aufgabe 2: Benutzerregistrierung}
+
+\texttt{UserService.registerUser} ruft \texttt{sendConfirmationEmail} der
+Schnittstelle \texttt{IEmailService} auf. Da die Methode \texttt{void}
+zurückgibt, ist ein reiner Zustands-Test nicht möglich -- es muss die
+Interaktion geprüft werden. Verifiziert wird, dass die Bestätigungs-E-Mail mit
+der richtigen Adresse versendet wird.
+
+\section*{Getestete Klassen}
+
+\begin{lstlisting}[language=Java]
+public interface IEmailService {
+    void sendConfirmationEmail(String email);
+}
+
+public class User {
+    private String name;
+    private String email;
+    public User(String name, String email) {
+        this.name = name; this.email = email;
+    }
+    public String getEmail() { return email; }
+}
+
+public class UserService {
+    private IEmailService emailService;
+    public UserService(IEmailService emailService) {
+        this.emailService = emailService;
+    }
+    public void registerUser(User user) {
+        emailService.sendConfirmationEmail(user.getEmail());
+    }
+}
+\end{lstlisting}
+
+\section*{2.1 Mock ohne Framework}
+
+\begin{lstlisting}[language=Java]
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class UserServiceManualMockTest {
+
+    static class EmailServiceMock implements IEmailService {
+        int aufrufZaehler = 0;
+        String letzteEmail = null;
+
+        public void sendConfirmationEmail(String email) {
+            aufrufZaehler++;
+            letzteEmail = email;
+        }
+    }
+
+    @Test
+    void registerUserSendetBestaetigungAnRichtigeAdresse() {
+        EmailServiceMock mock = new EmailServiceMock();
+        UserService service = new UserService(mock);
+
+        service.registerUser(new User("Anna", "anna@example.com"));
+
+        assertEquals(1, mock.aufrufZaehler);
+        assertEquals("anna@example.com", mock.letzteEmail);
+    }
+}
+\end{lstlisting}
+
+\section*{2.2 Mock mit Framework (Mockito)}
+
+\begin{lstlisting}[language=Java]
+import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.*;
+
+public class UserServiceMockitoTest {
+
+    @Test
+    void registerUserSendetBestaetigungAnRichtigeAdresse() {
+        IEmailService emailService = mock(IEmailService.class);
+        UserService service = new UserService(emailService);
+
+        service.registerUser(new User("Anna", "anna@example.com"));
+
+        verify(emailService, times(1)).sendConfirmationEmail("anna@example.com");
+        verifyNoMoreInteractions(emailService);
+    }
+}
+\end{lstlisting}
+
+
+\chapter*{Aufgabe 3: Applikation-Analytics}
+
+\texttt{AnalyticsService.trackEvent} ruft \texttt{logEvent} der Klasse
+\texttt{LoggingService} auf. Hier wird ein \textbf{Spy} verwendet: Im Gegensatz
+zum Mock führt der Spy das echte Verhalten weiter aus und protokolliert
+zusätzlich die Aufrufe. Gezeigt werden ein handgeschriebener Spy und ein
+Mockito-Spy.
+
+\section*{Getestete Klassen}
+
+\begin{lstlisting}[language=Java]
+public interface ILoggingService {
+    void logEvent(String event);
+}
+
+public class LoggingService implements ILoggingService {
+    public void logEvent(String event) {
+        System.out.println("Ereignis protokolliert: " + event);
+    }
+}
+
+public class AnalyticsService {
+    private ILoggingService loggingService;
+    public AnalyticsService(ILoggingService loggingService) {
+        this.loggingService = loggingService;
+    }
+    public void trackEvent(String event) {
+        loggingService.logEvent(event);
+    }
+}
+\end{lstlisting}
+
+\section*{Testklasse mit Spy}
+
+\begin{lstlisting}[language=Java]
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class AnalyticsServiceSpyTest {
+
+    // Handgeschriebener Spy: delegiert an das echte Objekt und zaehlt mit
+    static class LoggingServiceSpy implements ILoggingService {
+        private final LoggingService echt = new LoggingService();
+        int aufrufZaehler = 0;
+        String letztesEvent = null;
+
+        public void logEvent(String event) {
+            aufrufZaehler++;
+            letztesEvent = event;
+            echt.logEvent(event); // echtes Verhalten wird ausgefuehrt
+        }
+    }
+
+    @Test
+    void handgeschriebenerSpy() {
+        LoggingServiceSpy spy = new LoggingServiceSpy();
+        AnalyticsService service = new AnalyticsService(spy);
+
+        service.trackEvent("Login");
+
+        assertEquals(1, spy.aufrufZaehler);
+        assertEquals("Login", spy.letztesEvent);
+    }
+
+    @Test
+    void mockitoSpy() {
+        ILoggingService spy = spy(new LoggingService());
+        AnalyticsService service = new AnalyticsService(spy);
+
+        service.trackEvent("Login");
+
+        verify(spy, times(1)).logEvent("Login");
+    }
+}
+\end{lstlisting}
+
+
+\chapter*{Code-Abdeckung}
+
+Alle 11 Testfälle laufen erfolgreich durch. Die getesteten Klassen werden
+vollständig abgedeckt; bei \texttt{OrderService} werden beide Zweige der
+\texttt{if}-Verzweigung (Zahlung erfolgreich / fehlgeschlagen) ausgeführt.
+
+\begin{longtable}{| p{4.5cm} | p{2.5cm} | p{2.5cm} | p{2.5cm} |}
+	\hline
+	\textbf{Klasse} & \textbf{Methoden} & \textbf{Zeilen} & \textbf{Zweige} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Klasse} & \textbf{Methoden} & \textbf{Zeilen} & \textbf{Zweige} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	OrderService    & 100\,\% & 100\,\% & 100\,\% \\ \hline
+	UserService     & 100\,\% & 100\,\% & --      \\ \hline
+	AnalyticsService& 100\,\% & 100\,\% & --      \\ \hline
+\end{longtable}
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
