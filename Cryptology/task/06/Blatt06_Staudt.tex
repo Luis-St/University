@@ -1,0 +1,326 @@
+\documentclass[
+    fontsize=12pt,          % default font size 12pt
+    paper=a4,               % DIN A4 page format
+    numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+    listof=totoc,           % add list of figures, tables, etc. to ToC
+    listof=entryprefix,     % add entry name to figures, tables, etc.
+    listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+    bibliography=totoc,     % add bibliography to ToC but without a chapter number
+    parskip=half,           % half line spacing between paragraphs
+    openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+\usepackage{amssymb}   % \checkmark
+
+\begin{document}
+
+    \begin{titlepage}
+    	\pagestyle{empty}
+
+    	% HFU Logo
+    	\begin{flushright}
+    		\begin{figure}[ht]
+    			\flushright
+    			\includegraphics[height=2cm]{../../for_latex/hfu}
+    		\end{figure}
+    	\end{flushright}
+
+    	\begin{center}
+    		\vspace{3cm}
+
+    		{\fontsize{22}{22} \selectfont \textbf{Blatt 6}}\\[5mm]
+    		{\fontsize{18}{18} \selectfont Kryptologie}
+
+    		\vspace{12cm}
+
+    		{\fontsize{14}{14} \selectfont Luis Staudt}
+    	\end{center}
+    \end{titlepage}
+
+% ############################################################################
+% CONTENT STARTS HERE
+% ############################################################################
+
+
+\chapter*{ECDSA-signierte Kassenbons (TSE-Signatur)}
+
+
+\section*{Aufgabenstellung}
+
+Die Technische Sicherheitseinrichtung (TSE) signiert jeden Kassenvorgang mit ECDSA.
+Die signaturrelevanten Daten stehen im QR-Code des Bons.
+Ohne App soll die Gültigkeit der angegebenen TSE-Signatur \emph{von Hand} nachgerechnet werden:
+
+\begin{enumerate}[label=\alph*)]
+    \item Inhalt des QR-Codes verifizieren (Felder zuordnen, $r,s$ und Public Key $D$ dekodieren).
+    \item Zugehörige \textsc{log-message} gemäß BSI TR-03151 aufstellen und Hashwert berechnen.
+    \item Passende elliptische Kurve $E$ ermitteln, indem geprüft wird, ob $D \in E$ liegt.
+    \item Gültigkeit des Unterschriftpaars $(r,s)$ verifizieren.
+    \item Verifikation eines eigenen (hier selbst erzeugten) Bons.
+\end{enumerate}
+
+
+\section*{Verwendete Werkzeuge}
+
+\begin{itemize}
+    \item \textbf{Java} mit den JDK-Klassen \texttt{MessageDigest} (SHA-256/SHA-384), \texttt{Base64}
+          und \texttt{java.time.Instant} für Dekodierung, Aufbau der Log-Message sowie Hash- und
+          Zeitstempelberechnung.
+    \item Die elliptische Kurven-Arithmetik (Punktaddition, skalare Multiplikation, Punkt-auf-Kurve-Test)
+          übernimmt die erprobte Bibliothek \textbf{Bouncy Castle} (\texttt{org.bouncyc\-astle.math.ec});
+          die benannten Kurvenparameter (brainpoolP384r1, secp384r1) stammen aus
+          \texttt{ECNamedCurveTable}.
+    \item Programm: \texttt{src/net/luis/task6/TseSignatureVerification.java}.
+\end{itemize}
+
+
+\section*{a) Inhalt des QR-Codes}
+
+Der QR-Code ist eine durch \texttt{;} getrennte Liste fester Felder.
+Die Zuordnung zur BSI-Spezifikation lautet:
+
+\begin{table}[H]
+    \centering
+    \small
+    \begin{tabular}{l l}
+        \toprule
+        \textbf{Feld (BSI)}            & \textbf{Wert im QR-Code} \\
+        \midrule
+        \texttt{version}               & V0 \\
+        \texttt{clientID} (Kasse)      & P915560150 \\
+        \texttt{processType}           & Kassenbeleg-V1 \\
+        \texttt{processData}           & Beleg\^{}0.00\_1.65\_0.00\_0.00\_0.00\^{}1.65:Bar \\
+        \texttt{transactionNumber}     & 124226 \\
+        \texttt{signatureCounter}      & 387826 \\
+        Start-Zeit                     & 2022-10-31T06:29:44.000Z \\
+        Log-/End-Zeit                  & 2022-10-31T06:29:58.000Z \\
+        \texttt{signatureAlgorithm}    & ecdsa-plain-SHA384 \\
+        \texttt{logTimeFormat}         & unixTime \\
+        Signatur $(r,s)$               & Base64 (96 Byte) \\
+        Public Key $D$                 & Base64 (97 Byte) \\
+        \bottomrule
+    \end{tabular}
+    \caption{Zuordnung der QR-Code-Felder.}
+\end{table}
+
+\textbf{Signatur.} Die Base64-Signatur dekodiert zu genau $96$~Byte. Bei
+\emph{ecdsa-plain} ist dies die Konkatenation der beiden $48$-Byte-Werte $r \,\|\, s$ ($2\cdot 384$~Bit):
+
+\begin{lstlisting}[caption={Dekodiertes Signaturpaar $(r,s)$ (hex)}]
+r = 6FA9BBAF63C0944AE393D737D1CE1B90F8ABA6A372DB486CE352EB26
+    ECA876EA1D63BDCF0750FA26F411AD1359FA3E0F
+s = 34C182A251737943CED3B256CD091742A3BDC43F429427799D77589F
+    F051673D6306F76321E32370E2F2EFD2B4B0806
+\end{lstlisting}
+
+\textbf{Public Key.} Die Base64-Daten dekodieren zu $97$~Byte. Das erste Byte ist
+\texttt{0x04} (unkomprimierter Punkt), gefolgt von $D_x \,\|\, D_y$ zu je $48$~Byte:
+
+\begin{lstlisting}[caption={Dekodierter Public Key $D=(D_x,D_y)$ (hex)}]
+Dx = 18991AC866345CD711FD074AF239ED2869899E9CDA6DCD3CA555A5B8
+     931DC36F80AD2012042009FDCF30CBD9073EF6E4
+Dy = 071DC32724E40A4FDDB88E6A22181306A3331210B1E76A8AAFBE7AC13
+     4B2C9B4BE9F7898DB7E530678C853F353785A1B
+\end{lstlisting}
+
+\textbf{Plausibilitätsprobe.} Die Seriennummer der TSE ist der SHA-256-Hash des Public Key
+(inkl.\ Tag \texttt{0x04}). Berechnet ergibt sich
+
+\begin{lstlisting}
+serialNumber = SHA256(04||Dx||Dy)
+             = 2DE151380B91213FBADFAF18EF856DB499E608283
+               984F96297213F450BA552B7
+\end{lstlisting}
+
+\noindent Dieser Wert stimmt exakt mit der auf dem Bon aufgedruckten\\
+\texttt{TSE-Seriennr.\ 2DE151380B91213FBADFAF18EF856DB499E608283}\,$\dots$\\
+überein. Damit ist der QR-Inhalt konsistent.
+
+
+\section*{b) Log-Message und Hashwert}
+
+Die \textsc{log-message} $M$ wird gemäß BSI TR-03151 als ASN.1/DER im Tag-Length-Value-Format
+aus den QR-Feldern zusammengesetzt. Verwendete Felder in Reihenfolge:
+
+\begin{table}[H]
+    \centering
+    \small
+    \begin{tabular}{l l l}
+        \toprule
+        \textbf{Feld} & \textbf{Tag} & \textbf{Wert (kodiert)} \\
+        \midrule
+        version            & \texttt{02} & \texttt{02} (=2) \\
+        certifiedDataType  & \texttt{06} & OID 0.4.0.127.0.7.3.7.1.1 \\
+        operationType      & \texttt{80} & \texttt{\textquotedbl FinishTransaction\textquotedbl} \\
+        clientID           & \texttt{81} & \texttt{\textquotedbl P915560150\textquotedbl} \\
+        processData        & \texttt{82} & \texttt{\textquotedbl Beleg\^{}0.00\_1.65\_...\^{}1.65:Bar\textquotedbl} \\
+        processType        & \texttt{83} & \texttt{\textquotedbl Kassenbeleg-V1\textquotedbl} \\
+        transactionNumber  & \texttt{85} & \texttt{01E542} (=124226) \\
+        serialNumber       & \texttt{04} & SHA256(Public Key), 32 Byte \\
+        signatureAlgorithm & \texttt{30} & OID 0.4.0.127.0.7.1.1.4.1.4 (SHA384) \\
+        signatureCounter   & \texttt{02} & \texttt{05EAF2} (=387826) \\
+        logTime (unixTime) & \texttt{02} & \texttt{635F6B66} (=1\,667\,197\,798) \\
+        \bottomrule
+    \end{tabular}
+    \caption{Aufbau der Log-Message (TLV). Ganzzahlen sind als minimale Big-Endian-Bytefolge kodiert.}
+\end{table}
+
+\textbf{Zeitstempel.} Als \texttt{logTime} geht die \emph{End-/Logzeit} 2022-10-31T06:29:58Z ein,
+umgerechnet in den Unix-Timestamp $1\,667\,197\,798 = \texttt{0x635F6B66}$ (4 Byte).
+
+Die vollständige Log-Message lautet (166 Byte):
+
+\begin{lstlisting}[caption={Log-Message $M$ (hex)}]
+020102060904007F000703070101801146696E6973685472616E736163
+74696F6E810A50393135353630313530822742656C65675E302E30305F
+312E36355F302E30305F302E30305F302E30305E312E36353A42617283
+0E4B617373656E62656C65672D5631850301E54204202DE151380B9121
+3FBADFAF18EF856DB499E608283984F96297213F450BA552B7300C060A
+04007F00070101040104020305EAF20204635F6B66
+\end{lstlisting}
+
+Der für die Signatur maßgebliche Hashwert ist $h := \mathrm{SHA384}(M)$:
+
+\begin{lstlisting}[caption={Hashwert $h=\mathrm{SHA384}(M)$}]
+h = B61488218E6FC197DB055B1ADD7E99372927CE608159054C0833C692
+    DE056AE98B386EA5BFC3DC5DB6FE5C6C92C1F67A
+\end{lstlisting}
+
+\noindent Da Hash- und Kurvenbitlänge gleich sind ($384$~Bit), geht $h$ ohne Kürzung als
+Zahl in die ECDSA-Verifikation ein.
+
+
+\section*{c) Bestimmung der elliptischen Kurve}
+
+Die Kurve ist im QR-Code \emph{nicht} angegeben. Wegen der $384$-Bit-Koordinaten
+($r,s,D_x,D_y$ je $48$~Byte) und SHA-384 kommen die gängigen $384$-Bit-Kurven in Frage.
+Detektion durch Einsetzen von $D=(D_x,D_y)$ in die Kurvengleichung
+$y^2 \equiv x^3 + a\,x + b \pmod p$:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l c c}
+        \toprule
+        \textbf{Kurve} & $G \in E$ & $D \in E$ \\
+        \midrule
+        secp384r1        & ja  & \textbf{nein} \\
+        brainpoolP384r1  & ja  & \textbf{ja} \\
+        \bottomrule
+    \end{tabular}
+    \caption{Test, ob der Public-Key-Punkt $D$ auf der jeweiligen Kurve liegt.}
+\end{table}
+
+\noindent Nur auf \textbf{brainpoolP384r1} (OID 1.3.36.3.3.2.8.1.1.11) erfüllt $D$ die
+Kurvengleichung exakt; secp384r1 scheidet aus. Damit ist die verwendete Kurve eindeutig.
+Die Parameter:
+
+\begin{lstlisting}[caption={Parameter der Kurve brainpoolP384r1}]
+p  = 8CB91E82A3386D280F5D6F7E50E641DF152F7109ED5456B412B1DA197
+     FB71123ACD3A729901D1A71874700133107EC53
+a  = 7BC382C63D8C150C3C72080ACE05AFA0C2BEA28E4FB22787139165EFB
+     A91F90F8AA5814A503AD4EB04A8C7DD22CE2826
+b  = 04A8C7DD22CE28268B39B55416F0447C2FB77DE107DCD2A62E880EA53
+     EEB62D57CB4390295DBC9943AB78696FA504C11
+Gx = 1D1C64F068CF45FFA2A63A81B7C13F6B8847A3E77EF14FE3DB7FCAFE0
+     CBD10E8E826E03436D646AAEF87B2E247D4AF1E
+Gy = 8ABE1D7520F9C2A45CB1EB8E95CFD55262B70B29FEEC5864E19C054FF
+     99129280E4646217791811142820341263C5315
+n  = 8CB91E82A3386D280F5D6F7E50E641DF152F7109ED5456B31F166E6CA
+     C0425A7CF3AB6AF6B7FC3103B883202E9046565
+\end{lstlisting}
+
+
+\section*{d) Verifikation der Signatur}
+
+Mit $h$, dem Generator $G$, dem Public Key $D$ und $(r,s)$ wird die ECDSA-Verifikation
+auf brainpoolP384r1 gerechnet:
+
+\begin{enumerate}
+    \item Vorprüfung: $1 \le r,s \le n-1$ \checkmark{} und $D \in E$ \checkmark.
+    \item $w := s^{-1} \bmod n$.
+    \item $u_1 := h\,w \bmod n$, \quad $u_2 := r\,w \bmod n$.
+    \item $L := [u_1]\,G + [u_2]\,D = [s^{-1}]\big([h]\,G + [r]\,D\big) \in E$.
+    \item Gültig, falls $L_x \equiv r \pmod n$.
+\end{enumerate}
+
+Kern der Verifikation (Punktarithmetik über Bouncy Castle):
+
+\begin{lstlisting}[language=Java, caption={ECDSA-Verifikation mit Bouncy Castle}]
+BigInteger w  = s.modInverse(n);
+BigInteger u1 = h.multiply(w).mod(n);
+BigInteger u2 = r.multiply(w).mod(n);
+ECPoint    L  = G.multiply(u1).add(D.multiply(u2)).normalize();  // [s^-1]([h]G + [r]D)
+boolean valid = L.getAffineXCoord().toBigInteger().mod(n).equals(r);
+\end{lstlisting}
+
+Berechnetes Ergebnis:
+
+\begin{lstlisting}[caption={Ergebnis der Verifikation}]
+Lx mod n = 6FA9BBAF63C0944AE393D737D1CE1B90F8ABA6A372DB486CE352
+           EB26ECA876EA1D63BDCF0750FA26F411AD1359FA3E0F
+r        = 6FA9BBAF63C0944AE393D737D1CE1B90F8ABA6A372DB486CE352
+           EB26ECA876EA1D63BDCF0750FA26F411AD1359FA3E0F
+\end{lstlisting}
+
+\noindent Es gilt $L_x \bmod n = r$. Die \textbf{Signatur ist gültig}: Der Bon gehört
+nachweislich zu der in der TSE gespeicherten, unveränderten Transaktion, und die
+QR-Daten (Betrag, Zeit, Zähler) wurden nicht manipuliert.
+
+
+\section*{e) Eigener (selbst erzeugter) Bon}
+
+Da kein eigener QR-Bon vorlag, wurde -- wie in der Aufgabe erlaubt -- ein vollständiger
+Bon \emph{selbst} erzeugt und mit identischem Verfahren verifiziert (alles auf brainpoolP384r1,
+reproduzierbar über festes Schlüsselpaar $d$ und festen Nonce $k$):
+
+\begin{enumerate}
+    \item Schlüsselpaar erzeugen: privater Schlüssel $d$ zufällig, $D := [d]\,G$.
+    \item Fiktiver Bon (Betrag $3{,}50$, \texttt{Kassenbeleg-V1}, Bar) $\rightarrow$ Log-Message $M'$
+          $\rightarrow$ $h' := \mathrm{SHA384}(M')$.
+    \item Signieren: $k$ zufällig, $r' := ([k]G)_x \bmod n$, \;$s' := k^{-1}(h' + r'\,d) \bmod n$.
+    \item Verifizieren wie in d).
+\end{enumerate}
+
+\begin{lstlisting}[caption={Selbst erzeugter Bon -- Schlüssel, Hash und Signatur}]
+d  = 1154E898CC38E41B6CB83558DE410C8B7591733C01BF36040BD94BE72
+     6960FF471B7C3C829AF6E589C97DE2F2F3B6D9B
+Dx = 5E8AB01DA3DE7DBA9D9272A3642A7804CCEC8BBD609D3FA0071BD3C0D
+     BA6525CA4F908EF503150C5495A8C16DC7A3D3B
+Dy = 87F590A64BD1F142D242BF201D21A062AF988A2458EED392E002DC86D
+     14951118250BD868A98A5518358EE3A62009D3C
+h' = 94005AB96774849DC546943C8C0813C7AFF86A17F0AAC16844BCDC91
+     4BF5C75DF93E40FAF8F911DF099FC807EF2A8BA0
+r' = 6BB079330987D742215815E77A7E0A315BB1AA1DF5F5F1003E415019
+     27FB3EB5A503AC1E8152EE48BF8A97BF489884DB
+s' = 2E95E1EFB2FCB41354EB37FCDE6AD256E5A6FC0F8C187098CE355474
+     5FB8C847B5B6D7B6A42BE842CD1321EBC724AB89
+\end{lstlisting}
+
+\noindent Verifikation: $D \in E$ \checkmark{} und $L_x \bmod n = r'$ \checkmark{}
+$\Rightarrow$ \textbf{Signatur gültig}. Der vollständige Signier-/Prüf-Durchlauf bestätigt das
+Verfahren end-to-end.
+
+
+\section*{Bewertung}
+
+\begin{itemize}
+    \item Alle fünf Teilschritte wurden \emph{ohne App} nachvollzogen; die TSE-Signatur des
+          vorgegebenen Bons ist \textbf{gültig}.
+    \item Die unabhängige Probe über die Seriennummer (SHA-256 des Public Keys $=$ Aufdruck)
+          bestätigt schon vor der eigentlichen Signaturprüfung die Integrität von QR und Bon.
+    \item Kritisch für die Verifikation waren zwei Punkte: das \emph{vollständige} Befüllen der
+          Log-Message inkl.\ \texttt{transactionNumber} (Tag \texttt{0x85}) -- fehlt ein Feld,
+          ändert sich der Hash und die Prüfung schlägt fehl -- sowie die richtige Kurvenwahl
+          (brainpoolP384r1 statt secp384r1), die sich eindeutig über die Punktprobe $D \in E$
+          ermitteln lässt.
+    \item Das selbst erzeugte Beispiel zeigt, dass mit denselben Bausteinen (Hash, EC-Arithmetik,
+          ECDSA) beliebige Bons signiert und geprüft werden können.
+\end{itemize}
+
+% ############################################################################
+% CONTENT ENDS HERE
+% ############################################################################
+
+\end{document}
