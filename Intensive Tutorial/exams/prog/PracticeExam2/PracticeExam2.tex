@@ -1,0 +1,218 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	parskip=half,
+	openany
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../../for_latex/preamble}
+\input{../../../for_latex/exam_setup}
+
+\title{Probeklausur 2}
+\author{Luis Staudt}
+\date{}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Probeklausur 2}\\[0.3em]
+	{\large Grundlagen der Programmierung}\\[0.7em]
+	\begin{tabular}{r l @{\hspace{1.4cm}} r l}
+		\textbf{Studiengänge:}    & PEB \& MVB            & \textbf{Autor:}        & Luis Staudt \\
+		\textbf{Semester:}        & Sommersemester 2026   & \textbf{Schwierigkeit:}& einfach \\
+		\textbf{Bearbeitungszeit:}& 90 Minuten            & \textbf{Gesamtpunkte:} & 90 \\
+	\end{tabular}\\[0.7em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{0.5em}
+
+\noindent\textit{Bearbeiten Sie alle fünf Aufgaben. Achten Sie auf sauberen, kompilierfähigen Java-Quelltext. Hilfsmittel: OpenBook, keine elektronischen Geräte.}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Probeklausur 2, Grundlagen der Programmierung}
+\rhead{\small SoSe 2026 (einfach)}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 1: Struktogramm in Java umsetzen \hfill (24 Punkte)}
+
+Das folgende Struktogramm bildet zunächst die Quersumme einer Zahl $m$ (und zählt deren gerade Ziffern) und gibt danach alle Primzahlen bis zu einer Obergrenze $g$ aus.
+
+Setzen Sie das Struktogramm \textbf{vollständig in ein lauffähiges Java-Programm} um. Verwenden Sie zum Einlesen \texttt{Tastatureingabe.leseInt()}.
+
+\begin{center}
+\begin{tikzpicture}
+	\node[nbfull] (a1) at (0,0) {lies eine ganze Zahl $m$ ein};
+	\node[nbfull] (a2) at (a1.south west) {\texttt{qsumme = 0;}\qquad \texttt{anzG = 0;}};
+
+	% while
+	\node[nbfull] (h1) at (a2.south west) {\textbf{solange} $m > 0$};
+	\node[nbi]    (w1) at ($(h1.south west)+(\nsind,0)$) {\texttt{rest = m \% 10;}\quad \texttt{qsumme = qsumme + rest;}};
+	\node[nci]    (wc) at (w1.south west) {};
+	\nscond{wc}{\texttt{rest \% 2 == 0}}{ja}{nein}
+	\node[nbih]   (wcl) at (wc.south west) {\texttt{anzG = anzG + 1;}};
+	\node[nbih]   (wcr) at ($(wc.south west)+(\nshalfi,0)$) {\textit{(nichts)}};
+	\node[nbi]    (w2) at (wcl.south west) {\texttt{m = m / 10;}};
+	\nsframe{h1}{w2}
+
+	\node[nbfull] (a3) at ($(w2.south west)+(-\nsind,0)$) {drucke \texttt{qsumme} und \texttt{anzG}};
+	\node[nbfull] (a4) at (a3.south west) {lies Obergrenze $g$ ein;\qquad \texttt{anzP = 0;}};
+
+	% for z
+	\node[nbfull] (h2) at (a4.south west) {\textbf{für} $z = 2,\,3,\,\ldots,\,g$};
+	\node[nbi]    (f1) at ($(h2.south west)+(\nsind,0)$) {\texttt{istPrim = true;}};
+
+	% inner for t
+	\node[nbi]    (h3) at (f1.south west) {\textbf{für} $t = 2,\,3,\,\ldots,\,z-1$};
+	\node[ncii]   (ic) at ($(h3.south west)+(\nsind,0)$) {};
+	\nscond{ic}{\texttt{z \% t == 0}}{ja}{nein}
+	\node[nbiih]  (icl) at (ic.south west) {\texttt{istPrim = false;}};
+	\node[nbiih]  (icr) at ($(ic.south west)+(\nshalfii,0)$) {\textit{(nichts)}};
+	\nsframe{h3}{icl}
+
+	% Verzweigung auf Ebene 1
+	\node[nci]    (fc) at ($(icl.south west)+(-\nsind,0)$) {};
+	\nscond{fc}{\texttt{istPrim == true}}{ja}{nein}
+	\node[nbih]   (fcl) at (fc.south west) {drucke $z$;\quad \texttt{anzP = anzP + 1;}};
+	\node[nbih]   (fcr) at ($(fc.south west)+(\nshalfi,0)$) {\textit{(nichts)}};
+	\nsframe{h2}{fcl}
+
+	\node[nbfull] (a5) at ($(fcl.south west)+(-\nsind,0)$) {drucke \texttt{anzP}};
+\end{tikzpicture}
+\end{center}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 2: Energieformel auswählen \hfill (14 Punkte)}
+
+Je nach physikalischer Situation wird eine andere Energieform berechnet.
+
+\begin{formeln}
+\[
+	\text{(1) kinetisch:}\quad E = \tfrac{1}{2}\,m\,v^2
+	\qquad
+	\text{(2) potentiell:}\quad E = m\,g\,h \;\;(g = 9{,}81)
+\]
+\[
+	\text{(3) Federspannung:}\quad E = \tfrac{1}{2}\,D\,s^2
+\]
+\end{formeln}
+
+Schreiben Sie ein Programm, das den Benutzer die Energieform per Zahl (\texttt{1}, \texttt{2} oder \texttt{3}) wählen lässt und anschließend die benötigten Größen abfragt. Berechnen und drucken Sie die Energie mit der \textbf{richtigen} Formel. Eine Masse $m \le 0$ bzw.\ eine Federkonstante $D \le 0$ ist als ungültige Eingabe abzufangen. Verwenden Sie \texttt{if/else}.
+
+\begin{beispiel}[Beispieldialog]
+\begin{lstlisting}[language={}]
+Energieform (1=kinetisch, 2=potentiell, 3=Feder): 1
+Masse m [kg]: 2
+Geschwindigkeit v [m/s]: 3
+Energie E = 9.0 J
+\end{lstlisting}
+\end{beispiel}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 3: Konstruktor für Polarkoordinaten \hfill (20 Punkte)}
+
+Gegeben ist die aus Vorlesung und Übung bekannte Klasse \texttt{Punkt} (Attribute \texttt{xKoordinate}, \texttt{yKoordinate} als \texttt{double}).
+
+Implementieren Sie für die Klasse \texttt{Punkt} einen \textbf{Konstruktor für Polarkoordinaten}. Erster Parameter ist der Radius~$r$ (Entfernung zum Ursprung), zweiter Parameter der Winkel~$\alpha$ zur x-Achse im mathematisch positiven Sinn, angegeben in \textbf{Grad}.
+
+\begin{formeln}[Umrechnung Polar $\to$ kartesisch ($\alpha$ in Grad)]
+\[
+	x = r \cdot \cos\!\left(\alpha \cdot \tfrac{\pi}{180}\right)
+	\qquad
+	y = r \cdot \sin\!\left(\alpha \cdot \tfrac{\pi}{180}\right)
+\]
+\end{formeln}
+
+\begin{lstlisting}
+Punkt p1 = new Punkt(4, 30);     // Radius 4, Winkel 30 Grad
+Punkt p2 = new Punkt(7.5, 0);    // auf der x-Achse
+Punkt p3 = new Punkt(3, 270);    // auf der negativen y-Achse
+
+double a = p1.berechneAbstandVomNullpunkt();  // muss 4.0 ergeben
+\end{lstlisting}
+
+\begin{hinweis}[Merkmale eines Konstruktors]
+	Er heißt wie die Klasse, hat \emph{keinen} Rückgabewert (auch kein \texttt{void}) und wird mit \texttt{new} aufgerufen.
+\end{hinweis}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 4: Fachwerk, größte Zug- und Druckkraft \hfill (16 Punkte)}
+
+Gegeben ist die aus Vorlesung und Übung bekannte Datei \texttt{fachwerk.jar}. Für ein gewähltes Fachwerk sollen nach der Berechnung die betragsmäßig \textbf{größte Zugkraft} und die betragsmäßig \textbf{größte Druckkraft} samt zugehöriger Stabnummer ausgegeben werden.
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth, scale=1.0,
+	knoten/.style={circle, fill=black, inner sep=1.6pt},
+	stab/.style={thick, gray!70!black}]
+	\coordinate (A) at (0,0); \coordinate (B) at (2,0); \coordinate (C) at (4,0); \coordinate (D) at (6,0);
+	\coordinate (E) at (1,1.7); \coordinate (F) at (3,1.7); \coordinate (G) at (5,1.7);
+	\draw[stab] (A)--(B); \draw[stab] (B)--(C); \draw[stab] (C)--(D);
+	\draw[stab] (A)--(E); \draw[stab] (E)--(B); \draw[stab] (E)--(F);
+	\draw[stab] (F)--(B); \draw[stab] (F)--(C); \draw[stab] (F)--(G);
+	\draw[stab] (G)--(C); \draw[stab] (G)--(D);
+	\foreach \p in {A,B,C,D,E,F,G} \node[knoten] at (\p) {};
+	\draw[->, thick] (C)--++(0,-0.9);
+	\node[below, font=\footnotesize] at ($(C)+(0,-0.9)$) {Last};
+\end{tikzpicture}\\[-0.3em]
+{\footnotesize\itshape Schematische Darstellung eines Fachwerks.}
+\end{center}
+
+\begin{hinweis}[Benötigte Methoden aus \texttt{fachwerk.jar}]
+	\texttt{int gibAnzahlStaebe()}, \texttt{Fachwerkstab gibStab(int i)}, \texttt{double gibStabkraft()} (positiv = Zug, negativ = Druck).
+\end{hinweis}
+
+\begin{lstlisting}
+public class Fachwerkaufgabe {
+    public static void main(String[] args) {
+        System.out.println("Welches Fachwerk wollen Sie rechnen (0-4)?");
+        int wahl = Tastatureingabe.leseInt();
+        Fachwerk fw = new Fachwerk(wahl);
+        fw.berechneGroessen();
+        // hier erweitern: groesste Zug- und Druckkraft mit Stabnummer suchen
+    }
+}
+\end{lstlisting}
+
+\begin{beispiel}[Mögliche Ausgabe]
+\begin{lstlisting}[language={}]
+Groesste Zugkraft  (Stab 5): 53.033
+Groesste Druckkraft (Stab 3): -62.5
+\end{lstlisting}
+\end{beispiel}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 5: Wertetabelle in eine Datei schreiben \hfill (16 Punkte)}
+
+Ein Körper wird aus der Ruhe gleichmäßig beschleunigt. Es gilt
+\[ v(t) = a \cdot t \qquad\text{und}\qquad s(t) = \tfrac{1}{2}\,a\,t^2, \qquad a = 2{,}5~\text{m/s}^2. \]
+
+Schreiben Sie ein Programm, das für $t = 0~\text{s}$ bis $t = 12~\text{s}$ in Schritten von $1~\text{s}$ jeweils Geschwindigkeit und Strecke berechnet und als drei Spalten in die Datei \texttt{bewegung.txt} schreibt.
+
+\begin{hinweis}[Hinweis]
+	Verwenden Sie \texttt{java.io.FileWriter}: mit \lstinline|new FileWriter("bewegung.txt")| öffnen, je Zeile mit \texttt{write(...)} schreiben (Zeilenumbruch \lstinline|"\n"|), am Ende \texttt{close()}.
+	Nutzen Sie \lstinline|"\t"| für die Spaltenabstände.
+\end{hinweis}
+
+\begin{beispiel}[Erwarteter Dateiinhalt (Auszug)]
+\begin{lstlisting}[language={}]
+t [s]   v [m/s]   s [m]
+0       0.0       0.0
+1       2.5       1.25
+2       5.0       5.0
+...
+12      30.0      180.0
+\end{lstlisting}
+\end{beispiel}
+
+\end{document}

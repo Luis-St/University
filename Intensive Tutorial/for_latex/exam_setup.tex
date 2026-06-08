@@ -1,0 +1,103 @@
+% ##################################################
+% Gemeinsames Setup fuer die Probeklausuren
+% (Java-Listings, Hinweis-/Beispiel-Boxen, Struktogramm-Stile in TikZ)
+% wird nach \include{../for_latex/preamble} per \input eingebunden
+% ##################################################
+
+% --- Java Code-Highlighting ---
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{keywordcolor}{rgb}{0.8,0.47,0.13}
+
+\lstdefinestyle{javastyle}{
+	backgroundcolor=\color{backcolour},
+	commentstyle=\color{codegray},
+	keywordstyle=\color{keywordcolor}\bfseries,
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=5pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=2,
+	language=Java,
+	frame=single,
+	rulecolor=\color{black!30}
+}
+
+\lstset{style=javastyle}
+
+% --- Hinweis-/Beispiel-/Formel-Umgebungen (schlicht, ohne farbige Box) ---
+\newenvironment{hinweis}[1][Hinweis]%
+	{\par\smallskip\noindent\textbf{#1.}\enspace\ignorespaces}%
+	{\par\smallskip}
+
+\newenvironment{beispiel}[1][Beispiel]%
+	{\par\smallskip\noindent\textbf{#1:}\par\nobreak\vspace{2pt}}%
+	{\par\smallskip}
+
+\newenvironment{formeln}[1][Gegebene Formeln]%
+	{\par\smallskip\noindent\textbf{#1:}\par\nobreak\vspace{2pt}}%
+	{\par\smallskip}
+
+% ##################################################
+% Struktogramm (Nassi-Shneiderman) in reinem TikZ
+% ##################################################
+\newlength{\nswidth}\setlength{\nswidth}{11.5cm}   % Gesamtbreite
+\newlength{\nsind}\setlength{\nsind}{0.55cm}        % Einrueckung je Schleifenebene
+% vorberechnete Versatzbreiten fuer Verzweigungen (in Koordinaten nutzbar)
+\newlength{\nshalf}\setlength{\nshalf}{\dimexpr\nswidth/2\relax}            % halbe Gesamtbreite
+\newlength{\nshalfi}\setlength{\nshalfi}{\dimexpr(\nswidth-\nsind)/2\relax}  % halbe Breite, 1x eingerueckt
+\newlength{\nshalfii}\setlength{\nshalfii}{\dimexpr(\nswidth-2\nsind)/2\relax} % halbe Breite, 2x eingerueckt
+
+\tikzset{
+	% Basis fuer Anweisungs-/Verzweigungsbloecke
+	nb/.style={draw, line width=0.4pt, anchor=north west, inner sep=4pt,
+		align=left, font=\footnotesize, fill=white, minimum height=0.8cm},
+	% volle Breite
+	nbfull/.style={nb, minimum width=\nswidth,
+		text width=\dimexpr\nswidth-8pt\relax},
+	% eine Ebene eingerueckt (Schleifenrumpf)
+	nbi/.style={nb, minimum width=\dimexpr\nswidth-\nsind\relax,
+		text width=\dimexpr\nswidth-\nsind-8pt\relax},
+	% zwei Ebenen eingerueckt (Schleife in Schleife)
+	nbii/.style={nb, minimum width=\dimexpr\nswidth-2\nsind\relax,
+		text width=\dimexpr\nswidth-2\nsind-8pt\relax},
+	% Verzweigung: halbe Breiten
+	nbh/.style={nb, minimum width=\dimexpr\nswidth/2\relax,
+		text width=\dimexpr\nswidth/2-8pt\relax},
+	nbih/.style={nb, minimum width=\dimexpr(\nswidth-\nsind)/2\relax,
+		text width=\dimexpr(\nswidth-\nsind)/2-8pt\relax},
+	% Verzweigung halbe Breite, zwei Ebenen eingerueckt
+	nbiih/.style={nb, minimum width=\nshalfii,
+		text width=\dimexpr\nshalfii-8pt\relax},
+	% Kopf einer Verzweigung (das Dreieck), inner sep 0
+	nc/.style={draw, line width=0.4pt, anchor=north west, inner sep=0pt,
+		minimum height=1.0cm, fill=white},
+	ncfull/.style={nc, minimum width=\nswidth},
+	nci/.style={nc, minimum width=\dimexpr\nswidth-\nsind\relax},
+	ncii/.style={nc, minimum width=\dimexpr\nswidth-2\nsind\relax},
+}
+
+% Zeichnet das Dreieck + Beschriftungen in einen bereits gesetzten nc-Knoten.
+% #1 Knotenname  #2 Bedingung  #3 ja-Label  #4 nein-Label
+\newcommand{\nscond}[4]{%
+	\draw[line width=0.4pt] (#1.north west) -- (#1.south);
+	\draw[line width=0.4pt] (#1.north east) -- (#1.south);
+	\node[font=\scriptsize, anchor=north, inner sep=1pt] at ($(#1.north)+(0,-1.5pt)$) {#2};
+	\node[font=\scriptsize, anchor=south west, inner sep=1pt] at ($(#1.south west)+(2.5pt,1.5pt)$) {#3};
+	\node[font=\scriptsize, anchor=south east, inner sep=1pt] at ($(#1.south east)+(-2.5pt,1.5pt)$) {#4};
+}
+
+% Zeichnet den L-Rahmen einer Schleife (linker + unterer Rand der Einrueckspalte).
+% #1 Kopfknoten der Schleife  #2 letzter Rumpfknoten
+\newcommand{\nsframe}[2]{%
+	\draw[line width=0.4pt] (#1.south west) |- (#2.south west);
+}

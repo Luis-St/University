@@ -1,0 +1,251 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	parskip=half,
+	openany
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../../for_latex/preamble}
+\input{../../../for_latex/exam_setup}
+
+\title{Probeklausur 5}
+\author{Luis Staudt}
+\date{}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Probeklausur 5}\\[0.3em]
+	{\large Grundlagen der Programmierung}\\[0.7em]
+	\begin{tabular}{r l @{\hspace{1.4cm}} r l}
+		\textbf{Studiengänge:}    & PEB \& MVB            & \textbf{Autor:}        & Luis Staudt \\
+		\textbf{Semester:}        & Sommersemester 2026   & \textbf{Schwierigkeit:}& schwer \\
+		\textbf{Bearbeitungszeit:}& 90 Minuten           & \textbf{Gesamtpunkte:} & 90 \\
+	\end{tabular}\\[0.7em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{0.5em}
+
+\noindent\textit{Bearbeiten Sie alle fünf Aufgaben. Achten Sie auf sauberen, kompilierfähigen Java-Quelltext. Hilfsmittel: OpenBook, keine elektronischen Geräte.}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Probeklausur 5, Grundlagen der Programmierung}
+\rhead{\small SoSe 2026 (schwer)}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 1: Struktogramm in Java umsetzen \hfill (24 Punkte)}
+
+Das folgende Struktogramm liest Zahlen ein, klassifiziert sie über ihre Teilersumme (vollkommen / abundant) und sucht anschließend die \emph{erste} Primzahl im Feld.
+Beide Teile verwenden eine \textbf{geschachtelte} Schleife.
+
+Setzen Sie das Struktogramm \textbf{vollständig in ein lauffähiges Java-Programm} um.
+
+\begin{center}
+\begin{tikzpicture}
+	\node[nbfull] (a1) at (0,0) {lies $n$ ein; lege Feld \texttt{werte} mit $n$ Plätzen an};
+	\node[nbfull] (h1) at (a1.south west) {\textbf{für} $i = 0,\,1,\,\ldots,\,n-1$};
+	\node[nbi]    (b1) at ($(h1.south west)+(\nsind,0)$) {lies \texttt{werte[i]} ein};
+	\nsframe{h1}{b1}
+
+	% Schleife 2: Teilersumme + Klassifikation
+	\node[nbfull] (h2) at ($(b1.south west)+(-\nsind,0)$) {\textbf{für} $i = 0,\,1,\,\ldots,\,n-1$};
+	\node[nbi]    (f0) at ($(h2.south west)+(\nsind,0)$) {\texttt{tsum = 0;}};
+	\node[nbi]    (h2i) at (f0.south west) {\textbf{für} $t = 1,\,\ldots,\,\texttt{werte[i]}/2$};
+	\node[ncii]   (ic) at ($(h2i.south west)+(\nsind,0)$) {};
+	\nscond{ic}{\texttt{werte[i] \% t == 0}}{ja}{nein}
+	\node[nbiih]  (icl) at (ic.south west) {\texttt{tsum = tsum + t;}};
+	\node[nbiih]  (icr) at ($(ic.south west)+(\nshalfii,0)$) {\textit{(nichts)}};
+	\nsframe{h2i}{icl}
+	\node[nci]    (c1) at ($(icl.south west)+(-\nsind,0)$) {};
+	\nscond{c1}{\texttt{tsum == werte[i]}}{ja}{nein}
+	\node[nbih]   (c1l) at (c1.south west) {drucke \texttt{werte[i]}: vollkommen};
+	\node[nbih]   (c1r) at ($(c1.south west)+(\nshalfi,0)$) {\textit{(nichts)}};
+	\node[nci]    (c2) at (c1l.south west) {};
+	\nscond{c2}{\texttt{tsum > werte[i]}}{ja}{nein}
+	\node[nbih]   (c2l) at (c2.south west) {\texttt{anzAbund = anzAbund + 1;}};
+	\node[nbih]   (c2r) at ($(c2.south west)+(\nshalfi,0)$) {\textit{(nichts)}};
+	\nsframe{h2}{c2l}
+
+	\node[nbfull] (a3) at ($(c2l.south west)+(-\nsind,0)$) {\texttt{i = 0;}\quad \texttt{primGefunden = false;}};
+
+	% Schleife 3: erste Primzahl
+	\node[nbfull] (h3) at (a3.south west) {\textbf{solange} (\texttt{nicht primGefunden}) \textbf{und} (\texttt{i < n})};
+	\node[nbi]    (pf) at ($(h3.south west)+(\nsind,0)$) {\texttt{istPrim = (werte[i] >= 2);}};
+	\node[nbi]    (h3i) at (pf.south west) {\textbf{für} $t = 2,\,\ldots,\,\texttt{werte[i]}-1$};
+	\node[ncii]   (pic) at ($(h3i.south west)+(\nsind,0)$) {};
+	\nscond{pic}{\texttt{werte[i] \% t == 0}}{ja}{nein}
+	\node[nbiih]  (picl) at (pic.south west) {\texttt{istPrim = false;}};
+	\node[nbiih]  (picr) at ($(pic.south west)+(\nshalfii,0)$) {\textit{(nichts)}};
+	\nsframe{h3i}{picl}
+	\node[nci]    (pc) at ($(picl.south west)+(-\nsind,0)$) {};
+	\nscond{pc}{\texttt{istPrim == true}}{ja}{nein}
+	\node[nbih]   (pcl) at (pc.south west) {\texttt{primGefunden = true; primPos = i;}};
+	\node[nbih]   (pcr) at ($(pc.south west)+(\nshalfi,0)$) {\textit{(nichts)}};
+	\node[nbi]    (pinc) at (pcl.south west) {\texttt{i = i + 1;}};
+	\nsframe{h3}{pinc}
+
+	% Ausgabe
+	\node[ncfull] (e1) at ($(pinc.south west)+(-\nsind,0)$) {};
+	\nscond{e1}{\texttt{primGefunden == true}}{ja}{nein}
+	\node[nbh]    (e1l) at (e1.south west) {drucke \texttt{primPos}};
+	\node[nbh]    (e1r) at ($(e1.south west)+(\nshalf,0)$) {drucke: keine Primzahl};
+\end{tikzpicture}
+\end{center}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 2: Schiefer Wurf, Größe auswählen \hfill (14 Punkte)}
+
+Ein Körper wird mit der Anfangsgeschwindigkeit $v_0$ unter dem Winkel~$\alpha$ (in Grad) geworfen ($g = 9{,}81$).
+
+\begin{formeln}
+\[
+	\text{(1) Horizontalweg:}\;\; x = v_0 \cos\alpha \cdot t
+	\qquad
+	\text{(2) Höhe:}\;\; y = v_0 \sin\alpha \cdot t - \tfrac{1}{2} g\,t^2
+\]
+\[
+	\text{(3) Steigzeit:}\;\; t_s = \frac{v_0 \sin\alpha}{g}
+	\qquad
+	\text{(4) Wurfweite:}\;\; w = \frac{v_0^{\,2}\,\sin(2\alpha)}{g}
+\]
+\end{formeln}
+
+Schreiben Sie ein Programm, das die gesuchte Größe per Zahl (\texttt{1} bis \texttt{4}) wählen lässt, die benötigten Werte abfragt und mit der \textbf{richtigen} Formel rechnet.
+Behandeln Sie die Sonderfälle: bei $\alpha = 90^\circ$ ist der Horizontalweg~$x = 0$ (und die Wurfweite~$w = 0$), bei $\alpha = 0^\circ$ ist die Steigzeit $t_s = 0$.
+
+\begin{hinweis}[Winkel im Bogenmaß]
+	Die Java-Funktionen \texttt{Math.sin} und \texttt{Math.cos} erwarten das Bogenmaß.
+	Rechnen Sie den Winkel mit \texttt{Math.toRadians(alpha)} bzw.\ $\alpha \cdot \pi/180$ um.
+\end{hinweis}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 3: Klasse \texttt{Dreieck} \hfill (20 Punkte)}
+
+Gegeben ist die Klasse \texttt{Punkt} (Attribute \texttt{xKoordinate}, \texttt{yKoordinate} als \texttt{double}).
+Implementieren Sie eine Klasse \texttt{Dreieck} aus drei \texttt{Punkt}-Objekten.
+Das Gerüst ist vorgegeben. Ergänzen Sie:
+
+\begin{itemize}[nosep]
+	\item einen \textbf{Konstruktor} mit drei \texttt{Punkt}-Parametern.
+	\item \texttt{berechneFlaeche()}:
+		$A = \tfrac{1}{2}\,\bigl|\,\Delta x_{12}\cdot\Delta y_{13} - \Delta x_{13}\cdot\Delta y_{12}\,\bigr|$,
+		wobei $\Delta x_{12} = x_2 - x_1$ usw.
+	\item \texttt{berechneUmfang()}: Summe der drei Seitenlängen (\emph{verwenden Sie}\\ \texttt{berechneAbstandZuPunkt}).
+	\item \texttt{istRechtwinklig()}: gibt \texttt{true} zurück, wenn das Dreieck (über den Satz des Pythagoras) rechtwinklig ist.
+		Wegen Rundungsfehlern ist eine \textbf{Epsilon-Umgebung} zu verwenden.
+\end{itemize}
+
+\begin{lstlisting}
+public class Dreieck {
+    public Punkt p1, p2, p3;   // Daten
+    // Konstruktor und Methoden ergaenzen
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+Punkt a = new Punkt();  a.xKoordinate = 0;  a.yKoordinate = 0;
+Punkt b = new Punkt();  b.xKoordinate = 4;  b.yKoordinate = 0;
+Punkt c = new Punkt();  c.xKoordinate = 0;  c.yKoordinate = 3;
+
+Dreieck d = new Dreieck(a, b, c);
+System.out.println("Flaeche: " + d.berechneFlaeche());  // 6.0
+System.out.println("Umfang:  " + d.berechneUmfang());   // 12.0
+if (d.istRechtwinklig())
+    System.out.println("Das Dreieck ist rechtwinklig");
+\end{lstlisting}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 4: Fachwerk, Knotenverschiebungen \hfill (16 Punkte)}
+
+Gegeben ist die aus Vorlesung und Übung bekannte Datei \texttt{fachwerk.jar}.
+Nach der Berechnung sollen für ein gewähltes Fachwerk zwei Auswertungen der Knotenverschiebungen programmiert werden:
+\begin{itemize}[nosep]
+	\item Geben Sie \textbf{alle Knoten} aus, die sich \textbf{rein vertikal} verschieben (Verschiebung in x-Richtung praktisch null, in y-Richtung von null verschieden). Existiert kein solcher Knoten, ist eine entsprechende Meldung auszugeben.
+	\item Geben Sie zusätzlich den Knoten mit der \textbf{größten Gesamtverschiebung} samt deren Wert aus, wobei $v = \sqrt{v_x^2 + v_y^2}$.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth, scale=1.0,
+	knoten/.style={circle, fill=black, inner sep=1.6pt},
+	stab/.style={thick, gray!70!black}]
+	\coordinate (A) at (0,0); \coordinate (B) at (2.5,0); \coordinate (C) at (5,0);
+	\coordinate (D) at (1.25,2.0); \coordinate (E) at (3.75,2.0);
+	\draw[stab] (A)--(B); \draw[stab] (B)--(C);
+	\draw[stab] (A)--(D); \draw[stab] (D)--(B); \draw[stab] (D)--(E);
+	\draw[stab] (E)--(B); \draw[stab] (E)--(C);
+	\foreach \p in {A,B,C,D,E} \node[knoten] at (\p) {};
+	\draw[->, thick] (B)--++(0,-0.9);
+	\node[below, font=\footnotesize] at ($(B)+(0,-0.9)$) {Last};
+\end{tikzpicture}\\[-0.3em]
+{\footnotesize\itshape Schematische Darstellung eines Fachwerks.}
+\end{center}
+
+\begin{hinweis}[Epsilon-Umgebung beachten]
+	Wegen Gleitkomma-Rundung ist \glqq null\grqq{} über eine Epsilon-Umgebung zu prüfen:
+	\[ |v_x| < \varepsilon \;\text{ und }\; |v_y| \ge \varepsilon. \]
+	Benötigte Methoden: \texttt{gibAnzahlKnoten()}, \texttt{gibKnoten(int i)},\\ \texttt{gibVerschiebungX()}, \texttt{gibVerschiebungY()}.
+\end{hinweis}
+
+Ergänzen Sie den folgenden Quelltext zu einem vollständigen, lauffähigen Programm:
+
+\begin{lstlisting}
+public class Fachwerkaufgabe {
+    public static void main(String[] args) {
+        System.out.println("Welches Fachwerk wollen Sie rechnen (0-4)?");
+        int wahl = Tastatureingabe.leseInt();
+        Fachwerk fw = new Fachwerk(wahl);
+        fw.berechneGroessen();
+        double epsilon = 1e-6;
+        // hier erweitern: rein vertikal verschobene Knoten ausgeben sowie
+        // den Knoten mit der groessten Gesamtverschiebung bestimmen
+    }
+}
+\end{lstlisting}
+
+\begin{beispiel}[Mögliche Ausgabe]
+\begin{lstlisting}[language={}]
+Knoten 2 verschiebt sich rein vertikal
+Knoten 4 verschiebt sich rein vertikal
+Groesste Gesamtverschiebung: Knoten 3 mit 0.0123
+\end{lstlisting}
+\end{beispiel}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 5: Wurfbahn in eine Datei schreiben \hfill (16 Punkte)}
+
+Ein Körper wird unter dem Winkel~$\alpha$ mit $v_0$ geworfen ($g = 9{,}81$). Für die Bahnkurve gilt
+\[ x(t) = v_0 \cos\alpha \cdot t \qquad y(t) = v_0 \sin\alpha \cdot t - \tfrac{1}{2} g\,t^2. \]
+
+Schreiben Sie ein Programm, das ab $t = 0~\text{s}$ in Schritten von $0{,}1~\text{s}$ die Werte $t$, $x(t)$ und $y(t)$ in die Datei \texttt{bahn.txt} schreibt. \textbf{Brechen Sie ab, sobald $y(t) < 0$} wird (Aufprall).
+Hängen Sie am Ende eine Zeile mit der erreichten \textbf{Wurfweite} und der \textbf{Flugzeit} an.
+
+\begin{hinweis}[Hinweise]
+	Winkel mit \texttt{Math.toRadians(alpha)} umrechnen.
+	Datei: \lstinline|new FileWriter("bahn.txt")|, je Zeile \texttt{write(...)} mit \lstinline|"\n"|, am Ende \texttt{close()}.
+	Nutzen Sie \lstinline|"\t"| für die Spaltenabstände.
+\end{hinweis}
+
+\begin{beispiel}[Erwarteter Dateiinhalt (Auszug, $v_0=20$, $\alpha=45^\circ$)]
+\begin{lstlisting}[language={}]
+t [s]   x [m]    y [m]
+0.0     0.0      0.0
+0.1     1.414    1.365
+...
+2.8     39.6     0.179
+Aufprall bei t = 2.9 s, Wurfweite = 41.01 m
+\end{lstlisting}
+\end{beispiel}
+
+\end{document}

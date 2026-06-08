@@ -1,0 +1,244 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	parskip=half,
+	openany
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../../for_latex/preamble}
+\input{../../../for_latex/exam_setup}
+
+\title{Probeklausur 3}
+\author{Luis Staudt}
+\date{}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Probeklausur 3}\\[0.3em]
+	{\large Grundlagen der Programmierung}\\[0.7em]
+	\begin{tabular}{r l @{\hspace{1.4cm}} r l}
+		\textbf{Studiengänge:}    & PEB \& MVB            & \textbf{Autor:}        & Luis Staudt \\
+		\textbf{Semester:}        & Sommersemester 2026   & \textbf{Schwierigkeit:}& mittel \\
+		\textbf{Bearbeitungszeit:}& 90 Minuten           & \textbf{Gesamtpunkte:} & 90 \\
+	\end{tabular}\\[0.7em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{0.5em}
+
+\noindent\textit{Bearbeiten Sie alle fünf Aufgaben. Achten Sie auf sauberen, kompilierfähigen Java-Quelltext. Hilfsmittel: OpenBook, keine elektronischen Geräte.}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Probeklausur 3, Grundlagen der Programmierung}
+\rhead{\small SoSe 2026 (mittel)}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 1: Struktogramm in Java umsetzen \hfill (24 Punkte)}
+
+Das folgende Struktogramm liest Messwerte ein, zählt die gültigen Werte (innerhalb eines Bereichs) und ermittelt deren Mittelwert sowie Minimum und Maximum.
+Anschließend sucht es den \emph{ersten} Ausreißer (Abweichung vom Mittelwert über einer Grenze).
+
+Setzen Sie das Struktogramm \textbf{vollständig in ein lauffähiges Java-Programm} um.
+
+\begin{center}
+\begin{tikzpicture}
+	\node[nbfull] (a1) at (0,0) {lies $n$, \texttt{unten}, \texttt{oben} und \texttt{grenze} ein};
+	\node[nbfull] (a2) at (a1.south west) {lege Feld \texttt{werte} mit $n$ Plätzen an};
+	\node[nbfull] (h1) at (a2.south west) {\textbf{für} $i = 0,\,1,\,\ldots,\,n-1$};
+	\node[nbi]    (b1) at ($(h1.south west)+(\nsind,0)$) {lies \texttt{werte[i]} ein};
+	\nsframe{h1}{b1}
+	\node[nbfull] (a3) at ($(b1.south west)+(-\nsind,0)$) {\texttt{gueltig=0; tsum=0; min=werte[0]; max=werte[0];}};
+
+	% Schleife 2
+	\node[nbfull] (h2) at (a3.south west) {\textbf{für} $i = 0,\,1,\,\ldots,\,n-1$};
+	\node[nci]    (c1) at ($(h2.south west)+(\nsind,0)$) {};
+	\nscond{c1}{\texttt{unten <= werte[i] <= oben}}{ja}{nein}
+	\node[nbih]   (c1l) at (c1.south west) {\texttt{gueltig++; tsum += werte[i];}};
+	\node[nbih]   (c1r) at ($(c1.south west)+(\nshalfi,0)$) {\textit{(nichts)}};
+	\node[nci]    (c2) at (c1l.south west) {};
+	\nscond{c2}{\texttt{werte[i] < min}}{ja}{nein}
+	\node[nbih]   (c2l) at (c2.south west) {\texttt{min = werte[i];}};
+	\node[nbih]   (c2r) at ($(c2.south west)+(\nshalfi,0)$) {\textit{(nichts)}};
+	\node[nci]    (c3) at (c2l.south west) {};
+	\nscond{c3}{\texttt{werte[i] > max}}{ja}{nein}
+	\node[nbih]   (c3l) at (c3.south west) {\texttt{max = werte[i];}};
+	\node[nbih]   (c3r) at ($(c3.south west)+(\nshalfi,0)$) {\textit{(nichts)}};
+	\nsframe{h2}{c3l}
+
+	% Mittelwert (Verzweigung)
+	\node[ncfull] (m1) at ($(c3l.south west)+(-\nsind,0)$) {};
+	\nscond{m1}{\texttt{gueltig > 0}}{ja}{nein}
+	\node[nbh]    (m1l) at (m1.south west) {\texttt{mittel = tsum / gueltig;}};
+	\node[nbh]    (m1r) at ($(m1.south west)+(\nshalf,0)$) {\texttt{mittel = 0;}};
+	\node[nbfull] (a4) at (m1l.south west) {\texttt{i = 0;}\qquad \texttt{gefunden = false;}};
+
+	% Schleife 3 (while mit Flag)
+	\node[nbfull] (h3) at (a4.south west) {\textbf{solange} (\texttt{nicht gefunden}) \textbf{und} (\texttt{i < n})};
+	\node[nci]    (c4) at ($(h3.south west)+(\nsind,0)$) {};
+	\nscond{c4}{$|\,\mathtt{werte[i]}-\mathtt{mittel}\,| > \mathtt{grenze}$}{ja}{nein}
+	\node[nbih]   (c4l) at (c4.south west) {\texttt{gefunden = true; pos = i;}};
+	\node[nbih]   (c4r) at ($(c4.south west)+(\nshalfi,0)$) {\textit{(nichts)}};
+	\node[nbi]    (p1) at (c4l.south west) {\texttt{i = i + 1;}};
+	\nsframe{h3}{p1}
+
+	% Ausgabe (Verzweigung)
+	\node[ncfull] (e1) at ($(p1.south west)+(-\nsind,0)$) {};
+	\nscond{e1}{\texttt{gefunden == true}}{ja}{nein}
+	\node[nbh]    (e1l) at (e1.south west) {drucke \texttt{pos}};
+	\node[nbh]    (e1r) at ($(e1.south west)+(\nshalf,0)$) {drucke: kein Ausreißer};
+\end{tikzpicture}
+\end{center}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 2: Widerstandsschaltung auswählen \hfill (14 Punkte)}
+
+Zwei oder drei Widerstände werden zusammengeschaltet, anschließend wird der Strom bei gegebener Spannung~$U$ berechnet.
+
+\begin{formeln}
+\[
+	\text{(1) Reihe:}\quad R = R_1 + R_2 + R_3
+	\qquad
+	\text{(2) Parallel (zwei):}\quad R = \frac{R_1 \cdot R_2}{R_1 + R_2}
+\]
+\[
+	\text{danach in beiden Fällen:}\quad I = \frac{U}{R}
+\]
+\end{formeln}
+
+Schreiben Sie ein Programm, das die Schaltungsart per Zahl (\texttt{1} oder \texttt{2}) wählen lässt, die Widerstände und die Spannung~$U$ abfragt, den Gesamtwiderstand~$R$ mit der \textbf{richtigen} Formel und anschließend den Strom~$I$ berechnet. Fangen Sie den Sonderfall $R = 0$ (Kurzschluss) ab und geben Sie dann eine entsprechende Meldung statt einer Division aus.
+
+\begin{beispiel}[Beispieldialog]
+\begin{lstlisting}[language={}]
+Schaltung (1=Reihe, 2=Parallel): 2
+R1 [Ohm]: 100
+R2 [Ohm]: 100
+Spannung U [V]: 10
+Gesamtwiderstand R = 50.0 Ohm
+Strom I = 0.2 A
+\end{lstlisting}
+\end{beispiel}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 3: Klasse \texttt{Kreis} \hfill (20 Punkte)}
+
+Gegeben ist die Klasse \texttt{Punkt} (Attribute \texttt{xKoordinate}, \texttt{yKoordinate} als \texttt{double}).
+Implementieren Sie eine Klasse \texttt{Kreis}, die einen Mittelpunkt (ein \texttt{Punkt}) und einen Radius besitzt.
+Das Gerüst ist vorgegeben. Ergänzen Sie:
+
+\begin{itemize}[nosep]
+	\item einen \textbf{Konstruktor} mit Mittelpunkt und Radius. Ist der Radius $\le 0$, wird stattdessen der Radius~\texttt{1} verwendet.
+	\item die Methode \texttt{berechneFlaeche()} ($A = \pi r^2$).
+	\item die Methode \texttt{enthaeltPunkt(Punkt p)}, die \texttt{true} zurückgibt, wenn \texttt{p} innerhalb des Kreises oder auf dem Rand liegt. \emph{Verwenden Sie dazu \texttt{berechneAbstandZuPunkt}.}
+\end{itemize}
+
+\begin{lstlisting}
+public class Kreis {
+    public Punkt mittelpunkt;  // Daten
+    public double radius;      // Daten
+    // Konstruktor und Methoden ergaenzen
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+Punkt mp = new Punkt();
+mp.xKoordinate = 2;  mp.yKoordinate = 3;
+Kreis k = new Kreis(mp, 5);
+System.out.println("Flaeche: " + k.berechneFlaeche());
+
+Punkt p = new Punkt();
+p.xKoordinate = 4;  p.yKoordinate = 4;
+if (k.enthaeltPunkt(p))
+    System.out.println("p liegt im Kreis");
+\end{lstlisting}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 4: Fachwerk, Mittelpunkt des höchstbelasteten Stabes \hfill (16 Punkte)}
+
+Gegeben ist die aus Vorlesung und Übung bekannte Datei \texttt{fachwerk.jar}.
+Für ein gewähltes Fachwerk soll nach der Berechnung der Stab mit der betragsmäßig \textbf{größten Stabkraft} bestimmt werden.
+Geben Sie dessen Stabnummer, die Kraftart (Zug/Druck) sowie die Koordinaten seines \textbf{Mittelpunkts} aus.
+
+\begin{formeln}[Mittelpunkt eines Stabes]
+\[ x_m = \frac{x_a + x_e}{2} \qquad y_m = \frac{y_a + y_e}{2} \]
+wobei $a$ der Anfangs- und $e$ der Endknoten des Stabes ist.
+\end{formeln}
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth, scale=1.0,
+	knoten/.style={circle, fill=black, inner sep=1.6pt},
+	stab/.style={thick, gray!70!black}]
+	\coordinate (A) at (0,0); \coordinate (B) at (2.2,0); \coordinate (C) at (4.4,0); \coordinate (D) at (6.6,0);
+	\coordinate (E) at (1.1,1.8); \coordinate (F) at (3.3,1.8); \coordinate (G) at (5.5,1.8);
+	\draw[stab] (A)--(B); \draw[stab] (B)--(C); \draw[stab] (C)--(D);
+	\draw[stab] (A)--(E); \draw[stab] (E)--(B); \draw[stab] (E)--(F);
+	\draw[stab] (F)--(B); \draw[stab] (F)--(C); \draw[stab] (F)--(G);
+	\draw[stab] (G)--(C); \draw[stab] (G)--(D);
+	\foreach \p in {A,B,C,D,E,F,G} \node[knoten] at (\p) {};
+	\draw[->, thick] (B)--++(0,-0.9); \draw[->, thick] (C)--++(0,-0.9);
+\end{tikzpicture}\\[-0.3em]
+{\footnotesize\itshape Schematische Darstellung eines Fachwerks.}
+\end{center}
+
+\begin{hinweis}[Benötigte Methoden aus \texttt{fachwerk.jar}]
+	\texttt{gibAnzahlStaebe()}, \texttt{gibStab(i)},\\ \texttt{gibStabkraft()}, \texttt{gibKnotenNrA()}, \texttt{gibKnotenNrE()}, \texttt{gibKnoten(i)}, \texttt{gibX()}, \texttt{gibY()}.
+\end{hinweis}
+
+\begin{lstlisting}
+public class Fachwerkaufgabe {
+    public static void main(String[] args) {
+        System.out.println("Welches Fachwerk wollen Sie rechnen (0-4)?");
+        int wahl = Tastatureingabe.leseInt();
+        Fachwerk fw = new Fachwerk(wahl);
+        fw.berechneGroessen();
+        // hier erweitern: hoechstbelasteten Stab finden, Mittelpunkt ausgeben
+    }
+}
+\end{lstlisting}
+
+\begin{beispiel}[Mögliche Ausgabe]
+\begin{lstlisting}[language={}]
+Hoechstbelasteter Stab: Stab 3 (Druckkraft), Kraft = -62.5
+Mittelpunkt: x = 3.0   y = 1.5
+\end{lstlisting}
+\end{beispiel}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 5: Entladekurve in eine Datei schreiben \hfill (16 Punkte)}
+
+Ein Kondensator entlädt sich; die Spannung folgt
+\[ U(t) = U_0 \cdot e^{-t/\tau}, \qquad U_0 = 10~\text{V}, \quad \tau = 5~\text{s}. \]
+
+Schreiben Sie ein Programm, das für $t = 0~\text{s}$ bis $t = 20~\text{s}$ in Schritten von $0{,}5~\text{s}$ jeweils $t$ und $U(t)$ in die Datei \texttt{entladung.txt} schreibt.
+Markieren Sie zusätzlich in der jeweiligen Zeile, sobald $U(t) < 0{,}37 \cdot U_0$ unterschritten wird (z.\,B.\ mit dem Zusatz \texttt{*}).
+
+\begin{hinweis}[Hinweis]
+	Die Exponentialfunktion ist \texttt{Math.exp(...)}.
+	Datei: \lstinline|new FileWriter("entladung.txt")|, je Zeile \texttt{write(...)} mit \lstinline|"\n"|, am Ende \texttt{close()}.
+	Eine Kopfzeile ist erwünscht.
+\end{hinweis}
+
+\begin{beispiel}[Erwarteter Dateiinhalt (Auszug)]
+\begin{lstlisting}[language={}]
+t [s]    U [V]
+0.0      10.0
+0.5      9.048
+...
+5.0      3.679   *
+...
+20.0     0.183   *
+\end{lstlisting}
+\end{beispiel}
+
+\end{document}

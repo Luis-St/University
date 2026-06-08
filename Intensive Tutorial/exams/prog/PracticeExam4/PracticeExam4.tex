@@ -1,0 +1,230 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	parskip=half,
+	openany
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../../for_latex/preamble}
+\input{../../../for_latex/exam_setup}
+
+\title{Probeklausur 4}
+\author{Luis Staudt}
+\date{}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Probeklausur 4}\\[0.3em]
+	{\large Grundlagen der Programmierung}\\[0.7em]
+	\begin{tabular}{r l @{\hspace{1.4cm}} r l}
+		\textbf{Studiengänge:}    & PEB \& MVB            & \textbf{Autor:}        & Luis Staudt \\
+		\textbf{Semester:}        & Sommersemester 2026   & \textbf{Schwierigkeit:}& mittel \\
+		\textbf{Bearbeitungszeit:}& 90 Minuten           & \textbf{Gesamtpunkte:} & 90 \\
+	\end{tabular}\\[0.7em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{0.5em}
+
+\noindent\textit{Bearbeiten Sie alle fünf Aufgaben. Achten Sie auf sauberen, kompilierfähigen Java-Quelltext. Hilfsmittel: OpenBook, keine elektronischen Geräte.}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Probeklausur 4, Grundlagen der Programmierung}
+\rhead{\small SoSe 2026 (mittel)}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 1: Struktogramm in Java umsetzen \hfill (24 Punkte)}
+
+Das folgende Struktogramm prüft zunächst eine Eingabe, bildet danach die Collatz-Folge eines Startwerts (und merkt sich deren größten erreichten Wert) und berechnet zum Schluss eine Fakultät mit Überlaufkontrolle.
+
+Setzen Sie das Struktogramm \textbf{vollständig in ein lauffähiges Java-Programm} um.
+
+\begin{center}
+\begin{tikzpicture}
+	\node[nbfull] (a1) at (0,0) {lies Startwert $k$ ein};
+
+	% Eingabepruefung
+	\node[nbfull] (h0) at (a1.south west) {\textbf{solange} $k < 1$};
+	\node[nbi]    (v0) at ($(h0.south west)+(\nsind,0)$) {lies $k$ erneut ein};
+	\nsframe{h0}{v0}
+
+	\node[nbfull] (a2) at ($(v0.south west)+(-\nsind,0)$) {\texttt{schritte = 0;}\qquad \texttt{maxK = k;}};
+
+	% Collatz
+	\node[nbfull] (h1) at (a2.south west) {\textbf{solange} $k \neq 1$};
+	\node[nci]    (c1) at ($(h1.south west)+(\nsind,0)$) {};
+	\nscond{c1}{\texttt{k \% 2 == 0}}{ja}{nein}
+	\node[nbih]   (c1l) at (c1.south west) {\texttt{k = k / 2;}};
+	\node[nbih]   (c1r) at ($(c1.south west)+(\nshalfi,0)$) {\texttt{k = 3 * k + 1;}};
+	\node[nci]    (c2) at (c1l.south west) {};
+	\nscond{c2}{\texttt{k > maxK}}{ja}{nein}
+	\node[nbih]   (c2l) at (c2.south west) {\texttt{maxK = k;}};
+	\node[nbih]   (c2r) at ($(c2.south west)+(\nshalfi,0)$) {\textit{(nichts)}};
+	\node[nbi]    (b1) at (c2l.south west) {\texttt{schritte = schritte + 1;}};
+	\nsframe{h1}{b1}
+
+	\node[nbfull] (a3) at ($(b1.south west)+(-\nsind,0)$) {drucke \texttt{schritte} und \texttt{maxK}};
+	\node[nbfull] (a4) at (a3.south west) {lies $n$ ein;\qquad \texttt{fak = 1;}};
+
+	% Fakultaet
+	\node[nbfull] (h2) at (a4.south west) {\textbf{für} $i = 2,\,3,\,\ldots,\,n$};
+	\node[nbi]    (f1) at ($(h2.south west)+(\nsind,0)$) {\texttt{fak = fak * i;}};
+	\node[nci]    (c3) at (f1.south west) {};
+	\nscond{c3}{\texttt{fak > grenze}}{ja}{nein}
+	\node[nbih]   (c3l) at (c3.south west) {drucke $i$, Warnung; Schleife abbrechen};
+	\node[nbih]   (c3r) at ($(c3.south west)+(\nshalfi,0)$) {\textit{(nichts)}};
+	\nsframe{h2}{c3l}
+
+	\node[nbfull] (a5) at ($(c3l.south west)+(-\nsind,0)$) {drucke \texttt{fak}};
+\end{tikzpicture}
+\end{center}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 2: Kinematik, gesuchte Größe auswählen \hfill (14 Punkte)}
+
+Bei der gleichmäßig beschleunigten Bewegung kann je nach Aufgabenstellung eine andere Größe gesucht sein.
+
+\begin{formeln}
+\[
+	\text{(1)}\;\; v = v_0 + a\,t
+	\qquad
+	\text{(2)}\;\; s = v_0\,t + \tfrac{1}{2}\,a\,t^2
+\]
+\[
+	\text{(3)}\;\; a = \frac{v - v_0}{t}
+	\qquad
+	\text{(4)}\;\; t = \frac{v - v_0}{a}
+\]
+\end{formeln}
+
+Schreiben Sie ein Programm, das die gesuchte Größe per Zahl (\texttt{1} bis \texttt{4}) wählen lässt, die jeweils benötigten Werte abfragt und das Ergebnis mit der \textbf{richtigen} Formel berechnet.
+Fangen Sie die Division durch Null ab: bei Auswahl~\texttt{3} den Fall $t = 0$, bei Auswahl~\texttt{4} den Fall $a = 0$.
+
+\begin{beispiel}[Beispieldialog]
+\begin{lstlisting}[language={}]
+Gesuchte Groesse (1=v, 2=s, 3=a, 4=t): 1
+v0 [m/s]: 5
+a [m/s^2]: 2
+t [s]: 3
+Geschwindigkeit v = 11.0 m/s
+\end{lstlisting}
+\end{beispiel}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 3: Punkt drehen und verschieben \hfill (20 Punkte)}
+
+Gegeben ist die Klasse \texttt{Punkt} (Attribute \texttt{xKoordinate}, \texttt{yKoordinate} als \texttt{double}).
+Implementieren Sie zwei Methoden, die jeweils einen \textbf{neuen} \texttt{Punkt} zurückgeben (die aufrufende Instanz bleibt unverändert):
+
+\begin{itemize}[nosep]
+	\item \texttt{rotiere(double winkel)}, dreht den Punkt um den Ursprung (Winkel in Grad).
+	\item \texttt{verschiebeUm(double strecke, double richtung)}, verschiebt den Punkt um \texttt{strecke} in Richtung \texttt{richtung} (in Grad).
+\end{itemize}
+
+\begin{formeln}[Berechnungsformeln (Winkel in Grad, daher Umrechnung $\cdot\,\pi/180$)]
+\[
+	x_n = x\cos\beta - y\sin\beta \qquad y_n = x\sin\beta + y\cos\beta
+\]
+\[
+	x_n = x + \text{strecke}\cdot\cos(\text{richtung}) \qquad
+	y_n = y + \text{strecke}\cdot\sin(\text{richtung})
+\]
+\end{formeln}
+
+\begin{lstlisting}
+Punkt p = new Punkt();
+p.xKoordinate = 3;  p.yKoordinate = 4;
+
+Punkt gedreht  = p.rotiere(90);          // um 90 Grad drehen
+Punkt versetzt = p.verschiebeUm(5, 0);   // 5 Einheiten in x-Richtung
+System.out.println(gedreht.xKoordinate + " / " + gedreht.yKoordinate);
+\end{lstlisting}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 4: Fachwerk, längster und kürzester Stab \hfill (16 Punkte)}
+
+Gegeben ist die aus Vorlesung und Übung bekannte Datei \texttt{fachwerk.jar}.
+Für ein gewähltes Fachwerk sollen der \textbf{längste} und der \textbf{kürzeste} Stab (jeweils mit Stabnummer und Länge) sowie die \textbf{Gesamtlänge} aller Stäbe ausgegeben werden.
+
+\begin{formeln}[Stablänge aus den Knotenkoordinaten]
+\[ l = \sqrt{(x_e - x_a)^2 + (y_e - y_a)^2} \]
+\end{formeln}
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth, scale=1.0,
+	knoten/.style={circle, fill=black, inner sep=1.6pt},
+	stab/.style={thick, gray!70!black}]
+	\coordinate (A) at (0,0); \coordinate (B) at (2.5,0); \coordinate (C) at (5,0);
+	\coordinate (D) at (1.0,2.0); \coordinate (E) at (4.0,2.4);
+	\draw[stab] (A)--(B); \draw[stab] (B)--(C);
+	\draw[stab] (A)--(D); \draw[stab] (D)--(B); \draw[stab] (D)--(E);
+	\draw[stab] (E)--(B); \draw[stab] (E)--(C);
+	\foreach \p in {A,B,C,D,E} \node[knoten] at (\p) {};
+\end{tikzpicture}\\[-0.3em]
+{\footnotesize\itshape Schematische Darstellung eines Fachwerks.}
+\end{center}
+
+\begin{hinweis}[Wichtig]
+	Es geht nur um die \emph{Geometrie} des Fachwerks (die Knotenkoordinaten).
+	Ein Aufruf von \texttt{berechneGroessen()} ist daher \textbf{nicht} erforderlich.
+	Benötigt: \texttt{gibAnzahlStaebe()}, \texttt{gibStab(i)}, \texttt{gibKnotenNrA()}, \texttt{gibKnotenNrE()}, \texttt{gibKnoten(i)}, \texttt{gibX()}, \texttt{gibY()}.
+\end{hinweis}
+
+\begin{lstlisting}
+public class Fachwerkaufgabe {
+    public static void main(String[] args) {
+        System.out.println("Welches Fachwerk wollen Sie rechnen (0-4)?");
+        int wahl = Tastatureingabe.leseInt();
+        Fachwerk fw = new Fachwerk(wahl);
+        // hier erweitern: laengsten/kuerzesten Stab und Gesamtlaenge bestimmen
+    }
+}
+\end{lstlisting}
+
+\begin{beispiel}[Mögliche Ausgabe]
+\begin{lstlisting}[language={}]
+Laengster Stab:  Stab 7 mit Laenge 4.272
+Kuerzester Stab: Stab 2 mit Laenge 2.0
+Gesamtlaenge aller Staebe: 35.61
+\end{lstlisting}
+\end{beispiel}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 5: Energie-Wertetabelle in eine Datei schreiben \hfill (16 Punkte)}
+
+Ein Körper der Masse $m = 3~\text{kg}$ wird aus der Ruhe mit $a = 2~\text{m/s}^2$ beschleunigt.
+Für Geschwindigkeit und kinetische Energie gilt
+\[ v(t) = a\,t \qquad E(t) = \tfrac{1}{2}\,m\,\bigl(a\,t\bigr)^2. \]
+
+Schreiben Sie ein Programm, das für $t = 0~\text{s}$ bis $t = 10~\text{s}$ in Schritten von $0{,}5~\text{s}$ jeweils $t$, $v$ und $E$ als drei Spalten in die Datei \texttt{energie.txt} schreibt. Hängen Sie am Ende eine Zeile an, die den \textbf{Zeitpunkt} nennt, zu dem $E$ erstmals eine Grenze $E_{\text{grenze}} = 100~\text{J}$ überschreitet.
+
+\begin{hinweis}[FileWriter]
+	\lstinline|new FileWriter("energie.txt")|, je Zeile \texttt{write(...)} mit \lstinline|"\n"|, am Ende \texttt{close()}.
+	Nutzen Sie \lstinline|"\t"| für die Spaltenabstände.
+\end{hinweis}
+
+\begin{beispiel}[Erwarteter Dateiinhalt (Auszug)]
+\begin{lstlisting}[language={}]
+t [s]   v [m/s]   E [J]
+0.0     0.0       0.0
+0.5     1.0       1.5
+...
+6.0     12.0      216.0
+...
+Grenze von 100 J erstmals ueberschritten bei t = 4.5 s
+\end{lstlisting}
+\end{beispiel}
+
+\end{document}

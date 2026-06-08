@@ -1,0 +1,227 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	parskip=half,
+	openany
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../../for_latex/preamble}
+\input{../../../for_latex/exam_setup}
+
+\title{Probeklausur 1}
+\author{Luis Staudt}
+\date{}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Probeklausur 1}\\[0.3em]
+	{\large Grundlagen der Programmierung}\\[0.7em]
+	\begin{tabular}{r l @{\hspace{1.4cm}} r l}
+		\textbf{Studiengänge:}    & PEB \& MVB            & \textbf{Autor:}        & Luis Staudt \\
+		\textbf{Semester:}        & Sommersemester 2026   & \textbf{Schwierigkeit:}& einfach \\
+		\textbf{Bearbeitungszeit:}& 90 Minuten            & \textbf{Gesamtpunkte:} & 90 \\
+	\end{tabular}\\[0.7em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{0.5em}
+
+\noindent\textit{Bearbeiten Sie alle fünf Aufgaben. Achten Sie auf sauberen, kompilierfähigen Java-Quelltext. Hilfsmittel: OpenBook, keine elektronischen Geräte.}
+
+% --- Seitenkopf und -fuß ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Probeklausur 1, Grundlagen der Programmierung}
+\rhead{\small SoSe 2026 (einfach)}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 1: Struktogramm in Java umsetzen \hfill (24 Punkte)}
+
+Gegeben ist das folgende Struktogramm.
+Es liest eine Anzahl von Messwerten ein, bestimmt deren größten Wert und Mittelwert und gibt anschließend zu jedem Wert aus, ob er unter oder über dem Mittelwert liegt.
+
+Setzen Sie das Struktogramm \textbf{vollständig in ein lauffähiges Java-Programm} um.
+Verwenden Sie zum Einlesen \texttt{Tastatureingabe.leseInt()} bzw.\\\ \texttt{Tastatureingabe.leseDouble()}.
+
+\begin{center}
+\begin{tikzpicture}
+	\node[nbfull] (a1) at (0,0) {lies die Anzahl $n$ ein};
+	\node[nbfull] (a2) at (a1.south west) {lege ein Feld \texttt{werte} mit $n$ Plätzen an};
+
+	% Schleife 1
+	\node[nbfull] (h1) at (a2.south west) {\textbf{für} $i = 0,\,1,\,\ldots,\,n-1$};
+	\node[nbi]    (b1) at ($(h1.south west)+(\nsind,0)$) {lies \texttt{werte[i]} über die Tastatur ein};
+	\nsframe{h1}{b1}
+
+	\node[nbfull] (a3) at ($(b1.south west)+(-\nsind,0)$)
+		{\texttt{summe = 0;}\qquad \texttt{max = werte[0];}};
+
+	% Schleife 2
+	\node[nbfull] (h2) at (a3.south west) {\textbf{für} $i = 0,\,1,\,\ldots,\,n-1$};
+	\node[nci]    (c1) at ($(h2.south west)+(\nsind,0)$) {};
+	\nscond{c1}{\texttt{werte[i] > max}}{ja}{nein}
+	\node[nbih]   (c1l) at (c1.south west) {\texttt{max = werte[i];}};
+	\node[nbih]   (c1r) at ($(c1.south west)+(\nshalfi,0)$) {\textit{(nichts)}};
+	\node[nbi]    (b2) at (c1l.south west) {\texttt{summe = summe + werte[i];}};
+	\nsframe{h2}{b2}
+
+	\node[nbfull] (a4) at ($(b2.south west)+(-\nsind,0)$) {\texttt{mittel = summe / n;}};
+
+	% Schleife 3
+	\node[nbfull] (h3) at (a4.south west) {\textbf{für} $i = 0,\,1,\,\ldots,\,n-1$};
+	\node[nci]    (c2) at ($(h3.south west)+(\nsind,0)$) {};
+	\nscond{c2}{\texttt{werte[i] < mittel}}{ja}{nein}
+	\node[nbih]   (c2l) at (c2.south west) {drucke \texttt{werte[i]}, \glqq unter\grqq};
+	\node[nbih]   (c2r) at ($(c2.south west)+(\nshalfi,0)$) {drucke \texttt{werte[i]}, \glqq über\grqq};
+	\nsframe{h3}{c2l}
+\end{tikzpicture}
+\end{center}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 2: Bewegungsformel auswählen \hfill (14 Punkte)}
+
+Ein Körper bewegt sich geradlinig.
+Je nach Bewegungsart beschreibt eine andere Formel die zurückgelegte Strecke~$s$.
+
+\begin{formeln}
+\[
+	\text{(1) gleichförmig:}\quad s = v \cdot t
+	\qquad
+	\text{(2) aus Ruhe beschleunigt:}\quad s = \tfrac{1}{2}\,a\,t^2
+\]
+\[
+	\text{(3) mit Anfangsgeschwindigkeit:}\quad s = v_0 \cdot t + \tfrac{1}{2}\,a\,t^2
+\]
+\end{formeln}
+
+Schreiben Sie ein Programm, das den Benutzer zunächst die Bewegungsart per Zahl (\texttt{1}, \texttt{2} oder \texttt{3}) wählen lässt und anschließend die benötigten Größen abfragt.
+Berechnen und drucken Sie die Strecke~$s$ mit der \textbf{richtigen} Formel. Fangen Sie eine \textbf{negative Zeit} (\texttt{t < 0}) als ungültige Eingabe ab.
+Die Auswahl ist mit \texttt{if/else} (kein \texttt{switch} nötig) zu realisieren.
+
+\begin{beispiel}[Beispieldialog]
+\begin{lstlisting}[language={}]
+Bewegungsart (1=gleichfoermig, 2=beschleunigt, 3=mit v0): 2
+Beschleunigung a [m/s^2]: 2.5
+Zeit t [s]: 4
+Zurueckgelegte Strecke s = 20.0 m
+\end{lstlisting}
+\end{beispiel}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 3: Punkt im Kreis \hfill (20 Punkte)}
+
+Gegeben ist die aus Vorlesung und Übung bekannte Klasse \texttt{Punkt} (Attribute \texttt{xKoordinate}, \texttt{yKoordinate} als \texttt{double}).
+
+Implementieren Sie die Methode \texttt{liegtInnerhalb}, die zurückgibt, ob die aufrufende Punktinstanz innerhalb eines Kreises mit Radius~$r$ um einen übergebenen Mittelpunkt liegt.
+Übergabeparameter sind der Radius sowie der Mittelpunkt (ein \texttt{Punkt}).
+
+\begin{center}
+\begin{tabular}{c l}
+	\toprule
+	\textbf{Rückgabe} & \textbf{Bedeutung} \\
+	\midrule
+	\texttt{1}  & Punkt liegt innerhalb des Kreises oder auf dem Umfang \\
+	\texttt{0}  & Punkt liegt außerhalb des Kreises \\
+	\texttt{-1} & ungültiger Kreis (Radius~$\le 0$) \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{hinweis}[Wiederverwendung]
+	Wer die aus der Übung bekannte Methode\\ \texttt{berechneAbstandZuPunkt(Punkt p)} sinnvoll wiederverwendet, erhält einen \textbf{Zusatzpunkt}.
+\end{hinweis}
+
+\begin{lstlisting}
+Punkt p1 = new Punkt();
+p1.xKoordinate = 1.0;  p1.yKoordinate = 1.5;
+Punkt mp = new Punkt();
+mp.xKoordinate = 5.6;  mp.yKoordinate = -4.3;
+
+int i = p1.liegtInnerhalb(3.0, mp);
+if (i == 1)       System.out.println("p1 liegt innerhalb");
+else if (i == 0)  System.out.println("p1 liegt ausserhalb");
+else              System.out.println("ungueltiger Radius");
+\end{lstlisting}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 4: Fachwerk, Stäbe klassifizieren \hfill (16 Punkte)}
+
+Gegeben ist die aus Vorlesung und Übung bekannte Datei \texttt{fachwerk.jar}. Nach der Berechnung soll für ein gewähltes Fachwerk gezählt werden, wie viele \textbf{Zugstäbe}, \textbf{Druckstäbe} und \textbf{Nullstäbe} es enthält.
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth, scale=1.0,
+	knoten/.style={circle, fill=black, inner sep=1.6pt},
+	stab/.style={thick, gray!70!black}]
+	\coordinate (A) at (0,0);
+	\coordinate (B) at (2.5,0);
+	\coordinate (C) at (5,0);
+	\coordinate (D) at (1.25,1.9);
+	\coordinate (E) at (3.75,1.9);
+	\draw[stab] (A)--(B); \draw[stab] (B)--(C);
+	\draw[stab] (A)--(D); \draw[stab] (D)--(B);
+	\draw[stab] (D)--(E); \draw[stab] (E)--(B); \draw[stab] (E)--(C);
+	\foreach \p in {A,B,C,D,E} \node[knoten] at (\p) {};
+	\draw[->, thick] (B)--++(0,-0.9);
+	\node[below, font=\footnotesize] at ($(B)+(0,-0.9)$) {Last};
+\end{tikzpicture}\\[-0.3em]
+{\footnotesize\itshape Schematische Darstellung eines Fachwerks.}
+\end{center}
+
+\begin{hinweis}[Nullstab über Epsilon-Umgebung]
+	Die Berechnung liefert für Nullstäbe sehr kleine Werte ($\ne 0$), z.\,B. \texttt{3.55E-15}. Erkennen Sie einen Nullstab über eine \textbf{Epsilon-Umgebung}:
+	\[ |F| < \varepsilon \;\Rightarrow\; \text{Nullstab}, \qquad
+	   F > \varepsilon \;\Rightarrow\; \text{Zugstab}, \qquad
+	   F < -\varepsilon \;\Rightarrow\; \text{Druckstab.} \]
+	Benötigte Methoden: \texttt{int gibAnzahlStaebe()}, \texttt{Fachwerkstab gibStab(int i)}, \texttt{double gibStabkraft()}.
+\end{hinweis}
+
+Ergänzen Sie den folgenden Quelltext, sodass die drei Anzahlen ausgegeben werden:
+
+\begin{lstlisting}
+public class Fachwerkaufgabe {
+    public static void main(String[] args) {
+        System.out.println("Welches Fachwerk wollen Sie rechnen (0-4)?");
+        int wahl = Tastatureingabe.leseInt();
+        Fachwerk fw = new Fachwerk(wahl);
+        fw.berechneGroessen();
+        double epsilon = 1e-6;
+        // hier erweitern: zaehlen und ausgeben
+    }
+}
+\end{lstlisting}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 5: Wertetabelle in eine Datei schreiben \hfill (16 Punkte)}
+
+Ein Körper fällt aus der Ruhe; für die zurückgelegte Strecke gilt
+\[ s(t) = \tfrac{1}{2}\,a\,t^2 \qquad \text{mit } a = 9{,}81~\text{m/s}^2. \]
+
+Schreiben Sie ein Programm, das für die Zeitpunkte $t = 0~\text{s}$ bis $t = 15~\text{s}$ in Schritten von $1~\text{s}$ jeweils die Strecke berechnet und Zeile für Zeile in die Datei \texttt{fall.txt} schreibt.
+
+\begin{hinweis}[Hinweis]
+	Verwenden Sie \texttt{java.io.FileWriter}: Datei mit \lstinline|new FileWriter("fall.txt")| öffnen, je Zeile mit \texttt{write(...)} schreiben (Zeilenumbruch \lstinline|"\n"| nicht vergessen) und am Ende \texttt{close()} aufrufen.
+	Nutzen Sie \lstinline|"\t"| für die Spaltenabstände.
+\end{hinweis}
+
+\begin{beispiel}[Erwarteter Dateiinhalt (Auszug)]
+\begin{lstlisting}[language={}]
+t = 0 s    s = 0.0 m
+t = 1 s    s = 4.905 m
+t = 2 s    s = 19.62 m
+...
+t = 15 s   s = 1103.625 m
+\end{lstlisting}
+\end{beispiel}
+
+\end{document}
