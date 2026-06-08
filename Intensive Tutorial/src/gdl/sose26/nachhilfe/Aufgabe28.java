@@ -3,7 +3,7 @@ package gdl.sose26.nachhilfe;
 import static prog.Picture.*;
 import static prog.Picture.show;
 
-public class KlausurAufgabe28 {
+public class Aufgabe28 {
 	
 	public static void main(String[] args) {
 		

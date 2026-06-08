@@ -2,7 +2,7 @@ package gdl.sose26.nachhilfe;
 
 import static prog.Picture.*;
 
-public class KlausurAufgabe4 {
+public class Aufgabe4 {
 	
 	public static void main(String[] args) {
 		
