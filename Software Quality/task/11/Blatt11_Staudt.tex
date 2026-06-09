@@ -1,0 +1,404 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half,           % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+\usepackage{longtable}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 11}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Qualität}\\[3mm]
+		{\fontsize{14}{14} \selectfont Qualitätsmetriken, GQM und objektorientierte Disharmonien}
+
+		\vspace{10cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% AUFGABE 1
+% ############################################################################
+
+\chapter*{Aufgabe 1: Qualitätsmetriken und GQM}
+
+\section*{Teil 1: Theoretische und methodische Grundlagen}
+
+\subsection*{Was ist eine (Qualitäts-)Metrik?}
+
+Eine Metrik bildet eine Eigenschaft eines Software-Artefakts oder -Prozesses
+auf einen Zahlenwert ab und macht sie dadurch mess- und vergleichbar.
+Eine Qualitätsmetrik misst speziell Eigenschaften, die mit der Software-Qualität
+(z.\,B. Wartbarkeit, Zuverlässigkeit) zusammenhängen.
+Man unterscheidet:
+
+\begin{itemize}
+	\item \textbf{Direkte Metriken:} ohne weitere Größen messbar (z.\,B. Lines of Code).
+	\item \textbf{Indirekte/abgeleitete Metriken:} aus mehreren Größen berechnet
+	      (z.\,B. Fehlerdichte = Fehler / KLOC).
+\end{itemize}
+
+Jede Metrik besitzt eine \emph{Skala} (nominal, ordinal, intervall, ratio,
+absolut), die festlegt, welche Vergleiche und Rechenoperationen zulässig sind.
+
+\subsection*{Kategorien von Metriken}
+
+Metriken werden üblicherweise danach unterschieden, \emph{was} gemessen wird:
+
+\begin{longtable}{| p{2.8cm} | p{4.5cm} | p{5.0cm} |}
+	\hline
+	\textbf{Kategorie} & \textbf{Misst} & \textbf{Beispiele} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Kategorie} & \textbf{Misst} & \textbf{Beispiele} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	Produkt\-metriken & Eigenschaften des Artefakts (Code, Entwurf, Doku) &
+	LOC, zyklomatische Komplexität (McCabe), CK-Metriken (WMC, DIT, CBO, LCOM),
+	Testabdeckung, Fehlerdichte \\ \hline
+	Prozess\-metriken & Eigenschaften des Entwicklungs- und Wartungsprozesses &
+	Durchlaufzeit, Fehlerbeseitigungsrate, Review-Abdeckung, Deployment-Frequenz,
+	MTTR, Change-Failure-Rate \\ \hline
+	Projekt\-metriken & Eigenschaften des Projektmanagements &
+	Aufwand (Personentage), Kosten, Termintreue, Teamgröße, Velocity,
+	Restaufwand \\ \hline
+\end{longtable}
+
+\subsection*{Eigenschaften sinnvoller Metriken}
+
+\begin{itemize}
+	\item \textbf{Validität:} misst tatsächlich die gemeinte Eigenschaft.
+	\item \textbf{Objektivität \& Reproduzierbarkeit:} Ergebnis ist unabhängig
+	      vom Messenden und wiederholbar.
+	\item \textbf{Vergleichbarkeit:} Werte sind über Projekte/Zeit hinweg
+	      gegenüberstellbar.
+	\item \textbf{Wirtschaftlichkeit:} mit vertretbarem Aufwand (möglichst
+	      automatisiert) erhebbar.
+	\item \textbf{Verständlichkeit \& Zielbezug:} leicht interpretierbar und auf
+	      ein konkretes Ziel bezogen.
+	\item \textbf{Rechtzeitigkeit \& Robustheit:} früh verfügbar und nicht
+	      leicht manipulierbar.
+\end{itemize}
+
+\subsection*{Vergleichbarkeit und Bewertung von Metriken}
+
+Ein einzelner Messwert ist für sich genommen selten aussagekräftig. Erst durch
+\textbf{Bezugsgrößen} wird er bewertbar:
+
+\begin{itemize}
+	\item \textbf{Schwellenwerte (Thresholds):} Soll-/Grenzwerte als Ampel.
+	\item \textbf{Baselines/Benchmarks:} Vergleich mit eigenem Ausgangswert oder
+	      Branchenwerten.
+	\item \textbf{Trends:} Entwicklung über die Zeit (Verbesserung/Verschlechterung).
+	\item \textbf{Normalisierung:} z.\,B. pro KLOC, um Größeneffekte zu entfernen.
+\end{itemize}
+
+Die zulässige Auswertung hängt von der Skala ab (z.\,B. Mittelwert nur ab
+Intervallskala). Wichtig ist, stets \textbf{Metrik-Sätze} statt Einzelwerte zu
+betrachten, da einzelne Metriken zu Fehlsteuerung führen können
+(Goodhart: ``a measure that becomes a target ceases to be a good measure'').
+
+\subsection*{Aufbau und Funktionsweise des GQM-Ansatzes}
+
+Goal--Question--Metric (Basili \& Rombach) ist ein \textbf{zielorientierter
+Top-down-Ansatz}, der Messungen aus den Qualitätszielen ableitet -- es wird also
+nur gemessen, was zur Beantwortung einer konkreten Frage beiträgt. Er besteht aus
+drei Ebenen:
+
+\begin{enumerate}
+	\item \textbf{Goal (konzeptionell):} das Mess-/Qualitätsziel.
+	\item \textbf{Question (operational):} Fragen, die prüfen, ob das Ziel
+	      erreicht wird.
+	\item \textbf{Metric (quantitativ):} Metriken, die die Fragen beantworten.
+\end{enumerate}
+
+Ziele werden mit einer \textbf{Schablone} präzisiert:
+
+\begin{quote}
+	\emph{Analysiere} \textless Objekt\textgreater{} \emph{zum Zweck}
+	\textless Absicht\textgreater{} \emph{bezüglich}
+	\textless Qualitätsaspekt\textgreater{} \emph{aus Sicht}
+	\textless Betrachter\textgreater{} \emph{im Kontext}
+	\textless Umgebung\textgreater.
+\end{quote}
+
+\subsection*{Zusammenhang zwischen Zielen, Fragen und Metriken}
+
+GQM bildet eine \textbf{Baumstruktur}: Ein Ziel wird durch mehrere Fragen
+verfeinert, jede Frage durch eine oder mehrere Metriken beantwortet. Eine Metrik
+kann mehreren Fragen dienen.
+
+\begin{center}
+	Ziel \;$\rightarrow$\; Fragen \;$\rightarrow$\; Metriken
+\end{center}
+
+Die Definition erfolgt \textbf{top-down} (vom Ziel zur Metrik), die
+Interpretation \textbf{bottom-up}: gemessene Werte beantworten die Fragen, deren
+Antworten zeigen, ob das Ziel erreicht ist.
+
+
+% ----------------------------------------------------------------------------
+
+\section*{Teil 2: Messkonzept für ``Schwarzwald-Entdecker''}
+
+\textbf{Die Anwendung.} ``Schwarzwald-Entdecker'' ist ein Web-Portal (auf
+gängigen Browsern und mobilen Geräten nutzbar), über das Kunden Ausflüge und
+Aktivitäten im Schwarzwald planen, auswählen, buchen und bezahlen sowie ihre
+Buchungen einsehen, ändern und stornieren können. Kernbausteine sind der
+\emph{Ausflug-Konfigurator} (Filterung passender Angebote nach Präferenzen,
+Planung kollisionsfreier Mehrtages-/Mehrfachtouren) sowie Registrierung/Login,
+Buchung mit Verfügbarkeitsprüfung und Bestätigung und eine Buchungshistorie.
+Laut Anforderung soll das Portal \textbf{benutzerfreundlich, zuverlässig,
+hochverfügbar, performant und sicher} (Datenschutz/DSGVO, sichere Zahlung) sein.
+
+Im Folgenden werden mit GQM Qualitätsziele über den \textbf{gesamten
+Entwicklungszyklus} (Anforderung, Entwurf, Implementierung, Test, Betrieb)
+abgeleitet; die Ziele orientieren sich an den geforderten Qualitätseigenschaften.
+
+\subsection*{GQM-Modell}
+
+\begin{longtable}{| p{0.6cm} | p{4.6cm} | p{6.3cm} |}
+	\hline
+	\textbf{} & \textbf{Frage} & \textbf{Metrik} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{} & \textbf{Frage} & \textbf{Metrik} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	\multicolumn{3}{|l|}{\textbf{G1 -- Gebrauchstauglichkeit aus Sicht der Kunden
+	verbessern}} \\ \hline
+	Q1 & Wie reibungslos gelingt eine Buchung? & Task-Completion-Rate,
+	Abbruchrate im Buchungs-Funnel, Time-on-Task \\ \hline
+	Q2 & Wie verständlich ist der Ausflug-Konfigurator? & Klicks/Schritte bis zur
+	fertigen Planung, SUS-Score \\ \hline
+	Q3 & Funktioniert die Bedienung auf allen Geräten? & erfolgreiche Sitzungen je
+	Browser/Gerät \\ \hline
+	\multicolumn{3}{|l|}{\textbf{G2 -- Zuverlässigkeit und Verfügbarkeit im Betrieb
+	verbessern}} \\ \hline
+	Q4 & Wie verfügbar ist das Portal? & Uptime \%, MTBF, MTTR \\ \hline
+	Q5 & Wie korrekt arbeiten Filter-, Kollisions- und Verfügbarkeitsprüfung? &
+	Fehlbuchungsrate, Quote korrekt erkannter Terminkollisionen \\ \hline
+	\multicolumn{3}{|l|}{\textbf{G3 -- Performance und Reaktionsfähigkeit
+	verbessern}} \\ \hline
+	Q6 & Wie schnell lädt das Portal/reagiert die UI? & Seitenladezeit (p95),
+	Antwortzeit der Filterung, Time-to-Interactive \\ \hline
+	Q7 & Wie verhält es sich bei Lastspitzen (Saison)? & Durchsatz, Antwortzeit
+	unter Last \\ \hline
+	\multicolumn{3}{|l|}{\textbf{G4 -- Sicherheit und Datenschutz gewährleisten}}
+	\\ \hline
+	Q8 & Wie sicher sind Zahlung und Daten? & Anzahl offener Schwachstellen
+	(CVSS), Anteil verschlüsselter Verbindungen, Pentest-Ergebnis \\ \hline
+	Q9 & Wie schnell werden Lücken geschlossen? & MTTR für Sicherheitsfehler,
+	Abdeckung der DSGVO-Anforderungen \\ \hline
+	\multicolumn{3}{|l|}{\textbf{G5 -- Wartbarkeit des Codes aus Entwicklersicht
+	verbessern}} \\ \hline
+	Q10 & Wie komplex/wartbar ist der Code? & Zyklomatische Komplexität, WMC,
+	Code-Smell-Dichte \\ \hline
+	Q11 & Wie gut ist der Code getestet? & Zeilen-/Branch-Coverage \\ \hline
+	\multicolumn{3}{|l|}{\textbf{G6 -- Release-Prozess effizient und vorhersehbar
+	gestalten (Prozess/Projekt)}} \\ \hline
+	Q12 & Wie viele Fehler erreichen die Produktion? & Escaped-Defects,
+	Fehlerdichte je Release \\ \hline
+	Q13 & Wie schnell/zuverlässig liefern wir? & Lead-Time, Deployment-Frequenz,
+	Change-Failure-Rate \\ \hline
+\end{longtable}
+
+\subsection*{Interpretation der Metriken}
+
+\textbf{Nutzen für die Qualitätsverbesserung.}
+Die Metriken machen Qualität objektiv sichtbar, ermöglichen einen Soll-/Ist-Abgleich
+und erlauben es, Verbesserungen messbar zu belegen (z.\,B. Crash-Rate vor/nach
+einem Release).
+
+\textbf{Sichtbar gemachte Probleme/Risiken.}
+Eine fehlerhafte Kollisions- oder Verfügbarkeitsprüfung (G2) führt zu Doppel-
+oder Fehlbuchungen; Schwachstellen bei Zahlung/Datenhaltung (G4) bedrohen Geld
+und persönliche Daten; Ausfälle oder lange Antwortzeiten (G2, G3) -- gerade in
+der Hauptsaison -- kosten Buchungen; hohe Komplexität bei niedriger Coverage
+(G5) deutet auf wartungsintensiven, fehleranfälligen Code.
+
+\textbf{Profitierende Stakeholder.}
+\begin{itemize}
+	\item \emph{Kunde/Tourist:} einfache Planung, korrekte Buchungen, Schutz von
+	      Daten und Zahlung (G1--G4).
+	\item \emph{Ausflugsanbieter/Tourismus:} weniger Fehlbuchungen, höhere
+	      Verfügbarkeit in der Saison (G2).
+	\item \emph{Entwickler:} wartbarer Code, weniger Bugfixing (G5).
+	\item \emph{Betrieb (Ops):} überwachbare Verfügbarkeit/Performance (G2, G3).
+	\item \emph{Datenschutz/Compliance:} nachweisbare DSGVO-Konformität (G4).
+	\item \emph{Product Owner/Management:} planbare, fehlerarme Releases (G6).
+\end{itemize}
+
+\textbf{Abgeleitete Maßnahmen (Beispiele).}
+\begin{itemize}
+	\item Fehlbuchungen / verpasste Kollisionen $\rightarrow$ gezielte Tests der
+	      Konfigurator-Logik, Korrektur der Filter-/Prüfregeln.
+	\item Offene Schwachstellen $\rightarrow$ Pentests, Dependency-Scans,
+	      priorisiertes Patchen, Verschlüsselung erzwingen.
+	\item Komplexität/Coverage über Schwellenwerten $\rightarrow$ Refactoring \&
+	      zusätzliche Tests, Quality-Gate im CI.
+	\item Schlechter SUS-Score / hohe Abbruchrate $\rightarrow$ Usability-Tests,
+	      Überarbeitung von Konfigurator und Buchungs-Flow.
+\end{itemize}
+
+\textbf{Einsatz in der Praxis.}
+Die Metriken werden weitgehend automatisiert erhoben (statische Analyse, Tests
+und Coverage im CI, Security-/Dependency-Scans, Verfügbarkeits- und
+Performance-Monitoring im Betrieb, Befragungen für Usability) und in einem
+\textbf{Dashboard} zusammengeführt. Über
+\textbf{Quality-Gates} und regelmäßige Auswertung in Retrospektiven wird die
+Qualität kontinuierlich gesteuert -- so entsteht ein geschlossener Regelkreis
+aus Messen, Bewerten und Verbessern.
+
+
+% ############################################################################
+% AUFGABE 2
+% ############################################################################
+
+\chapter*{Aufgabe 2: Identitäts-Disharmonien (Kategorie 1)}
+
+\section*{Grundlagen}
+
+Lanza \& Marinescu beschreiben guten objektorientierten Entwurf über drei
+``Harmonien''. \textbf{Identitäts-Disharmonien} betreffen die \emph{Harmonie der
+Identität}, d.\,h. die Frage, ob ein \textbf{einzelnes Element (eine Klasse oder
+Methode) für sich genommen} gut definiert ist -- unabhängig von seinen
+Beziehungen zu anderen Elementen. Eine Disharmonie liegt vor, wenn ein Element
+zu viel, zu komplex oder umgekehrt zu wenig (nur Daten) macht.
+
+\textbf{Typische Ursachen:}
+\begin{itemize}
+	\item schlechte Verteilung der Verantwortlichkeiten (Verletzung des Single-
+	      Responsibility-Prinzips),
+	\item ``prozedurales Denken'' in OO-Sprachen (Logik in wenigen großen
+	      Methoden/Klassen, Daten getrennt von Verhalten),
+	\item ungebremstes Wachstum ohne begleitendes Refactoring.
+\end{itemize}
+
+\textbf{Auswirkungen auf Qualität, Wartbarkeit und Weiterentwicklung:}
+geringe Kohäsion und hohe Komplexität erschweren Verständnis, Test und Änderung;
+Fehler häufen sich; Wiederverwendung und Erweiterung werden blockiert -- die
+Software ``verrottet'' über die Zeit.
+
+\section*{Konkrete Disharmonien}
+
+Zur Identitäts-Kategorie gehören die folgenden Disharmonien (Code Smells):
+
+\subsection*{Brain Method}
+Eine Methode, die zu viel Funktionalität einer Klasse in sich zentralisiert.
+\emph{Merkmale:} sehr lang, viele Verzweigungen, tief verschachtelt, greift auf
+viele Variablen zu. \emph{Einfluss:} schwer verständlich und testbar, hohe
+Fehleranfälligkeit; klassischer ``Long Method''-Smell.
+
+\subsection*{God Class}
+Eine Klasse, die zu viel ``Intelligenz'' an sich zieht und die Arbeit anderer
+Klassen übernimmt. \emph{Merkmale:} sehr viele Methoden/Verantwortlichkeiten,
+greift stark auf fremde Daten zu, geringe Kohäsion. \emph{Einfluss:} zentrale
+Engstelle, Änderungen wirken sich breit aus, schwer wartbar.
+
+\subsection*{Brain Class}
+Eine komplexe Klasse, die eine oder mehrere Brain Methods enthält und damit
+übermäßig viel Logik bündelt -- die ``methodenseitige'' Verwandte der God Class.
+\emph{Einfluss:} ähnlich wie God Class, mit Fokus auf interne Komplexität.
+
+\subsection*{Data Class}
+Eine Klasse, die nur Daten hält (Felder mit Gettern/Settern), aber kein
+nennenswertes Verhalten besitzt -- ein ``dummer Datenhalter''.
+\emph{Merkmale:} viele öffentliche Attribute/Accessoren, sehr geringe
+funktionale Komplexität. \emph{Einfluss:} das zugehörige Verhalten liegt verstreut
+in anderen Klassen (Tell-Don't-Ask verletzt), was Kapselung und Kohäsion
+schwächt.
+
+\subsection*{Zentrale Metriken (Lanza)}
+
+\begin{longtable}{| p{2.2cm} | p{9.0cm} |}
+	\hline
+	\textbf{Abk.} & \textbf{Bedeutung} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Abk.} & \textbf{Bedeutung} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	WMC      & Weighted Method Count -- Summe der Methoden-Komplexitäten \\ \hline
+	ATFD     & Access To Foreign Data -- Zugriffe auf fremde Daten \\ \hline
+	TCC      & Tight Class Cohesion -- Kohäsion der Klasse \\ \hline
+	CYCLO    & Zyklomatische Komplexität einer Methode \\ \hline
+	LOC      & Lines of Code \\ \hline
+	MAXNESTING & maximale Verschachtelungstiefe \\ \hline
+	NOAV     & Number Of Accessed Variables \\ \hline
+	WOC      & Weight Of Class -- Anteil ``echter'' Funktionalität \\ \hline
+	NOPA / NOAM & Number Of Public Attributes / Accessor Methods \\ \hline
+\end{longtable}
+
+\section*{Erkennung und Gegenmaßnahmen}
+
+\subsection*{Erkennung (Detection Strategies)}
+
+Disharmonien werden über \textbf{Detection Strategies} erkannt -- logische
+Verknüpfungen mehrerer Metriken mit Schwellenwerten:
+
+\begin{itemize}
+	\item \textbf{God Class:} \texttt{ATFD > FEW} \emph{und} \texttt{WMC $\geq$
+	      VERY HIGH} \emph{und} \texttt{TCC < 1/3}.
+	\item \textbf{Brain Method:} \texttt{LOC > 2$\cdot$HighAvg} \emph{und}
+	      \texttt{CYCLO $\geq$ HIGH} \emph{und} \texttt{MAXNESTING $\geq$ SEVERAL}
+	      \emph{und} \texttt{NOAV > MANY}.
+	\item \textbf{Brain Class:} sehr hohe Gesamtkomplexität (WMC), niedrige TCC
+	      und mindestens eine Brain Method.
+	\item \textbf{Data Class:} niedriger \texttt{WOC} \emph{und} viele
+	      öffentliche Attribute/Accessoren (\texttt{NOPA+NOAM > FEW}).
+\end{itemize}
+
+\textbf{Werkzeuge:} iPlasma/inFusion (Lanza), SonarQube, PMD, Checkstyle,
+NDepend, Understand sowie JDeodorant zur Smell-/Refactoring-Erkennung.
+
+\subsection*{Gegenmaßnahmen und Refactoring}
+
+\textbf{Vorbeugung:} konsequente Anwendung des Single-Responsibility-Prinzips,
+``Tell, Don't Ask'', Information Hiding, regelmäßige Code-Reviews sowie
+Metrik-Schwellenwerte als Quality-Gate im CI und kontinuierliches Refactoring.
+
+\begin{longtable}{| p{3.0cm} | p{8.5cm} |}
+	\hline
+	\textbf{Disharmonie} & \textbf{Geeignete Refactorings} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{Disharmonie} & \textbf{Geeignete Refactorings} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	Brain Method & Extract Method, Decompose Conditional, Replace Temp with
+	Query, Introduce Parameter Object, Replace Method with Method Object \\ \hline
+	God Class / Brain Class & Extract Class, Extract Subclass, Move Method, Move
+	Field (Verantwortlichkeiten aufteilen) \\ \hline
+	Data Class & Move Method (Verhalten zur Klasse holen), Encapsulate Field,
+	Encapsulate Collection, Tell-Don't-Ask umsetzen \\ \hline
+\end{longtable}
+
+\end{document}
