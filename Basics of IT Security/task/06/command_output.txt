@@ -1,0 +1,131 @@
+luis@Alpha-17:~/Programming/GitHub/University/Basics of IT Security/task/04$ cd /tmp
+luis@Alpha-17:/tmp$ mkdir test
+luis@Alpha-17:/tmp$ cd test/
+luis@Alpha-17:/tmp/test$ sudo useradd alice
+[sudo] password for luis:
+luis@Alpha-17:/tmp/test$ sudo useradd bob
+luis@Alpha-17:/tmp/test$ sudo useradd eve
+luis@Alpha-17:/tmp/test$ cat /etc/passwd | grep -E "alice|bob|eve"
+alice:x:1001:1001::/home/alice:/bin/sh
+bob:x:1002:1002::/home/bob:/bin/sh
+eve:x:1003:1003::/home/eve:/bin/sh
+luis@Alpha-17:/tmp/test$ echo "Geheimer Text von Alice"       > alice.txt
+luis@Alpha-17:/tmp/test$ echo "Geheimer Text von Bob"         > bob.txt
+luis@Alpha-17:/tmp/test$ echo "Alice und Bob teilen sich das" > alicebob.txt
+luis@Alpha-17:/tmp/test$ echo "Für alle sichtbar"             > world.txt
+luis@Alpha-17:/tmp/test$ ll
+total 32
+drwxrwxr-x  2 luis luis  4096 Apr 15 23:23 ./
+drwxrwxrwt 26 root root 12288 Apr 15 23:23 ../
+-rw-rw-r--  1 luis luis    30 Apr 15 23:23 alicebob.txt
+-rw-rw-r--  1 luis luis    24 Apr 15 23:23 alice.txt
+-rw-rw-r--  1 luis luis    22 Apr 15 23:23 bob.txt
+-rw-rw-r--  1 luis luis    19 Apr 15 23:23 world.txt
+luis@Alpha-17:/tmp/test$ sudo chown alice:alice alice.txt
+luis@Alpha-17:/tmp/test$ sudo chown alice:alice alicebob.txt
+luis@Alpha-17:/tmp/test$ sudo chown bob:bob     bob.txt
+luis@Alpha-17:/tmp/test$ sudo chown bob:bob     world.txt
+luis@Alpha-17:/tmp/test$ ls -l
+total 16
+-rw-rw-r-- 1 alice alice 30 Apr 15 23:23 alicebob.txt
+-rw-rw-r-- 1 alice alice 24 Apr 15 23:23 alice.txt
+-rw-rw-r-- 1 bob   bob   22 Apr 15 23:23 bob.txt
+-rw-rw-r-- 1 bob   bob   19 Apr 15 23:23 world.txt
+luis@Alpha-17:/tmp/test$ sudo su alice
+$ whoami
+alice
+$ cat bob.txt
+Geheimer Text von Bob
+$ cat alice.txt
+Geheimer Text von Alice
+$ exit
+luis@Alpha-17:/tmp/test$ sudo chmod 600 alice.txt bob.txt alicebob.txt world.txt
+luis@Alpha-17:/tmp/test$ ll
+total 32
+drwxrwxr-x  2 luis  luis   4096 Apr 15 23:23 ./
+drwxrwxrwt 26 root  root  12288 Apr 15 23:23 ../
+-rw-------  1 alice alice    30 Apr 15 23:23 alicebob.txt
+-rw-------  1 alice alice    24 Apr 15 23:23 alice.txt
+-rw-------  1 bob   bob      22 Apr 15 23:23 bob.txt
+-rw-------  1 bob   bob      19 Apr 15 23:23 world.txt
+luis@Alpha-17:/tmp/test$ sudo su alice
+$ whoami
+alice
+$ cat bob.txt
+cat: bob.txt: Permission denied
+$ cat alice.txt
+Geheimer Text von Alice
+$ exit
+luis@Alpha-17:/tmp/test$ sudo chmod 600 alice.txt bob.txt alicebob.txt world.txt
+luis@Alpha-17:/tmp/test$ ll
+total 32
+drwxrwxr-x  2 luis  luis   4096 Apr 15 23:23 ./
+drwxrwxrwt 26 root  root  12288 Apr 15 23:26 ../
+-rw-------  1 alice alice    30 Apr 15 23:23 alicebob.txt
+-rw-------  1 alice alice    24 Apr 15 23:23 alice.txt
+-rw-------  1 bob   bob      22 Apr 15 23:23 bob.txt
+-rw-------  1 bob   bob      19 Apr 15 23:23 world.txt
+luis@Alpha-17:/tmp/test$ sudo su alice
+$ whoami
+alice
+$ cat alice.txt #
+Geheimer Text von Alice
+$ cat bob.txt
+cat: bob.txt: Permission denied
+$ exit
+luis@Alpha-17:/tmp/test$ sudo su bob
+$ whoami
+bob
+$ cat bob.txt
+Geheimer Text von Bob
+$ cat alice.txt
+cat: alice.txt: Permission denied
+$ exit
+luis@Alpha-17:/tmp/test$ sudo su eve
+$ whoami
+eve
+$ cat alice.txt
+cat: alice.txt: Permission denied
+$ cat bob.txt
+cat: bob.txt: Permission denied
+$ exit
+luis@Alpha-17:/tmp/test$ sudo groupadd aliceundbob
+luis@Alpha-17:/tmp/test$ sudo usermod -a -G aliceundbob alice
+luis@Alpha-17:/tmp/test$ sudo usermod -a -G aliceundbob bob
+luis@Alpha-17:/tmp/test$ sudo chown alice:aliceundbob alicebob.txt
+luis@Alpha-17:/tmp/test$ sudo chmod 660 alicebob.txt
+luis@Alpha-17:/tmp/test$ ll
+total 32
+drwxrwxr-x  2 luis  luis         4096 Apr 15 23:23 ./
+drwxrwxrwt 26 root  root        12288 Apr 15 23:26 ../
+-rw-rw----  1 alice aliceundbob    30 Apr 15 23:23 alicebob.txt
+-rw-------  1 alice alice          24 Apr 15 23:23 alice.txt
+-rw-------  1 bob   bob            22 Apr 15 23:23 bob.txt
+-rw-------  1 bob   bob            19 Apr 15 23:23 world.txt
+luis@Alpha-17:/tmp/test$ sudo su - alice -c "cat /tmp/test/alicebob.txt; echo 'NEU-Alice' >> /tmp/test/alicebob.txt && echo OK-write"
+su: warning: cannot change directory to /home/alice: No such file or directory
+Alice und Bob teilen sich das
+OK-write
+luis@Alpha-17:/tmp/test$ sudo su - bob   -c "cat /tmp/test/alicebob.txt; echo 'NEU-Bob'   >> /tmp/test/alicebob.txt && echo OK-write"
+su: warning: cannot change directory to /home/bob: No such file or directory
+Alice und Bob teilen sich das
+NEU-Alice
+OK-write
+luis@Alpha-17:/tmp/test$ sudo su - eve   -c "cat /tmp/test/alicebob.txt"
+su: warning: cannot change directory to /home/eve: No such file or directory
+cat: /tmp/test/alicebob.txt: Permission denied
+luis@Alpha-17:/tmp/test$ sudo chmod 666 world.txt
+luis@Alpha-17:/tmp/test$ ll
+total 32
+drwxrwxr-x  2 luis  luis         4096 Apr 15 23:23 ./
+drwxrwxrwt 26 root  root        12288 Apr 15 23:26 ../
+-rw-rw----  1 alice aliceundbob    48 Apr 15 23:29 alicebob.txt
+-rw-------  1 alice alice          24 Apr 15 23:23 alice.txt
+-rw-------  1 bob   bob            22 Apr 15 23:23 bob.txt
+-rw-rw-rw-  1 bob   bob            19 Apr 15 23:23 world.txt
+luis@Alpha-17:/tmp/test$ sudo su - eve -c "cat /tmp/test/world.txt; echo 'EVE war hier' >> /tmp/test/world.txt && cat /tmp/test/world.txt"
+su: warning: cannot change directory to /home/eve: No such file or directory
+Für alle sichtbar
+Für alle sichtbar
+EVE war hier
+luis@Alpha-17:/tmp/test$
