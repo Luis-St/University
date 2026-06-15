@@ -24,7 +24,13 @@
 \usepackage{tikz}
 \usetikzlibrary{calc, arrows.meta, positioning}
 \usepackage{fancyhdr}
-\usepackage{unicode-math}
+% unicode-math funktioniert nur mit lualatex/xelatex und bricht pdflatex ab.
+% Da es aktuell nirgends genutzt wird (kein \setmathfont o.ae.), nur unter
+% lua/xelatex laden, damit pdflatex (inkl. beramono = Bera Mono) weiter laeuft.
+\usepackage{iftex}
+\unless\ifPDFTeX
+	\usepackage{unicode-math}
+\fi
 
 \usepackage{amsthm}
 

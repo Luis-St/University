@@ -1,0 +1,196 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	parskip=half,
+	openany
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../../for_latex/preamble}
+\input{../../../for_latex/exam_setup}
+
+\title{Probeklausur 4}
+\author{Luis Staudt}
+\date{}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Probeklausur 4}\\[0.3em]
+	{\large Grundlagen der Programmierung}\\[0.7em]
+	\begin{tabular}{r l @{\hspace{1.4cm}} r l}
+		\textbf{Studiengänge:}    & MIB \& OMB            & \textbf{Autor:}        & Luis Staudt \\
+		\textbf{Semester:}        & Sommersemester 2026 \\
+		\textbf{Bearbeitungszeit:}& 90 Minuten            & \textbf{Gesamtpunkte:} & 90 \\
+	\end{tabular}\\[0.7em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{0.5em}
+
+\vfill
+% --- Bewertungstabelle ---
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{|l|c|c|c|c|c|}
+	\hline
+	\textbf{Aufgabe}          & 1  & 2  & 3  & 4  & \textbf{Gesamt} \\ \hline
+	\textbf{Punkte}           & 25 & 20 & 20 & 25 & 90              \\ \hline
+	\textbf{Erreichte Punkte} &    &    &    &    &                 \\ \hline
+\end{tabular}
+\end{center}
+\vfill
+
+% --- Seitenkopf und -fuß ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Probeklausur 4, Grundlagen der Programmierung}
+\rhead{\small SoSe 2026}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 1: Bildverarbeitung -- Quadranten kopieren \hfill (25 Punkte)}
+
+Ein Bitmap werde in einem zweidimensionalen \texttt{int}-Array \texttt{p} gespeichert. Jede Farbe wird durch eine Zahl vom Typ \texttt{int} dargestellt. Die Variable \texttt{p[x][y]} steht für die Farbe des Bildes an der Koordinate $(x,y)$. Der Ursprung des Koordinatensystems liegt links oben, somit enthält \texttt{p[0][0]} die Farbe des Pixels in der linken oberen Ecke.
+
+\begin{center}
+\begin{tikzpicture}[font=\scriptsize]
+	\foreach \xi in {0,...,5}
+		\foreach \yi in {0,...,4}
+			\node[draw, minimum width=1.25cm, minimum height=0.7cm]
+			at (1.3*\xi, -0.75*\yi) {p[\xi][\yi]};
+\end{tikzpicture}
+\end{center}
+
+Die Breite des Bildes ist \texttt{p.length}, die Höhe ist \texttt{p[0].length}. Damit liegt $x$ im Bereich $0$ bis \texttt{p.length-1} und $y$ im Bereich $0$ bis \texttt{p[0].length-1}.
+
+Schreiben Sie eine Klassenmethode \texttt{f}, die den \textbf{oberen linken Quadranten} des Bildes in den \textbf{unteren rechten Quadranten} kopiert. Sei \texttt{hw = p.length/2} und \texttt{hh = p[0].length/2}. Dann soll für jedes Pixel des oberen linken Quadranten der Wert \texttt{p[x][y]} nach \texttt{p[x+hw][y+hh]} kopiert werden. Die Methode \texttt{f} soll als Parameter \texttt{p} einen zweidimensionalen \texttt{int}-Array haben und keinen Rückgabewert. Es darf davon ausgegangen werden, dass Breite und Höhe des Bildes gerade Zahlen sind.
+
+\begin{center}
+\begin{tabular}{cc}
+	\includegraphics[width=0.34\textwidth]{../images/MyPicture.jpg} &
+	\includegraphics[width=0.34\textwidth]{../images/exam4_result.png} \\[0.3em]
+	{\small\itshape Originalbild} & {\small\itshape Zielbild nach Aufruf von \texttt{f(p)}} \\
+\end{tabular}
+\end{center}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 2: Syntaxfehler -- Klasse Rechner \hfill (20 Punkte)}
+
+Der Programmcode der Klasse \texttt{Rechner} enthält mehrere syntaktische Fehler. Geben Sie zu jedem Fehler die Zeilennummer der Zeile an, in der sich der Fehler befindet, und beschreiben Sie jeweils den Fehler.
+
+\begin{lstlisting}
+public class Rechner {
+
+    public static int fakultaet(int n) {
+        int f = 1;
+        for (int i = 1; i <= n; i++)
+            f = f * i;
+        return f;
+    }
+
+    public static int g(int n) {
+        if (n == 0)
+            return 1;
+        else
+            return n * g(n - 1)
+    }
+
+    public static String beschreibe(int n) {
+        if (n < 0)
+            return "negativ";
+        if (n == 0)
+            return "null";
+    }
+
+    public boolean istGerade(int n) {
+        return n % 2;
+    }
+
+    public static void main(String[] args) {
+        int a = fakultaet(5);
+        System.out.println(a);
+        int b = g(4, 2);
+        System.out.println(beschreibe(b));
+        System.out.println(istGerade(a));
+    }
+}
+\end{lstlisting}
+
+\begin{center}
+\begin{tabular}{|p{1.6cm}|p{10.5cm}|}
+	\hline
+	\textbf{Zeile} & \textbf{Fehler} \\ \hline
+	& \\[2cm] \hline
+	& \\[2cm] \hline
+	& \\[2cm] \hline
+	& \\[2cm] \hline
+	& \\[2cm] \hline
+\end{tabular}
+\end{center}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 3: Programmausgabe -- wechselseitige Rekursion \hfill (20 Punkte)}
+
+Zu welcher Ausgabe kommt es, wenn man die Methode \texttt{main} der Klasse \texttt{X} ausführt?
+
+\begin{lstlisting}
+public class X {
+
+    public static int f(int n) {
+        System.out.println("f(" + n + ")");
+        if (n <= 1)
+            return 1;
+        return n + g(n - 1);
+    }
+
+    public static int g(int n) {
+        System.out.println("g(" + n + ")");
+        if (n <= 0)
+            return 0;
+        return f(n - 2);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(f(4));
+    }
+}
+\end{lstlisting}
+
+\begin{hinweis}[Empfehlung]
+	Die Methoden \texttt{f} und \texttt{g} rufen sich gegenseitig auf. Verfolgen Sie die Aufrufe der Reihe nach und beachten Sie, dass jede \texttt{println}-Anweisung sofort beim Betreten der Methode ausgeführt wird, während das Ergebnis von \texttt{f(4)} erst ganz am Ende ausgegeben wird.
+\end{hinweis}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 4: Methode implementieren -- Palindrom prüfen \hfill (25 Punkte)}
+
+Schreiben Sie eine statische Methode \texttt{istPalindrom}, die einen Parameter \texttt{s} vom Typ \texttt{String} hat und einen Rückgabewert vom Typ \texttt{boolean}.
+
+Der Rückgabewert soll genau dann \texttt{true} sein, wenn der String \texttt{s} \textbf{vorwärts und rückwärts gelesen identisch} ist (ein Palindrom). Andernfalls soll der Rückgabewert \texttt{false} sein. Der leere String und ein String aus einem einzigen Zeichen gelten als Palindrom.
+
+\begin{hinweis}[Hinweise]
+	\texttt{s.length()} liefert die Länge des Strings \texttt{s}; \texttt{s.charAt(i)} liefert das $i$-te Zeichen (wobei $0 \le i < \texttt{s.length()}$).
+\end{hinweis}
+
+\begin{center}
+\begin{tabular}{l c}
+	\toprule
+	\textbf{s} & \textbf{istPalindrom(s)} \\
+	\midrule
+	\lstinline!"otto"! & \texttt{true} \\
+	\lstinline!"anna"! & \texttt{true} \\
+	\lstinline!"Haus"! & \texttt{false} \\
+	\lstinline!"a"!    & \texttt{true} \\
+	\lstinline!""!     & \texttt{true} \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}

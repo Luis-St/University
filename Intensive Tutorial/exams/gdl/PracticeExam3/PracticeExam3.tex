@@ -1,0 +1,192 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	parskip=half,
+	openany
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../../for_latex/preamble}
+\input{../../../for_latex/exam_setup}
+
+\title{Probeklausur 3}
+\author{Luis Staudt}
+\date{}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Probeklausur 3}\\[0.3em]
+	{\large Grundlagen der Programmierung}\\[0.7em]
+	\begin{tabular}{r l @{\hspace{1.4cm}} r l}
+		\textbf{Studiengänge:}    & MIB \& OMB            & \textbf{Autor:}        & Luis Staudt \\
+		\textbf{Semester:}        & Sommersemester 2026 \\
+		\textbf{Bearbeitungszeit:}& 90 Minuten            & \textbf{Gesamtpunkte:} & 90 \\
+	\end{tabular}\\[0.7em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{0.5em}
+
+\vfill
+% --- Bewertungstabelle ---
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{|l|c|c|c|c|c|}
+	\hline
+	\textbf{Aufgabe}          & 1  & 2  & 3  & 4  & \textbf{Gesamt} \\ \hline
+	\textbf{Punkte}           & 25 & 20 & 20 & 25 & 90              \\ \hline
+	\textbf{Erreichte Punkte} &    &    &    &    &                 \\ \hline
+\end{tabular}
+\end{center}
+\vfill
+
+% --- Seitenkopf und -fuß ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Probeklausur 3, Grundlagen der Programmierung}
+\rhead{\small SoSe 2026}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 1: Bildverarbeitung -- Kreisscheibe schwarz färben \hfill (25 Punkte)}
+
+Ein Bitmap werde in einem zweidimensionalen \texttt{int}-Array \texttt{p} gespeichert. Jede Farbe wird durch eine Zahl vom Typ \texttt{int} dargestellt. Die Variable \texttt{p[x][y]} steht für die Farbe des Bildes an der Koordinate $(x,y)$. Der Ursprung des Koordinatensystems liegt links oben, somit enthält \texttt{p[0][0]} die Farbe des Pixels in der linken oberen Ecke.
+
+\begin{center}
+\begin{tikzpicture}[font=\scriptsize]
+	\foreach \xi in {0,...,5}
+		\foreach \yi in {0,...,4}
+			\node[draw, minimum width=1.25cm, minimum height=0.7cm]
+			at (1.3*\xi, -0.75*\yi) {p[\xi][\yi]};
+\end{tikzpicture}
+\end{center}
+
+Die Breite des Bildes ist \texttt{p.length}, die Höhe ist \texttt{p[0].length}. Damit liegt $x$ im Bereich $0$ bis \texttt{p.length-1} und $y$ im Bereich $0$ bis \texttt{p[0].length-1}. Der Wert $0$ steht für die Farbe schwarz.
+
+Schreiben Sie eine Klassenmethode \texttt{f}, die eine \textbf{gefüllte kreisförmige Fläche} schwarz färbt. Der Mittelpunkt des Kreises soll die Position $(171,161)$ haben, der Radius soll $60$ Pixel betragen. Alle Pixel, deren Abstand zum Mittelpunkt höchstens $60$ Pixel beträgt, sollen auf $0$ gesetzt werden. Die Methode \texttt{f} soll als Parameter \texttt{p} einen zweidimensionalen \texttt{int}-Array haben und keinen Rückgabewert.
+
+\begin{center}
+\begin{tabular}{cc}
+	\includegraphics[width=0.34\textwidth]{../images/MyPicture.jpg} &
+	\includegraphics[width=0.34\textwidth]{../images/exam3_result.png} \\[0.3em]
+	{\small\itshape Originalbild} & {\small\itshape Zielbild nach Aufruf von \texttt{f(p)}} \\
+\end{tabular}
+\end{center}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 2: Syntaxfehler -- Klasse Punkt \hfill (20 Punkte)}
+
+Der Programmcode der Klasse \texttt{Punkt} enthält mehrere syntaktische Fehler. Geben Sie zu jedem Fehler die Zeilennummer der Zeile an, in der sich der Fehler befindet, und beschreiben Sie jeweils den Fehler.
+
+\begin{lstlisting}
+public class Punkt {
+
+    public double x;
+    public double y;
+
+    public Punkt(double x, double y) {
+        this.x = x;
+        this.y = y
+    }
+
+    public double abstand(Punkt p) {
+        double dx = x - p.x;
+        double dy = y - p.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    public boolean istNah(Punkt p, double s) {
+        if (abstand(p) < s)
+            return true;
+        else
+            System.out.println("zu weit");
+    }
+
+    public static void main(String[] args) {
+        Punkt a = new Punkt(0, 0);
+        Punkt b = new Punkt(3, 4);
+        double d = a.abstand();
+        System.out.println(d)
+        boolean nah = a.istNah(b, "fuenf");
+    }
+}
+\end{lstlisting}
+
+\begin{center}
+\begin{tabular}{|p{1.6cm}|p{10.5cm}|}
+	\hline
+	\textbf{Zeile} & \textbf{Fehler} \\ \hline
+	& \\[2cm] \hline
+	& \\[2cm] \hline
+	& \\[2cm] \hline
+	& \\[2cm] \hline
+	& \\[2cm] \hline
+\end{tabular}
+\end{center}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 3: Programmausgabe -- verkettete Objekte \hfill (20 Punkte)}
+
+Zu welcher Ausgabe kommt es, wenn man die Methode \texttt{main} der Klasse \texttt{Zelle} ausführt?
+
+\begin{lstlisting}
+public class Zelle {
+
+    public int wert;
+    public Zelle next;
+
+    public Zelle(int w) {
+        wert = w;
+        next = null;
+    }
+
+    public static void main(String[] args) {
+        Zelle a = new Zelle(1);
+        Zelle b = new Zelle(2);
+        Zelle c = new Zelle(3);
+        a.next = b;
+        b.next = c;
+        System.out.println(a.next.wert);
+        a.next = c;
+        System.out.println(a.next.wert);
+        c.wert = 9;
+        System.out.println(b.next.wert);
+        b.next.next = a;
+        System.out.println(a.next.next.wert);
+    }
+}
+\end{lstlisting}
+
+\begin{hinweis}[Empfehlung]
+	Zeichnen Sie nach jeder Zuweisung ein kleines Objektdiagramm (Kästchen mit \texttt{wert} und Pfeil \texttt{next}) und verfolgen Sie, auf welches Objekt die jeweilige Referenz zeigt.
+\end{hinweis}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 4: Methode implementieren -- Nullen ans Ende \hfill (25 Punkte)}
+
+Schreiben Sie eine statische Methode \texttt{f}, die einen Parameter \texttt{a} vom Typ \texttt{int}-Array hat und keinen Rückgabewert.
+
+Die Methode \texttt{f} soll alle Felder mit dem Wert $0$ \textbf{an das Ende des Arrays verschieben}. Die Reihenfolge der übrigen (von $0$ verschiedenen) Zahlen soll dabei \textbf{erhalten} bleiben. Die Länge des Arrays soll sich nicht ändern.
+
+\begin{center}
+\begin{tabular}{l l}
+	\toprule
+	\textbf{a vor der Ausführung von f(a)} & \textbf{a nach der Ausführung von f(a)} \\
+	\midrule
+	\texttt{[0, 1, 0, 2, 3]} & \texttt{[1, 2, 3, 0, 0]} \\
+	\texttt{[1, 2, 3]}       & \texttt{[1, 2, 3]} \\
+	\texttt{[0, 0, 5]}       & \texttt{[5, 0, 0]} \\
+	\texttt{[4, 0, 0, 7, 0]} & \texttt{[4, 7, 0, 0, 0]} \\
+	\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}
