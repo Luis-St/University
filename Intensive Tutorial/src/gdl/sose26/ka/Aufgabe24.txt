@@ -8,12 +8,14 @@ f("ABC", 0, 3)
          f("ABC", 2, 1)
          > B
     > A
+   Schleifendurchlauf 2 (i=1)
+     > B
+     f("ABC", 2, 2)
+     > B
+   Schleifendurchlauf 3 (i=2):
+     > C
+     f("ABC", 3, 2)
+     > C
+> *
 
-
-   Schleifendurchlauf 2:
-
-
-
-   Schleifendurchlauf 3:
-
-
+Ausgabe für g("ABC"): ABBABBCC*

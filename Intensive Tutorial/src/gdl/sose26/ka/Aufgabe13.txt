@@ -1,0 +1,14 @@
+z49: x1 = [1]->null
+z50: x1 = [1]->[2]->null
+z51: x1 = [1]->[2]->[3]->null
+z52: x1 = [1]->[2]->[3]->[4]->null
+z53: x1 = [1]->[2]->[3]->[4]->[3]->null
+z54: > 1, 2, 3, 4, 3
+z55: x1 = [1]->[2]->[3]->null
+z56: > 1, 2, 3
+z57: x1 = [1]->[7]->[2]->[3]->null
+z58: > 1, 7, 2, 3
+z59: x1 = [1]->[8]->[7]->[2]->[3]->null
+z60: > 1, 8, 7, 2, 3
+z61: x1 = [1]->[8]->x1 (nach Element 7 fangen wir wieder bei 1 an, unsere Liste hat kein Ende mehr)
+z62: > 1, 8, 1, 8, 1, .... -> Unendliche gleiche Ausgabe, Stackoverflow

@@ -17,7 +17,7 @@ public class Aufgabe24 {
 	
 	public static void main(String[] args) {
 		g("ABC");
-		g("Hund");
+		//g("Hund");
 	}
 	
 }
