@@ -1,0 +1,294 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half,           % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+\usepackage{longtable}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 12}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Qualität}\\[3mm]
+		{\fontsize{14}{14} \selectfont Nichtfunktionale Tests}
+
+		\vspace{10cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% AUFGABE 1
+% ############################################################################
+
+\chapter*{Aufgabe 1: Anzahl an gleichzeitigen Benutzern ermitteln}
+
+\section*{Ziel des Testszenarios}
+
+Für die neue Webshop-Applikation soll die \textbf{maximale Anzahl gleichzeitiger
+Benutzer} ermittelt werden, die das System noch zuverlässig (innerhalb der
+vereinbarten Service-Level) bedienen kann.
+Dazu werden vier Testarten kombiniert, die aufeinander aufbauen: Performanztest,
+Lasttest, Stresstest und Skalierbarkeitstest.
+Alle Tests laufen gegen eine produktionsnahe Umgebung; typische Nutzerabläufe
+(Anmelden, Suchen, Warenkorb, Bestellung/Bezahlung) werden als Lastprofil
+nachgebildet.
+
+\section*{Einsatz der einzelnen Testarten}
+
+\subsection*{Performanztest (Baseline)}
+
+\textbf{Einsatz:} Zuerst wird das System unter geringer, definierter Last
+(z.\,B. wenige Benutzer) gemessen, um eine \textbf{Referenz (Baseline)} ohne
+Last\-einfluss zu gewinnen.
+So ist später erkennbar, wie sich die Werte bei steigender Last verschlechtern.
+
+\textbf{Metriken:} Antwortzeit pro Transaktion (Mittel und p95/p99), Durchsatz
+(Requests/s), Ressourcenverbrauch im Ruhezustand.
+
+\textbf{Interpretation:} liefert die Soll-Werte, gegen die alle weiteren
+Messungen verglichen werden.
+
+\subsection*{Lasttest}
+
+\textbf{Einsatz:} Die Benutzerzahl wird schrittweise bis zur \textbf{erwarteten
+realistischen Last} erhöht und über längere Zeit konstant gehalten.
+Geprüft wird, ob das System die geplante Last innerhalb der Service-Level
+bewältigt.
+
+\textbf{Metriken:} Antwortzeit (p95/p99) je Laststufe, Durchsatz, Fehlerrate
+(z.\,B. HTTP 5xx, Timeouts), Ressourcenauslastung (CPU, RAM, DB-Verbindungen).
+
+\textbf{Interpretation:} Solange Antwortzeiten und Fehlerrate unter den
+Grenzwerten bleiben, gilt die jeweilige Benutzerzahl als zuverlässig bedienbar.
+
+\subsection*{Stresstest}
+
+\textbf{Einsatz:} Die Last wird \textbf{über die erwartete Last hinaus} bis zum
+Überlastpunkt gesteigert, um die Belastungsgrenze und das Verhalten im
+Grenzbereich zu finden.
+Zusätzlich wird das Verhalten beim Zurücknehmen der Last (Recovery) beobachtet.
+
+\textbf{Metriken:} Benutzerzahl am ``Knickpunkt'' (sprunghaft steigende
+Antwortzeit / Fehlerrate), Sättigungspunkt der Ressourcen, Erholungszeit nach
+der Spitze.
+
+\textbf{Interpretation:} Der Punkt, ab dem die Service-Level verletzt werden,
+markiert die \textbf{Kapazitätsobergrenze}.
+
+\subsection*{Skalierbarkeitstest}
+
+\textbf{Einsatz:} Es wird gemessen, wie die Kapazität mit \textbf{zusätzlichen
+Ressourcen} (mehr CPU/RAM bzw. zusätzliche Instanzen) wächst -- also ob durch
+Hoch- bzw. Hinzuskalieren mehr gleichzeitige Benutzer möglich werden.
+
+\textbf{Metriken:} maximal mögliche Benutzerzahl je Ausbaustufe, Durchsatz pro
+Ressourceneinheit, Effizienz der Skalierung (linear vs. abflachend).
+
+\textbf{Interpretation:} zeigt, ob die ermittelte Obergrenze durch Skalierung
+erweiterbar ist und wo Engpässe (z.\,B. Datenbank) die Skalierung begrenzen.
+
+\section*{Bestimmung der maximalen Benutzerkapazität}
+
+Die maximale Zahl gleichzeitiger Benutzer ergibt sich aus der höchsten Laststufe,
+bei der \textbf{alle definierten Akzeptanzkriterien gleichzeitig} eingehalten
+werden, z.\,B.:
+
+\begin{itemize}
+	\item Antwortzeit p95 unter dem vereinbarten Grenzwert (z.\,B. $< 2$\,s),
+	\item Fehlerrate unter Schwelle (z.\,B. $< 1\,\%$),
+	\item Ressourcenauslastung im stabilen Bereich (keine Sättigung).
+\end{itemize}
+
+Lasttest liefert den bestätigten Normalbetrieb, der Stresstest die harte
+Obergrenze; die Differenz dient als \textbf{Sicherheitsreserve}.
+Der Skalierbarkeitstest zeigt schließlich, ob und wie diese Grenze bei steigendem
+Bedarf wirtschaftlich angehoben werden kann.
+
+
+% ############################################################################
+% AUFGABE 2
+% ############################################################################
+
+\chapter*{Aufgabe 2: Zuverlässigkeit medizinischer Software}
+
+Zuverlässigkeit beschreibt die Fähigkeit der Software, ihre Funktionen unter
+festgelegten Bedingungen über einen bestimmten Zeitraum korrekt zu erbringen.
+Betrachtet werden die Aspekte \textbf{Reife}, \textbf{Fehlertoleranz} und
+\textbf{Wiederherstellbarkeit} am Beispiel der Software eines medizinischen
+Gerätes (z.\,B. Infusionspumpe, Beatmungs- oder Überwachungsgerät).
+
+\section*{Teil 1: Die drei Aspekte}
+
+\subsection*{Reife (Maturity)}
+
+\textbf{Allgemein:} Grad, in dem die Software unter normalem Betrieb fehlerfrei
+arbeitet -- also wie selten Ausfälle auftreten (gemessen z.\,B. über MTBF,
+Fehlerdichte, Ausfallrate).
+Reife entsteht durch ausgereiften, gut getesteten und im Feld bewährten Code.
+
+\textbf{Konkret beim Medizingerät:} Eine hohe Reife bedeutet, dass die Pumpe im
+Dauerbetrieb zuverlässig die korrekte Dosis abgibt, ohne sporadische Abstürze
+oder Fehlfunktionen.
+Geringe Reife äußert sich in zufälligen Aussetzern während der Behandlung.
+
+\subsection*{Fehlertoleranz (Fault Tolerance)}
+
+\textbf{Allgemein:} Fähigkeit, trotz auftretender Fehler (Software-Defekte,
+fehlerhafte Eingaben, Hardware-/Sensorausfälle) weiter ein definiertes,
+sicheres Verhalten zu zeigen, statt unkontrolliert auszufallen.
+Mittel sind z.\,B. Redundanz, Plausibilitätsprüfungen und ein sicherer Zustand
+(Fail-Safe).
+
+\textbf{Konkret beim Medizingerät:} Fällt ein Sensor aus oder wird ein
+unplausibler Wert erkannt, schaltet das Gerät kontrolliert in einen sicheren
+Zustand und alarmiert das Personal, anstatt eine falsche Dosis abzugeben.
+Die Behandlung wird so nie unbemerkt fehlerhaft fortgeführt.
+
+\subsection*{Wiederherstellbarkeit (Recoverability)}
+
+\textbf{Allgemein:} Fähigkeit, nach einem Ausfall den Betrieb und die
+betroffenen Daten/Zustände wiederherzustellen -- gemessen z.\,B. über die
+Wiederherstellzeit (MTTR) und den Datenverlust.
+
+\textbf{Konkret beim Medizingerät:} Nach einem Strom- oder Softwareausfall
+fährt das Gerät schnell wieder hoch, stellt die zuletzt gültigen
+Behandlungsparameter wieder her und nimmt die Therapie kontrolliert wieder auf,
+ohne dass eingestellte Werte verloren gehen.
+
+\section*{Teil 2: Wichtigster Aspekt für ein Medizinprodukt}
+
+Am wichtigsten ist die \textbf{Fehlertoleranz}.
+
+\textbf{Begründung:} Bei einem Medizinprodukt steht die \textbf{Patienten\-sicherheit}
+an oberster Stelle.
+Reife reduziert die Häufigkeit von Fehlern, kann sie aber nie vollständig
+ausschließen; ebenso können Sensor- oder Stromausfälle nicht verhindert werden.
+Entscheidend ist daher, dass ein \emph{auftretender} Fehler nicht zu einer
+gefährlichen Fehlfunktion führt.
+Eine fehlertolerante Steuerung verhindert genau das, indem sie unplausible
+Zustände erkennt, in einen sicheren Zustand wechselt und alarmiert -- so wird
+eine Über-/Unterdosierung oder eine falsche Messung (medizinische Genauigkeit)
+mit unmittelbarer Gefahr für den Patienten vermieden.
+Fehlende Fehlertoleranz hat hier potenziell tödliche Konsequenzen, während ein
+seltener, aber sicher abgefangener Fehler beherrschbar bleibt.
+
+\section*{Teil 3: Situationsabhängige Priorität}
+
+Welcher Aspekt dominiert, hängt von Einsatzart und Kritikalität ab:
+
+\begin{itemize}
+	\item \textbf{Lebenserhaltende Geräte im Dauerbetrieb} (Beatmung): Reife wird
+	      sehr wichtig -- jeder einzelne Aussetzer ist kritisch, das Gerät muss
+	      durchgehend fehlerfrei laufen.
+	\item \textbf{Mobile/akkubetriebene oder störungsanfällige Umgebung}
+	      (Rettungswagen, Notfall): Wiederherstellbarkeit gewinnt an Bedeutung,
+	      da Strom- oder Verbindungsausfälle wahrscheinlicher sind und ein
+	      schnelles, datenerhaltendes Wiederanlaufen zählt.
+	\item \textbf{Nicht-kritische Geräte} (z.\,B. reine Dokumentations-/Mess\-software
+	      ohne direkte Therapiewirkung): Hier dürfen kurze Ausfälle toleriert
+	      werden, Reife/Verfügbarkeit treten in den Vordergrund, da kein
+	      unmittelbares Patientenrisiko besteht.
+\end{itemize}
+
+In sicherheitskritischen Situationen bleibt die Fehlertoleranz jedoch die
+Grundvoraussetzung, auf der die übrigen Aspekte aufsetzen.
+
+
+% ############################################################################
+% AUFGABE 3
+% ############################################################################
+
+\chapter*{Aufgabe 3: Performanztest versus Ressourcennutzungstest}
+
+Beide gehören zu den \textbf{nichtfunktionalen Tests} und betrachten das
+Effizienzverhalten, verfolgen aber unterschiedliche Ziele: Der Performanztest
+fragt nach dem \emph{Zeitverhalten} (wie schnell?), der Ressourcennutzungstest
+nach dem \emph{Ressourcenverbrauch} (wie sparsam?).
+
+\section*{Gegenüberstellung der Testziele}
+
+\begin{longtable}{| p{2.8cm} | p{5.0cm} | p{5.0cm} |}
+	\hline
+	\textbf{} & \textbf{Performanztest} & \textbf{Ressourcennutzungstest} \\ \hline
+	\endfirsthead
+	\hline
+	\textbf{} & \textbf{Performanztest} & \textbf{Ressourcennutzungstest} \\ \hline
+	\endhead
+	\hline
+	\endfoot
+	Ziel & Zeit- und Reaktionsverhalten des Systems unter definierter Last
+	bewerten & ermitteln, wie viele Ressourcen die Software für ihre Aufgaben
+	verbraucht \\ \hline
+	Kernfrage & Wie schnell/leistungsfähig ist das System? & Wie effizient/sparsam
+	nutzt es die Ressourcen? \\ \hline
+	Fokus & Antwortzeit, Durchsatz, Latenz & CPU, Speicher, Datenträger, Netz,
+	Energie \\ \hline
+\end{longtable}
+
+\section*{Typische Metriken}
+
+\textbf{Performanztest:}
+\begin{itemize}
+	\item Antwortzeit/Latenz (Mittel, p95/p99),
+	\item Durchsatz (Transaktionen bzw. Requests pro Sekunde),
+	\item Time-to-First-Byte / Time-to-Interactive.
+\end{itemize}
+
+\textbf{Ressourcennutzungstest:}
+\begin{itemize}
+	\item CPU- und Speicherauslastung (inkl. Erkennung von Memory-Leaks),
+	\item Datenträger- und Netz-I/O,
+	\item Energie-/Akkuverbrauch, Anzahl belegter Verbindungen/Threads.
+\end{itemize}
+
+\section*{Nutzung der Ergebnisse zur Qualitätsverbesserung}
+
+\textbf{Performanztest:} Ergebnisse decken zu langsame Funktionen und Engpässe
+auf und führen zu Optimierungen (Caching, Indizes, Query-Tuning, Parallelisierung)
+sowie zur Festlegung/Überwachung von Service-Levels.
+
+\textbf{Ressourcennutzungstest:} Ergebnisse zeigen Verschwendung und Lecks und
+führen zu sparsamerer Implementierung, korrekter Ressourcenfreigabe und
+passender Dimensionierung der Hardware (Kostensenkung, Skalierbarkeit).
+
+Beide ergänzen sich: Ein System kann schnell sein, dabei aber so viele Ressourcen
+verbrauchen, dass es teuer oder schlecht skalierbar ist -- erst gemeinsam
+ergeben sie ein vollständiges Effizienzbild.
+
+\section*{Konkrete Beispiele}
+
+\begin{itemize}
+	\item \textbf{Performanztest besonders relevant:} Webshop/Online-Portal, bei
+	      dem kurze Antwortzeiten unter Last über Nutzerzufriedenheit und Umsatz
+	      entscheiden; Echtzeit-/Handelssysteme mit harten Latenzvorgaben.
+	\item \textbf{Ressourcennutzungstest besonders relevant:} Mobile App
+	      (Akku-/Speicherverbrauch) und Embedded-/IoT-Geräte mit knapper
+	      Hardware; Cloud-Dienste, bei denen der Ressourcenverbrauch direkt die
+	      Betriebskosten bestimmt; Langläufer-Dienste, bei denen Memory-Leaks
+	      über Tage auffallen.
+\end{itemize}
+
+\end{document}
