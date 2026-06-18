@@ -1,0 +1,197 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half,           % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+
+\include{../../for_latex/preamble}
+\usepackage{longtable}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	% HFU Logo
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 13}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Software Qualität}\\[3mm]
+		{\fontsize{14}{14} \selectfont Nichtfunktionale Tests -- Sicherheitstests}
+
+		\vspace{10cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+% ############################################################################
+% AUFGABE 1
+% ############################################################################
+
+\chapter*{Aufgabe 1: Sicherheitstests}
+
+Im Folgenden werden die sieben Leitfragen für die Testart \textbf{Sicherheitstests}
+beantwortet.
+Grundlage ist Kapitel~18 aus Bath/McKay, ``Praxiswissen Softwaretest --
+Test\-Analyst und Technical Test Analyst''.
+
+\section*{1. Adressiertes Qualitätsmerkmal nach ISO/IEC 25010}
+
+Sicherheitstests adressieren das Qualitätsmerkmal \textbf{Sicherheit (Security)}.
+Es beschreibt die Fähigkeit der Software, unberechtigten Zugriff -- sowohl
+versehentlich als auch vorsätzlich -- auf Programme und Daten zu verhindern.
+Nach ISO/IEC 25010 gliedert es sich in die Teilmerkmale:
+
+\begin{itemize}
+	\item \textbf{Vertraulichkeit} -- Daten sind nur Befugten zugänglich,
+	\item \textbf{Integrität} -- Schutz vor unbefugtem Ändern/Löschen von Daten,
+	\item \textbf{Nichtabstreitbarkeit} -- durchgeführte Aktionen sind nachweisbar,
+	\item \textbf{Zurechenbarkeit} -- Aktionen lassen sich einem Akteur zuordnen,
+	\item \textbf{Authentizität} -- die Identität eines Akteurs ist nachweisbar.
+\end{itemize}
+
+\section*{2. Ziele der Testart}
+
+\begin{itemize}
+	\item Sicherheitslücken und Schwachstellen aufdecken, \emph{bevor} ein
+	      Angreifer sie ausnutzen kann.
+	\item Schutz wertvoller Informationen (z.\,B. Kreditkartendaten,
+	      Benutzerprivilegien) vor dem Zugriff Unbefugter nachweisen.
+	\item Zeigen, dass das System den typischen Bedrohungen standhält
+	      (Devise: ``Kenne deinen Feind'').
+	\item Im Unterschied zu funktionalen Tests liegt der Fokus nicht auf der
+	      vorgesehenen Funktion, sondern auf den ``anderen Dingen'', die ein
+	      System nebenbei tun kann und die sich ausnutzen lassen.
+\end{itemize}
+
+\section*{3. Allgemeine Vorgehensweise, Varianten und Unterarten}
+
+Eine gute Vorgehensweise kombiniert statische und dynamische Verfahren über den
+gesamten Lebenszyklus; sie ist kein bloßes ``Hacking''.
+Eingesetzt werden:
+
+\begin{itemize}
+	\item \textbf{Technische Reviews} der Dokumente (Sicherheitsstrategie,
+	      Systemarchitektur) anhand einer Sicherheits-Checkliste.
+	\item \textbf{Statische Codeanalyse} (werkzeuggestützt) am erstellten Code.
+	\item \textbf{Dynamische Analyse} während der Codeausführung.
+	\item \textbf{Gezielte Angriffe} auf identifizierte Schwachstellen.
+\end{itemize}
+
+Geplante Angriffe folgen nach Whittaker \& Thompson drei Schritten:
+(1) Sammeln sicherheitsrelevanter Informationen, (2) Scannen auf Schwachstellen,
+(3) Entwicklung und Durchführung der Angriffe.
+Statt der Standard-Testdatenauswahl wird ein ``handgemachter'' Ansatz verfolgt,
+der gezielt auf die untersuchte Schwachstelle zugeschnitten ist (u.\,a. negative
+Äquivalenzklassen, Ursache-Wirkungs-Graphen für Rechteregeln, explorative Tests).
+
+\textbf{Wichtige Bedrohungs-Unterarten (zu testende Lücken):} Eingabepuffer\-überlauf,
+Nebeneffekte zugelassener Funktionen, unbefugtes Kopieren/Löschen von Daten
+(SQL-Injection), unbefugter Zugang, Missbrauch von Benutzerrechten,
+Denial-of-Service, Abfangen/Ändern von Übertragungen (Man-in-the-Middle),
+Knacken von Verschlüsselung, Logikbomben/Ostereier, Cross-Site-Scripting (XSS)
+und Phishing.
+
+\section*{4. Erhobene Qualitätsmetriken bzw. Kennzahlen}
+
+\begin{itemize}
+	\item Anzahl gefundener Schwachstellen, gegliedert nach Bedrohungskategorie.
+	\item Schweregrad der Lücken (z.\,B. CVSS-Score) und Anzahl bekannter,
+	      ungepatchter Schwachstellen (Abgleich mit CVE).
+	\item Erfolgsquote der durchgeführten Angriffe.
+	\item Abdeckung der Bedrohungskategorien bzw. der Sicherheits-Checkliste.
+	\item Rückverfolgbarkeit: lückenlose Zuordnung von identifizierter
+	      Schwachstelle $\rightarrow$ durchgeführtem Test $\rightarrow$ Ergebnis.
+\end{itemize}
+
+\section*{5. Schwierigkeiten und deren Adressierung}
+
+\begin{itemize}
+	\item \textbf{Schwer erkennbare Symptome:} Sicherheitsmängel zeigen sehr
+	      unterschiedliche Symptome.
+	      $\rightarrow$ Erfahrene Tester mit Spezialwissen und Kreativität, kein
+	      reines Standardvorgehen.
+	\item \textbf{Repräsentative Testdaten:} sind aufwendig zu erstellen
+	      (z.\,B. verschlüsselte Daten, Trustcenter); explorative Tests werden
+	      dadurch eingeschränkt.
+	      $\rightarrow$ frühzeitige Planung der Testumgebung und -daten.
+	\item \textbf{Destruktivität:} Angriffe können Daten/System beschädigen.
+	      $\rightarrow$ vor Durchführung sicherstellen, dass die Testumgebung
+	      wiederherstellbar ist.
+	\item \textbf{Rechtlich/ethisch:} ohne Erlaubnis können Tests als echte
+	      Angriffe gedeutet werden (Strafbarkeit).
+	      $\rightarrow$ Erlaubnis der Geschäftsführung einholen, alle Beteiligten
+	      informieren; Tester melden Lücken, statt sie auszunutzen.
+	\item \textbf{Vertraulichkeit der Ergebnisse:}
+	      $\rightarrow$ Berichte nur an kleinen Empfängerkreis, separates
+	      Fehlerverfolgungssystem, verschlüsselte Übertragung.
+	\item \textbf{Sich ständig ändernde Bedrohungslage:}
+	      $\rightarrow$ Werkzeuge und Wissen laufend aktualisieren, Betriebsphase
+	      mit Überwachung einbeziehen.
+\end{itemize}
+
+\section*{6. Typischerweise eingesetzte Werkzeuge}
+
+\begin{itemize}
+	\item Statische Sicherheitsprüfwerkzeuge, z.\,B. \textbf{Fortify Source Code
+	      Analysis}; vom Hersteller laufend an neue Bedrohungen angepasst.
+	\item Werkzeuge zur Simulation von Ausnahmebedingungen des Betriebssystems,
+	      z.\,B. \textbf{Holodeck}.
+	\item Werkzeuge zur Erzeugung sehr langer Strings (Test auf Pufferüberläufe).
+	\item Schwachstellenscanner sowie Wissensquellen wie \textbf{CVE}, \textbf{OWASP}
+	      und \textbf{NIST}.
+\end{itemize}
+
+\section*{7. Praktische Anwendung bei ``Schwarzwald-Entdecker''}
+
+\textbf{Anwendung.} ``Schwarzwald-Entdecker'' ist ein Web-Portal, über das Kunden
+Ausflüge planen, buchen und \emph{bezahlen} sowie ihre Buchungen einsehen, ändern
+und stornieren.
+Es verarbeitet personenbezogene Daten (DSGVO) und Zahlungsdaten -- damit ist
+Sicherheit ein zentrales Qualitätsziel.
+
+\textbf{Lebenszyklus-Vorgehen.} Zuerst Review der Sicherheitsstrategie und der
+Architektur (Protokolle, Verschlüsselung, Rechtekonzept), dann statische
+Codeanalyse, danach -- mit Erlaubnis der Geschäftsführung -- gezielte Angriffe
+gegen eine wiederherstellbare Testumgebung.
+
+\textbf{Beispielhafte Angriffe je Bedrohung:}
+
+\begin{itemize}
+	\item \textbf{Pufferüberlauf / XSS:} überlange Strings und Skript-Eingaben in
+	      Registrierungs- und Login-Formulare einschleusen (negative
+	      Äquivalenzklassen).
+	\item \textbf{SQL-Injection:} im Such-/Filterfeld des Ausflug-Konfigurators
+	      Datenbankbefehle statt Suchbegriffe eingeben.
+	\item \textbf{Missbrauch von Benutzerrechten:} prüfen, dass Kunde~A die
+	      Buchungen von Kunde~B nicht einsehen, ändern oder stornieren kann --
+	      alle Rechte-Kombinationen testen.
+	\item \textbf{Unbefugter Zugang / Vertraulichkeit:} Login-Daten und
+	      Kreditkartendaten dürfen nicht ``geknackt'' oder unverschlüsselt
+	      übertragen werden (HTTPS prüfen).
+	\item \textbf{Man-in-the-Middle:} versuchen, die Kommunikation während der
+	      Zahlung abzufangen und zu verändern.
+	\item \textbf{Denial-of-Service:} das öffentlich erreichbare Buchungsportal
+	      mit Überlast belasten.
+	\item \textbf{Phishing:} gefälschte Login-Seite als Köder für Zugangsdaten.
+\end{itemize}
+
+\textbf{Berichterstattung.} Gefundene Lücken werden vertraulich und
+rückverfolgbar an einen kleinen Empfängerkreis gemeldet, statt sie auszunutzen.
+
+\end{document}
