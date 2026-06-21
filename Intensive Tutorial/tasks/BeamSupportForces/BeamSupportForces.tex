@@ -1,0 +1,201 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../for_latex/preamble}
+\title{\Huge\textbf{Auflagerkräfte}}
+\author{Luis Staudt}
+\date{}
+
+% Code-Highlighting für Java
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{keywordcolor}{rgb}{0.8,0.47,0.13}
+
+\lstdefinestyle{java}{
+	language=,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\bfseries\color{blue!70!black},
+	stringstyle=\color{red!60!black},
+	commentstyle=\itshape\color{gray},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	numbersep=8pt,
+	frame=single,
+	framerule=0.4pt,
+	rulecolor=\color{gray!50},
+	breaklines=true,
+	showstringspaces=false,
+	tabsize=4,
+	xleftmargin=1.5em,
+	framexleftmargin=1.5em,
+	aboveskip=0.8em,
+	belowskip=0.6em
+}
+\lstset{style=java}
+
+\newtcolorbox{hinweis}[1][Hinweis]{
+	colback=blue!5,
+	colframe=blue!40!black,
+	fonttitle=\bfseries,
+	title=#1,
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\newtcolorbox{beispiel}[1][Beispiel]{
+	colback=green!5,
+	colframe=green!40!black,
+	fonttitle=\bfseries,
+	title=#1,
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Intensivtutorium}\\[0.3em]
+	{\large Programmierung}\\[0.6em]
+	\begin{tabular}{r l @{\hspace{2cm}} r l}
+		\textbf{Semester:}      & Sommersemester 2026                    & \textbf{Tutor:}         & Luis Staudt \\
+		\textbf{Studiengänge:}  & MIB, OMB, PEB, MVB         & & \\
+	\end{tabular}\\[0.6em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{1em}
+
+% --- Seitenkopf und -fuß (ab Seite 2) ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Intensivtutorium -- Grundlagen der Programmierung}
+\rhead{\small SS 2026}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+
+% =============================================
+% Übungsaufgabe -- Auflagerkräfte eines Trägers
+% =============================================
+
+\section*{Übungsaufgabe -- Auflagerkräfte eines Trägers}
+
+Ein an seinen beiden Enden gelagerter Träger der Länge~$L$ wird durch eine senkrecht wirkende Einzellast~$F$ beansprucht. Der Angriffspunkt dieser Last befindet sich im Abstand~$a$, gemessen vom linken Auflager~$A$; das gegenüberliegende, rechte Auflager wird mit~$B$ bezeichnet (siehe nachstehende Skizze).
+
+\begin{center}
+	\begin{tikzpicture}[>=Stealth, scale=1]
+		% Balken
+		\draw[line width=0.8pt, fill=gray!8] (0,0) rectangle (8,0.25);
+
+		% Auflager A (links)
+		\draw[fill=gray!25] (0,0) -- (-0.4,-0.65) -- (0.4,-0.65) -- cycle;
+		\draw[line width=0.6pt] (-0.55,-0.65) -- (0.55,-0.65);
+		\foreach \x in {-0.4,-0.2,...,0.45} {
+			\draw[line width=0.4pt] (\x,-0.65) -- (\x-0.18,-0.88);
+		}
+		\node at (-0.85,-0.3) {$A$};
+
+		% Auflager B (rechts)
+		\draw[fill=gray!25] (8,0) -- (7.6,-0.65) -- (8.4,-0.65) -- cycle;
+		\draw[line width=0.6pt] (7.45,-0.65) -- (8.55,-0.65);
+		\foreach \x in {7.6,7.8,...,8.45} {
+			\draw[line width=0.4pt] (\x,-0.65) -- (\x-0.18,-0.88);
+		}
+		\node at (8.85,-0.3) {$B$};
+
+		% Einzellast F bei a = 3
+		\draw[->, line width=1.1pt, red!70!black] (3,1.4) -- (3,0.25);
+		\node[red!70!black] at (3,1.65) {$F$};
+
+		% Maßlinie a
+		\draw[<->, line width=0.5pt] (0,-1.25) -- (3,-1.25);
+		\node[fill=white, inner sep=1pt] at (1.5,-1.25) {$a$};
+		\draw[dotted] (3,0) -- (3,-1.35);
+
+		% Maßlinie L
+		\draw[<->, line width=0.5pt] (0,-1.85) -- (8,-1.85);
+		\node[fill=white, inner sep=1pt] at (4,-1.85) {$L$};
+		\draw[dotted] (0,-0.9) -- (0,-1.95);
+		\draw[dotted] (8,-0.9) -- (8,-1.95);
+	\end{tikzpicture}
+\end{center}
+
+Für einen derart belasteten Träger lassen sich die in den beiden Lagern auftretenden Auflagerkräfte~$F_A$ (am linken Lager) und~$F_B$ (am rechten Lager) aus dem Momentengleichgewicht herleiten und mit Hilfe der nachfolgenden Beziehungen bestimmen, welche für die Bearbeitung verwendet werden dürfen:
+
+\[
+	F_B = F \cdot \frac{a}{L}
+	\qquad\qquad
+	F_A = F \cdot \frac{L - a}{L}
+\]
+
+\begin{hinweis}[Physikalischer Hintergrund]
+	Die Aufteilung der Last auf die beiden Lager richtet sich nach der Lage des Angriffspunktes: Je näher die Last am rechten Lager~$B$ angreift (großes~$a$), desto größer fällt der von~$B$ aufzunehmende Anteil~$F_B$ aus und desto kleiner wird~$F_A$. In jedem Fall entspricht die Summe beider Auflagerkräfte der aufgebrachten Last, es gilt also $F_A + F_B = F$.
+\end{hinweis}
+
+\medskip
+In einem ersten Schritt werden über die Tastatur nacheinander \textbf{drei Zahlenwerte} eingelesen, und zwar für die Last~$F$, den Abstand~$a$ sowie die Trägerlänge~$L$.
+
+\subsection*{Aufgabe}
+
+\begin{enumerate}[label=\textbf{\arabic*.)}]
+	\item Es soll geprüft werden, ob alle eingegebenen Zahlenwerte $\geq 0$ sind, ansonsten soll ein Fehlerhinweis ausgegeben werden.
+
+	\item Die Trägerlänge $L$ soll größer als 0 sein, sonst solle eine Fehlermeldung angezeigt werden.
+
+	\item Der Abstand $a$ soll als sinnvoller Angriffspunkt nicht außerhalb des Trägers liegen ($a \leq L$).
+
+	\item Wenn keine Fehlermeldung nach 1, 2 und 3 vorliegt, sollen die Auflagerkräfte $F_A$ und $F_B$ berechnet und auf dem Bildschirm ausgegeben werden.
+\end{enumerate}
+
+\begin{hinweis}
+	Für die Tastatureingabe kannst du die im Kurs verwendete Klasse \texttt{Tastatureingabe} mit der Methode \texttt{leseDouble()} nutzen. Alternativ ist auch ein \texttt{Scanner} erlaubt.
+\end{hinweis}
+
+\medskip
+Vervollständige das folgende Programmgerüst:
+
+\begin{lstlisting}
+public class Auflagerkraft {
+
+    public static void main(String[] args) {
+
+        System.out.println("Geben Sie F ein:");
+        double f = Tastatureingabe.leseDouble();
+
+        System.out.println("Geben Sie a ein:");
+        double a = Tastatureingabe.leseDouble();
+
+        System.out.println("Geben Sie L ein:");
+        double l = Tastatureingabe.leseDouble();
+
+        // 1.) Pruefen, ob alle Werte >= 0 sind
+        // 2.) Pruefen, ob L > 0 ist
+        // 3.) Pruefen, ob a <= L ist
+        // 4.) Auflagerkraefte FA und FB berechnen und ausgeben
+
+    }
+}
+\end{lstlisting}
+
+\begin{beispiel}
+	Eingabe: $F = 100$, $a = 2$, $L = 8$
+	\begin{verbatim}
+FA = 75.0
+FB = 25.0
+	\end{verbatim}
+	(Die Last sitzt nahe am linken Lager, daher trägt $A$ den größeren Anteil.)
+\end{beispiel}
+
+\end{document}
