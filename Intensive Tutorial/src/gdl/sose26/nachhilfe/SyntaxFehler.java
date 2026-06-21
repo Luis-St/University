@@ -19,10 +19,10 @@ public class SyntaxFehler {
 		
 		// i = i + 1.0; // Aufpassen!!!
 		
-		StringBuffer buffer = new StringBuffer();
+/*		StringBuffer buffer = new StringBuffer();
 		buffer.append(wert).append(",");
 		
-		buffer.toString()
+		buffer.toString()*/
 		
 	}
 	
