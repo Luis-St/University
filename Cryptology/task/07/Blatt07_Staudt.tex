@@ -111,17 +111,53 @@ Carol                   = 6F90F101115140727C43CADEE0B9E17881403A63
 \section*{Mining (Proof of Work)}
 
 SHA-256 ist eine kryptographische Hash-Funktion ohne Abkürzung: einen Hash mit $k$ führenden
-Nullen findet man nur durch Ausprobieren, im Mittel $\approx 16^{k}$ Versuche je Block.
-Jede weitere Nibble kostet also den \textbf{16-fachen} Aufwand -- genau das ist die Sicherheit
-des Proof of Work.
+Null-Nibbles findet man nur durch Ausprobieren. Da jede Nibble mit Wahrscheinlichkeit
+$\tfrac{1}{16}$ null ist, trifft die Bedingung im Mittel jeden $16^{k}$-ten Versuch -- der Treffer
+folgt einer geometrischen Verteilung mit Erwartungswert $16^{k}$ Hashes je Block.
+Jede weitere Nibble kostet also den \textbf{16-fachen} Aufwand; das ist die Sicherheit des Proof
+of Work. Für $k=10$ sind das $16^{10}\approx 1{,}1\cdot10^{12}$ Hashes je Block.
 
-\textbf{Effizienz statt Trick.} Statt langsam in CrypTool2 zu minen, läuft die Suche offline auf
-der GPU. Optimierung: Die konstanten 512-Bit-Blöcke der Nachricht (IV $+$ Transaktionsdaten)
-werden einmalig auf der CPU vorgehasht (\emph{Midstate}); die GPU variiert nur die Nonce und
-rechnet pro Versuch lediglich den letzten Kompressionsschritt.
-Durchsatz $\approx 3$\,GH/s (RTX~4070).
-Damit ist $k=10$ ($\approx 1{,}1\cdot 10^{12}$ Hashes je Block) in wenigen Minuten erreichbar --
-deutlich über dem Musterbeispiel ($k=6$).
+\subsection*{Optimierung: Midstate}
+
+\textbf{Effizienz statt Trick.} Statt langsam in CrypTool2 zu minen, läuft die Suche offline auf der
+GPU. SHA-256 verarbeitet die Nachricht in 512-Bit-Blöcken (je 64~Byte); pro Block läuft eine
+Kompressionsfunktion. Beim Mining ändert sich von Versuch zu Versuch nur die Nonce ganz am Ende --
+der gesamte Anfang (IV $+$ Transaktionsdaten) bleibt konstant. Diese konstanten Blöcke werden daher
+\emph{einmalig} auf der CPU vorgehasht (\emph{Midstate}); die GPU lädt den Midstate, setzt nur den
+variablen Zähler ein und rechnet pro Versuch lediglich die \emph{restlichen} Kompressionsschritte.
+
+Konkret für Block~1 (analog für die anderen):
+
+\begin{itemize}
+    \item Nachricht $=$ IV $(64)$ $+$ TX $(121)$ $+$ \texttt{(8)} $+$ Nonce $(32)$ $=\;220$~Byte.
+          Mit SHA-Padding ergibt das $\lceil(220+9)/64\rceil = \mathbf{4}$ Kompressionsblöcke.
+    \item Konstanter Präfix (IV, TX, \texttt{(8)} und die 16~zufälligen High-Hexstellen der Nonce)
+          $=204$~Byte $=$ \textbf{3 volle Blöcke}, die als Midstate vorgehasht werden.
+    \item Die GPU variiert nur die 16~niederwertigen Hexstellen der Nonce und rechnet je Versuch
+          \textbf{nur den letzten} der vier Blöcke -- ein Viertel der Arbeit pro Hash.
+\end{itemize}
+
+\noindent So erreicht die RTX~4070 einen Durchsatz von $\approx 3$\,GH/s. Bei $1{,}1\cdot10^{12}$
+Hashes je Block liegt die \emph{erwartete} Suchzeit bei $\approx 6$~Minuten; wegen der geometrischen
+Verteilung streuen die tatsächlichen Zeiten aber stark (Standardabweichung $\approx$ Erwartungswert):
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{l l r}
+        \toprule
+        \textbf{Block} & \textbf{Empfänger} & \textbf{Suchzeit} \\
+        \midrule
+        1 & Alice & $1260$\,s $\;(\approx 21$\,min$)$ \\
+        2 & Bob   & $\phantom{0}236$\,s $\;(\approx 4$\,min$)$ \\
+        3 & Carol & $1091$\,s $\;(\approx 18$\,min$)$ \\
+        \bottomrule
+    \end{tabular}
+    \caption{Gemessene Mining-Zeiten je Block bei $k=10$ (RTX~4090). Die große Streuung von
+             $4$ bis $21$~Minuten entspricht der erwarteten geometrischen Verteilung.}
+\end{table}
+
+\noindent Damit liegt das erreichte $k=10$ deutlich über dem Musterbeispiel ($k=6$, $\approx 1{,}7\cdot10^7$
+Hashes).
 
 
 \section*{Ergebnis: Die drei Blöcke}
@@ -158,6 +194,33 @@ HASH = 00000000004BB8BD740A25D5B36C419B7668DBC34DC73352264D00C606466331
 Spaltenbreite bedingt; gehasht wird die ununterbrochene Zeichenkette.
 
 
+\section*{Verifikation}
+
+Die SHA-256-Implementierung wird zunächst gegen den offiziellen Testvektor geprüft
+(\texttt{reference.c}, Selbsttest beim Start):
+
+\begin{lstlisting}[caption={Selbsttest gegen den bekannten SHA-256-Testvektor}]
+SHA256("abc") = BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD
+expected      = BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD   [OK]
+\end{lstlisting}
+
+\noindent Anschließend wird jeder Block-Hash mit einer dritten, völlig unabhängigen
+Implementierung -- Pythons \texttt{hashlib} -- nachgerechnet, z.\,B. für Block~1:
+
+\begin{lstlisting}[language=Python, caption={Unabhängige Kontrolle mit Python \texttt{hashlib} (Block 1)}]
+$ python3 -c "import hashlib; \
+  iv='0'*64; \
+  tx='(1)426B8(2)D92AB98BB95D0DA30A4C9B38CBEC5F2642AA73F9(3)1781470311' \
+     '(4)35318264C9A98FAF79965C270AC80C5606774DF1(5)42(6)112(7)'; \
+  nonce='(8)591b5f1056840691000000bc249430e6'; \
+  print(hashlib.sha256((iv+tx+nonce).encode()).hexdigest())"
+0000000000161f40beaf0b2600ee1dd39e7b34f995702ad26f88e75a6053de94
+\end{lstlisting}
+
+\noindent Alle drei Implementierungen (CUDA, C, Python) und CrypTool2 liefern für jeden Block
+denselben Hash; die zehn führenden Null-Nibbles sind reproduzierbar bestätigt.
+
+
 \section*{Nachbau in CrypTool2}
 
 Der Workspace \texttt{Blockchain.cwm} bildet die Kette je Block mit
@@ -171,6 +234,16 @@ $\rightarrow$ \texttt{Text Output} nach:
           Nullen.
     \item Der Output-Hash von Block~$n$ ist die IV-Eingabe von Block~$n{+}1$ (Kette).
 \end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{Blockchain}
+    \caption{CrypTool2-Workspace (\texttt{Blockchain.cwm}): die drei verketteten Blöcke. Jeder
+             \texttt{Texteingabe}-Strang (IV, TX, Nonce) wird per \texttt{Konkatenation} zusammengeführt
+             und in \texttt{SHA-256} gehasht. Die \texttt{Textausgabe} jedes Blocks zeigt den Hash mit
+             zehn führenden Null-Nibbles (\texttt{00 00 00 00 00 \dots}) und dient zugleich als
+             IV-Eingabe des nächsten Blocks -- die Verkettung ist damit sichtbar erfüllt.}
+\end{figure}
 
 
 \section*{Bewertung}
