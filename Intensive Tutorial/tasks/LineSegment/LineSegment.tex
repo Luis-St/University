@@ -1,0 +1,154 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../for_latex/preamble}
+\title{\Huge\textbf{Strecke}}
+\author{Luis Staudt}
+\date{}
+
+% Code-Highlighting für Java
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{keywordcolor}{rgb}{0.8,0.47,0.13}
+
+\lstdefinestyle{java}{
+	language=,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\bfseries\color{blue!70!black},
+	stringstyle=\color{red!60!black},
+	commentstyle=\itshape\color{gray},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	numbersep=8pt,
+	frame=single,
+	framerule=0.4pt,
+	rulecolor=\color{gray!50},
+	breaklines=true,
+	showstringspaces=false,
+	tabsize=4,
+	xleftmargin=1.5em,
+	framexleftmargin=1.5em,
+	aboveskip=0.8em,
+	belowskip=0.6em
+}
+\lstset{style=java}
+
+\newtcolorbox{hinweis}[1][Hinweis]{
+	colback=blue!5,
+	colframe=blue!40!black,
+	fonttitle=\bfseries,
+	title=#1,
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\newtcolorbox{beispiel}[1][Beispiel]{
+	colback=green!5,
+	colframe=green!40!black,
+	fonttitle=\bfseries,
+	title=#1,
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Intensivtutorium}\\[0.3em]
+	{\large Programmierung}\\[0.6em]
+	\begin{tabular}{r l @{\hspace{2cm}} r l}
+		\textbf{Semester:}      & Sommersemester 2026                    & \textbf{Tutor:}         & Luis Staudt \\
+		\textbf{Studiengänge:}  & MIB, OMB, PEB, MVB         & & \\
+	\end{tabular}\\[0.6em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{1em}
+
+% --- Seitenkopf und -fuß (ab Seite 2) ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Intensivtutorium -- Grundlagen der Programmierung}
+\rhead{\small SS 2026}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+
+% =============================================
+% Aufgabe 3 -- Klasse Strecke
+% =============================================
+
+\section*{Aufgabe 3: Klasse \texttt{Strecke} \hfill (20 Punkte)}
+
+Gegeben ist die aus Vorlesung und Übung bekannte Klasse \texttt{Punkt} (Attribute \texttt{xKoordinate}, \texttt{yKoordinate} als \texttt{double}, Methode \texttt{berechneAbstandZuPunkt(Punkt p)}).
+
+Implementieren Sie eine Klasse \texttt{Strecke}, die eine gerade Verbindung zwischen zwei Punkten in der Ebene beschreibt.
+Eine \texttt{Strecke} wird über ihre beiden Endpunkte (jeweils ein \texttt{Punkt}) erzeugt.
+
+\begin{center}
+	\begin{tikzpicture}[>=Stealth, scale=1]
+		% Achsen
+		\draw[->, line width=0.5pt, gray!60] (-0.4,0) -- (5.2,0) node[right, black] {\small $x$};
+		\draw[->, line width=0.5pt, gray!60] (0,-0.4) -- (0,3.6) node[above, black] {\small $y$};
+
+		% Punkte
+		\coordinate (B) at (1,3);
+		\coordinate (A) at (4,1);
+
+		% Strecke
+		\draw[line width=1.1pt, blue!60!black] (B) -- (A);
+
+		% Punkt B (links)
+		\fill[blue!60!black] (B) circle (2.4pt);
+		\node[above] at (B) {\small $(1\,|\,3)$};
+
+		% Punkt A (rechts)
+		\fill[blue!60!black] (A) circle (2.4pt);
+		\node[above right] at (A) {\small $(4\,|\,1)$};
+
+		% Anfang/Ende Beschriftung
+		\node[below left, blue!60!black] at (B) {\footnotesize Anfang};
+		\node[below right, blue!60!black] at (A) {\footnotesize Ende};
+	\end{tikzpicture}
+\end{center}
+
+Die Klasse \texttt{Strecke} soll Folgendes leisten:
+
+\begin{enumerate}[label=\textbf{\arabic*.)}]
+	\item Eine \texttt{Strecke} wird aus zwei \texttt{Punkt}-Objekten erzeugt.
+		Dabei soll sie ihre Endpunkte \textbf{stets von links nach rechts} verwalten: Der Endpunkt mit der \textbf{kleineren x-Koordinate} ist der Anfang der Strecke, der andere das Ende.
+		Bei gleicher x-Koordinate bleibt die übergebene Reihenfolge erhalten.
+
+	\item Sie kann ihre \textbf{Länge} zurückgeben.
+
+	\item Sie kann ihre \textbf{Steigung} zurückgeben:
+		\[
+			m = \frac{y_{ende} - y_{anfang}}{x_{ende} - x_{anfang}}
+		\]
+\end{enumerate}
+
+\begin{beispiel}
+\begin{lstlisting}
+Punkt a = new Punkt();  a.xKoordinate = 4;  a.yKoordinate = 1;
+Punkt b = new Punkt();  b.xKoordinate = 1;  b.yKoordinate = 3;
+
+Strecke s = new Strecke(a, b);              // b liegt links -> Anfang = b
+System.out.println(s.anfang.xKoordinate);   // 1.0
+System.out.println("Laenge:   " + s.berechneLaenge());    // 3.6055...
+System.out.println("Steigung: " + s.berechneSteigung());  // -0.6667
+\end{lstlisting}
+\end{beispiel}
+
+\end{document}
