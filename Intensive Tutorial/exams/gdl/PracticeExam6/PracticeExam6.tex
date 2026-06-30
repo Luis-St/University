@@ -1,0 +1,263 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	parskip=half,
+	openany
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../../for_latex/preamble}
+\input{../../../for_latex/exam_setup}
+
+\title{Probeklausur 6}
+\author{Luis Staudt}
+\date{}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Probeklausur 6}\\[0.3em]
+	{\large Grundlagen der Programmierung}\\[0.7em]
+	\begin{tabular}{r l @{\hspace{1.4cm}} r l}
+		\textbf{Studiengänge:}    & MIB \& OMB            & \textbf{Autor:}        & Luis Staudt \\
+		\textbf{Semester:}        & Sommersemester 2026 \\
+		\textbf{Bearbeitungszeit:}& 90 Minuten            & \textbf{Gesamtpunkte:} & 90 \\
+	\end{tabular}\\[0.7em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{0.5em}
+
+\noindent\textbf{Hinweis:} Diese Probeklausur ist bewusst anspruchsvoll
+gestaltet. Achten Sie besonders auf Schleifengrenzen, Reihenfolge von
+Anweisungen und die korrekte Behandlung von Randfällen.
+
+\vfill
+% --- Bewertungstabelle ---
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{|l|c|c|c|c|c|}
+	\hline
+	\textbf{Aufgabe}          & 1  & 2  & 3  & 4  & \textbf{Gesamt} \\ \hline
+	\textbf{Punkte}           & 25 & 20 & 20 & 25 & 90              \\ \hline
+	\textbf{Erreichte Punkte} &    &    &    &    &                 \\ \hline
+\end{tabular}
+\end{center}
+\vfill
+
+% --- Seitenkopf und -fuß ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Probeklausur 6, Grundlagen der Programmierung}
+\rhead{\small SoSe 2026}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 1: Bildverarbeitung -- drei Schritte kombiniert \hfill (25 Punkte)}
+
+Ein Bitmap werde in einem zweidimensionalen \texttt{int}-Array \texttt{p} gespeichert. Jede Farbe wird durch eine Zahl vom Typ \texttt{int} dargestellt. Die Variable \texttt{p[x][y]} steht für die Farbe des Bildes an der Koordinate $(x,y)$. Der Ursprung des Koordinatensystems liegt links oben, somit enthält \texttt{p[0][0]} die Farbe des Pixels in der linken oberen Ecke.
+
+\begin{center}
+\begin{tikzpicture}[font=\scriptsize]
+	\foreach \xi in {0,...,5}
+		\foreach \yi in {0,...,4}
+			\node[draw, minimum width=1.25cm, minimum height=0.7cm]
+			at (1.3*\xi, -0.75*\yi) {p[\xi][\yi]};
+\end{tikzpicture}
+\end{center}
+
+Die Breite des Bildes ist \texttt{p.length}, die Höhe ist \texttt{p[0].length}. Damit liegt $x$ im Bereich $0$ bis \texttt{p.length-1} und $y$ im Bereich $0$ bis \texttt{p[0].length-1}. Der Wert $0$ steht für die Farbe schwarz.
+
+Schreiben Sie \textbf{eine} Klassenmethode \texttt{f} mit Parameter \texttt{p} (zweidimensionaler \texttt{int}-Array) und ohne Rückgabewert. Die Methode soll \textbf{nacheinander} die folgenden drei Schritte ausführen:
+
+\begin{enumerate}[label=\textbf{\alph*)}]
+	\item \textbf{Kreisförmigen Ausschnitt kopieren.} Der Ausschnitt hat den Mittelpunkt $(90,230)$ und den Radius $45$. Jedes Pixel dieses Ausschnitts soll an eine Position kopiert werden, die $165$ Pixel weiter \textbf{rechts} liegt (Zielmittelpunkt also $(255,230)$). Es darf angenommen werden, dass Ausschnitt und Zielbereich vollständig im Bild liegen und sich nicht überlappen.
+	\item \textbf{Eine Form zeichnen (Kreislinie).} Zeichnen Sie um den Mittelpunkt $(171,95)$ eine schwarze Kreislinie mit innerem Radius $38$ und äußerem Radius $55$. Alle Pixel, deren Abstand zum Mittelpunkt \textbf{zwischen $38$ und $55$} liegt (jeweils einschließlich), sollen auf $0$ gesetzt werden.
+	\item \textbf{Rahmen schwarz färben.} Färben Sie zum Schluss alle Pixel schwarz, deren Abstand zum Bildrand \textbf{kleiner als $18$} Pixel ist (Rahmen der Dicke $18$).
+\end{enumerate}
+
+Die Reihenfolge ist verbindlich: erst a), dann b), dann c).
+
+\begin{center}
+\begin{tabular}{cc}
+	\includegraphics[width=0.34\textwidth]{../images/MyPicture.jpg} &
+	\includegraphics[width=0.34\textwidth]{../images/exam6_result.png} \\[0.3em]
+	{\small\itshape Originalbild} & {\small\itshape Zielbild nach Aufruf von \texttt{f(p)}} \\
+\end{tabular}
+\end{center}
+
+\begin{hinweis}[Hinweis]
+	Verwenden Sie das Abstandsquadrat ($(x-m_x)^2+(y-m_y)^2$) statt einer Wurzel. Für den Ring brauchen Sie \emph{zwei} Bedingungen, für den Rahmen die Oder-Verknüpfung der vier Randbereiche.
+\end{hinweis}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 2: Syntaxfehler -- Klassen Geometrie, Rechteck und Programm \hfill (20 Punkte)}
+
+Der Programmcode der drei Klassen \texttt{Geometrie}, \texttt{Rechteck} und \texttt{Programm} enthält mehrere \textbf{verschiedene} syntaktische Fehler. Geben Sie zu jedem Fehler die Zeilennummer der Zeile an, in der sich der Fehler befindet, und beschreiben Sie jeweils den Fehler.
+
+\begin{lstlisting}
+public class Geometrie {
+
+    public double radius;
+
+    public static double flaeche(double r) {
+        return 3.14159 * r * r
+    }
+
+    public static double umfang(double r) {
+        return 2 * 3.14159 * r;
+    }
+
+    public double durchmesser() {
+        return 2 * radius;
+    }
+
+    public static boolean istGross(double r) {
+        if (r > 100)
+            return true;
+    }
+}
+
+public class Rechteck {
+
+    public int breite;
+    public int hoehe;
+
+    public static int flaeche(int b, int h) {
+        return b * h;
+    }
+
+    public static int skaliere(int wert, int faktor) {
+        int ergebnis = wert * faktor;
+    }
+
+    public boolean istQuadrat(int b, int h) {
+        return b - h;
+    }
+}
+
+public class Programm {
+
+    public static void zeige(String text) {
+        System.out.println(text);
+    }
+
+    public static void main(String[] args) {
+        double a = Geometrie.flaeche(5.0);
+        zeige(a);
+        double u = Geometrie.umfang();
+        int f = Rechteck.flaeche(4, 6);
+        boolean q = istQuadrat(4, 4);
+        System.out.println(Geometrie.radius);
+        int s = Rechteck.skaliere(3, 2, 1);
+    }
+}
+\end{lstlisting}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|p{1.6cm}|p{10.5cm}|}
+	\hline
+	\textbf{Zeile} & \textbf{Fehler} \\ \hline
+	& \\[1.4cm] \hline
+	& \\[1.4cm] \hline
+	& \\[1.4cm] \hline
+	& \\[1.4cm] \hline
+	& \\[1.4cm] \hline
+	& \\[1.4cm] \hline
+	& \\[1.4cm] \hline
+	& \\[1.4cm] \hline
+	& \\[1.4cm] \hline
+\end{tabular}
+\end{center}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 3: Programmausgabe -- Rekursion und Schleifen \hfill (20 Punkte)}
+
+Zu welcher Ausgabe kommt es, wenn man die Methode \texttt{main} der Klasse \texttt{X} ausführt?
+
+\begin{lstlisting}
+public class X {
+
+    public static void zeichne(int n) {
+        if (n <= 0) {
+            System.out.print(".");
+            return;
+        }
+        System.out.print(n);
+        zeichne(n - 1);
+        System.out.print(n);
+    }
+
+    public static void tabelle(int zeilen) {
+        int i = 1;
+        while (i <= zeilen) {
+            int summe = 0;
+            for (int j = 1; j <= i; j++) {
+                summe = summe + j;
+            }
+            System.out.println(i + ":" + summe);
+            i = i * 2;
+        }
+    }
+
+    public static void main(String[] args) {
+        for (int k = 2; k >= 0; k--) {
+            zeichne(k);
+            System.out.println();
+        }
+        tabelle(5);
+        int n = 16;
+        while (n > 1) {
+            System.out.print(n + " ");
+            n = n / 2;
+        }
+        System.out.println();
+    }
+}
+\end{lstlisting}
+
+\begin{hinweis}[Hinweis]
+	\texttt{System.out.print} erzeugt keinen, \texttt{System.out.println} erzeugt einen Zeilenumbruch.
+\end{hinweis}
+
+\begin{hinweis}[Empfehlung]
+	Die Methode \texttt{zeichne} gibt \emph{vor} und \emph{nach} dem rekursiven Aufruf jeweils eine Zahl aus. In \texttt{tabelle} wird \texttt{i} nach jeder Zeile \emph{verdoppelt}, in der \texttt{while}-Schleife von \texttt{main} wird \texttt{n} jeweils \emph{halbiert}.
+\end{hinweis}
+
+% =============================================
+\clearpage
+\section*{Aufgabe 4: Methode implementieren -- zwei sortierte Arrays mischen \hfill (25 Punkte)}
+
+Schreiben Sie eine statische Methode \texttt{mische} mit zwei Parametern \texttt{a} und \texttt{b} vom Typ \texttt{int[]} und einem Rückgabewert vom Typ \texttt{int[]}.
+
+Beide Eingabe-Arrays sind bereits \textbf{aufsteigend sortiert}. Die Methode soll ein \textbf{neues} Array zurückgeben, das alle Elemente aus \texttt{a} und \texttt{b} enthält und ebenfalls \textbf{aufsteigend sortiert} ist (der Mischschritt von \emph{Merge-Sort}). Gleiche Werte dürfen mehrfach vorkommen und bleiben erhalten.
+
+Die Methode soll effizient in \textbf{einem Durchlauf} mit zwei Laufindizes arbeiten -- also \emph{nicht} erst beide Arrays zusammenkopieren und dann sortieren.
+
+\begin{hinweis}[Hinweise]
+	\texttt{a.length} liefert die Länge des Arrays \texttt{a}; mit \texttt{new int[n]} legt man ein neues \texttt{int}-Array der Länge \texttt{n} an.
+\end{hinweis}
+
+\begin{beispiel}[Beispiele]
+\begin{center}
+\begin{tabular}{l l l}
+	\toprule
+	\textbf{a} & \textbf{b} & \textbf{mische(a, b)} \\
+	\midrule
+	\lstinline!{1,4,7}! & \lstinline!{2,3,9}! & \lstinline!{1,2,3,4,7,9}! \\
+	\lstinline!{}!      & \lstinline!{5}!     & \lstinline!{5}! \\
+	\lstinline!{2,2}!   & \lstinline!{1,2}!   & \lstinline!{1,2,2,2}! \\
+	\lstinline!{1,2,3}! & \lstinline!{}!      & \lstinline!{1,2,3}! \\
+	\bottomrule
+\end{tabular}
+\end{center}
+\end{beispiel}
+
+\end{document}
