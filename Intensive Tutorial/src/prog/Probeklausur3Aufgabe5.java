@@ -1,6 +1,7 @@
 package prog;
 
-import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Probeklausur3Aufgabe5 {
 	

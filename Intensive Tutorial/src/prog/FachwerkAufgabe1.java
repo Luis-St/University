@@ -46,6 +46,5 @@ public class FachwerkAufgabe1 {
 		
 		System.out.println(nr + ": " + max + "m");
 		
-		
 	}
 }

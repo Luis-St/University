@@ -25,6 +25,29 @@ public class Rechteck {
 		breite = b;
 	}
 	
+	// Dient zum testen, nicht relevant für die Klausur
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		
+		System.out.println("Gib die Rechteck breite ein: ");
+		double b = scanner.nextDouble();
+		System.out.println("Gib die Rechteck höhe ein: ");
+		double h = scanner.nextDouble();
+		
+		Rechteck rechteck1 = new Rechteck(b, h);
+		
+		double flaecheR1 = rechteck1.berechneFlaeche();
+		System.out.println(flaecheR1);
+		
+		double umfangR1 = rechteck1.berechneUmfang();
+		System.out.println(umfangR1);
+		
+		boolean groesser = rechteck1.istGroesserAls(new Rechteck(20.0, 20.0));
+		System.out.println(groesser);
+		
+		scanner.close();
+	}
+	
 	// c)
 	public double berechneFlaeche() {
 		double flaeche = hoehe * breite;
@@ -58,29 +81,6 @@ public class Rechteck {
 		
 		// Möglichkeit 3:
 		// return eigeneFlaeche > andereFlaeche;
-	}
-	
-	// Dient zum testen, nicht relevant für die Klausur
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		
-		System.out.println("Gib die Rechteck breite ein: ");
-		double b = scanner.nextDouble();
-		System.out.println("Gib die Rechteck höhe ein: ");
-		double h = scanner.nextDouble();
-		
-		Rechteck rechteck1 = new Rechteck(b, h);
-		
-		double flaecheR1 = rechteck1.berechneFlaeche();
-		System.out.println(flaecheR1);
-		
-		double umfangR1 = rechteck1.berechneUmfang();
-		System.out.println(umfangR1);
-		
-		boolean groesser = rechteck1.istGroesserAls(new Rechteck(20.0, 20.0));
-		System.out.println(groesser);
-		
-		scanner.close();
 	}
 	
 }

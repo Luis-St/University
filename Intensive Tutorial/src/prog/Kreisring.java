@@ -33,28 +33,6 @@ public class Kreisring {
 		mittelpunkt = mp;
 	}
 	
-	// A = pi * r^2
-	// Math.PI ~ 3.14
-	// Agesamt = Ar2 - Ar1
-	// Mehthode ohne Parameter mit Rückgabe
-	public double berechneFlaeche() {
-		double aR2 = Math.PI * r2 * r2;
-		double aR1 = Math.PI * r1 * r1;
-		double aGesamt = aR2 - aR1;
-		
-		return aGesamt;
-	}
-	
-	// Zusatz (Methoden, nicht teil der Aufgabe)
-	
-	public void verschiebe(int xMitte, int yMitte) {
-		Punkt mp = new Punkt();
-		mp.xKoordinate = xMitte;
-		mp.yKoordinate = yMitte;
-		
-		mittelpunkt = mp;
-	}
-	
 	// Dient zum testen, nicht relevant für die Klausur
 	public static void main(String[] args) {
 		/* // Konstruktor 1, danach abgeändert (siehe unten)
@@ -73,5 +51,27 @@ public class Kreisring {
 		// Zusatz
 		kr.verschiebe(-3, -2);
 		System.out.println(kr.mittelpunkt);
+	}
+	
+	// Zusatz (Methoden, nicht teil der Aufgabe)
+	
+	// A = pi * r^2
+	// Math.PI ~ 3.14
+	// Agesamt = Ar2 - Ar1
+	// Mehthode ohne Parameter mit Rückgabe
+	public double berechneFlaeche() {
+		double aR2 = Math.PI * r2 * r2;
+		double aR1 = Math.PI * r1 * r1;
+		double aGesamt = aR2 - aR1;
+		
+		return aGesamt;
+	}
+	
+	public void verschiebe(int xMitte, int yMitte) {
+		Punkt mp = new Punkt();
+		mp.xKoordinate = xMitte;
+		mp.yKoordinate = yMitte;
+		
+		mittelpunkt = mp;
 	}
 }

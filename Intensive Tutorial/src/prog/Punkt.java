@@ -1,7 +1,7 @@
 package prog;
 
 public class Punkt {
-
+	
 	public int xKoordinate;
 	public int yKoordinate;
 	
