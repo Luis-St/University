@@ -1,0 +1,166 @@
+\documentclass[
+	fontsize=12pt,          % default font size 12pt
+	paper=a4,               % DIN A4 page format
+	numbers=noenddot,       % remove dots behind chapter numbers (e.g. 1.5 not 1.5.)
+	listof=totoc,           % add list of figures, tables, etc. to ToC
+	listof=entryprefix,     % add entry name to figures, tables, etc.
+	listof=nochaptergap,    % no chapter gap for figures, tables, etc.
+	bibliography=totoc,     % add bibliography to ToC but without a chapter number
+	parskip=half            % half line spacing between paragraphs
+	openany                 % chapters can start on any page
+]{scrbook}
+\usepackage{tcolorbox}
+
+\include{../../for_latex/preamble}
+\title{\Huge\textbf{Stabkräfte im Fachwerk}}
+\author{Luis Staudt}
+\date{}
+
+% Code-Highlighting für Java
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{keywordcolor}{rgb}{0.8,0.47,0.13}
+
+\lstdefinestyle{java}{
+	language=,
+	basicstyle=\ttfamily\small,
+	keywordstyle=\bfseries\color{blue!70!black},
+	stringstyle=\color{red!60!black},
+	commentstyle=\itshape\color{gray},
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	numbersep=8pt,
+	frame=single,
+	framerule=0.4pt,
+	rulecolor=\color{gray!50},
+	breaklines=true,
+	showstringspaces=false,
+	tabsize=4,
+	xleftmargin=1.5em,
+	framexleftmargin=1.5em,
+	aboveskip=0.8em,
+	belowskip=0.6em
+}
+\lstset{style=java}
+
+\newtcolorbox{hinweis}[1][Hinweis]{
+	colback=blue!5,
+	colframe=blue!40!black,
+	fonttitle=\bfseries,
+	title=#1,
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\newtcolorbox{beispiel}[1][Beispiel]{
+	colback=green!5,
+	colframe=green!40!black,
+	fonttitle=\bfseries,
+	title=#1,
+	boxrule=0.5pt,
+	arc=2pt
+}
+
+\begin{document}
+
+% --- Titelblock ---
+\begin{center}
+	\rule{\textwidth}{0.8pt}\\[0.6em]
+	{\LARGE\bfseries Intensivtutorium}\\[0.3em]
+	{\large Programmierung}\\[0.6em]
+	\begin{tabular}{r l @{\hspace{2cm}} r l}
+		\textbf{Semester:}      & Sommersemester 2026                    & \textbf{Tutor:}         & Luis Staudt \\
+		\textbf{Studiengänge:}  & MIB, OMB, PEB, MVB         & & \\
+	\end{tabular}\\[0.6em]
+	\rule{\textwidth}{0.8pt}
+\end{center}
+\vspace{1em}
+
+% --- Seitenkopf und -fuß (ab Seite 2) ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Intensivtutorium -- Grundlagen der Programmierung}
+\rhead{\small SS 2026}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+
+% =============================================
+% Übungsaufgabe -- Stabkräfte im Fachwerk
+% =============================================
+
+\section*{Übungsaufgabe -- Stabkräfte im Fachwerk}
+
+Gegeben ist die aus Vorlesung und Übung bekannte Datei \texttt{fachwerk.jar}.
+Nach der Berechnung sollen für ein gewähltes Fachwerk die \textbf{Stabkräfte} ausgewertet werden.
+
+Ein Stab steht unter \textbf{Zug}, wenn seine Stabkraft $> 0$ ist, und unter \textbf{Druck}, wenn sie $< 0$ ist.
+Ist die Stabkraft (im Rahmen einer Epsilon-Umgebung) praktisch null, handelt es sich um einen \textbf{Nullstab}.
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth, scale=1.0,
+	knoten/.style={circle, fill=black, inner sep=1.6pt},
+	stab/.style={thick, gray!70!black}]
+	\coordinate (A) at (0,0); \coordinate (B) at (2.5,0); \coordinate (C) at (5,0);
+	\coordinate (D) at (1.25,2.0); \coordinate (E) at (3.75,2.0);
+	\draw[stab] (A)--(B); \draw[stab] (B)--(C);
+	\draw[stab] (A)--(D); \draw[stab] (D)--(B); \draw[stab] (D)--(E);
+	\draw[stab] (E)--(B); \draw[stab] (E)--(C);
+	\foreach \p in {A,B,C,D,E} \node[knoten] at (\p) {};
+	\draw[->, thick] (B)--++(0,-0.9);
+	\node[below, font=\footnotesize] at ($(B)+(0,-0.9)$) {Last};
+\end{tikzpicture}\\[-0.3em]
+{\footnotesize\itshape Schematische Darstellung eines Fachwerks.}
+\end{center}
+
+\begin{hinweis}[Physikalischer Hintergrund]
+	Ein Zugstab wird auseinandergezogen (positive Stabkraft), ein Druckstab wird gestaucht (negative Stabkraft).
+	Nullstäbe tragen im belasteten Zustand keine Kraft; sie sind konstruktiv aber wichtig, weil sie das Fachwerk aussteifen und ein Ausknicken verhindern.
+	Der betragsmäßig am stärksten beanspruchte Stab bestimmt die Dimensionierung des Bauteils.
+\end{hinweis}
+
+\subsection*{Aufgabe}
+
+Ergänzen Sie das Programm so, dass nach der Berechnung folgende Auswertungen erfolgen:
+
+\begin{enumerate}[label=\textbf{\arabic*.)}]
+	\item Zählen Sie, wie viele Stäbe \textbf{Zugstäbe}, \textbf{Druckstäbe} bzw.\ \textbf{Nullstäbe} sind, und geben Sie die drei Anzahlen aus.
+
+	\item Bestimmen Sie den \textbf{am stärksten beanspruchten Stab}, also den Stab mit dem betragsmäßig größten Stabkraftwert.
+	Geben Sie dessen Nummer, seine beiden Knotennummern sowie den Stabkraftwert aus.
+\end{enumerate}
+
+\begin{hinweis}[Epsilon-Umgebung beachten]
+	Wegen Gleitkomma-Rundung ist \glqq null\grqq{} über eine Epsilon-Umgebung zu prüfen: $|F| < \varepsilon$.
+	Benötigte Methoden: \texttt{gibAnzahlStaebe()}, \texttt{gibStab(int i)}, \texttt{gibStabkraft()},\\ \texttt{gibKnotenNrA()}, \texttt{gibKnotenNrE()}.
+	Der Betrag lässt sich mit \texttt{Math.abs(\dots)} bilden.
+\end{hinweis}
+
+\medskip
+Vervollständige das folgende Programmgerüst:
+
+\begin{lstlisting}
+public class TrussBarForces {
+    public static void main(String[] args) {
+        System.out.println("Welches Fachwerk wollen Sie rechnen (0-4)?");
+        int wahl = Tastatureingabe.leseInt();
+        Fachwerk fw = new Fachwerk(wahl);
+        fw.berechneGroessen();
+        double epsilon = 1e-6;
+        // hier erweitern: Zug-/Druck-/Nullstaebe zaehlen sowie
+        // den am staerksten beanspruchten Stab bestimmen
+    }
+}
+\end{lstlisting}
+
+\begin{beispiel}[Mögliche Ausgabe (Fachwerk~2)]
+\begin{lstlisting}[language={}]
+Zugstaebe:   18
+Druckstaebe: 17
+Nullstaebe:  2
+Am staerksten beansprucht: Stab 5 (Knoten 5 -> 6) mit -120.5985074534
+\end{lstlisting}
+\end{beispiel}
+
+\end{document}
