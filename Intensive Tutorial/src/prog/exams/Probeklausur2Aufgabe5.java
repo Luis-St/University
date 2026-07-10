@@ -1,4 +1,4 @@
-package prog;
+package prog.exams;
 
 import java.io.FileWriter;
 

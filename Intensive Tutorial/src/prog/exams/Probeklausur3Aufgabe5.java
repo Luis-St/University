@@ -1,4 +1,4 @@
-package prog;
+package prog.exams;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -33,9 +33,9 @@ public class Probeklausur3Aufgabe5 {
 				double uGerundet = Math.round(u * 1000.0) / 1000.0;
 				
 				if (u < 0.37 * u0) {
-					fw.write("" + t + "\t\t" + uGerundet + "\t\t*\n");
+					fw.write(t + "\t\t" + uGerundet + "\t\t*\n");
 				} else {
-					fw.write("" + t + "\t\t" + uGerundet + "\n");
+					fw.write(t + "\t\t" + uGerundet + "\n");
 				}
 				
 			}
