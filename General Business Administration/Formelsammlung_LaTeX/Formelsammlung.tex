@@ -1,36 +1,59 @@
 \documentclass[
-	fontsize=12pt,
+	fontsize=11pt,
 	paper=a4,
-	numbers=noenddot,
-	parskip=half-,
-	openany
-]{scrbook}
-
-\input{./for_latex/preamble}
+	parskip=false
+]{scrartcl}
 
 % ##################################################
-% FORMELSAMMLUNG: \raggedbottom, damit einzelne (kurze) Abschnitte, die per
-% \pagebreak allein auf einer Seite stehen, nicht künstlich bis zum unteren
-% Rand gestreckt werden.
+% ENCODING & FONT
 % ##################################################
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{ngerman}
+\renewcommand{\familydefault}{\sfdefault}
+
 \usepackage{amssymb}
-\raggedbottom
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{array}
 
-\RedeclareSectionCommand[beforeskip=14pt, afterskip=14pt]{chapter}
+\pagestyle{empty}
 
-\setlength{\abovedisplayskip}{8pt plus 2pt minus 2pt}
-\setlength{\belowdisplayskip}{8pt plus 2pt minus 2pt}
-\setlength{\abovedisplayshortskip}{4pt plus 2pt}
-\setlength{\belowdisplayshortskip}{4pt plus 2pt}
+% ##################################################
+% PAGE FORMATTING -- so eng wie vernünftig druckbar
+% ##################################################
+\usepackage[
+	margin=1cm,
+	top=0.8cm,
+	bottom=0.8cm
+]{geometry}
 
-\renewcommand{\arraystretch}{1.15}
+% ##################################################
+% SPACING -- alles auf Minimum
+% ##################################################
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1pt}
+\setlength{\abovedisplayskip}{2pt plus 1pt minus 1pt}
+\setlength{\belowdisplayskip}{2pt plus 1pt minus 1pt}
+\setlength{\abovedisplayshortskip}{1pt}
+\setlength{\belowdisplayshortskip}{1pt}
+\setlength{\jot}{1pt}
+\renewcommand{\arraystretch}{0.95}
+\setlength{\tabcolsep}{2.5pt}
 
-% Zwischenüberschrift mit moderatem, festem Abstand davor
-\newcommand{\formheading}[1]{\par\vspace{14pt}\noindent\textbf{#1}\par\vspace{1.5pt plus 0.5pt minus 0.5pt}}
+% Kapitelüberschrift -- eine Ebene über formheading, mit Trennlinie
+\newcommand{\sectiontitle}[1]{%
+	\par\vspace{5pt}\noindent{\normalsize\textbf{#1}}\par
+	\vspace{-2pt}\noindent\hrulefill\par\vspace{1pt}%
+}
 
-% Symbol-Legende -- feste, nicht auf die volle Breite gestreckte Spaltenbreite
-\newenvironment{symtable}[1][4.4cm]{%
-	\smallskip
+% Zwischenüberschrift -- minimaler, fester Abstand davor
+\newcommand{\formheading}[1]{\par\vspace{4pt}\noindent\textbf{\small #1}\par\vspace{0.5pt}}
+
+% Symbol-Legende -- kompakt, kleine Schrift
+\newenvironment{symtable}[1][3.6cm]{%
+	\small
 	\begin{tabular}{@{}lp{#1}@{}}
 	\toprule
 	\textbf{Symbol} & \textbf{Bedeutung} \\
@@ -38,53 +61,22 @@
 }{%
 	\bottomrule
 	\end{tabular}
-	\smallskip
 }
 
 \begin{document}
+\small
 
-\begin{titlepage}
-	\pagestyle{empty}
+\begin{center}
+\Large\textbf{Allgemeine BWL --- Formelsammlung}
+\end{center}
+\vspace{-2pt}
 
-	\begin{flushright}
-		\begin{figure}[ht]
-			\flushright
-			\includegraphics[height=2cm]{./for_latex/hfu}
-		\end{figure}
-	\end{flushright}
-
-	\begin{center}
-		\vspace{3cm}
-
-		{\fontsize{22}{22} \selectfont \textbf{Allgemeine BWL}}\\[5mm]
-		{\fontsize{18}{18} \selectfont Formelsammlung}
-	\end{center}
-\end{titlepage}
-
-{\let\cleardoublepage\relax\let\clearpage\relax \chapter{Einführung und Überblick (Kenngrößen)}}
 \input{./chapters/kapitel1_einfuehrung}
-\pagebreak
-
-{\let\cleardoublepage\relax\let\clearpage\relax \chapter{Gründung von Unternehmen}}
 \input{./chapters/kapitel2_gruendung}
-
-{\let\cleardoublepage\relax\let\clearpage\relax \chapter{Entscheidungstheorie}}
 \input{./chapters/kapitel3_entscheidungstheorie}
-\pagebreak
-
-{\let\cleardoublepage\relax\let\clearpage\relax \chapter{Personal und Organisation}}
 \input{./chapters/kapitel4_personal}
-\pagebreak
-
-{\let\cleardoublepage\relax\let\clearpage\relax \chapter{Beschaffung}}
 \input{./chapters/kapitel5_beschaffung}
-\pagebreak
-
-{\let\cleardoublepage\relax\let\clearpage\relax \chapter{Produktionswirtschaft}}
 \input{./chapters/kapitel6_produktion}
-\pagebreak
-
-{\let\cleardoublepage\relax\let\clearpage\relax \chapter{Absatzwirtschaft}}
 \input{./chapters/kapitel7_absatz}
 
 \end{document}

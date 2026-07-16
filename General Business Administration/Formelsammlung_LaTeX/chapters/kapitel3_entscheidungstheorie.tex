@@ -1,14 +1,16 @@
+\sectiontitle{Entscheidungstheorie}
+
 \begin{center}
-\begin{tabular}{@{}lp{7.5cm}@{}}
+\begin{tabular}{@{}lp{9.5cm}@{}}
 	\toprule
 	\textbf{Regel} & \textbf{Formel} \\
 	\midrule
-	Bayes (Erwartungswert) & $\mu = \sum (p_i \cdot E_i)$ \\[5pt]
-	Maximin (Wald) & $\max_i(\min_j E_{ij})$ \\[5pt]
-	Maximax & $\max_i(\max_j E_{ij})$ \\[5pt]
-	Minimin (Schadensmatrix) & $\min_i(\min_j E_{ij})$ \\[5pt]
-	Hurwicz & $H = \lambda \cdot \max + (1-\lambda) \cdot \min$ \\[5pt]
-	Laplace & $\bar{E} = \frac{1}{n} \cdot \sum E_{ij}$ \\[5pt]
+	Bayes (Erwartungswert) & $\mu = \sum (p_i \cdot E_i)$ \\
+	Maximin (Wald) & $\max_i(\min_j E_{ij})$ \\
+	Maximax & $\max_i(\max_j E_{ij})$ \\
+	Minimin (Schadensmatrix) & $\min_i(\min_j E_{ij})$ \\
+	Hurwicz & $H = \lambda \cdot \max + (1-\lambda) \cdot \min$ \\
+	Laplace & $\bar{E} = \frac{1}{n} \cdot \sum E_{ij}$ \\
 	Savage-Niehans (Minimax-Regret) & $\text{Regret}_{ij} = \text{Spaltenmax}_j - E_{ij}$; wähle $\min_i(\max_j \text{Regret}_{ij})$ \\
 	\bottomrule
 \end{tabular}

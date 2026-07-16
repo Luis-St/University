@@ -1,68 +1,45 @@
-\formheading{ABC-Analyse}
-\[ \text{Anteil}_i = \frac{\text{Volumen}_i}{\text{Gesamtvolumen}} \cdot 100\,\% \]
-\[ \text{Volumen}_i = \text{Menge}_i \times \text{Preis}_i \]
+\pagebreak
+\sectiontitle{Beschaffung}
 
-\formheading{Scoring-Methode / Nutzwertanalyse}
-\[ \text{Gesamtnutzwert} = \sum (\text{Gewicht} \times \text{Bewertung}) \]
+\formheading{ABC-Analyse} \; $\text{Anteil}_i = \dfrac{\text{Volumen}_i}{\text{Gesamtvolumen}} \cdot 100\,\%$, \quad $\text{Volumen}_i = \text{Menge}_i \times \text{Preis}_i$
+
+\formheading{Scoring-Methode / Nutzwertanalyse} \; $\text{Gesamtnutzwert} = \sum (\text{Gewicht} \times \text{Bewertung})$
 
 \formheading{Kostenvergleichsrechnung (KVR)}
-\begin{center}
-\begin{minipage}[c]{0.46\textwidth}
+\begin{minipage}[c]{0.56\textwidth}
 \centering
-\[ K = B + \dfrac{A}{t} + \dfrac{A}{2} \cdot i \]
-(ohne Restwert)
-
-\[ K = B + \dfrac{A - R}{t} + i \cdot \dfrac{A + R}{2} \]
-(mit Restwert)
-
-\[ k = \dfrac{K}{x} \quad \text{(Stückkosten)} \]
+\[ K = B + \dfrac{A}{t} + \dfrac{A}{2} i \;\text{(o. Restwert)}, \quad K = B + \dfrac{A - R}{t} + i \dfrac{A + R}{2} \;\text{(m. Restwert)}, \quad k = \dfrac{K}{x} \]
 \end{minipage}%
 \hfill
-\begin{minipage}[c]{0.46\textwidth}
+\begin{minipage}[c]{0.38\textwidth}
 \centering
-\begin{symtable}
-	$B$ & Betriebskosten \\
-	$A$ & Anschaffungskosten \\
-	$t$ & Nutzungsdauer \\
-	$i$ & Kalkulationszins \\
-	$R$ & Restwert \\
-	$x$ & Mengenoutput \\
+\begin{symtable}[3cm]
+	$B,A,R$ & Betriebs-, Anschaffungskosten, Restwert \\
+	$t,i,x$ & Nutzungsdauer, Kalk.-zins, Mengenoutput \\
 \end{symtable}
 \end{minipage}
-\end{center}
-\pagebreak
 
 \formheading{Optimale Bestellmenge -- Andler-Formel (EOQ)}
-\begin{center}
-\begin{minipage}[c]{0.46\textwidth}
+\begin{minipage}[c]{0.56\textwidth}
 \centering
-\[ h = \alpha \cdot c \]
-\[ K_{\mathrm{L}} = \dfrac{q}{2} \cdot h \qquad K_{\mathrm{B}} = \dfrac{r}{q} \cdot s \]
-\[ K_{\mathrm{ges}} = \dfrac{q}{2} \cdot h + \dfrac{r}{q} \cdot s \]
-
-Optimum (Lagerkosten = Bestellkosten):
-\[ q^{*} = \sqrt{\dfrac{2 \cdot r \cdot s}{h}} \]
-\[ T = \dfrac{q}{r} \qquad T^{*} = \dfrac{q^{*}}{r} \quad \text{(Reichweite)} \]
-\[ \text{Bestellmengenwert} = c \cdot q^{*} \]
-\[ \text{Jahresumsatz } U = c \cdot r \]
+\[ h = \alpha c, \quad K_{\mathrm{L}} = \dfrac{q}{2} h, \quad K_{\mathrm{B}} = \dfrac{r}{q} s, \quad K_{\mathrm{ges}} = \dfrac{q}{2} h + \dfrac{r}{q} s \]
+\[ q^{*} = \sqrt{\dfrac{2 r s}{h}} \;\text{(Optimum)}, \quad T = \dfrac{q}{r},\ T^{*} = \dfrac{q^{*}}{r} \;\text{(Reichw.)}, \quad U = c \cdot r \]
 \end{minipage}%
 \hfill
-\begin{minipage}[c]{0.46\textwidth}
+\begin{minipage}[c]{0.38\textwidth}
 \centering
-\begin{symtable}
-	$r$ & Bedarf [ME/Jahr] \\
-	$h$ & spez. Lagerkosten [EUR/(ME$\cdot$Jahr)], $h = \alpha \cdot c$ \\
-	$s$ & spez. Bestellkosten [EUR/Bestellung] \\
-	$q,\ q^{*}$ & Bestellmenge, optimale Bestellmenge \\
-	$c$ & Einkaufspreis [EUR/ME] \\
-	$\alpha$ & Lagerzins [\%/Jahr] \\
+\begin{symtable}[3cm]
+	$r,c$ & Bedarf [ME/J], Einkaufspreis [EUR/ME] \\
+	$h,s$ & Lagerkosten $=\alpha c$, Bestellkosten \\
+	$q,q^{*},\alpha$ & (opt.) Bestellmenge, Lagerzins \\
 \end{symtable}
 \end{minipage}
-\end{center}
 
 \formheading{Lagerbestandsformeln}
-\[ \varnothing\,\text{Arbeitsbestand} = \dfrac{q}{2} \]
-\[ \varnothing\,\text{Gesamtbestand} = \varnothing\,\text{Arbeitsbestand} + \varnothing\,\text{Sicherheitsbestand} \]
-\[ \varnothing\,\text{Bestand (Prozess)} = \varnothing\,\text{Flussstärke} \cdot \Delta t \]
-\[ \text{Buchbestand} = \text{Inventurbestand} + \text{Zugänge} - \text{Abgänge} \]
-\[ \text{Verfügbarer Bestand} = \text{physischer Bestand} + \text{Bestellbestand} - \text{reservierter Bestand} \]
+\[ \begin{aligned}
+\varnothing\,\text{Arbeitsbestand} &= \frac{q}{2} \\
+\varnothing\,\text{Gesamtbestand} &= \varnothing\,\text{Arbeitsbestand} + \varnothing\,\text{Sicherheitsbestand} \\
+\varnothing\,\text{Bestand} &= \varnothing\,\text{Flussstärke} \cdot \Delta t \\
+\text{Buchbestand} &= \text{Inventurbestand} + \text{Zugänge} - \text{Abgänge} \\
+\text{Verfügb. Bestand} &= \text{phys. Bestand} + \text{Bestellbestand} - \text{reserv. Bestand}
+\end{aligned} \]
