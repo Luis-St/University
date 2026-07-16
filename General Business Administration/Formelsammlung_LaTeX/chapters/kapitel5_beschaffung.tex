@@ -1,0 +1,68 @@
+\formheading{ABC-Analyse}
+\[ \text{Anteil}_i = \frac{\text{Volumen}_i}{\text{Gesamtvolumen}} \cdot 100\,\% \]
+\[ \text{Volumen}_i = \text{Menge}_i \times \text{Preis}_i \]
+
+\formheading{Scoring-Methode / Nutzwertanalyse}
+\[ \text{Gesamtnutzwert} = \sum (\text{Gewicht} \times \text{Bewertung}) \]
+
+\formheading{Kostenvergleichsrechnung (KVR)}
+\begin{center}
+\begin{minipage}[c]{0.46\textwidth}
+\centering
+\[ K = B + \dfrac{A}{t} + \dfrac{A}{2} \cdot i \]
+(ohne Restwert)
+
+\[ K = B + \dfrac{A - R}{t} + i \cdot \dfrac{A + R}{2} \]
+(mit Restwert)
+
+\[ k = \dfrac{K}{x} \quad \text{(Stückkosten)} \]
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.46\textwidth}
+\centering
+\begin{symtable}
+	$B$ & Betriebskosten \\
+	$A$ & Anschaffungskosten \\
+	$t$ & Nutzungsdauer \\
+	$i$ & Kalkulationszins \\
+	$R$ & Restwert \\
+	$x$ & Mengenoutput \\
+\end{symtable}
+\end{minipage}
+\end{center}
+\pagebreak
+
+\formheading{Optimale Bestellmenge -- Andler-Formel (EOQ)}
+\begin{center}
+\begin{minipage}[c]{0.46\textwidth}
+\centering
+\[ h = \alpha \cdot c \]
+\[ K_{\mathrm{L}} = \dfrac{q}{2} \cdot h \qquad K_{\mathrm{B}} = \dfrac{r}{q} \cdot s \]
+\[ K_{\mathrm{ges}} = \dfrac{q}{2} \cdot h + \dfrac{r}{q} \cdot s \]
+
+Optimum (Lagerkosten = Bestellkosten):
+\[ q^{*} = \sqrt{\dfrac{2 \cdot r \cdot s}{h}} \]
+\[ T = \dfrac{q}{r} \qquad T^{*} = \dfrac{q^{*}}{r} \quad \text{(Reichweite)} \]
+\[ \text{Bestellmengenwert} = c \cdot q^{*} \]
+\[ \text{Jahresumsatz } U = c \cdot r \]
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.46\textwidth}
+\centering
+\begin{symtable}
+	$r$ & Bedarf [ME/Jahr] \\
+	$h$ & spez. Lagerkosten [EUR/(ME$\cdot$Jahr)], $h = \alpha \cdot c$ \\
+	$s$ & spez. Bestellkosten [EUR/Bestellung] \\
+	$q,\ q^{*}$ & Bestellmenge, optimale Bestellmenge \\
+	$c$ & Einkaufspreis [EUR/ME] \\
+	$\alpha$ & Lagerzins [\%/Jahr] \\
+\end{symtable}
+\end{minipage}
+\end{center}
+
+\formheading{Lagerbestandsformeln}
+\[ \varnothing\,\text{Arbeitsbestand} = \dfrac{q}{2} \]
+\[ \varnothing\,\text{Gesamtbestand} = \varnothing\,\text{Arbeitsbestand} + \varnothing\,\text{Sicherheitsbestand} \]
+\[ \varnothing\,\text{Bestand (Prozess)} = \varnothing\,\text{Flussstärke} \cdot \Delta t \]
+\[ \text{Buchbestand} = \text{Inventurbestand} + \text{Zugänge} - \text{Abgänge} \]
+\[ \text{Verfügbarer Bestand} = \text{physischer Bestand} + \text{Bestellbestand} - \text{reservierter Bestand} \]

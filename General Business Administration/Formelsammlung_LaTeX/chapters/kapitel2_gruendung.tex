@@ -1,0 +1,60 @@
+\formheading{Center-of-Gravity-Modell (CoG) -- gewichteter Schwerpunkt}
+\begin{center}
+\begin{minipage}[c]{0.46\textwidth}
+\centering
+\[ a^{*} = \frac{\sum_{i=1}^{n} (a_i \cdot w_i)}{\sum_{i=1}^{n} w_i} \]
+\[ b^{*} = \frac{\sum_{i=1}^{n} (b_i \cdot w_i)}{\sum_{i=1}^{n} w_i} \]
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.46\textwidth}
+\centering
+\begin{symtable}
+	$a_i,\ b_i$ & Koordinaten des Nachfragezentrums $i$ \\
+	$w_i$ & Gewicht von $i$ (Frachtmenge/Ladeeinheiten) \\
+	$n$ & Anzahl der Nachfragezentren \\
+	$a^{*},\ b^{*}$ & Koordinaten des gesuchten Standorts \\
+\end{symtable}
+\end{minipage}
+\end{center}
+
+\formheading{OHG-Gewinnverteilung}
+\begin{center}
+\begin{minipage}[c]{0.46\textwidth}
+\centering
+\[ V_i = 0{,}04 \cdot K_i \]
+\[ G_{\mathrm{Rest}} = G - \sum_{i=1}^{n} V_i \]
+\[ G_i = V_i + \dfrac{G_{\mathrm{Rest}}}{n} \]
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.46\textwidth}
+\centering
+\begin{symtable}
+	$G$ & Gesamtgewinn \\
+	$K_i$ & Kapitalanteil Gesellschafter $i$ \\
+	$V_i$ & Vorabverzinsung Gesellschafter $i$ \\
+	$n$ & Anzahl Gesellschafter \\
+	$G_i$ & Gewinnanteil Gesellschafter $i$ \\
+\end{symtable}
+\end{minipage}
+\end{center}
+\pagebreak
+
+\formheading{KG-Gewinnverteilung}
+\begin{center}
+\begin{minipage}[c]{0.46\textwidth}
+\centering
+\[ V_i = T_i + z_i \cdot K_i \]
+\[ G_{\mathrm{Rest}} = G - \sum_{i=1}^{n} V_i \]
+\[ G_i = V_i + G_{\mathrm{Rest}} \cdot \dfrac{q_i}{\sum_{j=1}^{n} q_j} \]
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.46\textwidth}
+\centering
+\begin{symtable}
+	$T_i$ & Tätigkeits-/Vorausvergütung Gesellschafter $i$ \\
+	$z_i$ & Verzinsungssatz \\
+	$K_i$ & Kapitalanteil Gesellschafter $i$ \\
+	$q_i$ & fester Verteilungsschlüssel Gesellschafter $i$ \\
+\end{symtable}
+\end{minipage}
+\end{center}

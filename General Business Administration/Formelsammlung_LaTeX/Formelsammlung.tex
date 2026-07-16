@@ -1,0 +1,90 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	parskip=half-,
+	openany
+]{scrbook}
+
+\input{./for_latex/preamble}
+
+% ##################################################
+% FORMELSAMMLUNG: \raggedbottom, damit einzelne (kurze) Abschnitte, die per
+% \pagebreak allein auf einer Seite stehen, nicht künstlich bis zum unteren
+% Rand gestreckt werden.
+% ##################################################
+\usepackage{amssymb}
+\raggedbottom
+
+\RedeclareSectionCommand[beforeskip=14pt, afterskip=14pt]{chapter}
+
+\setlength{\abovedisplayskip}{8pt plus 2pt minus 2pt}
+\setlength{\belowdisplayskip}{8pt plus 2pt minus 2pt}
+\setlength{\abovedisplayshortskip}{4pt plus 2pt}
+\setlength{\belowdisplayshortskip}{4pt plus 2pt}
+
+\renewcommand{\arraystretch}{1.15}
+
+% Zwischenüberschrift mit moderatem, festem Abstand davor
+\newcommand{\formheading}[1]{\par\vspace{14pt}\noindent\textbf{#1}\par\vspace{1.5pt plus 0.5pt minus 0.5pt}}
+
+% Symbol-Legende -- feste, nicht auf die volle Breite gestreckte Spaltenbreite
+\newenvironment{symtable}[1][4.4cm]{%
+	\smallskip
+	\begin{tabular}{@{}lp{#1}@{}}
+	\toprule
+	\textbf{Symbol} & \textbf{Bedeutung} \\
+	\midrule
+}{%
+	\bottomrule
+	\end{tabular}
+	\smallskip
+}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{./for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Allgemeine BWL}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Formelsammlung}
+	\end{center}
+\end{titlepage}
+
+{\let\cleardoublepage\relax\let\clearpage\relax \chapter{Einführung und Überblick (Kenngrößen)}}
+\input{./chapters/kapitel1_einfuehrung}
+\pagebreak
+
+{\let\cleardoublepage\relax\let\clearpage\relax \chapter{Gründung von Unternehmen}}
+\input{./chapters/kapitel2_gruendung}
+
+{\let\cleardoublepage\relax\let\clearpage\relax \chapter{Entscheidungstheorie}}
+\input{./chapters/kapitel3_entscheidungstheorie}
+\pagebreak
+
+{\let\cleardoublepage\relax\let\clearpage\relax \chapter{Personal und Organisation}}
+\input{./chapters/kapitel4_personal}
+\pagebreak
+
+{\let\cleardoublepage\relax\let\clearpage\relax \chapter{Beschaffung}}
+\input{./chapters/kapitel5_beschaffung}
+\pagebreak
+
+{\let\cleardoublepage\relax\let\clearpage\relax \chapter{Produktionswirtschaft}}
+\input{./chapters/kapitel6_produktion}
+\pagebreak
+
+{\let\cleardoublepage\relax\let\clearpage\relax \chapter{Absatzwirtschaft}}
+\input{./chapters/kapitel7_absatz}
+
+\end{document}
