@@ -1,0 +1,27 @@
+This is a test file,
+it contains exactly two lines:
+
+
+---
+Funny, might there be more?
+
+
+
+
+
+---
+Seems so, haha
+
+
+
+
+
+---
+Is this the end?
+
+
+
+
+
+---
+yeah, where at the end
