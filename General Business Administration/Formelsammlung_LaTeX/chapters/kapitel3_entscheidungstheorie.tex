@@ -5,13 +5,15 @@
 	\toprule
 	\textbf{Regel} & \textbf{Formel} \\
 	\midrule
-	Bayes (Erwartungswert) & $\mu = \sum (p_i \cdot E_i)$ \\
+	Bayes (Erwartungswert) & $\mu_i = \sum_j (p_j \cdot E_{ij})$ \\
 	Maximin (Wald) & $\max_i(\min_j E_{ij})$ \\
 	Maximax & $\max_i(\max_j E_{ij})$ \\
 	Minimin (Schadensmatrix) & $\min_i(\min_j E_{ij})$ \\
-	Hurwicz & $H = \lambda \cdot \max + (1-\lambda) \cdot \min$ \\
+	Hurwicz & $H = \lambda \cdot Z_{\max} + (1-\lambda) \cdot Z_{\min}$ \\
 	Laplace & $\bar{E} = \frac{1}{n} \cdot \sum E_{ij}$ \\
 	Savage-Niehans (Minimax-Regret) & $\text{Regret}_{ij} = \text{Spaltenmax}_j - E_{ij}$; wähle $\min_i(\max_j \text{Regret}_{ij})$ \\
 	\bottomrule
 \end{tabular}
+
+$i$ = Handlungsalternative (Zeile), $j$ = Umweltzustand (Spalte)
 \end{center}

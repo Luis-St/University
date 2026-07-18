@@ -43,14 +43,19 @@ $$V_i = 0{,}04 \cdot K_i \qquad G_{\mathrm{Rest}} = G - \sum_{i=1}^{n} V_i \qqua
 
 ### KG-Gewinnverteilung
 
-$$V_i = T_i + z_i \cdot K_i \qquad G_{\mathrm{Rest}} = G - \sum_{i=1}^{n} V_i \qquad G_i = V_i + G_{\mathrm{Rest}} \cdot \dfrac{q_i}{\sum_{j=1}^{n} q_j}$$
+$$\begin{aligned}
+V_i &= T_i + z_i \cdot K_i & H_i &= K_i + P_i \\
+G_{\mathrm{Rest}} &= G - \sum_{i=1}^{n} V_i & G_i &= V_i + G_{\mathrm{Rest}} \cdot \dfrac{H_i}{\sum_{j=1}^{n} H_j}
+\end{aligned}$$
 
 | Symbol | Bedeutung |
 |---|---|
 | $T_i$ | Tätigkeits-/Vorausvergütung Gesellschafter $i$ |
 | $z_i$ | Verzinsungssatz |
 | $K_i$ | Kapitalanteil Gesellschafter $i$ |
-| $q_i$ | fester Verteilungsschlüssel Gesellschafter $i$ |
+| $P_i$ | Privatvermögen Gesellschafter $i$ (nur Komplementär haftet damit; bei Kommanditist $P_i = 0$) |
+| $H_i$ | Haftungssumme Gesellschafter $i$ (dient als Verteilungsschlüssel für die Risikoverteilung) |
+| $H_j$ | Haftungssumme Gesellschafter $j$ (Summationsindex über alle Gesellschafter) |
 
 ---
 
@@ -58,13 +63,15 @@ $$V_i = T_i + z_i \cdot K_i \qquad G_{\mathrm{Rest}} = G - \sum_{i=1}^{n} V_i \q
 
 | Regel | Formel |
 |---|---|
-| **Bayes (Erwartungswert)** | $\mu = \sum (p_i \cdot E_i)$ |
+| **Bayes (Erwartungswert)** | $\mu_i = \sum_j (p_j \cdot E_{ij})$ |
 | **Maximin (Wald)** | $\max_i(\min_j E_{ij})$ |
 | **Maximax** | $\max_i(\max_j E_{ij})$ |
 | **Minimin** (Schadensmatrix) | $\min_i(\min_j E_{ij})$ |
-| **Hurwicz** | $H = \lambda \cdot \max + (1-\lambda) \cdot \min$ |
+| **Hurwicz** | $H = \lambda \cdot Z_{\max} + (1-\lambda) \cdot Z_{\min}$ |
 | **Laplace** | $\bar{E} = \frac{1}{n} \cdot \sum E_{ij}$ |
 | **Savage-Niehans (Minimax-Regret)** | $\text{Regret}_{ij} = \text{Spaltenmax}_j - E_{ij}$; wähle $\min_i(\max_j \text{Regret}_{ij})$ |
+
+$i$ = Handlungsalternative (Zeile), $j$ = Umweltzustand (Spalte)
 
 ---
 

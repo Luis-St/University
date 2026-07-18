@@ -34,7 +34,12 @@
 \formheading{KG-Gewinnverteilung}
 \begin{minipage}[c]{0.44\textwidth}
 \centering
-\[ V_i = T_i + z_i K_i,\quad G_{\mathrm{Rest}} = G - \sum V_i,\quad G_i = V_i + G_{\mathrm{Rest}} \cdot \dfrac{q_i}{\sum q_j} \]
+\[
+\begin{aligned}
+V_i &= T_i + z_i K_i & H_i &= K_i + P_i \\
+G_{\mathrm{Rest}} &= G - \sum V_i & G_i &= V_i + G_{\mathrm{Rest}} \cdot \dfrac{H_i}{\sum H_j}
+\end{aligned}
+\]
 \end{minipage}%
 \hfill
 \begin{minipage}[c]{0.5\textwidth}
@@ -42,6 +47,8 @@
 \begin{symtable}[4.3cm]
 	$T_i$ & Tätigkeitsvergütung Ges. $i$ \\
 	$z_i,K_i$ & Verzinsungssatz, Kapitalanteil \\
-	$q_i$ & fester Verteilungsschlüssel Ges. $i$ \\
+	$P_i$ & Privatvermögen Ges. $i$ (nur Komplementär, sonst 0) \\
+	$H_i$ & Haftungssumme Ges. $i$ (Verteilungsschlüssel) \\
+	$H_j$ & Haftungssumme Ges. $j$ (Summationsindex) \\
 \end{symtable}
 \end{minipage}
