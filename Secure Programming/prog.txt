@@ -1,0 +1,471 @@
+
+prog:     file format elf64-x86-64
+
+
+Disassembly of section .init:
+
+0000000000401000 <_init>:
+_init():
+  401000:	f3 0f 1e fa          	endbr64
+  401004:	48 83 ec 08          	sub    $0x8,%rsp
+  401008:	48 8b 05 d1 2f 00 00 	mov    0x2fd1(%rip),%rax        # 403fe0 <__gmon_start__@Base>
+  40100f:	48 85 c0             	test   %rax,%rax
+  401012:	74 02                	je     401016 <_init+0x16>
+  401014:	ff d0                	call   *%rax
+  401016:	48 83 c4 08          	add    $0x8,%rsp
+  40101a:	c3                   	ret
+
+Disassembly of section .plt:
+
+0000000000401020 <.plt>:
+  401020:	ff 35 ca 2f 00 00    	push   0x2fca(%rip)        # 403ff0 <_GLOBAL_OFFSET_TABLE_+0x8>
+  401026:	ff 25 cc 2f 00 00    	jmp    *0x2fcc(%rip)        # 403ff8 <_GLOBAL_OFFSET_TABLE_+0x10>
+  40102c:	0f 1f 40 00          	nopl   0x0(%rax)
+  401030:	f3 0f 1e fa          	endbr64
+  401034:	68 00 00 00 00       	push   $0x0
+  401039:	e9 e2 ff ff ff       	jmp    401020 <_init+0x20>
+  40103e:	66 90                	xchg   %ax,%ax
+  401040:	f3 0f 1e fa          	endbr64
+  401044:	68 01 00 00 00       	push   $0x1
+  401049:	e9 d2 ff ff ff       	jmp    401020 <_init+0x20>
+  40104e:	66 90                	xchg   %ax,%ax
+  401050:	f3 0f 1e fa          	endbr64
+  401054:	68 02 00 00 00       	push   $0x2
+  401059:	e9 c2 ff ff ff       	jmp    401020 <_init+0x20>
+  40105e:	66 90                	xchg   %ax,%ax
+  401060:	f3 0f 1e fa          	endbr64
+  401064:	68 03 00 00 00       	push   $0x3
+  401069:	e9 b2 ff ff ff       	jmp    401020 <_init+0x20>
+  40106e:	66 90                	xchg   %ax,%ax
+  401070:	f3 0f 1e fa          	endbr64
+  401074:	68 04 00 00 00       	push   $0x4
+  401079:	e9 a2 ff ff ff       	jmp    401020 <_init+0x20>
+  40107e:	66 90                	xchg   %ax,%ax
+  401080:	f3 0f 1e fa          	endbr64
+  401084:	68 05 00 00 00       	push   $0x5
+  401089:	e9 92 ff ff ff       	jmp    401020 <_init+0x20>
+  40108e:	66 90                	xchg   %ax,%ax
+  401090:	f3 0f 1e fa          	endbr64
+  401094:	68 06 00 00 00       	push   $0x6
+  401099:	e9 82 ff ff ff       	jmp    401020 <_init+0x20>
+  40109e:	66 90                	xchg   %ax,%ax
+  4010a0:	f3 0f 1e fa          	endbr64
+  4010a4:	68 07 00 00 00       	push   $0x7
+  4010a9:	e9 72 ff ff ff       	jmp    401020 <_init+0x20>
+  4010ae:	66 90                	xchg   %ax,%ax
+  4010b0:	f3 0f 1e fa          	endbr64
+  4010b4:	68 08 00 00 00       	push   $0x8
+  4010b9:	e9 62 ff ff ff       	jmp    401020 <_init+0x20>
+  4010be:	66 90                	xchg   %ax,%ax
+
+Disassembly of section .plt.sec:
+
+00000000004010c0 <putchar@plt>:
+  4010c0:	f3 0f 1e fa          	endbr64
+  4010c4:	ff 25 36 2f 00 00    	jmp    *0x2f36(%rip)        # 404000 <putchar@GLIBC_2.2.5>
+  4010ca:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+00000000004010d0 <localtime@plt>:
+  4010d0:	f3 0f 1e fa          	endbr64
+  4010d4:	ff 25 2e 2f 00 00    	jmp    *0x2f2e(%rip)        # 404008 <localtime@GLIBC_2.2.5>
+  4010da:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+00000000004010e0 <puts@plt>:
+  4010e0:	f3 0f 1e fa          	endbr64
+  4010e4:	ff 25 26 2f 00 00    	jmp    *0x2f26(%rip)        # 404010 <puts@GLIBC_2.2.5>
+  4010ea:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+00000000004010f0 <printf@plt>:
+  4010f0:	f3 0f 1e fa          	endbr64
+  4010f4:	ff 25 1e 2f 00 00    	jmp    *0x2f1e(%rip)        # 404018 <printf@GLIBC_2.2.5>
+  4010fa:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+0000000000401100 <read@plt>:
+  401100:	f3 0f 1e fa          	endbr64
+  401104:	ff 25 16 2f 00 00    	jmp    *0x2f16(%rip)        # 404020 <read@GLIBC_2.2.5>
+  40110a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+0000000000401110 <time@plt>:
+  401110:	f3 0f 1e fa          	endbr64
+  401114:	ff 25 0e 2f 00 00    	jmp    *0x2f0e(%rip)        # 404028 <time@GLIBC_2.2.5>
+  40111a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+0000000000401120 <perror@plt>:
+  401120:	f3 0f 1e fa          	endbr64
+  401124:	ff 25 06 2f 00 00    	jmp    *0x2f06(%rip)        # 404030 <perror@GLIBC_2.2.5>
+  40112a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+0000000000401130 <strtok@plt>:
+  401130:	f3 0f 1e fa          	endbr64
+  401134:	ff 25 fe 2e 00 00    	jmp    *0x2efe(%rip)        # 404038 <strtok@GLIBC_2.2.5>
+  40113a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+0000000000401140 <atoi@plt>:
+  401140:	f3 0f 1e fa          	endbr64
+  401144:	ff 25 f6 2e 00 00    	jmp    *0x2ef6(%rip)        # 404040 <atoi@GLIBC_2.2.5>
+  40114a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+Disassembly of section .text:
+
+0000000000401150 <_start>:
+_start():
+  401150:	f3 0f 1e fa          	endbr64
+  401154:	31 ed                	xor    %ebp,%ebp
+  401156:	49 89 d1             	mov    %rdx,%r9
+  401159:	5e                   	pop    %rsi
+  40115a:	48 89 e2             	mov    %rsp,%rdx
+  40115d:	48 83 e4 f0          	and    $0xfffffffffffffff0,%rsp
+  401161:	50                   	push   %rax
+  401162:	54                   	push   %rsp
+  401163:	45 31 c0             	xor    %r8d,%r8d
+  401166:	31 c9                	xor    %ecx,%ecx
+  401168:	48 c7 c7 d5 12 40 00 	mov    $0x4012d5,%rdi
+  40116f:	ff 15 63 2e 00 00    	call   *0x2e63(%rip)        # 403fd8 <__libc_start_main@GLIBC_2.34>
+  401175:	f4                   	hlt
+  401176:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+  40117d:	00 00 00 
+
+0000000000401180 <_dl_relocate_static_pie>:
+_dl_relocate_static_pie():
+  401180:	f3 0f 1e fa          	endbr64
+  401184:	c3                   	ret
+  401185:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+  40118c:	00 00 00 
+  40118f:	90                   	nop
+
+0000000000401190 <deregister_tm_clones>:
+deregister_tm_clones():
+  401190:	b8 58 40 40 00       	mov    $0x404058,%eax
+  401195:	48 3d 58 40 40 00    	cmp    $0x404058,%rax
+  40119b:	74 13                	je     4011b0 <deregister_tm_clones+0x20>
+  40119d:	b8 00 00 00 00       	mov    $0x0,%eax
+  4011a2:	48 85 c0             	test   %rax,%rax
+  4011a5:	74 09                	je     4011b0 <deregister_tm_clones+0x20>
+  4011a7:	bf 58 40 40 00       	mov    $0x404058,%edi
+  4011ac:	ff e0                	jmp    *%rax
+  4011ae:	66 90                	xchg   %ax,%ax
+  4011b0:	c3                   	ret
+  4011b1:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  4011b8:	00 00 00 00 
+  4011bc:	0f 1f 40 00          	nopl   0x0(%rax)
+
+00000000004011c0 <register_tm_clones>:
+register_tm_clones():
+  4011c0:	be 58 40 40 00       	mov    $0x404058,%esi
+  4011c5:	48 81 ee 58 40 40 00 	sub    $0x404058,%rsi
+  4011cc:	48 89 f0             	mov    %rsi,%rax
+  4011cf:	48 c1 ee 3f          	shr    $0x3f,%rsi
+  4011d3:	48 c1 f8 03          	sar    $0x3,%rax
+  4011d7:	48 01 c6             	add    %rax,%rsi
+  4011da:	48 d1 fe             	sar    $1,%rsi
+  4011dd:	74 11                	je     4011f0 <register_tm_clones+0x30>
+  4011df:	b8 00 00 00 00       	mov    $0x0,%eax
+  4011e4:	48 85 c0             	test   %rax,%rax
+  4011e7:	74 07                	je     4011f0 <register_tm_clones+0x30>
+  4011e9:	bf 58 40 40 00       	mov    $0x404058,%edi
+  4011ee:	ff e0                	jmp    *%rax
+  4011f0:	c3                   	ret
+  4011f1:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  4011f8:	00 00 00 00 
+  4011fc:	0f 1f 40 00          	nopl   0x0(%rax)
+
+0000000000401200 <__do_global_dtors_aux>:
+__do_global_dtors_aux():
+  401200:	f3 0f 1e fa          	endbr64
+  401204:	80 3d 4d 2e 00 00 00 	cmpb   $0x0,0x2e4d(%rip)        # 404058 <__TMC_END__>
+  40120b:	75 13                	jne    401220 <__do_global_dtors_aux+0x20>
+  40120d:	55                   	push   %rbp
+  40120e:	48 89 e5             	mov    %rsp,%rbp
+  401211:	e8 7a ff ff ff       	call   401190 <deregister_tm_clones>
+  401216:	c6 05 3b 2e 00 00 01 	movb   $0x1,0x2e3b(%rip)        # 404058 <__TMC_END__>
+  40121d:	5d                   	pop    %rbp
+  40121e:	c3                   	ret
+  40121f:	90                   	nop
+  401220:	c3                   	ret
+  401221:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  401228:	00 00 00 00 
+  40122c:	0f 1f 40 00          	nopl   0x0(%rax)
+
+0000000000401230 <frame_dummy>:
+frame_dummy():
+  401230:	f3 0f 1e fa          	endbr64
+  401234:	eb 8a                	jmp    4011c0 <register_tm_clones>
+
+0000000000401236 <split>:
+split():
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:8
+  401236:	f3 0f 1e fa          	endbr64
+  40123a:	55                   	push   %rbp
+  40123b:	48 89 e5             	mov    %rsp,%rbp
+  40123e:	48 83 ec 40          	sub    $0x40,%rsp
+  401242:	48 89 7d d8          	mov    %rdi,-0x28(%rbp)
+  401246:	48 89 75 d0          	mov    %rsi,-0x30(%rbp)
+  40124a:	48 89 55 c8          	mov    %rdx,-0x38(%rbp)
+  40124e:	48 89 4d c0          	mov    %rcx,-0x40(%rbp)
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:9
+  401252:	48 8b 45 d8          	mov    -0x28(%rbp),%rax
+  401256:	48 8d 15 ab 0d 00 00 	lea    0xdab(%rip),%rdx        # 402008 <_IO_stdin_used+0x8>
+  40125d:	48 89 d6             	mov    %rdx,%rsi
+  401260:	48 89 c7             	mov    %rax,%rdi
+  401263:	e8 c8 fe ff ff       	call   401130 <strtok@plt>
+  401268:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:10
+  40126c:	48 8d 05 95 0d 00 00 	lea    0xd95(%rip),%rax        # 402008 <_IO_stdin_used+0x8>
+  401273:	48 89 c6             	mov    %rax,%rsi
+  401276:	bf 00 00 00 00       	mov    $0x0,%edi
+  40127b:	e8 b0 fe ff ff       	call   401130 <strtok@plt>
+  401280:	48 89 45 f0          	mov    %rax,-0x10(%rbp)
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:11
+  401284:	48 8d 05 7d 0d 00 00 	lea    0xd7d(%rip),%rax        # 402008 <_IO_stdin_used+0x8>
+  40128b:	48 89 c6             	mov    %rax,%rsi
+  40128e:	bf 00 00 00 00       	mov    $0x0,%edi
+  401293:	e8 98 fe ff ff       	call   401130 <strtok@plt>
+  401298:	48 89 45 e8          	mov    %rax,-0x18(%rbp)
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:13
+  40129c:	48 8b 45 f8          	mov    -0x8(%rbp),%rax
+  4012a0:	48 89 c7             	mov    %rax,%rdi
+  4012a3:	e8 98 fe ff ff       	call   401140 <atoi@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:13 (discriminator 1)
+  4012a8:	48 8b 55 d0          	mov    -0x30(%rbp),%rdx
+  4012ac:	89 02                	mov    %eax,(%rdx)
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:14
+  4012ae:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  4012b2:	48 89 c7             	mov    %rax,%rdi
+  4012b5:	e8 86 fe ff ff       	call   401140 <atoi@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:14 (discriminator 1)
+  4012ba:	48 8b 55 c8          	mov    -0x38(%rbp),%rdx
+  4012be:	89 02                	mov    %eax,(%rdx)
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:15
+  4012c0:	48 8b 45 e8          	mov    -0x18(%rbp),%rax
+  4012c4:	48 89 c7             	mov    %rax,%rdi
+  4012c7:	e8 74 fe ff ff       	call   401140 <atoi@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:15 (discriminator 1)
+  4012cc:	48 8b 55 c0          	mov    -0x40(%rbp),%rdx
+  4012d0:	89 02                	mov    %eax,(%rdx)
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:16
+  4012d2:	90                   	nop
+  4012d3:	c9                   	leave
+  4012d4:	c3                   	ret
+
+00000000004012d5 <main>:
+main():
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:18
+  4012d5:	f3 0f 1e fa          	endbr64
+  4012d9:	55                   	push   %rbp
+  4012da:	48 89 e5             	mov    %rsp,%rbp
+  4012dd:	48 83 ec 40          	sub    $0x40,%rsp
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:19
+  4012e1:	48 8d 05 28 0d 00 00 	lea    0xd28(%rip),%rax        # 402010 <_IO_stdin_used+0x10>
+  4012e8:	48 89 c7             	mov    %rax,%rdi
+  4012eb:	e8 f0 fd ff ff       	call   4010e0 <puts@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:22
+  4012f0:	48 8d 45 da          	lea    -0x26(%rbp),%rax
+  4012f4:	ba 0a 00 00 00       	mov    $0xa,%edx
+  4012f9:	48 89 c6             	mov    %rax,%rsi
+  4012fc:	bf 01 00 00 00       	mov    $0x1,%edi
+  401301:	e8 fa fd ff ff       	call   401100 <read@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:22 (discriminator 1)
+  401306:	48 89 45 f8          	mov    %rax,-0x8(%rbp)
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:23
+  40130a:	48 83 7d f8 ff       	cmpq   $0xffffffffffffffff,-0x8(%rbp)
+  40130f:	75 19                	jne    40132a <main+0x55>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:24
+  401311:	48 8d 05 2f 0d 00 00 	lea    0xd2f(%rip),%rax        # 402047 <_IO_stdin_used+0x47>
+  401318:	48 89 c7             	mov    %rax,%rdi
+  40131b:	e8 00 fe ff ff       	call   401120 <perror@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:25
+  401320:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+  401325:	e9 47 02 00 00       	jmp    401571 <main+0x29c>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:29
+  40132a:	48 8d 45 d0          	lea    -0x30(%rbp),%rax
+  40132e:	48 89 c7             	mov    %rax,%rdi
+  401331:	e8 da fd ff ff       	call   401110 <time@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:31
+  401336:	48 8d 45 d0          	lea    -0x30(%rbp),%rax
+  40133a:	48 89 c7             	mov    %rax,%rdi
+  40133d:	e8 8e fd ff ff       	call   4010d0 <localtime@plt>
+  401342:	48 89 45 f0          	mov    %rax,-0x10(%rbp)
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:33
+  401346:	bf 0a 00 00 00       	mov    $0xa,%edi
+  40134b:	e8 70 fd ff ff       	call   4010c0 <putchar@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:37
+  401350:	48 8d 4d c4          	lea    -0x3c(%rbp),%rcx
+  401354:	48 8d 55 c8          	lea    -0x38(%rbp),%rdx
+  401358:	48 8d 75 cc          	lea    -0x34(%rbp),%rsi
+  40135c:	48 8d 45 da          	lea    -0x26(%rbp),%rax
+  401360:	48 89 c7             	mov    %rax,%rdi
+  401363:	e8 ce fe ff ff       	call   401236 <split>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:39
+  401368:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  40136c:	8b 40 14             	mov    0x14(%rax),%eax
+  40136f:	8d 90 6c 07 00 00    	lea    0x76c(%rax),%edx
+  401375:	8b 45 cc             	mov    -0x34(%rbp),%eax
+  401378:	39 c2                	cmp    %eax,%edx
+  40137a:	7d 2c                	jge    4013a8 <main+0xd3>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:40
+  40137c:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  401380:	8b 40 14             	mov    0x14(%rax),%eax
+  401383:	05 6c 07 00 00       	add    $0x76c,%eax
+  401388:	89 c6                	mov    %eax,%esi
+  40138a:	48 8d 05 cf 0c 00 00 	lea    0xccf(%rip),%rax        # 402060 <_IO_stdin_used+0x60>
+  401391:	48 89 c7             	mov    %rax,%rdi
+  401394:	b8 00 00 00 00       	mov    $0x0,%eax
+  401399:	e8 52 fd ff ff       	call   4010f0 <printf@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:41
+  40139e:	b8 00 00 00 00       	mov    $0x0,%eax
+  4013a3:	e9 c9 01 00 00       	jmp    401571 <main+0x29c>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:43
+  4013a8:	8b 45 c8             	mov    -0x38(%rbp),%eax
+  4013ab:	83 f8 0c             	cmp    $0xc,%eax
+  4013ae:	7f 07                	jg     4013b7 <main+0xe2>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:43 (discriminator 1)
+  4013b0:	8b 45 c8             	mov    -0x38(%rbp),%eax
+  4013b3:	85 c0                	test   %eax,%eax
+  4013b5:	7f 19                	jg     4013d0 <main+0xfb>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:44
+  4013b7:	48 8d 05 da 0c 00 00 	lea    0xcda(%rip),%rax        # 402098 <_IO_stdin_used+0x98>
+  4013be:	48 89 c7             	mov    %rax,%rdi
+  4013c1:	e8 1a fd ff ff       	call   4010e0 <puts@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:45
+  4013c6:	b8 00 00 00 00       	mov    $0x0,%eax
+  4013cb:	e9 a1 01 00 00       	jmp    401571 <main+0x29c>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:47
+  4013d0:	8b 45 c4             	mov    -0x3c(%rbp),%eax
+  4013d3:	83 f8 1f             	cmp    $0x1f,%eax
+  4013d6:	7f 07                	jg     4013df <main+0x10a>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:47 (discriminator 1)
+  4013d8:	8b 45 c4             	mov    -0x3c(%rbp),%eax
+  4013db:	85 c0                	test   %eax,%eax
+  4013dd:	7f 19                	jg     4013f8 <main+0x123>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:48
+  4013df:	48 8d 05 da 0c 00 00 	lea    0xcda(%rip),%rax        # 4020c0 <_IO_stdin_used+0xc0>
+  4013e6:	48 89 c7             	mov    %rax,%rdi
+  4013e9:	e8 f2 fc ff ff       	call   4010e0 <puts@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:49
+  4013ee:	b8 00 00 00 00       	mov    $0x0,%eax
+  4013f3:	e9 79 01 00 00       	jmp    401571 <main+0x29c>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:53
+  4013f8:	8b 45 cc             	mov    -0x34(%rbp),%eax
+  4013fb:	89 c6                	mov    %eax,%esi
+  4013fd:	48 8d 05 de 0c 00 00 	lea    0xcde(%rip),%rax        # 4020e2 <_IO_stdin_used+0xe2>
+  401404:	48 89 c7             	mov    %rax,%rdi
+  401407:	b8 00 00 00 00       	mov    $0x0,%eax
+  40140c:	e8 df fc ff ff       	call   4010f0 <printf@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:54
+  401411:	8b 45 c8             	mov    -0x38(%rbp),%eax
+  401414:	89 c6                	mov    %eax,%esi
+  401416:	48 8d 05 cf 0c 00 00 	lea    0xccf(%rip),%rax        # 4020ec <_IO_stdin_used+0xec>
+  40141d:	48 89 c7             	mov    %rax,%rdi
+  401420:	b8 00 00 00 00       	mov    $0x0,%eax
+  401425:	e8 c6 fc ff ff       	call   4010f0 <printf@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:55
+  40142a:	8b 45 c4             	mov    -0x3c(%rbp),%eax
+  40142d:	89 c6                	mov    %eax,%esi
+  40142f:	48 8d 05 c1 0c 00 00 	lea    0xcc1(%rip),%rax        # 4020f7 <_IO_stdin_used+0xf7>
+  401436:	48 89 c7             	mov    %rax,%rdi
+  401439:	b8 00 00 00 00       	mov    $0x0,%eax
+  40143e:	e8 ad fc ff ff       	call   4010f0 <printf@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:57
+  401443:	bf 0a 00 00 00       	mov    $0xa,%edi
+  401448:	e8 73 fc ff ff       	call   4010c0 <putchar@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:58
+  40144d:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  401451:	8b 40 14             	mov    0x14(%rax),%eax
+  401454:	05 6c 07 00 00       	add    $0x76c,%eax
+  401459:	89 c6                	mov    %eax,%esi
+  40145b:	48 8d 05 9e 0c 00 00 	lea    0xc9e(%rip),%rax        # 402100 <_IO_stdin_used+0x100>
+  401462:	48 89 c7             	mov    %rax,%rdi
+  401465:	b8 00 00 00 00       	mov    $0x0,%eax
+  40146a:	e8 81 fc ff ff       	call   4010f0 <printf@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:59
+  40146f:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  401473:	8b 40 10             	mov    0x10(%rax),%eax
+  401476:	83 c0 01             	add    $0x1,%eax
+  401479:	89 c6                	mov    %eax,%esi
+  40147b:	48 8d 05 90 0c 00 00 	lea    0xc90(%rip),%rax        # 402112 <_IO_stdin_used+0x112>
+  401482:	48 89 c7             	mov    %rax,%rdi
+  401485:	b8 00 00 00 00       	mov    $0x0,%eax
+  40148a:	e8 61 fc ff ff       	call   4010f0 <printf@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:60
+  40148f:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  401493:	8b 40 0c             	mov    0xc(%rax),%eax
+  401496:	89 c6                	mov    %eax,%esi
+  401498:	48 8d 05 86 0c 00 00 	lea    0xc86(%rip),%rax        # 402125 <_IO_stdin_used+0x125>
+  40149f:	48 89 c7             	mov    %rax,%rdi
+  4014a2:	b8 00 00 00 00       	mov    $0x0,%eax
+  4014a7:	e8 44 fc ff ff       	call   4010f0 <printf@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:62
+  4014ac:	bf 0a 00 00 00       	mov    $0xa,%edi
+  4014b1:	e8 0a fc ff ff       	call   4010c0 <putchar@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:63
+  4014b6:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  4014ba:	8b 40 14             	mov    0x14(%rax),%eax
+  4014bd:	8d 90 6c 07 00 00    	lea    0x76c(%rax),%edx
+  4014c3:	8b 45 cc             	mov    -0x34(%rbp),%eax
+  4014c6:	29 c2                	sub    %eax,%edx
+  4014c8:	89 55 ec             	mov    %edx,-0x14(%rbp)
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:64
+  4014cb:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  4014cf:	8b 40 10             	mov    0x10(%rax),%eax
+  4014d2:	8d 50 01             	lea    0x1(%rax),%edx
+  4014d5:	8b 45 c8             	mov    -0x38(%rbp),%eax
+  4014d8:	29 c2                	sub    %eax,%edx
+  4014da:	89 55 e8             	mov    %edx,-0x18(%rbp)
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:65
+  4014dd:	48 8b 45 f0          	mov    -0x10(%rbp),%rax
+  4014e1:	8b 50 0c             	mov    0xc(%rax),%edx
+  4014e4:	8b 45 c4             	mov    -0x3c(%rbp),%eax
+  4014e7:	29 c2                	sub    %eax,%edx
+  4014e9:	89 55 e4             	mov    %edx,-0x1c(%rbp)
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:66
+  4014ec:	8b 45 ec             	mov    -0x14(%rbp),%eax
+  4014ef:	89 c6                	mov    %eax,%esi
+  4014f1:	48 8d 05 3e 0c 00 00 	lea    0xc3e(%rip),%rax        # 402136 <_IO_stdin_used+0x136>
+  4014f8:	48 89 c7             	mov    %rax,%rdi
+  4014fb:	b8 00 00 00 00       	mov    $0x0,%eax
+  401500:	e8 eb fb ff ff       	call   4010f0 <printf@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:67
+  401505:	8b 45 e8             	mov    -0x18(%rbp),%eax
+  401508:	89 c6                	mov    %eax,%esi
+  40150a:	48 8d 05 34 0c 00 00 	lea    0xc34(%rip),%rax        # 402145 <_IO_stdin_used+0x145>
+  401511:	48 89 c7             	mov    %rax,%rdi
+  401514:	b8 00 00 00 00       	mov    $0x0,%eax
+  401519:	e8 d2 fb ff ff       	call   4010f0 <printf@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:68
+  40151e:	8b 45 e4             	mov    -0x1c(%rbp),%eax
+  401521:	89 c6                	mov    %eax,%esi
+  401523:	48 8d 05 2b 0c 00 00 	lea    0xc2b(%rip),%rax        # 402155 <_IO_stdin_used+0x155>
+  40152a:	48 89 c7             	mov    %rax,%rdi
+  40152d:	b8 00 00 00 00       	mov    $0x0,%eax
+  401532:	e8 b9 fb ff ff       	call   4010f0 <printf@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:70
+  401537:	bf 0a 00 00 00       	mov    $0xa,%edi
+  40153c:	e8 7f fb ff ff       	call   4010c0 <putchar@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:71
+  401541:	83 7d ec 11          	cmpl   $0x11,-0x14(%rbp)
+  401545:	7e 16                	jle    40155d <main+0x288>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:72
+  401547:	48 8d 05 15 0c 00 00 	lea    0xc15(%rip),%rax        # 402163 <_IO_stdin_used+0x163>
+  40154e:	48 89 c7             	mov    %rax,%rdi
+  401551:	e8 8a fb ff ff       	call   4010e0 <puts@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:73
+  401556:	b8 00 00 00 00       	mov    $0x0,%eax
+  40155b:	eb 14                	jmp    401571 <main+0x29c>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:75
+  40155d:	48 8d 05 15 0c 00 00 	lea    0xc15(%rip),%rax        # 402179 <_IO_stdin_used+0x179>
+  401564:	48 89 c7             	mov    %rax,%rdi
+  401567:	e8 74 fb ff ff       	call   4010e0 <puts@plt>
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:76
+  40156c:	b8 00 00 00 00       	mov    $0x0,%eax
+/home/luis/Programming/GitHub/University/Secure Programming/Task9/prog3.c:78
+  401571:	c9                   	leave
+  401572:	c3                   	ret
+
+Disassembly of section .fini:
+
+0000000000401574 <_fini>:
+_fini():
+  401574:	f3 0f 1e fa          	endbr64
+  401578:	48 83 ec 08          	sub    $0x8,%rsp
+  40157c:	48 83 c4 08          	add    $0x8,%rsp
+  401580:	c3                   	ret
