@@ -1,0 +1,24 @@
+services:
+  idp:
+    image: quay.io/keycloak/keycloak
+    command: start-dev
+    container_name: idp
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "8081:8080"
+
+  sp:
+    image: nextcloud:stable
+    container_name: sp
+    environment:
+      - SQLITE_DATABASE=nextcloud
+      - NEXTCLOUD_ADMIN_USER=admin
+      - NEXTCLOUD_ADMIN_PASSWORD=adminpass123
+      - NEXTCLOUD_TRUSTED_DOMAINS=127.0.0.1
+      - OVERWRITEHOST=127.0.0.1:8080
+      - OVERWRITEPROTOCOL=http
+      - OVERWRITECLIURL=http://127.0.0.1:8080
+    ports:
+      - "8080:80"

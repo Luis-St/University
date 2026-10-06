@@ -1,0 +1,166 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	listof=totoc,
+	listof=entryprefix,
+	listof=nochaptergap,
+	bibliography=totoc,
+	parskip=half,
+	openany
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+\lstset{
+	extendedchars=true,
+	inputencoding=utf8,
+	literate=
+		{ä}{{\"a}}1
+		{ö}{{\"o}}1
+		{ü}{{\"u}}1
+		{ß}{{\ss}}1
+		{Ä}{{\"A}}1
+		{Ö}{{\"O}}1
+		{Ü}{{\"U}}1
+}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 6}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Web-Security und Intrusion Prevention}
+
+		\vspace{12cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+
+\chapter*{Aufgabe 1: Die Webanwendung}
+
+Es laufen zwei Flask-Anwendungen: das Gästebuch aus Blatt 5 (Port 5000, mit der
+dort gezeigten XSS-Lücke) und eine Online-Banking-Anwendung (Port 5001).
+Benutzer der Bank sind \texttt{alice} (alice123), \texttt{bob} (bob123) und
+\texttt{eve} (eve123), jeweils mit einem Kontostand. Nach dem Login setzt die
+Bank ein ungeschütztes Sitzungscookie \texttt{session\_id} ohne SameSite- oder
+HttpOnly-Flag.
+
+\chapter*{Aufgabe 2: Die Banking-Seite verstehen}
+
+Eine Überweisung von Alice an Bob über 10 EUR zeigt in der Entwicklerkonsole den
+zugehörigen Aufruf. Die Überweisung läuft über einen einfachen GET-Request:
+
+\begin{lstlisting}[language=bash]
+GET /transfer?to=<empfaenger>&amount=<betrag>   (Cookie: session_id=...)
+\end{lstlisting}
+
+Benötigt werden somit nur die Parameter \texttt{to} und \texttt{amount}; die
+Authentifizierung erfolgt allein über das automatisch mitgesendete
+Sitzungscookie. Genau das macht die Anwendung anfällig für CSRF.
+
+\begin{lstlisting}[language=bash]
+curl -b "session_id=..." "http://127.0.0.1:5001/transfer?to=bob&amount=10"
+-> Kontostand: 1000 -> 990
+\end{lstlisting}
+
+\chapter*{Aufgabe 3: CSRF über die XSS-Lücke im Gästebuch}
+
+Überwiesen werden sollen 500 EUR an Eve. Dazu wird ein \texttt{<img>}-Tag ins
+Gästebuch eingetragen, dessen \texttt{src} auf den Transfer-Endpunkt der Bank
+zeigt. Das Laden eines Bildes bleibt dabei unauffällig:
+
+\begin{lstlisting}[language=HTML]
+Schoenes Bild! <img src="http://127.0.0.1:5001/transfer?to=eve&amount=500">
+\end{lstlisting}
+
+Ist Alice bei der Bank eingeloggt und ruft das Gästebuch auf, versucht ihr
+Browser das vermeintliche Bild zu laden und sendet dabei ihr Banking-Cookie
+automatisch mit. Die Überweisung wird im Kontext von Alice ausgeführt:
+
+\begin{lstlisting}[language=bash]
+Kontostand Alice: 1000 -> 500   (500 EUR an Eve ueberwiesen)
+\end{lstlisting}
+
+\section*{Sec-Fetch-Header der gefälschten Anfrage}
+
+Serverseitig wurden die Header der eingehenden \texttt{/transfer}-Anfrage
+protokolliert:
+
+\begin{lstlisting}[language=bash]
+Sec-Fetch-Site: same-site
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: image
+Referer:        http://127.0.0.1:5000/
+Cookie:         session_id=...; secretcookie=itsasecret; ...
+\end{lstlisting}
+
+\texttt{Sec-Fetch-Site} trägt den Wert \texttt{same-site}, weil beide
+Anwendungen denselben Host \texttt{127.0.0.1} nutzen; der Port gehört nicht zur
+Site. Der Browser sendet das Cookie deshalb trotz des SameSite-Standards (Lax)
+mit. Bei verschiedenen Sites würde Lax den Angriff bereits erschweren.
+\texttt{Sec-Fetch-Dest: image} weist aus, dass die Anfrage von einem
+\texttt{<img>}-Tag stammt, und \texttt{Referer} zeigt auf das Gästebuch.
+
+\section*{Verhalten bei POST-basierter Überweisung}
+
+Bei Verwendung von POST liesse sich der Angriff nicht mehr über ein
+\texttt{<img>}-Tag auslösen, da Bilder ausschliesslich GET-Anfragen erzeugen.
+Möglich bliebe er dennoch: Erforderlich wäre ein automatisch abgesendetes
+HTML-Formular mit \verb|method="post"|, das per JavaScript submittet wird. Über
+die XSS-Lücke lässt sich ein solches Formular ebenfalls einschleusen. POST allein
+schützt somit nicht vor CSRF.
+
+\chapter*{Aufgabe 4: Absicherung mit CSRF-Token}
+
+Die Bank wird um CSRF-Tokens erweitert. Beim Login wird pro Sitzung ein
+zufälliges Token erzeugt und serverseitig gespeichert. Das Transfer-Formular
+enthält das Token als verstecktes Feld, und \texttt{/transfer} wird auf POST
+umgestellt und prüft das Token:
+
+\begin{lstlisting}[language=Python]
+def set_session(user):
+    sessions[session] = {"user": user, "csrf": get_random_string(32)}
+
+@app.route("/transfer", methods=["POST"])
+def transfer():
+    s = get_session(request.cookies.get("session_id"))
+    if not s: return redirect("/")
+    if request.form.get("csrf_token") != s["csrf"]:
+        abort(403)
+    ...
+\end{lstlisting}
+
+Zusätzlich wird das Sitzungscookie mit \texttt{httponly=True} und
+\verb|samesite="Strict"| gesetzt.
+
+Die Tests bestätigen die Wirkung:
+
+\begin{lstlisting}[language=bash]
+# alter <img>-CSRF (GET) -> Methode nicht mehr erlaubt
+GET  /transfer?to=eve&amount=500          -> 405
+# gefaelschter POST ohne gueltiges Token  -> abgewiesen
+POST /transfer  (ohne csrf_token)         -> 403
+# legitime Ueberweisung mit Token aus dem Dashboard -> funktioniert
+POST /transfer  (csrf_token=..., to=bob, amount=50) -> 302, Kontostand 1000 -> 950
+\end{lstlisting}
+
+Da ein Angreifer das sitzungsgebundene Token nicht erraten kann, wird die
+gefälschte Überweisung mit 403 abgewiesen. Legitime Überweisungen aus dem
+Dashboard funktionieren weiterhin.
+
+
+\end{document}

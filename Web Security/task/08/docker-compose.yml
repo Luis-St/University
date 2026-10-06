@@ -1,0 +1,77 @@
+version: "3.3"
+services:
+  
+  attacker:
+    build:
+      context: ./
+      dockerfile: Dockerfile-attacker
+    hostname: attacker
+    container_name: attacker
+    cap_add:
+      - NET_ADMIN
+    networks:
+      net1:
+        ipv4_address: 90.0.0.66
+
+
+  router:
+    build: 
+      context: ./
+      dockerfile: Dockerfile-router
+    hostname: router
+    container_name: router
+    cap_add:
+      - NET_ADMIN
+    networks:
+      net1:
+        ipv4_address: 90.0.255.254
+      internet:
+    sysctls:
+      - net.ipv4.conf.all.accept_redirects=1
+
+
+  browser:
+    build:
+      context: ./
+      dockerfile: Dockerfile-firefox
+    container_name: browser
+    hostname: browser
+    cap_add:
+      - NET_ADMIN
+    networks:
+      onlylocal:
+        ipv4_address: 10.0.0.10
+      net1:
+        ipv4_address: 90.0.0.1
+    volumes:
+      - firefox_data:/config
+    sysctls:
+      - net.ipv4.conf.all.accept_redirects=1
+
+
+
+
+
+networks:
+  internet:
+  net1:
+    internal: true
+    driver: macvlan
+    driver_opts:
+      com.docker.network.bridge.name: docker-net1
+    ipam:
+      config:
+        - subnet: 90.0.0.0/16
+
+  onlylocal:
+    driver: bridge
+    internal: true
+    driver_opts:
+      com.docker.network.bridge.name: docker-browser
+    ipam:
+      config:
+        - subnet: 10.0.0.0/16
+
+
+volumes:
+  firefox_data:

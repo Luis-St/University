@@ -1,0 +1,19 @@
+services:
+  website:
+    build:
+      dockerfile: Dockerfile.website
+      context: ./
+    volumes:
+      - ./secure/HandleLogin.py:/sql-injection/HandleLogin.py
+      - ./secure/ShowDate.py:/sql-injection/ShowDate.py
+      - ./secure/app.py:/sql-injection/app.py
+      - ./PrettyPrint.py:/sql-injection/PrettyPrint.py
+
+  proxy:
+    image: nginx
+    ports:
+      - "8080:8080"
+    depends_on:
+      - website
+    volumes:
+      - ./secure/nginx-filter.conf:/etc/nginx/nginx.conf

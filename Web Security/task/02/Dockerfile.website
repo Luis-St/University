@@ -1,0 +1,14 @@
+FROM python:3.8-slim
+
+RUN mkdir /sql-injection
+WORKDIR /sql-injection
+
+COPY createSQLiteDB.py /sql-injection/
+
+RUN pip3 install --upgrade pip && pip install --no-cache-dir flask 
+
+RUN python createSQLiteDB.py
+
+EXPOSE 5000
+
+CMD ["python", "app.py"]

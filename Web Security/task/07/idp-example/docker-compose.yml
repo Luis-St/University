@@ -1,0 +1,36 @@
+version: "3.3"
+services:
+
+  idp:
+    image: quay.io/keycloak/keycloak
+    command: start-dev
+    container_name: idp
+    hostname: idp
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    ports:
+      - "8081:8080"
+
+  sp:
+    image: nextcloud
+    hostname: sp
+    container_name: sp
+    ports:
+      - "8080:80"
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+

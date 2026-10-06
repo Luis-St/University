@@ -1,0 +1,10 @@
+FROM python
+RUN apt-get update
+RUN apt-get install -y traceroute net-tools iputils-ping tcpdump bash dsniff nano vim libpcap-dev tcpflow bettercap
+RUN apt-get clean
+
+RUN echo source \$VIMRUNTIME/defaults.vim \n set mouse-=a > ~/.vimrc
+
+RUN pip install scapy
+
+CMD ["sleep", "infinity"]

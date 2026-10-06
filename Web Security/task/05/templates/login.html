@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Gästebuch Login</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+<h1>📖 Gästebuch Login</h1>
+
+<form method="POST" class="guest-form">
+Password: <input type="text" name="password" required>
+
+<button type="submit">Login</button>
+</form>
+</div>
+</body>
+</html>

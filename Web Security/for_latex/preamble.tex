@@ -1,0 +1,179 @@
+\usepackage{cmap}
+
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{ngerman}
+
+
+\usepackage{scrhack}
+\usepackage[table]{xcolor}
+\usepackage{chngcntr}
+\usepackage{enumitem}
+
+
+\usepackage{amsthm}
+
+
+\usepackage{lipsum}
+\usepackage{unicode-math}
+
+
+\usepackage{mathtools}
+
+
+\usepackage[
+	colorlinks=false,
+	linkcolor=black,
+	citecolor=black,
+	filecolor=black,
+	urlcolor=black,
+	bookmarks=true,
+	bookmarksopen=true,
+	bookmarksopenlevel=3,
+	bookmarksnumbered,
+	plainpages=false,
+	pdfpagelabels=true,
+	hyperfootnotes
+]{hyperref}
+
+
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[onehalfspacing]{setspace}
+\raggedbottom
+
+\usepackage{anyfontsize}
+
+\addtokomafont{chapter}{\sffamily\large\bfseries}
+\addtokomafont{section}{\sffamily\normalsize\bfseries}
+\addtokomafont{subsection}{\sffamily\normalsize\mdseries}
+\addtokomafont{caption}{\sffamily\normalsize\mdseries}
+
+\usepackage{relsize}
+\renewcommand*{\UrlFont}{\ttfamily\smaller\relax}
+
+
+\usepackage[
+	bindingoffset=0cm,
+	inner=2.5cm,
+	outer=2.5cm,
+	top=3cm,
+	bottom=2cm
+]{geometry}
+
+\usepackage[
+	headsepline,
+	plainheadsepline
+]{scrlayer-scrpage}
+\clearpairofpagestyles
+\addtokomafont{pagehead}{\normalfont}
+\ohead*{\thepage}
+\ihead*{\leftmark}
+
+
+\usepackage{graphicx}
+\graphicspath{{pictures/}}
+\usepackage{float}
+
+\renewcommand{\thefigure}{\arabic{figure}}
+\counterwithout{figure}{chapter}
+
+\usepackage{wrapfig}
+
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tabularx}
+
+\renewcommand{\thetable}{\arabic{table}}
+\counterwithout{table}{chapter}
+
+
+\usepackage{listings}
+\usepackage{beramono}
+
+\renewcommand{\lstlistlistingname}{List of Code Listings}
+\renewcommand{\lstlistingname}{Code Listing}
+\newcommand{\listoflolentryname}{\lstlistingname}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.5,0,0.33}
+\definecolor{codepurblue}{rgb}{0.16,0.0,1.0}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{codestyle}{
+	backgroundcolor=\color{backcolour},
+	commentstyle=\color{codegreen},
+	keywordstyle=\bfseries\color{codepurple},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurblue},
+	basicstyle=\scriptsize\ttfamily,
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=5pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=2,
+	escapeinside={(*@}{@*)}
+}
+\lstset{style=codestyle, numberbychapter=false}
+
+
+
+\KOMAoptions{toc=chapterentrydotfill}
+\addtokomafont{chapterentry}{\normalfont}
+\setuptoc{toc}{totoc}
+
+\DeclareTOCStyleEntry[beforeskip=0cm]{chapter}{chapter}
+\DeclareTOCStyleEntry[beforeskip=0cm]{section}{section}
+\DeclareTOCStyleEntry[beforeskip=0cm]{default}{subsection}
+
+\BeforeStartingTOC[lof]{\def\autodot{:}}
+\BeforeStartingTOC[lot]{\def\autodot{:}}
+\BeforeStartingTOC[lol]{\def\autodot{:}}
+
+
+\iffalse
+\usepackage{csquotes}
+\setlength\bibitemsep{.5\baselineskip}
+\setcounter{biburlnumpenalty}{9000}
+\setcounter{biburllcpenalty}{9000}
+\setcounter{biburlucpenalty}{9000}
+
+\fi
+
+\usepackage[printonlyused]{acronym}
+
+
+\usepackage[title,titletoc]{appendix}
+
+\newcommand{\appendixchapter}[1]{
+\cleardoublepage
+\pagenumbering{arabic}
+\renewcommand{\thepage}{\thechapter-\arabic{page}}
+\chapter{#1}
+}
+
+\newcommand{\monthlyreport}[2]{
+\section{#1}
+\centering
+\includegraphics[trim=55 35 55 35,clip,width=1\textwidth]{#2}
+\clearpage
+}
+
+
+
+\newtheorem{beispiel}{Beispiel}
+
+\newtheorem{these}{These}
+
+\newtheorem{definition}{Definition}
+
+
+\usepackage[nameinlink, noabbrev]{cleveref}

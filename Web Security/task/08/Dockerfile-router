@@ -1,0 +1,14 @@
+FROM debian
+
+RUN apt update && apt install -y tcpdump iptables vim iproute2 iputils-ping dos2unix
+
+COPY router-entry.sh router-entry.sh
+RUN chmod +x router-entry.sh
+RUN dos2unix router-entry.sh
+
+COPY sysctl.conf /etc/sysctl.conf
+RUN dos2unix /etc/sysctl.conf
+
+COPY iptables-rule /etc/iptables/iptables-rule
+
+CMD ["/router-entry.sh"]

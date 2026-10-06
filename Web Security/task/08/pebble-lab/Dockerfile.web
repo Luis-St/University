@@ -1,0 +1,6 @@
+FROM debian:stable-slim
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      curl socat openssl nginx ca-certificates python3 iproute2 git cron \
+    && rm -rf /var/lib/apt/lists/*
+RUN curl -s https://get.acme.sh | sh -s email=test@websec.lab
+CMD ["sleep","infinity"]

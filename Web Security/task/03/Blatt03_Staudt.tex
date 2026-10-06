@@ -1,0 +1,171 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	listof=totoc,
+	listof=entryprefix,
+	listof=nochaptergap,
+	bibliography=totoc,
+	parskip=half,
+	openany
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+\lstset{
+	extendedchars=true,
+	inputencoding=utf8,
+	literate=
+		{ä}{{\"a}}1
+		{ö}{{\"o}}1
+		{ü}{{\"u}}1
+		{ß}{{\ss}}1
+		{Ä}{{\"A}}1
+		{Ö}{{\"O}}1
+		{Ü}{{\"U}}1
+}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 3}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Web-Security und Intrusion Prevention}
+
+		\vspace{12cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+
+\chapter*{Aufgabe 1: Die Webanwendung}
+
+Die Flask-Anwendung \texttt{app.py} listet ohne GET-Parameter alle Dateien im
+Unterordner \texttt{files/} auf und verlinkt sie über den Parameter
+\texttt{file}. Ist \texttt{file} gesetzt, gibt die Anwendung die angegebene Datei
+direkt mit \texttt{send\_file} zurück:
+
+\begin{lstlisting}[language=Python]
+@app.route('/')
+def index():
+    if not request.args.get("file"):
+        return generate_list()
+    else:
+        return send_file(request.args.get("file"))
+\end{lstlisting}
+
+Da der übergebene Pfad ungeprüft an \texttt{send\_file} gelangt, lassen sich
+beliebige Pfade einschleusen.
+
+\chapter*{Aufgabe 2: Die Anwendung ausnutzen}
+
+Der Parameter darf ein absoluter Pfad sein:
+
+\begin{lstlisting}[language=bash]
+curl "http://127.0.0.1:5000/?file=/etc/passwd"
+-> root:x:0:0:root:/root:/bin/bash
+   daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+   ...
+\end{lstlisting}
+
+Ebenso lässt sich mit \texttt{../} aus dem Arbeitsverzeichnis heraus navigieren
+(Path Traversal):
+
+\begin{lstlisting}[language=bash]
+curl "http://127.0.0.1:5000/?file=files/../../../../etc/passwd"
+-> root:x:0:0:root:/root:/bin/bash
+   ...
+\end{lstlisting}
+
+Beide Aufrufe geben den Inhalt von \texttt{/etc/passwd} preis. Analog lassen sich
+andere Dateien auslesen, etwa \texttt{app.py} selbst.
+
+\chapter*{Aufgabe 3: Absicherung}
+
+\section*{Erster Versuch: Präfix-Prüfung}
+
+Geprüft wird, ob der Pfad mit \texttt{files/} beginnt:
+
+\begin{lstlisting}[language=Python]
+if not file.startswith("files/"):
+    abort(403)
+return send_file(file)
+\end{lstlisting}
+
+Diese Prüfung blockiert absolute Pfade (\texttt{/etc/passwd} $\rightarrow$ 403),
+ist aber unzureichend: Ein relativer Pfad beginnt ebenfalls mit \texttt{files/}
+und umgeht die Prüfung trotzdem.
+
+\begin{lstlisting}[language=bash]
+curl -o /dev/null -w "%{http_code}" "http://.../?file=/etc/passwd"
+-> 403   (blockiert)
+curl "http://.../?file=files/../../../../etc/passwd"
+-> 200   (Datei wird weiterhin ausgegeben)
+\end{lstlisting}
+
+Die Ursache sind relative Pfade: Das Präfix \texttt{files/} wird durch
+\texttt{../} sofort wieder verlassen.
+
+\section*{Sichere Lösung mit os.path.realpath()}
+
+Der übergebene Pfad wird vollständig aufgelöst, wobei \texttt{..} und Symlinks
+entfernt werden, und muss tatsächlich innerhalb des erlaubten Verzeichnisses
+liegen:
+
+\begin{lstlisting}[language=Python]
+import os
+BASE_DIR = os.path.realpath("files")
+
+@app.route('/')
+def index():
+    file = request.args.get("file")
+    if not file:
+        return "<h1>Keine Datei angegeben</h1>"
+    requested = os.path.realpath(file)
+    if requested != BASE_DIR and not requested.startswith(BASE_DIR + os.sep):
+        abort(403)
+    return send_file(requested)
+\end{lstlisting}
+
+Da \texttt{realpath} den Pfad kanonisiert, bevor er mit dem Basisverzeichnis
+verglichen wird, scheitern sowohl absolute als auch relative Traversal-Pfade.
+Weil Symlinks mit aufgelöst werden, schützt die Prüfung zugleich gegen Angriffe
+über symbolische Links.
+
+\begin{lstlisting}[language=bash]
+curl -o /dev/null -w "%{http_code}" "http://.../?file=/etc/passwd"
+-> 403   (blockiert)
+curl -o /dev/null -w "%{http_code}" "http://.../?file=files/../../../../etc/passwd"
+-> 403   (blockiert)
+curl "http://.../?file=files/beispiel.txt"
+-> Dies ist eine harmlose Beispieldatei.   (erlaubte Datei weiterhin verfuegbar)
+\end{lstlisting}
+
+\section*{Zusammenfassung der drei Stufen}
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+ & absoluter Pfad & relativer Traversal \\
+\midrule
+\texttt{app.py} (verwundbar) & 200 (Leak) & 200 (Leak) \\
+\texttt{app\_naiv.py} (Präfix) & 403 & 200 (Bypass) \\
+\texttt{app\_secure.py} (realpath) & 403 & 403 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+\end{document}

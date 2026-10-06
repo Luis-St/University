@@ -1,0 +1,15 @@
+services:
+
+  website:
+    build:
+      dockerfile: Dockerfile.app
+      context: ./
+
+    volumes:
+      - ./static:/static
+      - ./templates/login.html:/templates/login.html
+      - ./templates/index.vuln.html:/templates/index.html
+      - ./app.vuln.py:/app.py
+
+    ports:
+      - "5000:5000"

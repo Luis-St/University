@@ -1,0 +1,13 @@
+issuer=CN=Pebble Intermediate CA 1a139c
+subject=
+X509v3 Subject Alternative Name: critical
+    DNS:immich.websec.lab
+notBefore=Oct  6 11:27:58 2026 GMT
+notAfter=Jan  4 11:27:57 2027 GMT
+
+subject=
+issuer=CN=Pebble Intermediate CA 1a139c
+
+subject=CN=Pebble Intermediate CA 1a139c
+issuer=CN=Pebble Root CA 6e4c88
+

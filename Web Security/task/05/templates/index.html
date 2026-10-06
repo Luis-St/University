@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Gästebuch</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+<h1>📖 Gästebuch</h1>
+    <h2><a href="{{ url_for('login') }}"> logout</a></h2>
+<form method="POST" class="guest-form">
+<input type="text" name="name" placeholder="Dein Name" required>
+
+<textarea name="message" placeholder="Deine Nachricht..." required></textarea>
+
+<button type="submit">Eintrag senden</button>
+</form>
+
+<h2>Einträge</h2>
+
+<div class="entries">
+
+{% for entry in entries %}
+
+<div class="entry">
+<div class="entry-header">
+<strong>{{ entry.name }}</strong>
+<span>{{ entry.date }}</span>
+</div>
+<p>{{ entry.message }}</p>
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+</body>
+</html>

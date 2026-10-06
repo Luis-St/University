@@ -1,0 +1,24 @@
+services:
+
+  guestbook:
+    build: ./Gaestebuch
+
+    volumes:
+      - ./Gaestebuch/static:/static
+      - ./Gaestebuch/templates:/templates
+      - ./Gaestebuch/app.py:/app.py
+      
+    ports:
+      - "5000:5000"
+
+  banking:
+    build: ./Onlinebanking
+
+    volumes:
+      - ./Onlinebanking/static:/static
+      - ./Onlinebanking/templates:/templates
+      - ./Onlinebanking/app.py:/app.py
+      
+    ports:
+      - "5001:5001"
+

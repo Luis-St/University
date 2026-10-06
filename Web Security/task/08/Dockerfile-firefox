@@ -1,0 +1,10 @@
+FROM jlesage/firefox
+RUN apk update
+RUN apk add bash iptables iptables-legacy tcpdump nano vim sudo
+USER root
+COPY startapp.sh /startapp.sh
+RUN chmod a+rx /startapp.sh
+RUN chmod u+s /bin/busybox
+COPY resolv.conf /etc/resolv.conf
+COPY appuserasroot /etc/sudoers.d/appuserasroot
+EXPOSE 5800 5900

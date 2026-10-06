@@ -1,0 +1,7 @@
+services:
+  website:
+    build:
+      context: .
+      dockerfile: Dockerfile.no-security
+    ports:
+      - 80:80

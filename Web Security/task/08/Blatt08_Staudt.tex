@@ -1,0 +1,294 @@
+\documentclass[
+	fontsize=12pt,
+	paper=a4,
+	numbers=noenddot,
+	listof=totoc,
+	listof=entryprefix,
+	listof=nochaptergap,
+	bibliography=totoc,
+	parskip=half,
+	openany
+]{scrbook}
+
+\include{../../for_latex/preamble}
+
+\lstset{
+	extendedchars=true,
+	inputencoding=utf8,
+	literate=
+		{ä}{{\"a}}1
+		{ö}{{\"o}}1
+		{ü}{{\"u}}1
+		{ß}{{\ss}}1
+		{Ä}{{\"A}}1
+		{Ö}{{\"O}}1
+		{Ü}{{\"U}}1
+}
+
+\begin{document}
+
+\begin{titlepage}
+	\pagestyle{empty}
+
+	\begin{flushright}
+		\begin{figure}[ht]
+			\flushright
+			\includegraphics[height=2cm]{../../for_latex/hfu}
+		\end{figure}
+	\end{flushright}
+
+	\begin{center}
+		\vspace{3cm}
+
+		{\fontsize{22}{22} \selectfont \textbf{Blatt 8}}\\[5mm]
+		{\fontsize{18}{18} \selectfont Web-Security und Intrusion Prevention}
+
+		\vspace{12cm}
+
+		{\fontsize{14}{14} \selectfont Luis Staudt}
+	\end{center}
+\end{titlepage}
+
+
+\chapter*{Vorbemerkung}
+
+Ein Teil dieser Aufgabe setzt externe Infrastruktur voraus, die lokal nicht
+reproduzierbar ist: eine bwCloud-VM mit öffentlicher IP (Login über
+HFU-Account), einen öffentlichen DNS-Namen über duckdns.org und ein öffentlich
+validiertes Let's-Encrypt-Zertifikat, dessen ACME-Challenge von aussen
+erreichbar sein muss. Dieser Teil wurde nicht ausgeführt.
+
+Der zentrale Lerninhalt, der MITM-Angriff per ARP-Spoofing und der Schutz durch
+HTTPS, wurde dagegen in einem lokalen, self-contained Docker-Lab durchgeführt
+(Kapitel \glqq Lokale Reproduktion\grqq{}), mit einem lokalen Login-Server
+anstelle der bwCloud-Seite. HSTS und die Let's-Encrypt-Validierung werden
+zusätzlich erklärt. Das Lab liegt reproduzierbar unter \texttt{lokal-lab/}
+(\texttt{run-mitm.sh}).
+
+\chapter*{Aufgabe 1: Die Anwendungen}
+
+Die lokale Angriffsumgebung besteht aus drei Docker-Containern:
+
+\begin{itemize}
+	\item \textbf{browser} -- das Opfer. Ein Firefox, der über VNC
+	      beziehungsweise eine Web-Oberfläche (\url{http://10.0.0.10:5800/})
+	      bedient wird und sich über den Router mit dem Internet verbindet.
+	\item \textbf{router} -- stellt die Internet-Verbindung her
+	      (NAT/MASQUERADE, \texttt{net.ipv4.ip\_forward=1}). Default-Gateway ist
+	      \texttt{90.0.255.254}.
+	\item \textbf{attacker} -- der Angreifer mit den Werkzeugen
+	      dsniff/arpspoof, tcpdump, scapy und bettercap. Führt den MITM-Angriff
+	      durch.
+\end{itemize}
+
+Der Webserver (Immich) läuft getrennt davon auf der bwCloud-VM.
+
+\chapter*{Aufgabe 2: VM und Webanwendung (bwCloud)}
+
+Die folgenden Schritte wurden auf der externen bwCloud-Infrastruktur ausgeführt,
+nicht im lokalen Lab:
+
+\begin{itemize}
+	\item SSH-Schlüssel erzeugen (\texttt{ssh-keygen}, mit Passwort gesichert);
+	      der private Schlüssel bleibt geheim, \texttt{id\_rsa.pub} wird in die
+	      VM importiert. Der Passwort-Login ist deaktiviert, da Passwörter leicht
+	      angreifbar sind.
+	\item Debian-13-VM (m1.medium, public-v4) in bwCloud erstellen, per SSH
+	      verbinden (\texttt{ssh debian@<IP>}), Updates einspielen, Docker
+	      installieren und den Benutzer \texttt{debian} zur \texttt{docker}-Gruppe
+	      hinzufügen.
+	\item Domainnamen über duckdns.org registrieren und die statische VM-IP
+	      eintragen.
+	\item Immich per docker-compose installieren, Port vorübergehend auf 80
+	      stellen und einen Testbenutzer anlegen, mit Pseudonym und
+	      Wegwerf-Passwort, da die Verbindung zunächst unverschlüsselt und
+	      mitlesbar ist.
+\end{itemize}
+
+\chapter*{Aufgabe 3: MITM-Angriff per ARP-Spoofing}
+
+ARP kennt keine Authentifizierung. Der Angreifer sendet gefälschte ARP-Antworten
+und bringt so Opfer und Gateway dazu, seine MAC-Adresse für die jeweils andere IP
+einzutragen. Dadurch läuft der gesamte Verkehr über den Angreifer
+(Man-in-the-Middle).
+
+Im attacker-Container wird zunächst das Default-Gateway gesetzt, da andernfalls
+die Internet-Verbindung des Opfers abbricht:
+
+\begin{lstlisting}[language=bash]
+docker exec -it attacker bash
+route add default gw 90.0.255.254
+\end{lstlisting}
+
+Das ARP-Spoofing erfolgt in beide Richtungen: dem Opfer 90.0.0.1 gegenüber als
+Gateway und dem Gateway gegenüber als Opfer:
+
+\begin{lstlisting}[language=bash]
+# gegenueber dem Opfer als Gateway auftreten
+arpspoof -i eth0 -t 90.0.0.1     90.0.255.254
+# gegenueber dem Gateway als Opfer auftreten
+arpspoof -i eth0 -t 90.0.255.254 90.0.0.1
+\end{lstlisting}
+
+Da Immich zunächst über HTTP läuft, stehen die Login-Daten im Klartext im Paket.
+tcpdump zeigt die Paketinhalte an:
+
+\begin{lstlisting}[language=bash]
+tcpdump -i eth0 -A -n 'tcp port 80'
+\end{lstlisting}
+
+Loggt sich das Opfer nun auf der Webseite ein, erscheint das im Klartext
+übertragene Passwort im Mitschnitt (POST-Body des Login-Requests). Danach werden
+\texttt{arpspoof} und \texttt{tcpdump} beendet.
+
+\chapter*{Aufgabe 4: Schutz mit Verschlüsselung und Zertifikaten}
+
+Immich wird auf Port 2283 zurückgestellt und ist nur noch intern erreichbar.
+Davor kommt der \emph{NginX Proxy Manager} (NPM), der über Port 80/443 nach
+aussen spricht und per Let's Encrypt ein Zertifikat für die duckdns-Domain
+anfordert. Zusätzlich werden \emph{Force SSL} und \emph{HSTS} aktiviert. Port 81
+(NPM-Admin) muss in der bwCloud-Firewall freigegeben werden.
+
+\section*{Bedeutung von HSTS}
+
+HSTS (HTTP Strict Transport Security) ist ein Response-Header
+(\texttt{Strict-Transport-Security: max-age=...}), mit dem der Server dem Browser
+mitteilt, die Seite für die angegebene Dauer ausschliesslich über HTTPS
+aufzurufen. Daraus ergeben sich folgende Konsequenzen:
+
+\begin{itemize}
+	\item Der Browser ersetzt \texttt{http://}-Aufrufe der Domain intern durch
+	      \texttt{https://}, noch bevor eine Anfrage das Netz verlässt.
+	\item Ein erzwungenes Downgrade auf HTTP (SSL-Stripping) wird verhindert.
+	\item Bei Zertifikatsfehlern ist kein \glqq Trotzdem fortfahren\grqq{} mehr
+	      möglich.
+\end{itemize}
+
+HSTS schliesst damit das Zeitfenster der ersten, noch unverschlüsselten Anfrage,
+mit \texttt{preload} sogar vollständig.
+
+\section*{Wie Let's Encrypt den Besitz des Servers prüft}
+
+Let's Encrypt nutzt das ACME-Protokoll mit einer
+Domain-Validation-Challenge. Der Antragsteller muss nachweisen, dass er die
+Domain kontrolliert:
+
+\begin{itemize}
+	\item \textbf{HTTP-01:} Let's Encrypt gibt ein Token vor; der Server muss es
+	      unter \texttt{http://<domain>/.well-known/acme-challenge/<token>}
+	      bereitstellen. Let's Encrypt ruft diese URL über den öffentlichen
+	      DNS-Namen ab. Nur wer den Server hinter der Domain kontrolliert, kann
+	      die Datei dort ablegen.
+	\item \textbf{DNS-01:} Alternativ wird ein vorgegebener Wert als TXT-Record
+	      (\texttt{\_acme-challenge.<domain>}) im DNS hinterlegt.
+\end{itemize}
+
+Ein Angreifer ohne Kontrolle über Domain beziehungsweise Server kann die
+Challenge nicht erfüllen und erhält daher kein gültiges Zertifikat. NPM übernimmt
+diesen Ablauf automatisch.
+
+\section*{MITM nach der Umstellung}
+
+Wird der Angriff bei aktivem HTTPS wiederholt, sieht der Angreifer nur noch
+TLS-verschlüsselten Verkehr; das Passwort ist nicht mehr auslesbar. Zwar könnte
+er die Pakete weiterhin umleiten, ohne den privaten Schlüssel des Servers aber
+den Inhalt nicht entschlüsseln. Der Versuch, ein eigenes Zertifikat
+unterzuschieben, scheitert an der Zertifikatsprüfung des Browsers und zusätzlich
+an HSTS.
+
+\chapter*{Lokale Reproduktion (Docker)}
+
+Da die bwCloud-Seite extern ist, wurde der Angriff in einem isolierten
+Docker-Netz (\texttt{192.168.80.0/24}) nachgestellt. Es kamen drei Container zum
+Einsatz: \texttt{server} (\texttt{.10}, Login-Webseite), \texttt{victim}
+(\texttt{.20}) und \texttt{attacker} (\texttt{.66}).
+
+\section*{Aufgabe 3 lokal: ARP-Spoofing + Klartext-Passwort}
+
+Der Angreifer aktiviert IP-Forwarding und fälscht per \texttt{arpspoof} die
+ARP-Zuordnung in beide Richtungen:
+
+\begin{lstlisting}[language=bash]
+sysctl -w net.ipv4.ip_forward=1
+arpspoof -i eth0 -t 192.168.80.20 192.168.80.10   # dem Opfer: ich bin der Server
+arpspoof -i eth0 -t 192.168.80.10 192.168.80.20   # dem Server: ich bin das Opfer
+\end{lstlisting}
+
+Danach zeigt die ARP-Tabelle des Opfers für die Server-IP die MAC des Angreifers,
+sodass der Verkehr nun über den Angreifer läuft:
+
+\begin{lstlisting}[language=bash]
+# victim /proc/net/arp
+192.168.80.10   ...   56:24:2a:f5:f7:52   *   eth0   # = MAC des Angreifers
+\end{lstlisting}
+
+Loggt sich das Opfer nun per HTTP ein, liest der Angreifer das Passwort im
+Klartext aus dem Mitschnitt (\texttt{images/mitm\_http.pcap}):
+
+\begin{lstlisting}[language=bash]
+tcpdump -nr mitm.pcap -A | grep password=
+-> user=alice&password=SuperGeheim123
+\end{lstlisting}
+
+\section*{Aufgabe 4 lokal: mit HTTPS ist das Passwort geschützt}
+
+Derselbe Angriff richtet sich gegen einen TLS-Server (Port 443, selbstsigniertes
+Zertifikat). Das Opfer loggt sich jetzt über HTTPS ein. Der Angreifer sieht zwar
+die Pakete, aber nur TLS-verschlüsselt:
+
+\begin{lstlisting}[language=bash]
+# Vorkommen des Passworts im jeweiligen Mitschnitt:
+grep -c SuperGeheim  (HTTP-Mitschnitt mitm.pcap)      -> 4   (lesbar)
+grep -c SuperGeheim  (HTTPS-Mitschnitt mitm_tls.pcap) -> 0   (nicht lesbar)
+\end{lstlisting}
+
+Ohne Verschlüsselung ist das Passwort trivial mitlesbar, mit HTTPS nicht. Dies
+deckt sich mit dem erwarteten Verhalten auf der bwCloud. Die pcap-Dateien liegen
+unter \texttt{images/} bei.
+
+\section*{Zertifikatsausstellung per ACME (lokal mit Pebble)}
+
+Ein echtes Let's-Encrypt-Zertifikat erfordert eine öffentliche Domain, deren
+ACME-Challenge von aussen erreichbar ist, was lokal nicht möglich ist.
+Stattdessen wurde \emph{Pebble}, der offizielle Test-ACME-Server von Let's
+Encrypt, verwendet. Pebble spricht dasselbe ACME-Protokoll (Order, HTTP-01,
+Ausstellung) wie die produktive CA; lediglich die ausstellende CA ist eine
+Test-CA. So lässt sich der vollständige Ablauf real durchführen.
+
+Die Ausstellung erfolgt über \texttt{acme.sh} im Standalone-Modus. Pebble
+validiert die HTTP-01-Challenge, indem es
+\url{http://<domain>:5002/.well-known/acme-challenge/<token>} abruft, also genau
+die Datei, die der ACME-Client während der Ausstellung bereitstellt:
+
+\begin{lstlisting}[language=bash]
+acme.sh --issue --standalone --httpport 5002 -d immich.websec.lab \
+        --server https://pebble:14000/dir
+-> Order -> HTTP-01 challenge -> finalize -> Cert success.
+\end{lstlisting}
+
+Das ausgestellte Zertifikat zeigt im Auszug (\texttt{images/acme\_cert.txt}):
+
+\begin{lstlisting}[language=bash]
+issuer=CN=Pebble Intermediate CA 1a139c
+X509v3 Subject Alternative Name: DNS:immich.websec.lab
+notBefore=Oct  6 11:27:58 2026   notAfter=Jan  4 11:27:57 2027
+# Kette: Leaf <- Pebble Intermediate CA <- Pebble Root CA
+\end{lstlisting}
+
+Für die Vertrauensprüfung wird der Webserver (NginX) mit dem ausgestellten
+Zertifikat betrieben. Ein Client, der die zugehörige Root-CA kennt, akzeptiert
+die Verbindung ohne Warnung; ohne sie schlägt die Prüfung fehl:
+
+\begin{lstlisting}[language=bash]
+curl               https://immich.websec.lab/  -> ssl_verify_result=20 (unbekannte CA)
+curl --cacert root https://immich.websec.lab/  -> ssl_verify_result=0, HTTP 200
+\end{lstlisting}
+
+Das ist exakt der Mechanismus, den auch Let's Encrypt nutzt: Ein über ACME
+ausgestelltes, von einer vertrauenswürdigen CA signiertes Zertifikat macht die
+Verbindung für den Browser gültig und schützt, wie oben gezeigt, gegen das
+Mitlesen durch den MITM-Angreifer. Das Setup liegt reproduzierbar unter
+\texttt{pebble-lab/} (\texttt{run-acme.sh}).
+
+
+\end{document}

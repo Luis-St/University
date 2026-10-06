@@ -1,0 +1,9 @@
+FROM php:7.2-apache
+USER root
+COPY index-js-security.php /var/www/html/index.php
+COPY upload-secure.php /var/www/html/upload.php
+COPY no-php-uploads.conf /etc/apache2/conf-enabled/no-php-uploads.conf
+RUN mkdir /var/www/html/uploads
+RUN chown www-data:www-data /var/www/html/*
+RUN chown www-data:www-data /var/www/html/uploads
+EXPOSE 80
